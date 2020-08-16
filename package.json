@@ -1,0 +1,53 @@
+{
+  "name": "next-mern-ssr-template",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "NODE_ENV=production node dist/index.js",
+    "dev": "ts-node-dev --project tsconfig.server.json server/index.ts & npm run sass:watch",
+    "dev:client": "next",
+    "dev:server": "ts-node-dev --project tsconfig.server.json server/index.ts & npm run sass:watch",
+    "sass:watch": "node-sass src/public/sass/main.scss src/public/css/main.css -w",
+    "sass:build": "node-sass src/public/sass/main.scss src/public/css/main.css --output-style compressed",
+    "build:client": "next build",
+    "build:server": "tsc --project tsconfig.server.json",
+    "build": "npm run sass:build && npm run build:client && npm run build:server",
+    "heroku:postbuild": "npm run build"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "cookie-session": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "express-validator": "^6.5.0",
+    "helmet": "^3.23.1",
+    "mongoose": "^5.9.19",
+    "next": "^9.4.4",
+    "next-images": "^1.4.0",
+    "node-sass": "^4.14.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-icons": "^3.10.0"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.0",
+    "@types/compression": "^1.7.0",
+    "@types/cookie-session": "^2.0.41",
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.6",
+    "@types/helmet": "0.0.47",
+    "@types/mongoose": "^5.7.27",
+    "@types/node": "^14.0.13",
+    "@types/node-sass": "^4.11.1",
+    "@types/react": "^16.9.36",
+    "ts-node-dev": "^1.0.0-pre.52",
+    "typescript": "^3.9.5"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
