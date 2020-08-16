@@ -1,4 +1,4 @@
-import { ApiSign } from "@monsid/ugh";
+import { ApiSign, currentUser, requireAuth } from "@monsid/ugh";
 
 import { userHandlers } from "./user";
 import { featureHandlers } from "./feature";
@@ -26,7 +26,7 @@ export const apiHandlers: Array<ApiSign> = [
         url: `/console${url}`,
         controller,
         method,
-        middlewares: [...middlewares],
+        middlewares: [currentUser, requireAuth, ...middlewares],
       };
     }
   ),
