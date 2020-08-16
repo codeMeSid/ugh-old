@@ -5,16 +5,17 @@ import helmet from "helmet";
 import cors from "cors";
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
+import { NodeEnv } from "@monsid/ugh";
 
 import next from "next";
 import { config } from "dotenv";
 
 const app = express();
-const dev = process.env.NODE_ENV !== "production";
-const nextApp = next({ dev });
+const isDevMode = process.env.NODE_ENV !== NodeEnv.Production;
+const nextApp = next({ dev: isDevMode });
 const handle = nextApp.getRequestHandler();
 
-if (dev) config();
+if (isDevMode) config();
 
 // middlewares
 app.use(json());
@@ -23,7 +24,7 @@ app.use(helmet());
 app.use(cors());
 app.use(
   cookieSession({
-    signed: dev,
+    signed: isDevMode,
     keys: ["p"],
   })
 );

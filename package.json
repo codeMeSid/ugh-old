@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start": "NODE_ENV=production node dist/index.js",
-    "dev": "ts-node-dev --project tsconfig.server.json server/index.ts & npm run sass:watch",
+    "dev": "ts-node-dev --no-notify --project tsconfig.server.json server/index.ts & npm run sass:watch",
     "dev:client": "next",
     "dev:server": "ts-node-dev --project tsconfig.server.json server/index.ts & npm run sass:watch",
     "sass:watch": "node-sass src/public/sass/main.scss src/public/css/main.css -w",
@@ -15,6 +15,7 @@
     "heroku:postbuild": "npm run build"
   },
   "dependencies": {
+    "@monsid/ugh": "0.0.19",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",

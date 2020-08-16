@@ -1,29 +1,20 @@
 import { Request, Response } from "express";
-import mongoose from "mongoose";
+import { startDb, successlog, errorHandler, errorlog } from "@monsid/ugh";
 import { app, nextApp, handle } from "./app";
-import { apiRouter } from "./routes";
-import { errorHandler } from "./middlewares/error-handler";
+import { apiRouter } from "./routes/api-routes";
+import { MONGO_URI } from "./utils/env-check";
 const start = async () => {
   try {
-    if (!process.env.MONGO_URI) throw new Error("mongo uri key not found");
-    if (!process.env.JWT_KEY) throw new Error("jwt key not found");
-
     await nextApp.prepare();
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-    });
-
-    app.use("/api", apiRouter);
+    await startDb(MONGO_URI!);
+    app.use("/api/ugh", apiRouter);
     app.use(errorHandler);
     app.all("*", (req: Request, res: Response) => handle(req, res));
-    console.log("Connected to MongoDb");
     app.listen(process.env.PORT, () => {
-      console.log(`SERVICE on port ${process.env.PORT}!!!!!!!!`);
+      successlog(`SERVICE on port ${process.env.PORT}!!!!!!!!`);
     });
   } catch (error) {
-    console.error(error);
+    errorlog(error);
     process.exit(1);
   }
 };
