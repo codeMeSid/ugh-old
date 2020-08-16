@@ -23,7 +23,7 @@ export const apiHandlers: Array<ApiSign> = [
   ...Array.from(consoleHandler).map(
     ({ url, controller, middlewares, method }): ApiSign => {
       return {
-        url: `/user${url}`,
+        url: `/console${url}`,
         controller,
         method,
         middlewares: [...middlewares],

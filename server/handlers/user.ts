@@ -16,7 +16,9 @@ import { activeUserController } from "../controllers/user/active";
 import { userRecoveryController } from "../controllers/user/recovery";
 import { resetUserController } from "../controllers/user/reset";
 import { userActivityController } from "../controllers/user/activity";
-
+import { userProfileContoller } from "../controllers/user/profile";
+import { userFetchAllController } from "../controllers/user/all";
+import { userDetailController } from "../controllers/user/detail";
 
 export const userHandlers: Array<ApiSign> = [
   {
@@ -24,6 +26,18 @@ export const userHandlers: Array<ApiSign> = [
     method: HttpMethod.Get,
     controller: activeUserController,
     middlewares: [],
+  },
+  {
+    url: "/profile",
+    method: HttpMethod.Get,
+    controller: userProfileContoller,
+    middlewares: [currentUser, requireAuth],
+  },
+  {
+    url: "/all",
+    method: HttpMethod.Get,
+    controller: userFetchAllController,
+    middlewares: [currentUser, requireAdminAuth],
   },
   {
     url: "/signout",
@@ -36,6 +50,12 @@ export const userHandlers: Array<ApiSign> = [
     method: HttpMethod.Get,
     controller: currentUserController,
     middlewares: [currentUser],
+  },
+  {
+    url: "/:userId",
+    method: HttpMethod.Get,
+    controller: userDetailController,
+    middlewares: [currentUser, requireAdminAuth],
   },
   {
     url: "/signup",
@@ -79,6 +99,4 @@ export const userHandlers: Array<ApiSign> = [
     controller: userActivityController,
     middlewares: [currentUser, requireAdminAuth],
   },
-  // get user details
-  // get all users
 ];
