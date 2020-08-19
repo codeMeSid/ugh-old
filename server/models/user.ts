@@ -52,6 +52,7 @@ const userSchema = new mongoose.Schema(
     ughId: {
       type: String,
       required: true,
+      unique: true,
     },
     name: {
       type: String,
