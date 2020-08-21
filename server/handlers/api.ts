@@ -5,6 +5,9 @@ import { featureHandlers } from "./feature";
 import { consoleHandler } from "./console";
 import { gameHandler } from "./game";
 import { coinHandler } from "./coin";
+import { galleryHandler } from "./gallery";
+import { sponsorshipHandler } from "./sponsorship";
+import { sponsorHandler } from "./sponsor";
 
 export const apiHandlers: Array<ApiSign> = [
   {
@@ -46,6 +49,36 @@ export const apiHandlers: Array<ApiSign> = [
     ({ url, controller, middlewares, method }): ApiSign => {
       return {
         url: `/coin${url}`,
+        controller,
+        method,
+        middlewares: [...middlewares],
+      };
+    }
+  ),
+  ...Array.from(galleryHandler).map(
+    ({ url, controller, middlewares, method }): ApiSign => {
+      return {
+        url: `/gallery${url}`,
+        controller,
+        method,
+        middlewares: [...middlewares],
+      };
+    }
+  ),
+  ...Array.from(sponsorHandler).map(
+    ({ url, controller, middlewares, method }): ApiSign => {
+      return {
+        url: `/sponsor${url}`,
+        controller,
+        method,
+        middlewares: [...middlewares],
+      };
+    }
+  ),
+  ...Array.from(sponsorshipHandler).map(
+    ({ url, controller, middlewares, method }): ApiSign => {
+      return {
+        url: `/sponsorship${url}`,
         controller,
         method,
         middlewares: [...middlewares],
