@@ -6,7 +6,7 @@ interface StreamAttrs {
   name: string;
   game: string;
   href: string;
-  social: string;
+  social: SocialTypes;
 }
 
 interface StreamDoc extends mongoose.Document {
@@ -14,7 +14,7 @@ interface StreamDoc extends mongoose.Document {
   name: string;
   game: string;
   href: string;
-  social: string;
+  social: SocialTypes;
   isActive: boolean;
 }
 
