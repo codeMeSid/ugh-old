@@ -8,6 +8,9 @@ import { coinHandler } from "./coin";
 import { galleryHandler } from "./gallery";
 import { sponsorshipHandler } from "./sponsorship";
 import { sponsorHandler } from "./sponsor";
+import { streamHandler } from "./stream";
+import { newsHandler } from "./news";
+import { tournamentHandler } from "./tournament";
 
 export const apiHandlers: Array<ApiSign> = [
   {
@@ -79,6 +82,36 @@ export const apiHandlers: Array<ApiSign> = [
     ({ url, controller, middlewares, method }): ApiSign => {
       return {
         url: `/sponsorship${url}`,
+        controller,
+        method,
+        middlewares: [...middlewares],
+      };
+    }
+  ),
+  ...Array.from(streamHandler).map(
+    ({ url, controller, middlewares, method }): ApiSign => {
+      return {
+        url: `/stream${url}`,
+        controller,
+        method,
+        middlewares: [...middlewares],
+      };
+    }
+  ),
+  ...Array.from(newsHandler).map(
+    ({ url, controller, middlewares, method }): ApiSign => {
+      return {
+        url: `/news${url}`,
+        controller,
+        method,
+        middlewares: [...middlewares],
+      };
+    }
+  ),
+  ...Array.from(tournamentHandler).map(
+    ({ url, controller, middlewares, method }): ApiSign => {
+      return {
+        url: `/tournament${url}`,
         controller,
         method,
         middlewares: [...middlewares],

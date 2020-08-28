@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 interface NewsAttrs {
   title: string;
   description: string;
-  createdAt: Date;
 }
 
 interface NewsDoc extends mongoose.Document {

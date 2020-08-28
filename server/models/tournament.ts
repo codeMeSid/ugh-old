@@ -8,7 +8,6 @@ interface TournamentAttrs {
   coins: number;
   playerCount: number;
   winnerCount: number;
-  players: Array<UserDoc>;
   game: string;
   console: string;
   addedBy: UserPayload;
