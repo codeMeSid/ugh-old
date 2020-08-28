@@ -5,15 +5,17 @@ import {
   errorHandler,
   errorlog,
   timer,
+  paymentHandler,
 } from "@monsid/ugh";
 import { app, nextApp, handle } from "./app";
 import { apiRouter } from "./routes/api-routes";
-import { MONGO_URI } from "./utils/env-check";
+import { MONGO_URI, RAZORPAY_ID, RAZORPAY_SECRET } from "./utils/env-check";
 const start = async () => {
   try {
     await nextApp.prepare();
     await startDb(MONGO_URI!);
     await timer.connect(MONGO_URI!);
+    await paymentHandler.init(RAZORPAY_ID!, RAZORPAY_SECRET!);
     app.use("/api/ugh", apiRouter);
     app.use(errorHandler);
     app.all("*", (req: Request, res: Response) => handle(req, res));
