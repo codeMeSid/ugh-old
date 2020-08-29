@@ -5,7 +5,7 @@ interface GalleryAttrs {
   imageUrl: string;
 }
 
-interface GalleryDoc extends mongoose.Document {
+export interface GalleryDoc extends mongoose.Document {
   name: string;
   imageUrl: string;
   isActive: boolean;

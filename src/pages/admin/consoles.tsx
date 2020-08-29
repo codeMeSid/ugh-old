@@ -34,7 +34,7 @@ const AdminConsolesDashboard = () => {
         await doRequest();
     }
     // render
-    return <SideLayout title="consoles">
+    return <SideLayout title={`console(${consoleData.length})`}>
         <div style={{ display: "flex", alignItems: "center" }}>
             <Button size="icon" text="+" style={{ marginBottom: 10, marginRight: 10 }} />
             <h1>Add Consoles</h1>
