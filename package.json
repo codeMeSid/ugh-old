@@ -5,6 +5,7 @@
   "scripts": {
     "start": "NODE_ENV=production node dist/index.js",
     "dev": "ts-node-dev --no-notify --project tsconfig.server.json server/index.ts & npm run sass:watch",
+    "dev2": "ts-node --project tsconfig.server.json server/index.ts & npm run sass:watch",
     "dev:client": "next",
     "dev:server": "ts-node-dev --project tsconfig.server.json server/index.ts & npm run sass:watch",
     "sass:watch": "node-sass src/public/sass/main.scss src/public/css/main.css -w",
@@ -31,8 +32,10 @@
     "next-images": "^1.4.0",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
+    "react-awesome-button": "^6.5.1",
     "react-dom": "^16.13.1",
-    "react-icons": "^3.10.0",
+    "react-icons": "^3.11.0",
+    "react-table": "^7.5.0",
     "response-time": "^2.3.2"
   },
   "devDependencies": {
@@ -47,6 +50,7 @@
     "@types/node-sass": "^4.11.1",
     "@types/react": "^16.9.36",
     "@types/response-time": "^2.3.4",
+    "ts-node": "^9.0.0",
     "ts-node-dev": "^1.0.0-pre.52",
     "typescript": "^3.9.5"
   },

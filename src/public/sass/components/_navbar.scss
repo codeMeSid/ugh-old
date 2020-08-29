@@ -1,0 +1,19 @@
+.navbar {
+  &--side {
+    position: absolute;
+    z-index: 100;
+    background-color: blue;
+    width: 5rem;
+    min-height: 100vh;
+    display: block;
+    text-align: center;
+  }
+  &--link {
+    color: white;
+  }
+  &--icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+  }
+}

@@ -1,4 +1,6 @@
 import "../public/css/main.css";
+import "react-awesome-button/dist/styles.css";
+
 
 const AppComponent = ({ Component, pageProps, router, currentUser }) => {
 
