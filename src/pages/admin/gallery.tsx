@@ -17,7 +17,7 @@ const AdminGalleryDashboard = () => {
     // requests
     const { doRequest } = useRequest({
         url: "/api/ugh/gallery/fetch/all", body: {}, method: "get", onSuccess: (data: Array<GalleryDoc>) => {
-            setGalleryData(data.map(gallery => ([gallery.name.toUpperCase(), <a href={gallery.imageUrl} target="_blank"><img src={gallery.imageUrl} width={250} /></a>, SwitchBlade(gallery.id, gallery.isActive)])))
+            setGalleryData(data.map(gallery => ([gallery.name.toUpperCase(), <a href={gallery.imageUrl} target="_blank"><img className="gallery__image" src={gallery.imageUrl} /></a>, SwitchBlade(gallery.id, gallery.isActive)])))
         }
     });
     // effect

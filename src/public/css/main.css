@@ -150,3 +150,10 @@ tr:nth-child(even) {
   max-width: 80rem;
   width: 100%;
   flex-wrap: wrap; }
+
+.gallery__image {
+  width: 25rem; }
+
+@media (max-width: 56.25em) {
+  .gallery__image {
+    width: 100%; } }
