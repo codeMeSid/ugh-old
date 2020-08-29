@@ -17,6 +17,9 @@ const SideLayout = ({ children, title }) => {
             </div>
             <div className="layout__body__children">
                 {children}
+                <div className="layout__body__children__fab">
+                   
+                </div>
             </div>
         </div>
     </div>

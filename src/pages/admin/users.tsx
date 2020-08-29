@@ -1,9 +1,10 @@
 import SideLayout from "../../components/layout/sidelayout"
+import Table from "../../components/table"
 
-const AdminDashboard = () => {
+const AdminUserDashboard = () => {
     return <SideLayout title="users">
-        <div>admin dashboard</div>
+        <Table headers={['value', 'cost', 'is active']} data={[]} />
     </SideLayout>
 }
 
-export default AdminDashboard
+export default AdminUserDashboard

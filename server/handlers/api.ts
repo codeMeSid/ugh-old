@@ -12,6 +12,7 @@ import { streamHandler } from "./stream";
 import { newsHandler } from "./news";
 import { tournamentHandler } from "./tournament";
 import { transactionHandler } from "./transaction";
+import { adminHandler } from "./admin";
 
 export const apiHandlers: Array<ApiSign> = [
   {
@@ -25,6 +26,17 @@ export const apiHandlers: Array<ApiSign> = [
         url: `/user${url}`,
         controller,
         method,
+        middlewares: [...middlewares],
+      };
+    }
+  ),
+  ...Array.from(adminHandler).map(
+    ({ url, controller, middlewares, method }): ApiSign => {
+      return {
+        url: `/admin${url}`,
+        controller,
+        method,
+        // TODO update admin middleware
         middlewares: [...middlewares],
       };
     }
