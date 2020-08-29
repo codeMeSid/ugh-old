@@ -11,9 +11,10 @@ export const userActivityController = async (req: Request, res: Response) => {
 
   let activity;
   if (user.activity === UserActivity.Active) activity = UserActivity.Banned;
-  else activity = UserActivity.Active;
+  else if (user.activity === UserActivity.Banned)
+    activity = UserActivity.Active;
 
   user.set({ activity });
   await user.save();
-  res.send(user);
+  res.send(true);
 };

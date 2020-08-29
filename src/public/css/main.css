@@ -106,16 +106,25 @@ table {
   font-size: 1.5rem; }
 
 th {
-  text-transform: uppercase; }
+  text-transform: uppercase;
+  cursor: pointer; }
 
 td,
 th {
   border: 1px solid #dddddd;
   text-align: left;
-  padding: 8px; }
+  padding: 8px;
+  cursor: pointer; }
 
 tr:nth-child(even) {
   background-color: #dddddd; }
+
+.table__link {
+  text-decoration: none; }
+
+@media (max-width: 56.25em) {
+  .table__hidden {
+    display: none; } }
 
 .card {
   background-color: #eee;

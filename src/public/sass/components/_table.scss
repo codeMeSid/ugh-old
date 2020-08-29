@@ -6,6 +6,7 @@ table {
 
 th {
   text-transform: uppercase;
+  cursor: pointer;
 }
 
 td,
@@ -13,8 +14,19 @@ th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
+  cursor: pointer;
 }
 
 tr:nth-child(even) {
   background-color: #dddddd;
+}
+
+.table__link {
+  text-decoration: none;
+}
+
+@include respond(tab-port) {
+  .table__hidden {
+    display: none;
+  }
 }
