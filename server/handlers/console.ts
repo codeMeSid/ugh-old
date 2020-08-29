@@ -28,6 +28,6 @@ export const consoleHandler: Array<ApiSign> = [
     url: "/update/activity/:consoleId",
     method: HttpMethod.Put,
     controller: consoleActivityController,
-    middlewares: [requireAdminAuth],
+    middlewares: [],
   },
 ];

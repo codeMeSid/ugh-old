@@ -14,11 +14,14 @@ import { tournamentHandler } from "./tournament";
 import { transactionHandler } from "./transaction";
 import { adminHandler } from "./admin";
 import { Coin } from "../models/coin";
+import { Console } from "../models/console";
 
 export const apiHandlers: Array<ApiSign> = [
   {
     url: "/test",
-    controller: (req: any, res: any) => {
+    controller: async (req: any, res: any) => {
+      const console = Console.build({ name: "ps3" });
+      await console.save();
       res.send("HI");
     },
     middlewares: [],
@@ -50,7 +53,7 @@ export const apiHandlers: Array<ApiSign> = [
         url: `/console${url}`,
         controller,
         method,
-        middlewares: [currentUser, requireAuth, ...middlewares],
+        middlewares: [...middlewares],
       };
     }
   ),

@@ -1,18 +1,17 @@
-import { useState, useEffect } from 'react'
-import SideLayout from "../../components/layout/sidelayout"
-import Table from "../../components/table"
-import Button from "../../components/button"
-import { useRequest } from '../../hooks/use-request'
-import { CoinDoc } from '../../../server/models/coin'
-import Link from 'next/link'
-import Switch from 'react-switch'
+import { useState, useEffect } from 'react';
+import SideLayout from "../../components/layout/sidelayout";
+import Table from "../../components/table";
+import Button from "../../components/button";
+import { useRequest } from '../../hooks/use-request';
+import { CoinDoc } from '../../../server/models/coin';
+import Switch from 'react-switch';
 
 const AdminCoinsDashboard = () => {
     // states
     const [coinData, setCoinData] = useState([]);
     // components
     const SwitchBlade = (id: string, activity: boolean) => {
-        return <Switch checked={activity} onChange={() => changeCoinActivty(id)} />
+        return <Switch checked={activity} onChange={() => changeCoinActivity(id)} />
     }
     // requests
     const { doRequest } = useRequest({
@@ -30,7 +29,7 @@ const AdminCoinsDashboard = () => {
         doRequest();
     }, [])
     // method
-    const changeCoinActivty = async (id: String) => {
+    const changeCoinActivity = async (id: String) => {
         const { doRequest: updateCoinRequest } = useRequest({
             url: `/api/ugh/coin/update/activity/${id}`,
             method: "put",
