@@ -21,7 +21,7 @@ export const gameHandler: Array<ApiSign> = [
     url: "/fetch/all",
     method: HttpMethod.Get,
     controller: gameFetchController,
-    middlewares: [currentUser, requireAdminAuth],
+    middlewares: [],
   },
   {
     url: "/fetch/active",
@@ -33,7 +33,7 @@ export const gameHandler: Array<ApiSign> = [
     url: "/update/activity/:gameId",
     method: HttpMethod.Put,
     controller: gameUpdateActivityController,
-    middlewares: [currentUser, requireAdminAuth],
+    middlewares: [],
   },
   {
     url: "/update/:gameId",

@@ -10,7 +10,7 @@ interface GameAttrs {
   thumbnailUrl: string;
 }
 
-interface GameDoc extends mongoose.Document {
+export interface GameDoc extends mongoose.Document {
   name: string;
   console: string;
   participants: Array<number>;

@@ -13,17 +13,12 @@ import { newsHandler } from "./news";
 import { tournamentHandler } from "./tournament";
 import { transactionHandler } from "./transaction";
 import { adminHandler } from "./admin";
-import { Gallery } from "../models/gallery";
+import { Game } from "../models/game";
 
 export const apiHandlers: Array<ApiSign> = [
   {
     url: "/test",
     controller: async (req: any, res: any) => {
-      const gallery = Gallery.build({
-        imageUrl:"https://images.pexels.com/photos/3321532/pexels-photo-3321532.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-        name: "robin",
-      });
-      await gallery.save();
       res.send("HI");
     },
     middlewares: [],
