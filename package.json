@@ -16,7 +16,7 @@
     "heroku:postbuild": "npm run build"
   },
   "dependencies": {
-    "@monsid/ugh": "0.0.38",
+    "@monsid/ugh": "0.0.40",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
@@ -27,7 +27,7 @@
     "express-async-errors": "^3.1.1",
     "express-validator": "^6.5.0",
     "helmet": "^3.23.1",
-    "mongoose": "^5.9.19",
+    "mongoose": "^5.10.2",
     "next": "^9.4.4",
     "next-images": "^1.4.0",
     "node-sass": "^4.14.1",
@@ -40,6 +40,7 @@
     "response-time": "^2.3.2"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/body-parser": "^1.19.0",
     "@types/compression": "^1.7.0",
     "@types/cookie-session": "^2.0.41",

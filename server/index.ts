@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
+import mongoose from "mongoose";
 import {
-  startDb,
   successlog,
   errorHandler,
   errorlog,
   timer,
   paymentHandler,
+  DatabaseConnectionError,
 } from "@monsid/ugh";
 import { app, nextApp, handle } from "./app";
 import { apiRouter } from "./routes/api-routes";
@@ -13,9 +14,16 @@ import { MONGO_URI, RAZORPAY_ID, RAZORPAY_SECRET } from "./utils/env-check";
 const start = async () => {
   try {
     await nextApp.prepare();
-    await startDb(MONGO_URI!);
-    await timer.connect(MONGO_URI!);
-    await paymentHandler.init(RAZORPAY_ID!, RAZORPAY_SECRET!);
+    await mongoose.connect(
+      MONGO_URI,
+      { useNewUrlParser: true, useUnifiedTopology: true },
+      (err) => {
+        if (err) throw new DatabaseConnectionError();
+        successlog("Database is connected");
+      }
+    );
+    await timer.connect(MONGO_URI);
+    await paymentHandler.init(RAZORPAY_ID, RAZORPAY_SECRET);
     app.use("/api/ugh", apiRouter);
     app.use(errorHandler);
     app.all("*", (req: Request, res: Response) => handle(req, res));

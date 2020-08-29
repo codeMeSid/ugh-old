@@ -8,7 +8,8 @@ interface Props {
 
 export default class NumberCard extends Component<Props> {
     state = {
-        count: 0
+        count: 0,
+        isCounting: false
     }
     constructor(props) {
         super(props)
@@ -16,6 +17,9 @@ export default class NumberCard extends Component<Props> {
 
     componentDidMount() {
         this.counter()
+    }
+    componentDidUpdate(prevProps) {
+        if (prevProps.count !== this.props.count) this.setState({ isCounting: true });
     }
 
     counter() {
@@ -27,11 +31,12 @@ export default class NumberCard extends Component<Props> {
     }
 
     render() {
+
         return <div className="card card--number">
             <div className="card__title">{this.props.title}</div>
             {
-                !this.props.count
-                    ? <Skeleton />
+                !this.state.isCounting
+                    ? <Skeleton width={100} height={100} />
                     : <div className="card__count">{this.state.count}</div>
             }
         </div>

@@ -12,14 +12,14 @@ export const adminFetchMetricController = async (
   req: Request,
   res: Response
 ) => {
-  const users = await User.find().countDocuments();
-  const tournaments = await Tournament.find().countDocuments();
-  const sponsors = await Sponsor.find().countDocuments();
-  const streams = await Stream.find().countDocuments();
-  const consoles = await Console.find().countDocuments();
-  const games = await Game.find().countDocuments();
-  const news = await News.find().countDocuments();
-  const gallery = await Gallery.find().countDocuments();
+  const users = (await User.find()).length;
+  const tournaments = (await Tournament.find()).length;
+  const sponsors = (await Sponsor.find()).length;
+  const streams = (await Stream.find()).length;
+  const consoles = (await Console.find()).length;
+  const games = (await Game.find()).length;
+  const news = (await News.find()).length;
+  const gallery = (await Gallery.find()).length;
   res.send({
     users,
     tournaments,
