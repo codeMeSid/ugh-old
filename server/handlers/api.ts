@@ -13,11 +13,14 @@ import { newsHandler } from "./news";
 import { tournamentHandler } from "./tournament";
 import { transactionHandler } from "./transaction";
 import { adminHandler } from "./admin";
+import { Coin } from "../models/coin";
 
 export const apiHandlers: Array<ApiSign> = [
   {
     url: "/test",
-    controller: (req: any, res: any) => res.send("HI"),
+    controller: (req: any, res: any) => {
+      res.send("HI");
+    },
     middlewares: [],
   },
   ...Array.from(userHandlers).map(

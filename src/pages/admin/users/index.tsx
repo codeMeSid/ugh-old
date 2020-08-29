@@ -42,7 +42,7 @@ const AdminUserDashboard = () => {
         await updateUserRequest();
         await doRequest();
     }
-
+    // render
     return <SideLayout title={`users(${userData.length})`}>
         <Table headers={[{ text: 'ughId', isResponsive: false },
         { text: 'name', isResponsive: true },
