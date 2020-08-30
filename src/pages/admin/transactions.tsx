@@ -8,7 +8,7 @@ const AdminTransactionDashboard = () => {
             <Button size="icon" text="+" style={{ marginBottom: 10, marginRight: 10 }} />
             <h1>Create transaction</h1>
         </div>
-        <Table headers={['value', 'cost', 'is active']} data={[]} />
+        <Table headers={[]} data={[]} />
     </SideLayout>
 }
 
