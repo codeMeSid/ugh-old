@@ -15,11 +15,8 @@ export default class NumberCard extends Component<Props> {
         super(props)
     }
 
-    componentDidMount() {
-        this.counter()
-    }
     componentDidUpdate(prevProps) {
-        if (prevProps.count !== this.props.count) this.setState({ isCounting: true });
+        if (prevProps.count !== this.props.count) this.setState({ isCounting: true }, this.counter);
     }
 
     counter() {
