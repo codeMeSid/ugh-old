@@ -13,21 +13,22 @@ import { newsHandler } from "./news";
 import { tournamentHandler } from "./tournament";
 import { transactionHandler } from "./transaction";
 import { adminHandler } from "./admin";
-import { Sponsorship } from "../models/sponsorship";
+import { Sponsor } from "../models/sponsor";
 
 export const apiHandlers: Array<ApiSign> = [
   {
     url: "/test",
     controller: async (req: any, res: any) => {
-      const sponsorship = Sponsorship.build({
-        name: "silver",
-        color: "#C0C0C0	",
-        packs: [
-          { duration: 3, price: 200 },
-          { duration: 9, price: 1000 },
-        ],
+      const sponsor = Sponsor.build({
+        contact: {
+          email: "s@s.in",
+          phone: "7338766426",
+        },
+        pack: { duration: 3, price: 100 },
+        packName: "gold",
+        message: "",
       });
-      await sponsorship.save();
+      await sponsor.save();
       res.send("HI");
     },
     middlewares: [],

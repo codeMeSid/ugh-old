@@ -45,7 +45,7 @@ const AdminSponsorshipDashboard = () => {
         await updateSRequest();
         await doRequest();
     }
-    return <SideLayout title="sponsorships">
+    return <SideLayout title={`packs(${sData.length})`}>
         <div style={{ display: "flex", alignItems: "center" }}>
             <Button size="icon" text="+" style={{ marginBottom: 10, marginRight: 10 }} />
             <h1>Add sponsorship</h1>

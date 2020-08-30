@@ -8,7 +8,7 @@ interface SponsorAttrs {
   message?: string;
 }
 
-interface SponsorDoc extends mongoose.Document {
+export interface SponsorDoc extends mongoose.Document {
   name: string;
   contact: SponsorContact;
   packName: string;

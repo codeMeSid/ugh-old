@@ -7,6 +7,7 @@ import {
 import { sponsorAddController } from "../controllers/sponsor/add";
 import { sponsorFetchActiveController } from "../controllers/sponsor/fetch-active";
 import { sponsorFetchController } from "../controllers/sponsor/fetch";
+import { sponsorUpdateActivityController } from "../controllers/sponsor/update-activity";
 
 export const sponsorHandler: Array<ApiSign> = [
   {
@@ -25,14 +26,14 @@ export const sponsorHandler: Array<ApiSign> = [
     url: "/fetch/all",
     method: HttpMethod.Get,
     controller: sponsorFetchController,
-    middlewares: [currentUser, requireAdminAuth],
+    middlewares: [],
   },
   // update activity
   {
     url: "/update/activity/:sponsorId",
     method: HttpMethod.Put,
-    controller: sponsorFetchActiveController,
-    middlewares: [currentUser, requireAdminAuth],
+    controller: sponsorUpdateActivityController,
+    middlewares: [],
   },
   // update request
   // {
