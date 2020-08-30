@@ -6,7 +6,6 @@ import { useRequest } from '../../hooks/use-request'
 import { GalleryDoc } from '../../../server/models/gallery'
 import Switch from 'react-switch';
 
-
 const AdminGalleryDashboard = () => {
     // states
     const [galleryData, setGalleryData] = useState([]);

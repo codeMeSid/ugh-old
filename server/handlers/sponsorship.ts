@@ -21,7 +21,7 @@ export const sponsorshipHandler: Array<ApiSign> = [
     url: "/fetch/all",
     method: HttpMethod.Get,
     controller: sponsorshipFetchController,
-    middlewares: [currentUser, requireAdminAuth],
+    middlewares: [],
   },
   {
     url: "/fetch/active",
@@ -30,10 +30,10 @@ export const sponsorshipHandler: Array<ApiSign> = [
     middlewares: [],
   },
   {
-    url: "/update/activity/:sponshorshipId",
+    url: "/update/activity/:sponsorshipId",
     method: HttpMethod.Put,
     controller: sponsorshipUpdateActivityController,
-    middlewares: [currentUser, requireAdminAuth],
+    middlewares: [],
   },
   {
     url: "/update/:sponshorshipId",

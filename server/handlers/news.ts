@@ -26,12 +26,12 @@ export const newsHandler: Array<ApiSign> = [
     url: "/fetch/all",
     method: HttpMethod.Get,
     controller: newsFetchController,
-    middlewares: [currentUser, requireAdminAuth],
+    middlewares: [],
   },
   {
     url: "/update/activity/:newsId",
     method: HttpMethod.Put,
     controller: newsUpdateActiveController,
-    middlewares: [currentUser, requireAdminAuth],
+    middlewares: [],
   },
 ];

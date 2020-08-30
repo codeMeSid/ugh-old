@@ -1,4 +1,4 @@
-import { ApiSign, currentUser, requireAuth } from "@monsid/ugh";
+import { ApiSign, currentUser, requireAuth, SocialTypes } from "@monsid/ugh";
 
 import { userHandlers } from "./user";
 import { featureHandlers } from "./feature";
@@ -13,12 +13,21 @@ import { newsHandler } from "./news";
 import { tournamentHandler } from "./tournament";
 import { transactionHandler } from "./transaction";
 import { adminHandler } from "./admin";
-import { Game } from "../models/game";
+import { Sponsorship } from "../models/sponsorship";
 
 export const apiHandlers: Array<ApiSign> = [
   {
     url: "/test",
     controller: async (req: any, res: any) => {
+      const sponsorship = Sponsorship.build({
+        name: "silver",
+        color: "#C0C0C0	",
+        packs: [
+          { duration: 3, price: 200 },
+          { duration: 9, price: 1000 },
+        ],
+      });
+      await sponsorship.save();
       res.send("HI");
     },
     middlewares: [],

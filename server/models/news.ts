@@ -5,29 +5,41 @@ interface NewsAttrs {
   description: string;
 }
 
-interface NewsDoc extends mongoose.Document {
+export interface NewsDoc extends mongoose.Document {
   title: string;
   description: string;
   createdAt: Date;
-  isActive: Boolean;
+  isActive: boolean;
 }
 
 interface NewsModel extends mongoose.Model<NewsDoc> {
   build(attrs: NewsAttrs): NewsDoc;
 }
 
-const newsSchema = new mongoose.Schema({
-  title: String,
-  description: String,
-  createdAt: {
-    type: mongoose.Schema.Types.Date,
-    default: Date.now(),
+const newsSchema = new mongoose.Schema(
+  {
+    title: String,
+    description: String,
+    createdAt: {
+      type: mongoose.Schema.Types.Date,
+      default: Date.now(),
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
-  isActive: {
-    type: Boolean,
-    default: true,
-  },
-});
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.password;
+        delete ret.__v;
+      },
+    },
+  }
+);
 
 newsSchema.statics.build = (attrs: NewsAttrs) => {
   return new News(attrs);

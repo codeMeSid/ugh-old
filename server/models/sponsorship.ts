@@ -7,7 +7,7 @@ interface SponsorshipAttrs {
   packs: Array<SponsorPack>;
 }
 
-interface SponsorshipDoc extends mongoose.Document {
+export interface SponsorshipDoc extends mongoose.Document {
   name: string;
   color: string;
   packs: Array<SponsorPack>;

@@ -9,7 +9,7 @@ interface StreamAttrs {
   social: SocialTypes;
 }
 
-interface StreamDoc extends mongoose.Document {
+export interface StreamDoc extends mongoose.Document {
   imageUrl: string;
   name: string;
   game: string;
