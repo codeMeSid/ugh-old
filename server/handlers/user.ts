@@ -4,6 +4,7 @@ import {
   currentUser,
   requireAuth,
   requireAdminAuth,
+  validateRequest,
 } from "@monsid/ugh";
 
 import { signupController } from "../controllers/user/signup";
@@ -19,6 +20,7 @@ import { userActivityController } from "../controllers/user/activity";
 import { userProfileContoller } from "../controllers/user/profile";
 import { userFetchAllController } from "../controllers/user/all";
 import { userDetailController } from "../controllers/user/detail";
+import { signupValidator } from "../utils/validator/user/signup";
 
 export const userHandlers: Array<ApiSign> = [
   // {
@@ -61,7 +63,7 @@ export const userHandlers: Array<ApiSign> = [
     url: "/signup",
     method: HttpMethod.Post,
     controller: signupController,
-    middlewares: [],
+    middlewares: [signupValidator, validateRequest],
   },
   // {
   //   url: "/social-auth",
@@ -75,12 +77,12 @@ export const userHandlers: Array<ApiSign> = [
   //   controller: userRecoveryController,
   //   middlewares: [],
   // },
-  // {
-  //   url: "/signin",
-  //   method: HttpMethod.Post,
-  //   controller: signinController,
-  //   middlewares: [],
-  // },
+  {
+    url: "/signin",
+    method: HttpMethod.Post,
+    controller: signinController,
+    middlewares: [],
+  },
   // {
   //   url: "/reset/:recoverykey",
   //   method: HttpMethod.Post,

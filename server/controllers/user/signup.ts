@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { filter, BadRequestError, isValidDob } from "@monsid/ugh";
+import { filter, BadRequestError } from "@monsid/ugh";
 import { User } from "../../models/user";
 
 // TODO send email
@@ -14,7 +14,7 @@ export const signupController = async (req: Request, res: Response) => {
     email,
     name,
     ughId,
-    dob: isValidDob(dob),
+    dob,
     password,
   });
   await newUser.save();
