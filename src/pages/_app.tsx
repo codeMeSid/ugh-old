@@ -2,12 +2,7 @@ import "../public/css/main.css";
 import "react-awesome-button/dist/styles.css";
 
 
-const AppComponent = ({ Component, pageProps, router, currentUser }) => {
-
-
-  return <Component {...pageProps} key={router.route} currentUser={currentUser} />
-
-}
+const AppComponent = ({ Component, pageProps, router, currentUser }) => <Component {...pageProps} key={router.route} currentUser={currentUser} />
 
 AppComponent.getInitialProps = async (appContext) => {
   let pageProps = {};
