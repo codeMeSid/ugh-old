@@ -57,12 +57,12 @@ export const userHandlers: Array<ApiSign> = [
   //   controller: userDetailController,
   //   middlewares: [currentUser, requireAdminAuth],
   // },
-  // {
-  //   url: "/signup",
-  //   method: HttpMethod.Post,
-  //   controller: signupController,
-  //   middlewares: [],
-  // },
+  {
+    url: "/signup",
+    method: HttpMethod.Post,
+    controller: signupController,
+    middlewares: [],
+  },
   // {
   //   url: "/social-auth",
   //   method: HttpMethod.Post,

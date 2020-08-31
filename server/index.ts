@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import mongoose from "mongoose";
 import {
   successlog,
@@ -8,9 +7,10 @@ import {
   paymentHandler,
   DatabaseConnectionError,
 } from "@monsid/ugh";
-import { app, nextApp, handle } from "./app";
+import { app, nextApp } from "./app";
 import { apiRouter } from "./routes/api-routes";
 import { MONGO_URI, RAZORPAY_ID, RAZORPAY_SECRET } from "./utils/env-check";
+import { siteRouter } from "./routes/site-routes";
 const start = async () => {
   try {
     await nextApp.prepare();
@@ -30,7 +30,7 @@ const start = async () => {
     await paymentHandler.init(RAZORPAY_ID, RAZORPAY_SECRET);
     app.use("/api/ugh", apiRouter);
     app.use(errorHandler);
-    app.all("*", (req: Request, res: Response) => handle(req, res));
+    app.use(siteRouter);
     app.listen(process.env.PORT, () => {
       successlog(`SERVICE on port ${process.env.PORT}!!!!!!!!`);
     });

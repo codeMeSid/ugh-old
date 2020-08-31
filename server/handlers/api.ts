@@ -25,24 +25,7 @@ import { Game } from "../models/game";
 export const apiHandlers: Array<ApiSign> = [
   {
     url: "/test",
-    controller: async (req: any, res: any) => {
-      const game = await Game.findById("5f4addecf718dd66400d093a");
-      const tournament = await Tournament.build({
-        name: "Team Death Match",
-        addedBy: {
-          id: "5f4aa39fe4ba2d360d04c1aa",
-          email: "s@s.in",
-          name: "siddhant",
-          role: "admin",
-        },
-        coins: 10,
-        endDateTime: new Date(Date.now().valueOf() + 3600000),
-        game,
-        playerCount: 100,
-        startDateTime: new Date(),
-        winnerCount: 10,
-      });
-      await tournament.save();
+    controller: (req: any, res: any) => {
       res.send("HI");
     },
     middlewares: [],
