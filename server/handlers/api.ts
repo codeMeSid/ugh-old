@@ -1,4 +1,10 @@
-import { ApiSign, currentUser, requireAuth, SocialTypes } from "@monsid/ugh";
+import {
+  ApiSign,
+  currentUser,
+  requireAuth,
+  SocialTypes,
+  TransactionTypes,
+} from "@monsid/ugh";
 
 import { userHandlers } from "./user";
 import { featureHandlers } from "./feature";
@@ -13,22 +19,30 @@ import { newsHandler } from "./news";
 import { tournamentHandler } from "./tournament";
 import { transactionHandler } from "./transaction";
 import { adminHandler } from "./admin";
-import { Sponsor } from "../models/sponsor";
+import { Tournament } from "../models/tournament";
+import { Game } from "../models/game";
 
 export const apiHandlers: Array<ApiSign> = [
   {
     url: "/test",
     controller: async (req: any, res: any) => {
-      const sponsor = Sponsor.build({
-        contact: {
+      const game = await Game.findById("5f4addecf718dd66400d093a");
+      const tournament = await Tournament.build({
+        name: "Team Death Match",
+        addedBy: {
+          id: "5f4aa39fe4ba2d360d04c1aa",
           email: "s@s.in",
-          phone: "7338766426",
+          name: "siddhant",
+          role: "admin",
         },
-        pack: { duration: 3, price: 100 },
-        packName: "gold",
-        message: "",
+        coins: 10,
+        endDateTime: new Date(Date.now().valueOf() + 3600000),
+        game,
+        playerCount: 100,
+        startDateTime: new Date(),
+        winnerCount: 10,
       });
-      await sponsor.save();
+      await tournament.save();
       res.send("HI");
     },
     middlewares: [],

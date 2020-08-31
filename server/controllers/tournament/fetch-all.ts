@@ -5,6 +5,6 @@ export const tournamentFetchAllController = async (
   req: Request,
   res: Response
 ) => {
-  const tournaments = await Tournament.find();
+  const tournaments = await Tournament.find().populate("game", "name console", "Games");
   res.send(tournaments);
 };

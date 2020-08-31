@@ -16,7 +16,11 @@ const start = async () => {
     await nextApp.prepare();
     await mongoose.connect(
       MONGO_URI,
-      { useNewUrlParser: true, useUnifiedTopology: true },
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: false,
+      },
       (err) => {
         if (err) throw new DatabaseConnectionError();
         successlog("Database is connected");

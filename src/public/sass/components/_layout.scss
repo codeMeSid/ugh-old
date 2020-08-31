@@ -1,8 +1,14 @@
 .layout {
   min-height: 100vh;
   width: 100vw;
+  position: relative;
   &--side {
     display: flex;
+  }
+  &__box {
+    height: 12vh;
+    width: 100%;
+    background-color: black;
   }
   &__body {
     &__title {
@@ -19,7 +25,6 @@
     &__children {
       padding: 2rem;
       position: relative;
-      
     }
   }
 }

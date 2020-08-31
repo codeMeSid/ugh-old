@@ -1,28 +1,29 @@
 import mongoose from "mongoose";
-import { UserPayload, TournamentStatus } from "@monsid/ugh";
+import { UserPayload, TournamentStatus, GameGroups } from "@monsid/ugh";
 import { UserDoc } from "./user";
 import { BracketDoc } from "./bracket";
+import { GameDoc } from "./game";
 
 interface TournamentAttrs {
   name: string;
   coins: number;
   playerCount: number;
+  group?: GameGroups;
   winnerCount: number;
-  game: string;
-  console: string;
+  game: GameDoc;
   addedBy: UserPayload;
   startDateTime: Date;
   endDateTime: Date;
 }
 
-interface TournamentDoc extends mongoose.Document {
+export interface TournamentDoc extends mongoose.Document {
   name: string;
   coins: number;
   playerCount: number;
+  group: GameGroups;
   winnerCount: number;
   players: Array<UserDoc>;
-  game: string;
-  console: string;
+  game: GameDoc;
   addedBy: UserPayload;
   startDateTime: Date;
   endDateTime: Date;
@@ -34,39 +35,56 @@ interface TournamentModel extends mongoose.Model<TournamentDoc> {
   build(attrs: TournamentAttrs): TournamentDoc;
 }
 
-const tournamentSchema = new mongoose.Schema({
-  name: String,
-  coins: Number,
-  playerCount: Number,
-  winnerCount: Number,
-  players: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Users",
-    },
-  ],
-  game: String,
-  console: String,
-  addedBy: {
-    id: String,
+const tournamentSchema = new mongoose.Schema(
+  {
     name: String,
-    email: String,
-    role: String,
-  },
-  startDateTime: mongoose.Schema.Types.Date,
-  endDateTime: mongoose.Schema.Types.Date,
-  brackets: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Brackets",
+    coins: Number,
+    playerCount: Number,
+    group: {
+      name: String,
+      participants: Number,
     },
-  ],
-  status: {
-    type: String,
-    enum: Object.values(TournamentStatus),
-    default: TournamentStatus.Upcoming,
+    winnerCount: Number,
+    players: [
+      {
+        refs: "Users",
+        type: mongoose.Schema.Types.ObjectId,
+      },
+    ],
+    game: {
+      refs: "Games",
+      type: mongoose.Schema.Types.ObjectId,
+    },
+    addedBy: {
+      id: String,
+      name: String,
+      email: String,
+      role: String,
+    },
+    startDateTime: mongoose.Schema.Types.Date,
+    endDateTime: mongoose.Schema.Types.Date,
+    brackets: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        refs: "Brackets",
+      },
+    ],
+    status: {
+      type: String,
+      enum: Object.values(TournamentStatus),
+      default: TournamentStatus.Upcoming,
+    },
   },
-});
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret._v;
+      },
+    },
+  }
+);
 
 tournamentSchema.statics.build = (attrs: TournamentAttrs) => {
   return new Tournament(attrs);

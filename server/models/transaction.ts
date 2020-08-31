@@ -8,7 +8,7 @@ interface TransactionAttrs {
   status: TransactionTypes;
 }
 
-interface TransactionDoc extends mongoose.Document {
+export interface TransactionDoc extends mongoose.Document {
   user: string;
   orderId: string;
   razorpayId: string;
@@ -26,7 +26,7 @@ const transactionSchema = new mongoose.Schema(
     user: String,
     orderId: String,
     razorpayId: String,
-    amount: { type: Number, min: 1000 },
+    amount: { type: Number, min: 100 },
     createdAt: { type: mongoose.Schema.Types.Date, default: Date.now() },
     status: {
       type: String,

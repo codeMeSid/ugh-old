@@ -1,0 +1,10 @@
+.signin {
+  min-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  &__other {
+    margin: 1.2rem 0;
+  }
+}
