@@ -21,7 +21,7 @@ AppComponent.getInitialProps = async (appContext) => {
   }
   return {
     pageProps,
-    currentUser: appContext.ctx.req.currentUser
+    currentUser: appContext?.ctx?.req?.currentUser
   };
 };
 

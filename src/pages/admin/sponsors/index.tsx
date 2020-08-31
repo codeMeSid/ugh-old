@@ -28,7 +28,7 @@ const AdminSponsorDashboard = () => {
                     <div>{s.contact.phone}</div>
                 </div>,
                 <div>
-                    <div>{s.sponsorPack.name.toUpperCase()}</div>
+                    <div style={{ backgroundColor: s.sponsorPack.color }}>{s.sponsorPack.name.toUpperCase()}</div>
                     <div>{s.sponsorPack.pack.duration} months</div>
                     <div>&#8377;{s.sponsorPack.pack.price}</div>
                 </div>,

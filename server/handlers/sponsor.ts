@@ -16,17 +16,19 @@ export const sponsorHandler: Array<ApiSign> = [
     controller: sponsorAddController,
     middlewares: [],
   },
+  // done
   {
     url: "/fetch/active",
     method: HttpMethod.Get,
     controller: sponsorFetchActiveController,
     middlewares: [],
   },
+  // done
   {
     url: "/fetch/all",
     method: HttpMethod.Get,
     controller: sponsorFetchController,
-    middlewares: [],
+    middlewares: [currentUser, requireAdminAuth],
   },
   // update activity
   {
