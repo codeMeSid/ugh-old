@@ -79,6 +79,7 @@ export const userHandlers: Array<ApiSign> = [
   //   controller: userRecoveryController,
   //   middlewares: [],
   // },
+  // done
   {
     url: "/signin",
     method: HttpMethod.Post,
