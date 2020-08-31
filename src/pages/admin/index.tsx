@@ -2,10 +2,20 @@ import { useState, useEffect } from 'react'
 import SideLayout from "../../components/layout/sidelayout"
 import NumberCard from "../../components/card/numer";
 import { useRequest } from '../../hooks/use-request';
+import Link from 'next/link';
 
 
 const AdminDashboard = () => {
     const [data, setData] = useState(null);
+    const pages = [
+        "users",
+        "tournaments",
+        "sponsors",
+        "streams",
+        "consoles",
+        "games",
+        "news",
+        "gallery"];
     const { doRequest } = useRequest({
         url: "/api/ugh/admin/fetch/metrics",
         body: {},
@@ -17,14 +27,21 @@ const AdminDashboard = () => {
     }, [])
     return <SideLayout title="admin">
         <div className="grid">
-            <NumberCard title="users" count={data?.users} />
-            <NumberCard title="tournaments" count={data?.tournaments} />
-            <NumberCard title="sponsors" count={data?.sponsors} />
-            <NumberCard title="streams" count={data?.streams} />
-            <NumberCard title="console" count={data?.consoles} />
-            <NumberCard title="games" count={data?.games} />
-            <NumberCard title="news" count={data?.news} />
-            <NumberCard title="gallery" count={data?.gallery} />
+            {pages.map(page => {
+                return <Link key={page} href={`/admin/${page}`}>
+                    <a style={{ textDecoration: "none", color: "black" }}>
+                        <NumberCard title={page} count={data ? data[page] : null} />
+                    </a>
+                </Link>
+            })}
+            {/* 
+            <NumberCard title= count={data?.tournaments} />
+            <NumberCard title= count={data?.sponsors} />
+            <NumberCard title= count={data?.streams} />
+            <NumberCard title= count={data?.consoles} />
+            <NumberCard title= count={data?.games} />
+            <NumberCard title= count={data?.news} />
+            <NumberCard title= count={data?.gallery} /> */}
         </div>
     </SideLayout>
 }

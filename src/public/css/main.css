@@ -163,7 +163,8 @@ tr:nth-child(even) {
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: center; }
+  justify-content: center;
+  cursor: pointer; }
   .card__title {
     font-size: 2.4rem;
     text-transform: capitalize; }

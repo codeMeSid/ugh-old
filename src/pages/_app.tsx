@@ -1,17 +1,12 @@
 import "../public/css/main.css";
 import "react-awesome-button/dist/styles.css";
-import Footer from "../components/footer";
-import SponsorSlider from "../components/sponsor-slider";
 
 
 const AppComponent = ({ Component, pageProps, router, currentUser }) => {
 
 
-  return <>
-    <Component {...pageProps} key={router.route} currentUser={currentUser} />
-    <SponsorSlider />
-    <Footer />
-  </>
+  return <Component {...pageProps} key={router.route} currentUser={currentUser} />
+
 }
 
 AppComponent.getInitialProps = async (appContext) => {
