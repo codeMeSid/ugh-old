@@ -5,7 +5,7 @@ import { useRequest } from '../../../hooks/use-request';
 import { SponsorDoc } from '../../../../server/models/sponsor';
 import Switch from 'react-switch';
 import Link from 'next/link'
-import Button from '../../../components/button';
+import Button from '../../../components/button/main';
 
 
 const AdminSponsorDashboard = () => {
@@ -28,9 +28,9 @@ const AdminSponsorDashboard = () => {
                     <div>{s.contact.phone}</div>
                 </div>,
                 <div>
-                    <div>{s.packName.toUpperCase()}</div>
-                    <div>{s.pack.duration} months</div>
-                    <div>&#8377;{s.pack.price}</div>
+                    <div>{s.sponsorPack.name.toUpperCase()}</div>
+                    <div>{s.sponsorPack.pack.duration} months</div>
+                    <div>&#8377;{s.sponsorPack.pack.price}</div>
                 </div>,
                 s.isProccessed
                     ? SwitchBlade(s.id, s.isActive)

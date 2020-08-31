@@ -2,8 +2,8 @@ import { useState } from 'react';
 import Router from 'next/router';
 import MainLayout from "../components/layout/mainlayout";
 import Input from "../components/input";
-import ProgressButton from "../components/progress-button";
-import SocialButton from "../components/social-button";
+import ProgressButton from "../components/button/progress";
+import SocialButton from "../components/button/social";
 import Link from "next/link";
 import { useRequest } from '../hooks/use-request';
 

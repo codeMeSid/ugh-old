@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import SideLayout from "../../../components/layout/sidelayout";
 import Table from "../../../components/table";
-import Button from "../../../components/button";
-import SocialButton from "../../../components/social-button";
+import Button from "../../../components/button/main";
+import SocialButton from "../../../components/button/social";
 import { useRequest } from '../../../hooks/use-request';
 import { StreamDoc } from '../../../../server/models/stream';
 import Link from 'next/link';

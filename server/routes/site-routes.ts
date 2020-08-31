@@ -1,25 +1,34 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { handle } from "../app";
 import { currentUser, UserRole } from "@monsid/ugh";
 
 const router = Router();
 
-router.use("/admin", currentUser, (req: Request, res: Response) => {
-  if (!req.currentUser || req.currentUser.role !== UserRole.Admin) {
-    res.redirect("/signin");
+router.use(
+  "/admin",
+  currentUser,
+  (req: Request, res: Response, next: NextFunction) => {
+    if (req.currentUser && req.currentUser.role === UserRole.Admin) next();
+    else res.redirect("/signin");
   }
-});
-router.use("/signin", currentUser, (req: Request, res: Response) => {
-  if (req.currentUser) {
-    res.redirect("/");
+);
+router.use(
+  "/signin",
+  currentUser,
+  (req: Request, res: Response, next: NextFunction) => {
+    if (req.currentUser) res.redirect("/");
+    else next();
   }
-});
-router.use("/signup", currentUser, (req: Request, res: Response) => {
-    if (req.currentUser) {
-      res.redirect("/");
-    }
-  });
+);
+router.use(
+  "/signup",
+  currentUser,
+  (req: Request, res: Response, next: NextFunction) => {
+    if (req.currentUser) res.redirect("/");
+    else next();
+  }
+);
 
-router.all("*", (req, res) => handle(req, res));
+router.all("*", currentUser, (req, res) => handle(req, res));
 
 export { router as siteRouter };

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import SideNavbar from "../navbar/sidenav"
-import Button from "../button";
+import Button from "../button/main";
 
 const SideLayout = ({ children, title }) => {
 

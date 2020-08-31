@@ -1,0 +1,51 @@
+.sponsor-slider {
+  width: 100%;
+  padding: 1rem;
+  background-color: black;
+  &__container {
+    display: flex;
+    overflow-x: scroll;
+    counter-reset: item;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-color: transparent transparent; /* thumb and track color */
+    scrollbar-width: 0px;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+  }
+  &__card {
+    min-width: 20rem;
+    max-width: 20rem;
+    height: 12rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    position: relative;
+    backdrop-filter: invert(70%);
+    &__name {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      text-transform: capitalize;
+      font-size: 1.6rem;
+      text-align: center;
+      background-color: rgba(white, 0.7);
+      padding: 4px;
+      color: black;
+      border-radius: 0.4rem;
+      opacity: 0;
+      transition: opacity 300ms linear;
+      text-decoration: none;
+    }
+    &:hover &__name {
+      opacity: 1;
+    }
+    &:not(:last-child) {
+      margin-right: 0.7rem;
+    }
+  }
+}

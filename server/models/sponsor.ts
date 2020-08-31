@@ -3,16 +3,22 @@ import { SponsorPack, SponsorContact, SponsorLink } from "@monsid/ugh";
 
 interface SponsorAttrs {
   contact: SponsorContact;
-  packName: string;
-  pack: SponsorPack;
+  sponsorPack: {
+    name: string;
+    color: string;
+    pack: SponsorPack;
+  };
   message?: string;
 }
 
 export interface SponsorDoc extends mongoose.Document {
   name: string;
   contact: SponsorContact;
-  packName: string;
-  pack: SponsorPack;
+  sponsorPack: {
+    name: string;
+    color: string;
+    pack: SponsorPack;
+  };
   sponsorId: string;
   message: string;
   imageUrl: string;
@@ -33,13 +39,13 @@ const sponsorSchema = new mongoose.Schema(
       phone: String,
       email: String,
     },
-    packName: {
-      type: String,
-      required: true,
-    },
-    pack: {
-      duration: Number,
-      price: Number,
+    sponsorPack: {
+      name: String,
+      color: String,
+      pack: {
+        duration: Number,
+        price: Number,
+      },
     },
     sponsorId: String,
     message: String,

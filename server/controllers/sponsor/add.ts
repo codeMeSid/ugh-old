@@ -3,7 +3,7 @@ import { Sponsor } from "../../models/sponsor";
 import { BadRequestError } from "@monsid/ugh";
 
 export const sponsorAddController = async (req: Request, res: Response) => {
-  const { email, phone, duration, price, packName, message } = req.body;
+  const { email, phone, duration, price, name, color, message } = req.body;
   const existingSponsor = await Sponsor.findOne({
     $or: [{ "contact.email": email }, { "contact.phone": phone }],
   });
@@ -14,11 +14,14 @@ export const sponsorAddController = async (req: Request, res: Response) => {
       email,
       phone,
     },
-    pack: {
-      duration,
-      price,
+    sponsorPack: {
+      name,
+      color,
+      pack: {
+        duration,
+        price,
+      },
     },
-    packName,
     message,
   });
   await sponsor.save();
