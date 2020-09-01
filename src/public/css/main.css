@@ -21,6 +21,10 @@ body::-webkit-scrollbar-thumb {
   border-radius: 5rem;
   font-family: "Chakra Petch", sans-serif; }
 
+a {
+  text-decoration: none;
+  color: inherit; }
+
 .loading-indicator {
   position: absolute;
   top: 50%;
@@ -68,7 +72,6 @@ h1 {
     visibility: hidden; }
 
 .layout {
-  min-height: 100vh;
   width: 100vw;
   position: relative; }
   .layout--side {
@@ -103,7 +106,68 @@ h1 {
   background-color: transparent;
   display: flex;
   align-items: center;
-  padding: 0 2rem; }
+  padding: 0 8rem; }
+
+.navbar__logo {
+  height: 5rem;
+  width: 14rem; }
+
+.navbar__list {
+  margin-left: auto; }
+  .navbar__list--collapse {
+    display: flex; }
+  .navbar__list--responsive {
+    display: none; }
+
+.navbar__item--link {
+  font-size: 1.6rem;
+  text-transform: capitalize;
+  margin-right: 5rem;
+  padding-bottom: 1rem;
+  position: relative;
+  transition: color 300ms linear; }
+  .navbar__item--link::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 0;
+    background-color: blue;
+    transition: width 300ms linear; }
+  .navbar__item--link:hover {
+    color: blue; }
+  .navbar__item--link:hover::before {
+    width: 100%; }
+
+.navbar__item--dropdown {
+  text-transform: capitalize;
+  position: relative;
+  margin-right: 5rem;
+  cursor: pointer;
+  font-size: 1.6rem; }
+  .navbar__item--dropdown__title {
+    transition: color 300ms linear; }
+    .navbar__item--dropdown__title:hover {
+      color: blue; }
+  .navbar__item--dropdown__menu {
+    position: absolute;
+    top: 100%;
+    right: 0%;
+    width: 15rem;
+    display: none;
+    flex-direction: column; }
+    .navbar__item--dropdown__menu__item {
+      background-color: rgba(0, 0, 255, 0.6);
+      padding: 1rem; }
+      .navbar__item--dropdown__menu__item:hover {
+        background-color: rgba(0, 0, 255, 0.4); }
+      .navbar__item--dropdown__menu__item:not(:last-child) {
+        margin-bottom: 0.5rem; }
+  .navbar__item--dropdown:hover .navbar__item--dropdown__menu {
+    display: flex; }
+  .navbar__item--dropdown:last-child {
+    margin-right: 0; }
 
 .navbar--side {
   position: fixed;
@@ -125,7 +189,11 @@ h1 {
 
 @media (max-width: 56.25em) {
   .navbar--top {
-    padding: 0 1rem; } }
+    padding: 0 2.5rem; }
+  .navbar__list--collapse {
+    display: none; }
+  .navbar__list--responsive {
+    display: block; } }
 
 table {
   border-collapse: collapse;

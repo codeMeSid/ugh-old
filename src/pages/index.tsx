@@ -1,9 +1,8 @@
 import MainLayout from "../components/layout/mainlayout"
 
-const LandingPage = () => {
-    return <MainLayout isFullscreen>
-        <div className="landingpage">
-            lanfing page
+const LandingPage = ({ currentUser }) => {
+    return <MainLayout isFullscreen currentUser={currentUser}>
+        <div className="landingpage" style={{ minHeight: "50rem", backgroundColor: "black" }}>
         </div>
     </MainLayout>
 }

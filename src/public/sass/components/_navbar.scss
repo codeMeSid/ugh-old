@@ -11,7 +11,84 @@
     background-color: transparent;
     display: flex;
     align-items: center;
-    padding: 0 2rem;
+    padding: 0 8rem;
+  }
+  &__logo {
+    height: 5rem;
+    width: 14rem;
+  }
+  &__list {
+    margin-left: auto;
+    &--collapse {
+      display: flex;
+    }
+    &--responsive {
+      display: none;
+    }
+  }
+  &__item {
+    &--link {
+      font-size: 1.6rem;
+      text-transform: capitalize;
+      margin-right: 5rem;
+      padding-bottom: 1rem;
+      position: relative;
+      transition: color 300ms linear;
+      &::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 2px;
+        width: 0;
+        background-color: blue;
+        transition: width 300ms linear;
+      }
+      &:hover {
+        color: blue;
+      }
+      &:hover::before {
+        width: 100%;
+      }
+    }
+
+    &--dropdown {
+      text-transform: capitalize;
+      position: relative;
+      margin-right: 5rem;
+      cursor: pointer;
+      font-size: 1.6rem;
+      &__title {
+        transition: color 300ms linear;
+        &:hover {
+          color: blue;
+        }
+      }
+      &__menu {
+        position: absolute;
+        top: 100%;
+        right: 0%;
+        width: 15rem;
+        display: none;
+        flex-direction: column;
+        &__item {
+          background-color: rgba(blue, 0.6);
+          padding: 1rem;
+          &:hover {
+            background-color: rgba(blue, 0.4);
+          }
+          &:not(:last-child) {
+            margin-bottom: 0.5rem;
+          }
+        }
+      }
+      &:hover &__menu {
+        display: flex;
+      }
+      &:last-child {
+        margin-right: 0;
+      }
+    }
   }
   &--side {
     position: fixed;
@@ -36,7 +113,15 @@
 @include respond(tab-port) {
   .navbar {
     &--top {
-      padding: 0 1rem;
+      padding: 0 2.5rem;
+    }
+    &__list {
+      &--collapse {
+        display: none;
+      }
+      &--responsive {
+        display: block;
+      }
     }
   }
 }
