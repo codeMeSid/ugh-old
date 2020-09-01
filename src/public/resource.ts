@@ -12,16 +12,19 @@ export const moreMenuLinks = [
   "how-to-play",
   "about",
 ];
-export const navlinks = (currentUser): Array<string> => [
-  "tournaments",
-  "shop",
-  ...(currentUser ? [] : ["signin", "signup"]),
+export const navlinks = ["tournaments", "shop"];
+export const navlinksAuth = ["signin", "signup"];
+export const outerMenuLinks = ["shop", "tournaments", "streams"];
+export const outerMenuLinksAuth = [
+  "profile",
+  "withdraw",
+  "my-tournament",
+  "signout",
 ];
-export const outerMenuLinks = (currentUser): Array<string> => [
-  "shop",
-  "tournaments",
-  "streams",
-  ...(currentUser
-    ? ["profile", "withdraw", "my-tournament", "signout"]
-    : ["sponsors", "about", "how-to-play", "signin", "signup"]),
+export const outerMenuLinksNonAuth = [
+  "sponsors",
+  "about",
+  "how-to-play",
+  "signin",
+  "signup",
 ];

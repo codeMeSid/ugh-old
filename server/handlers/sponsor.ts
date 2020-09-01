@@ -10,12 +10,12 @@ import { sponsorFetchController } from "../controllers/sponsor/fetch";
 import { sponsorUpdateActivityController } from "../controllers/sponsor/update-activity";
 
 export const sponsorHandler: Array<ApiSign> = [
-  {
-    url: "/add",
-    method: HttpMethod.Post,
-    controller: sponsorAddController,
-    middlewares: [],
-  },
+  // {
+  //   url: "/add",
+  //   method: HttpMethod.Post,
+  //   controller: sponsorAddController,
+  //   middlewares: [],
+  // },
   // done
   {
     url: "/fetch/active",
@@ -30,12 +30,12 @@ export const sponsorHandler: Array<ApiSign> = [
     controller: sponsorFetchController,
     middlewares: [currentUser, requireAdminAuth],
   },
-  // update activity
+  // done
   {
     url: "/update/activity/:sponsorId",
     method: HttpMethod.Put,
     controller: sponsorUpdateActivityController,
-    middlewares: [],
+    middlewares: [currentUser, requireAdminAuth],
   },
   // update request
   // {

@@ -12,29 +12,31 @@ import { coinUpdateActivityController } from "../controllers/coin/activity";
 import { coinUpdateController } from "../controllers/coin/update";
 
 export const coinHandler: Array<ApiSign> = [
+  // done
   {
     url: "/fetch/all",
     method: HttpMethod.Get,
     controller: coinFetchController,
+    middlewares: [currentUser, requireAdminAuth],
+  },
+  {
+    url: "/fetch/active",
+    method: HttpMethod.Get,
+    controller: coinFetchActiveController,
     middlewares: [],
   },
   // {
-  //   url: "/fetch/active",
-  //   method: HttpMethod.Get,
-  //   controller: coinFetchActiveController,
+  //   url: "/add",
+  //   method: HttpMethod.Post,
+  //   controller: coinAddController,
   //   middlewares: [],
   // },
-  {
-    url: "/add",
-    method: HttpMethod.Post,
-    controller: coinAddController,
-    middlewares: [],
-  },
+  // done
   {
     url: "/update/activity/:coinId",
     method: HttpMethod.Put,
     controller: coinUpdateActivityController,
-    middlewares: [],
+    middlewares: [currentUser, requireAdminAuth],
   },
   // {
   //   url: "/update/:coinId",

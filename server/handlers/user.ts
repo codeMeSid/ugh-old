@@ -98,10 +98,11 @@ export const userHandlers: Array<ApiSign> = [
   //   controller: updateUserController,
   //   middlewares: [currentUser, requireAuth],
   // },
+  // done
   {
     url: "/activity/:userId",
     method: HttpMethod.Put,
     controller: userActivityController,
-    middlewares: [],
+    middlewares: [currentUser, requireAdminAuth],
   },
 ];

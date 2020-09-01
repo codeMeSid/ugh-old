@@ -7,7 +7,7 @@ import SocialButton from "../components/button/social";
 import Link from "next/link";
 import { useRequest } from '../hooks/use-request';
 
-const SignIn = () => {
+const SignIn = ({ currentUser }) => {
     const [ughId, setUghId] = useState("");
     const [password, setPassword] = useState("");
     const { doRequest } = useRequest({ url: "/api/ugh/user/signin", body: { ughId, password }, method: "post", onSuccess: () => Router.push("/profile") });
@@ -17,7 +17,7 @@ const SignIn = () => {
             case 'password': return setPassword(value);
         }
     }
-    return <MainLayout>
+    return <MainLayout currentUser={currentUser}>
         <div className="signin">
             <h1 style={{ marginBottom: 10 }}>Sign In</h1>
             <Input placeholder="ugh id*" name="ughId" onChange={onChangeHandler} />

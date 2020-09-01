@@ -188,10 +188,10 @@ h1 {
     display: none;
     flex-direction: column; }
     .navbar__item--dropdown__menu__item {
-      background-color: rgba(0, 0, 255, 0.6);
+      background-color: blue;
       padding: 1rem; }
       .navbar__item--dropdown__menu__item:hover {
-        background-color: rgba(0, 0, 255, 0.4); }
+        background-color: rgba(0, 0, 255, 0.8); }
       .navbar__item--dropdown__menu__item:not(:last-child) {
         margin-bottom: 0.5rem; }
   .navbar__item--dropdown:hover .navbar__item--dropdown__menu {
@@ -408,3 +408,40 @@ tr:nth-child(even) {
   align-items: center; }
   .signin__other {
     margin: 1.2rem 0; }
+
+.shop {
+  min-height: 90vh;
+  padding: 2rem;
+  background-image: url("../asset/shop-bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center; }
+  .shop__container {
+    display: flex;
+    max-width: 100rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 auto; }
+  .shop__card {
+    margin: 0.7rem 0.5rem;
+    border-radius: 0.4rem;
+    padding: 2rem;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0.5rem 1.3rem rgba(0, 0, 0, 0.3);
+    color: white;
+    cursor: pointer; }
+    .shop__card__coin {
+      width: 16rem; }
+    .shop__card__value {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 0.8rem; }
+    .shop__card__cost {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin: 0.8rem 0; }
+
+@media (max-width: 56.25em) {
+  .shop__card__coin {
+    width: 12rem; } }

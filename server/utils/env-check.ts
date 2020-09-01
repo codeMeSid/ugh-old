@@ -7,10 +7,16 @@ const {
   RAZORPAY_SECRET,
   JWT_KEY,
   NODE_ENV,
+  BASE_URL,
 } = process.env;
 
 if (!PORT) {
   errorlog("PORT is required");
+  throw new Error();
+}
+
+if (!BASE_URL) {
+  errorlog("BASE URL is required");
   throw new Error();
 }
 
@@ -34,4 +40,12 @@ if (!RAZORPAY_SECRET) {
   throw new Error();
 }
 
-export { PORT, MONGO_URI, RAZORPAY_ID, RAZORPAY_SECRET, JWT_KEY, NODE_ENV };
+export {
+  PORT,
+  MONGO_URI,
+  RAZORPAY_ID,
+  RAZORPAY_SECRET,
+  JWT_KEY,
+  NODE_ENV,
+  BASE_URL,
+};

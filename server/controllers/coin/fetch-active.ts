@@ -5,6 +5,6 @@ export const coinFetchActiveController = async (
   req: Request,
   res: Response
 ) => {
-  const coins = await Coin.find({ isActive: true });
+  const coins = await Coin.find({ isActive: true }).select("cost value");
   res.send(coins);
 };
