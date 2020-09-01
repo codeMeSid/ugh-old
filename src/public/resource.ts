@@ -18,7 +18,6 @@ export const navlinks = (currentUser): Array<string> => [
   ...(currentUser ? [] : ["signin", "signup"]),
 ];
 export const outerMenuLinks = (currentUser): Array<string> => [
-  "home",
   "shop",
   "tournaments",
   "streams",
