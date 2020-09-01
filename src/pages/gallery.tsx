@@ -6,6 +6,8 @@ const Gallery = ({ currentUser, images }: { currentUser: any, images: Array<Gall
     return <MainLayout currentUser={currentUser}>
         <div className="gallery">
             <div className="gallery__title">See our events in pictures</div>
+            <div className="gallery__subtitle">and stay updated with atmosphere</div>
+
             <div className="gallery__display">
                 {
                     images.map(image => {

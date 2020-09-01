@@ -1,12 +1,20 @@
 .gallery {
   padding: 2rem;
   min-height: 88vh;
+  background-color: rgb(230, 230, 230);
   &__title {
     text-align: center;
     font-size: 3rem;
     text-transform: capitalize;
     font-weight: 900;
+  }
+  &__subtitle {
+    margin-top: 1rem;
     margin-bottom: 2rem;
+    text-align: center;
+    text-transform: capitalize;
+    font-weight: 900;
+    font-size: 1.8rem;
   }
   &__display {
     display: flex;

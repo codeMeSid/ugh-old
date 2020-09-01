@@ -448,13 +448,20 @@ tr:nth-child(even) {
 
 .gallery {
   padding: 2rem;
-  min-height: 88vh; }
+  min-height: 88vh;
+  background-color: #e6e6e6; }
   .gallery__title {
     text-align: center;
     font-size: 3rem;
     text-transform: capitalize;
+    font-weight: 900; }
+  .gallery__subtitle {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    text-transform: capitalize;
     font-weight: 900;
-    margin-bottom: 2rem; }
+    font-size: 1.8rem; }
   .gallery__display {
     display: flex;
     flex-wrap: wrap;
