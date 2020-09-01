@@ -1,25 +1,6 @@
 import Link from "next/link";
+import { outerMenuLinks } from "../../public/resource";
 
-const outerMenuLinks = (currentUser): Array<string> => [
-    "home",
-    "shop",
-    "tournaments",
-    "streams",
-    ...(currentUser
-        ? [
-            "profile",
-            "withdraw",
-            "my-tournament",
-            "signout",
-        ]
-        : [
-            "sponsors",
-            "about",
-            "how-to-play",
-            "signin",
-            "signup"
-        ])
-];
 
 const OuterMenu = ({ currentUser }) => <div className="navbar__responsive-menu">
     {

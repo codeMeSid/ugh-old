@@ -5,7 +5,7 @@ import OuterMenu from './outer-menu';
 const ResponsiveMenu = ({ currentUser }) => {
     const [openMenu, setOpenMenu] = useState(false);
     return <div className="navbar__list--responsive">
-        <Button onPress={(_, next) => {
+        <Button onPress={() => {
             setOpenMenu(!openMenu);
         }} type="icon" text={<AiOutlineMenu color="white" />} />
         {

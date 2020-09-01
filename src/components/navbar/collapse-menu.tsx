@@ -1,22 +1,7 @@
 import Link from "next/link";
 import DropdownMenu from "./dropdown-menu";
+import { navlinks, profileMenuLinks, moreMenuLinks } from "../../public/resource";
 
-const profileMenu = [
-    "profile",
-    "my-tournament",
-    "withdraw",
-    "settings",
-    "logout",
-];
-const moreMenu = [
-    "gallery",
-    "streams",
-    "sponsors",
-    "how-to-play",
-    "about",
-];
-
-const navlinks = (currentUser): Array<string> => ["tournaments", "shop", ...(currentUser ? [] : ["signin", "signup"])];
 
 
 const CollapseMenu = ({ currentUser }: { currentUser: any }) => {
@@ -26,8 +11,8 @@ const CollapseMenu = ({ currentUser }: { currentUser: any }) => {
                 <a className="navbar__item--link">{link}</a>
             </Link>
         })}
-        {currentUser && <DropdownMenu title="profile" listItems={profileMenu} />}
-        <DropdownMenu title="more" listItems={moreMenu} />
+        {currentUser && <DropdownMenu title="account" listItems={profileMenuLinks} />}
+        <DropdownMenu title="more" listItems={moreMenuLinks} />
     </div>
 };
 
