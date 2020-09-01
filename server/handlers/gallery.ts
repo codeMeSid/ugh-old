@@ -14,7 +14,7 @@ export const galleryHandler: Array<ApiSign> = [
     url: "/fetch/all",
     method: HttpMethod.Get,
     controller: galleryFetchController,
-    middlewares: [],
+    middlewares: [currentUser, requireAdminAuth],
   },
   {
     url: "/fetch/active",
@@ -32,6 +32,6 @@ export const galleryHandler: Array<ApiSign> = [
     url: "/update/activity/:galleryId",
     method: HttpMethod.Put,
     controller: galleryUpdateActivityController,
-    middlewares: [],
+    middlewares: [currentUser, requireAdminAuth],
   },
 ];

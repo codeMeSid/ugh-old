@@ -21,7 +21,7 @@ Shop.getInitialProps = async (ctx: GetServerSidePropsContext) => {
     const { data, errors } = await serverRequest(ctx, { url: "/api/ugh/coin/fetch/active", body: {}, method: "get" });
     const req: any = ctx.req
     return {
-        coins: data,
+        coins: data || [],
         errors,
         currentUser: req?.currentUser
     };
