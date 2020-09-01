@@ -12,7 +12,7 @@ const TopNavbar = ({ currentUser }: { currentUser: any}) => {
             </a>
         </Link>
         <div className="navbar__list">
-            <ResponsiveMenu />
+            <ResponsiveMenu currentUser={currentUser}/>
             <CollapseMenu currentUser={currentUser} />
         </div>
     </nav>

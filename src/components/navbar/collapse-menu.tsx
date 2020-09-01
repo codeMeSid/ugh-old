@@ -16,10 +16,12 @@ const moreMenu = [
     "about",
 ];
 
+const navlinks = (currentUser): Array<string> => ["tournaments", "shop", ...(currentUser ? [] : ["signin", "signup"])];
+
+
 const CollapseMenu = ({ currentUser }: { currentUser: any }) => {
-    const navlinks = ["tournaments", "shop", ...(currentUser ? [] : ["signin", "signup"])];
     return <div className="navbar__list--collapse">
-        {navlinks.map(link => {
+        {navlinks(currentUser).map(link => {
             return <Link key={Math.random()} href={`/${link}`}>
                 <a className="navbar__item--link">{link}</a>
             </Link>
