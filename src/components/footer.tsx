@@ -11,11 +11,19 @@ const Footer = () => {
         <div className="footer__l2">
             <div className="footer__l2__item">
                 <div style={{ marginBottom: ".4rem" }}>Follow Us</div>
-                <div>
-                    <SocialButton href="https://www.facebook.com/ultimategamershub/" size="icon" type="facebook" />
-                    <SocialButton href="http://twitter.com/" size="icon" type="twitter" />
-                    <Button href="https://www.twitch.tv/cricket" size="icon" text={<FaTwitch />} />
-                    <SocialButton href="https://www.youtube.com/channel/UCrRonf3Q69wDBnxnM1BOHog?view_as=subscriber" size="icon" type="youtube" />
+                <div style={{ display: "flex",justifyContent:"center" }}>
+                    <div style={{ marginRight: 5 }}>
+                        <SocialButton href="https://wzww.facebook.com/ultimategamershub/" size="icon" type="facebook" />
+                    </div>
+                    <div style={{ marginRight: 5 }}>
+                        <SocialButton href="http://twitter.com/" size="icon" type="twitter" />
+                    </div>
+                    <div style={{ marginRight: 5 }}>
+                        <Button href="https://www.twitch.tv/cricket" size="icon" text={<FaTwitch />} />
+                    </div>
+                    <div>
+                        <SocialButton href="https://www.youtube.com/channel/UCrRonf3Q69wDBnxnM1BOHog?view_as=subscriber" size="icon" type="youtube" />
+                    </div>
                 </div>
             </div>
             <div className="footer__l2__item">

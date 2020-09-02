@@ -6,13 +6,13 @@ import ShopCard from "../components/card/shop";
 
 const Shop = ({ currentUser, coins }: { currentUser: any, coins: Array<CoinDoc> }) => {
     return <MainLayout currentUser={currentUser}>
-        <div className="shop">
+        <section className="shop">
             <div className="shop__container">
                 {coins.map(coin => {
                     return <ShopCard key={Math.random()} coin={coin} currentUser={currentUser} />
                 })}
             </div>
-        </div>
+        </section>
     </MainLayout>
 }
 

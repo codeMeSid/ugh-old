@@ -11,6 +11,11 @@ const OuterMenu = ({ currentUser }) => <div className="navbar__responsive-menu">
         })
     }
     {
+        currentUser && currentUser.role === "admin" && <Link key={1} href={`/admin`}>
+            <a className="navbar__responsive-menu__link">admin</a>
+        </Link>
+    }
+    {
         currentUser ? outerMenuLinksAuth.map(link => {
             return <Link key={link} href={`/${link}`}>
                 <a className="navbar__responsive-menu__link">{link}</a>

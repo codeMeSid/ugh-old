@@ -34,7 +34,7 @@ const Streams = ({ currentUser, streams, errors }) => {
     }
 
     return <MainLayout currentUser={currentUser}>
-        <div className="streams">
+        <section className="streams">
             <div className="streams__title">Streams</div>
             <div className="streams__subtitle">This is where you can browse through our streams</div>
             <div className="streams__social">
@@ -60,7 +60,7 @@ const Streams = ({ currentUser, streams, errors }) => {
                 })}
             </div>
 
-        </div>
+        </section>
     </MainLayout>
 }
 

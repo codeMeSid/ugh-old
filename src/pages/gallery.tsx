@@ -4,7 +4,7 @@ import { GalleryDoc } from "../../server/models/gallery";
 
 const Gallery = ({ currentUser, images }: { currentUser: any, images: Array<GalleryDoc> }) => {
     return <MainLayout currentUser={currentUser}>
-        <div className="gallery">
+        <section className="gallery">
             <div className="gallery__title">See our events in pictures</div>
             <div className="gallery__subtitle">and stay updated with atmosphere</div>
 
@@ -22,7 +22,7 @@ const Gallery = ({ currentUser, images }: { currentUser: any, images: Array<Gall
                     })
                 }
             </div>
-        </div>
+        </section>
     </MainLayout>
 }
 

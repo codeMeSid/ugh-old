@@ -1,10 +1,4 @@
-import {
-  ApiSign,
-  currentUser,
-  requireAuth,
-  SocialTypes,
-  TransactionTypes,
-} from "@monsid/ugh";
+import { ApiSign, requireAdminAuth, currentUser } from "@monsid/ugh";
 
 import { userHandlers } from "./user";
 import { featureHandlers } from "./feature";
@@ -19,8 +13,6 @@ import { newsHandler } from "./news";
 import { tournamentHandler } from "./tournament";
 import { transactionHandler } from "./transaction";
 import { adminHandler } from "./admin";
-import { Tournament } from "../models/tournament";
-import { Game } from "../models/game";
 
 export const apiHandlers: Array<ApiSign> = [
   {
@@ -46,8 +38,7 @@ export const apiHandlers: Array<ApiSign> = [
         url: `/admin${url}`,
         controller,
         method,
-        // TODO update admin middleware
-        middlewares: [...middlewares],
+        middlewares: [currentUser, requireAdminAuth, ...middlewares],
       };
     }
   ),

@@ -8,6 +8,6 @@ export const sponsorFetchActiveController = async (
   const sponsors = await Sponsor.find({
     isActive: true,
     isProccessed: true,
-  }).select("name sponsorPack.color website imageUrl");
+  })
   res.send(sponsors);
 };

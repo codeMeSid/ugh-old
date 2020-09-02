@@ -18,7 +18,7 @@ const SignIn = ({ currentUser }) => {
         }
     }
     return <MainLayout currentUser={currentUser}>
-        <div className="signin">
+        <section className="signin">
             <h1 style={{ marginBottom: 10 }}>Sign In</h1>
             <Input placeholder="ugh id*" name="ughId" onChange={onChangeHandler} />
             <Input placeholder="password*" type="password" name="password" onChange={onChangeHandler} />
@@ -45,7 +45,7 @@ const SignIn = ({ currentUser }) => {
             <SocialButton size="medium" type="gplus">Google</SocialButton>
 
 
-        </div>
+        </section>
     </MainLayout>
 };
 

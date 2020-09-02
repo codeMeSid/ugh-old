@@ -32,7 +32,7 @@ const SignUp = ({ currentUser }) => {
         }
     }
     return <MainLayout currentUser={currentUser}>
-        <div className="signin">
+        <section className="signin">
             <h1 style={{ marginBottom: 10 }}>Register</h1>
             <Input placeholder="ugh id*" name="ughId" onChange={onChangeHandler} value={ughId} />
             <Input placeholder="name*" name="name" onChange={onChangeHandler} value={name} />
@@ -55,7 +55,7 @@ const SignUp = ({ currentUser }) => {
             <SocialButton size="medium" type="facebook">Facebook</SocialButton>
             <div style={{ margin: "1rem 0" }} />
             <SocialButton size="medium" type="gplus">Google</SocialButton>
-        </div>
+        </section>
     </MainLayout>
 };
 

@@ -11,6 +11,9 @@ const CollapseMenu = ({ currentUser }: { currentUser: any }) => {
                 <a className="navbar__item--link">{link}</a>
             </Link>
         })}
+        {currentUser && currentUser.role === "admin" && <Link key={Math.random()} href={`/admin`}>
+            <a className="navbar__item--link">admin</a>
+        </Link>}
         {
             !currentUser && navlinksAuth.map(link => {
                 return <Link key={Math.random()} href={`/${link}`}>
