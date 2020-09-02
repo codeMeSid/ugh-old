@@ -5,19 +5,19 @@ import { outerMenuLinks, outerMenuLinksAuth, outerMenuLinksNonAuth } from "../..
 const OuterMenu = ({ currentUser }) => <div className="navbar__responsive-menu">
     {
         outerMenuLinks.map(link => {
-            return <Link href={`/${link}`}>
+            return <Link key={link} href={`/${link}`}>
                 <a className="navbar__responsive-menu__link">{link}</a>
             </Link>
         })
     }
     {
         currentUser ? outerMenuLinksAuth.map(link => {
-            return <Link href={`/${link}`}>
+            return <Link key={link} href={`/${link}`}>
                 <a className="navbar__responsive-menu__link">{link}</a>
             </Link>
         }) :
             outerMenuLinksNonAuth.map(link => {
-                return <Link href={`/${link}`}>
+                return <Link key={link} href={`/${link}`}>
                     <a className="navbar__responsive-menu__link">{link}</a>
                 </Link>
             })

@@ -20,7 +20,7 @@ export const streamHandler: Array<ApiSign> = [
     url: "/fetch/all",
     method: HttpMethod.Get,
     controller: streamFetchAllController,
-    middlewares: [],
+    middlewares: [currentUser, requireAdminAuth],
   },
   {
     url: "/fetch/active",
@@ -32,7 +32,7 @@ export const streamHandler: Array<ApiSign> = [
     url: "/update/activity/:streamId",
     method: HttpMethod.Put,
     controller: streamUpdateActivityController,
-    middlewares: [],
+    middlewares: [currentUser, requireAdminAuth],
   },
   //   {
   //     url: "/update/:streamId",

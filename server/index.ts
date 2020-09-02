@@ -19,7 +19,7 @@ const start = async () => {
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useCreateIndex: false,
+        useCreateIndex: true,
       },
       (err) => {
         if (err) throw new DatabaseConnectionError();
