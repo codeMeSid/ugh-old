@@ -1,8 +1,79 @@
 .sponsors {
-  padding: 2rem;
+  min-height: 88vh;
+  &__head {
+    padding: 2rem 0;
+    background-image: url("../asset/streams.jpg");
+    background-size: cover;
+  }
   &__title {
     text-align: center;
-    text-transform: uppercase;
-    font-size: 3.6rem;
+    text-transform: capitalize;
+    font-size: 3.2rem;
+    font-weight: 900;
+    color: white;
+  }
+  &__new {
+    width: 36rem;
+    margin: 0 auto;
+    margin-top: 2rem;
+    background-color: rgba(white, 0.9);
+    border-radius: 0.4rem;
+    padding: 1rem;
+  }
+  &__body {
+    padding: 2rem;
+    background-color: rgba(navy, 1);
+    &__container {
+      max-width: 100rem;
+      margin: 0rem auto;
+    }
+  }
+  &__group {
+    &:not(:last-child) {
+      margin-bottom: 2rem;
+    }
+    &__title {
+      font-size: 3rem;
+      text-transform: uppercase;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: white;
+    }
+    &__list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+  &__card {
+    margin: 0.2rem;
+    cursor: pointer;
+    &__image {
+      width: 18rem;
+      height: 16rem;
+      & img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    &__name {
+      display: block;
+      text-align: center;
+      margin: 0.5rem 0;
+      font-size: 2rem;
+      text-transform: capitalize;
+      color: white;
+    }
+    &__links {
+      margin-top: 0.4rem;
+      flex-wrap: wrap;
+      width: 16rem;
+      display: flex;
+      justify-content: center;
+      &__item {
+        color: white;
+        font-size: 2rem;
+      }
+    }
   }
 }

@@ -1,17 +1,99 @@
-import { serverRequest } from "../hooks/server-request"
-import MainLayout from "../components/layout/mainlayout"
-import SponsorCard from "../components/card/sponsor"
-import { SponsorDoc } from "../../server/models/sponsor"
+import { useState } from 'react';
+import { serverRequest } from "../hooks/server-request";
+import MainLayout from "../components/layout/mainlayout";
+import SponsorCard from "../components/card/sponsor";
+import { SponsorDoc } from "../../server/models/sponsor";
+import Input from "../components/input";
+import { SponsorshipDoc } from "../../server/models/sponsorship";
+import Select from '../components/select';
+import Option from '../components/option';
+import ProgressButton from '../components/button/progress';
+import { useRequest } from '../hooks/use-request';
 
-const Sponsors = ({ currentUser, sponsors, sponsorships }) => {
+const Sponsors = ({ currentUser, sponsors, sponsorships }
+    : { currentUser: any, sponsors: any, sponsorships: Array<SponsorshipDoc> }) => {
+    const [sponsorshipIndex, setSponsorshipIndex] = useState(0);
+    const [packIndex, setPackIndex] = useState(0);
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [message, setMessage] = useState("");
+    const { doRequest } = useRequest({
+        url: "/api/ugh/sponsor/add", body: {
+            email,
+            phone,
+            duration: sponsorships[sponsorshipIndex].packs[packIndex].duration,
+            price: sponsorships[sponsorshipIndex].packs[packIndex].price,
+            name: sponsorships[sponsorshipIndex].name,
+            color: sponsorships[sponsorshipIndex].color,
+            message
+        }, method: "post"
+    })
+    const onChangeHandler = (name: string, value: string) => {
+        switch (name) {
+            case "email": return setEmail(value);
+            case "phone": return setPhone(value);
+            case "message": return setMessage(value);
+        }
+    }
+    const onSelectHandler = (e) => {
+        const val = `${e.currentTarget.value}`.split(",").map(num => parseInt(num));
+        console.log(val)
+        setSponsorshipIndex(val[0]);
+        setPackIndex(val[1]);
+    }
     return <MainLayout currentUser={currentUser}>
         <div className="sponsors">
-            <div className="sponsors__title">become a sponsor</div>
-            <div className="sponsors__new">
+            <div className="sponsors__head">
+                <div className="sponsors__title">Sponsor us</div>
+                <div className="sponsors__new">
+                    <Input name="email" type="email" onChange={onChangeHandler} placeholder="email*" value={email} />
+                    <Input name="phone" onChange={onChangeHandler} placeholder="phone(+91)*" value={phone} />
+                    <Select
+                        onSelect={onSelectHandler}
+                        value={`${sponsorshipIndex},${packIndex}`}
+                        placeholder="Sponsorship Package"
+                        options={sponsorships.map((sponsorship, sIndex) => {
+                            return sponsorship.packs.map((pack, pIndex) => {
+                                return <Option
+                                    // style={{ backgroundColor: sponsorship.color }}
+                                    key={Math.random()}
+                                    display={`${sponsorship.name.toUpperCase()} (${pack.duration} months - ₹${pack.price})`}
+                                    value={`${sIndex},${pIndex}`}
+                                />
+                            })
+                        })}
+                    />
 
+                    <textarea style={{ width: "100%", minHeight: "10rem", margin: "10px 0", padding: 5 }}
+                        placeholder="message"
+                        name="message"
+                        onChange={(e) => onChangeHandler(e.currentTarget.name, e.currentTarget.value)} />
+                    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                        <ProgressButton text="Submit" type="link" size="large" onPress={async (_, next) => {
+                            doRequest();
+                            next();
+                        }} />
+                    </div>
+                </div>
             </div>
-            <div className="sponsors__list">
-                <SponsorCard />
+
+            <div className="sponsors__body">
+                <div className="sponsors__body__container">
+                    {
+                        Object.keys(sponsors).map(sponsorKey => {
+                            return <div key={sponsorKey} className="sponsors__group">
+                                <div className="sponsors__group__title">{sponsorKey} members</div>
+                                <div className="sponsors__group__list">
+                                    {
+                                        Array.from(sponsors[sponsorKey]).map((sponsor: SponsorDoc) => {
+                                            return <SponsorCard key={Math.random()} sponsor={sponsor} />
+                                        })
+                                    }
+                                </div>
+                            </div>
+                        })
+                    }
+                </div>
             </div>
         </div>
     </MainLayout>
@@ -30,27 +112,8 @@ Sponsors.getInitialProps = async (ctx) => {
     });
     return {
         sponsors: packSponsors,
-        sponsorships: sponsorships.data
+        sponsorships: sponsorships.data || []
     }
 }
 
 export default Sponsors
-// [ { sponsorPack: [Object],
-//     name: 'make sense',
-//     website: 'www.facebook.com',
-//     imageUrl:
-//      'https://images.pexels.com/photos/3054218/pexels-photo-3054218.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
-//     id: '5f4b1c5ee16513926c65380d' } ],
-// sponsorships:
-// [ { isActive: true,
-//     name: 'golden',
-//     color: '#FFD700',
-//     packs: [Array],
-//     __v: 0,
-//     id: '5f4b06d2bf1282851d906b92' },
-//   { isActive: true,
-//     name: 'silver',
-//     color: '#C0C0C0\t',
-//     packs: [Array],
-//     __v: 0,
-//     id: '5f4b0728a94b4085b4330a7c' } ] }

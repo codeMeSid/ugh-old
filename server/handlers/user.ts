@@ -48,12 +48,12 @@ export const userHandlers: Array<ApiSign> = [
   //   controller: signoutController,
   //   middlewares: [],
   // },
-  // {
-  //   url: "/current",
-  //   method: HttpMethod.Get,
-  //   controller: currentUserController,
-  //   middlewares: [currentUser],
-  // },
+  {
+    url: "/current",
+    method: HttpMethod.Get,
+    controller: currentUserController,
+    middlewares: [currentUser],
+  },
   // {
   //   url: "/:userId",
   //   method: HttpMethod.Get,
