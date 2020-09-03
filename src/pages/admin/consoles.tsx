@@ -5,10 +5,13 @@ import Button from "../../components/button/main";
 import Switch from 'react-switch';
 import { useRequest } from '../../hooks/use-request';
 import { ConsoleDoc } from '../../../server/models/console';
+import DialogButton from '../../components/button/dialog';
+import Input from '../../components/input/input';
 
 const AdminConsolesDashboard = () => {
     // states
     const [consoleData, setConsoleData] = useState([]);
+    const [name, setName] = useState("");
     // components
     const SwitchBlade = (id: string, activity: boolean) => {
         return <Switch checked={activity} onChange={() => changeConsoleActivity(id)} />
@@ -19,6 +22,12 @@ const AdminConsolesDashboard = () => {
             setConsoleData(data.map(console => ([console.name.toUpperCase(), SwitchBlade(console.id, console.isActive)])));
         }
     });
+    const { doRequest: addConsoleRequest } = useRequest({
+        url: "/api/ugh/console/add",
+        body: { name },
+        method: "post",
+        onSuccess: doRequest
+    })
     // effect
     useEffect(() => {
         doRequest();
@@ -35,10 +44,9 @@ const AdminConsolesDashboard = () => {
     }
     // render
     return <SideLayout title={`console(${consoleData.length})`}>
-        <div style={{ display: "flex", alignItems: "center" }}>
-            <Button size="icon" text="+" style={{ marginBottom: 10, marginRight: 10 }} />
-            <h1>Add Consoles</h1>
-        </div>
+        <DialogButton title="add console" onAction={addConsoleRequest}>
+            <Input name="name" placeholder="name" onChange={(_, val) => setName(val)} value={name} />
+        </DialogButton>
         <Table headers={[
             { text: "name", isResponsive: false },
             { text: "activity", isResponsive: false }]} data={consoleData} />
