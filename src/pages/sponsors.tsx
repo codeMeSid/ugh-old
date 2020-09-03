@@ -3,10 +3,10 @@ import { serverRequest } from "../hooks/server-request";
 import MainLayout from "../components/layout/mainlayout";
 import SponsorCard from "../components/card/sponsor";
 import { SponsorDoc } from "../../server/models/sponsor";
-import Input from "../components/input";
+import Input from "../components/input/input";
 import { SponsorshipDoc } from "../../server/models/sponsorship";
-import Select from '../components/select';
-import Option from '../components/option';
+import Select from '../components/input/select';
+import Option from '../components/input/option';
 import ProgressButton from '../components/button/progress';
 import { useRequest } from '../hooks/use-request';
 
@@ -70,7 +70,7 @@ const Sponsors = ({ currentUser, sponsors, sponsorships }
                         onChange={(e) => onChangeHandler(e.currentTarget.name, e.currentTarget.value)} />
                     <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
                         <ProgressButton text="Submit" type="link" size="large" onPress={async (_, next) => {
-                            doRequest();
+                            await doRequest();
                             next();
                         }} />
                     </div>

@@ -1,0 +1,21 @@
+.dialog {
+  position: absolute;
+  top: 10rem;
+  left: 50%;
+  z-index: 10;
+  background-color: white;
+  padding: 1rem;
+  transform: translate(-50%);
+  border: 1px solid black;
+  &__head {
+    text-align: left;
+    font-size: 1.4rem;
+    cursor: pointer;
+  }
+  &__body {
+    margin-top: 1rem;
+  }
+  &__footer {
+    text-align: right;
+  }
+}

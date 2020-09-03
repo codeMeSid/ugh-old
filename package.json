@@ -26,6 +26,7 @@
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "express-validator": "^6.5.0",
+    "firebase": "^7.19.1",
     "helmet": "^3.23.1",
     "mongoose": "^5.10.2",
     "next": "^9.4.4",

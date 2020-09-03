@@ -5,10 +5,15 @@ import Button from "../../components/button/main"
 import { useRequest } from '../../hooks/use-request'
 import { GalleryDoc } from '../../../server/models/gallery'
 import Switch from 'react-switch';
+import DialogButton from '../../components/button/dialog'
+import Input from '../../components/input/input'
+import FileInput from '../../components/input/file'
 
 const AdminGalleryDashboard = () => {
     // states
     const [galleryData, setGalleryData] = useState([]);
+    const [name, setName] = useState("");
+    const [imageUrl, setImageUrl] = useState("");
     // components
     const SwitchBlade = (id: string, activity: boolean) => {
         return <Switch checked={activity} onChange={() => changeGalleryActivity(id)} />
@@ -19,11 +24,25 @@ const AdminGalleryDashboard = () => {
             setGalleryData(data.map(gallery => ([gallery.name.toUpperCase(), <a href={gallery.imageUrl} target="_blank"><img className="gallery__image" src={gallery.imageUrl} /></a>, SwitchBlade(gallery.id, gallery.isActive)])))
         }
     });
+    const { doRequest: addGalleryRequest } = useRequest({
+        url: "/api/ugh/gallery/add",
+        body: {
+            name, imageUrl
+        },
+        method: "post",
+        onSuccess: doRequest
+    })
     // effect
     useEffect(() => {
         doRequest();
     }, []);
     // method
+    const onChangeHandler = (name: string, value: string) => {
+        switch (name) {
+            case "name": return setName(value);
+            case "imageUrl": return setImageUrl(value);
+        }
+    }
     const changeGalleryActivity = async (id: string) => {
         const { doRequest: updateGalleryRequest } = useRequest({
             url: `/api/ugh/gallery/update/activity/${id}`,
@@ -35,10 +54,10 @@ const AdminGalleryDashboard = () => {
     }
     // render
     return <SideLayout title={`gallery(${galleryData.length})`}>
-        <div style={{ display: "flex", alignItems: "center" }}>
-            <Button size="icon" text="+" style={{ marginBottom: 10, marginRight: 10 }} />
-            <h1>Add Gallery</h1>
-        </div>
+        <DialogButton title="add gallery" onAction={addGalleryRequest}>
+            <Input name="name" placeholder="name" onChange={onChangeHandler} />
+            <FileInput name="imageUrl" placeholder="gallery image" onChange={onChangeHandler} />
+        </DialogButton>
         <Table headers={[
             { text: "name", isResponsive: true },
             { text: "image", isResponsive: false },

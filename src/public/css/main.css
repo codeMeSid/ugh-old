@@ -282,7 +282,7 @@ tr:nth-child(even) {
 
 @media (max-width: 56.25em) {
   .gallery__image {
-    width: 100%; } }
+    width: 10%; } }
 
 .form {
   width: 36rem;
@@ -326,6 +326,54 @@ tr:nth-child(even) {
       .form__select__option:hover, .form__select__option:focus {
         border: none;
         background-color: rgba(128, 128, 128, 0.4); }
+  .form__file__container {
+    display: flex;
+    align-items: center; }
+  .form__file__image {
+    width: auto;
+    height: auto;
+    max-height: 25rem;
+    max-width: 25rem; }
+  .form__file__remove {
+    margin-left: 2rem;
+    font-size: 3rem;
+    color: rgba(255, 0, 0, 0.6);
+    cursor: pointer; }
+  .form__file__progress {
+    width: 100%;
+    height: 1.8rem;
+    background-color: rgba(0, 128, 0, 0.3);
+    position: relative; }
+    .form__file__progress::before {
+      content: attr(value) "%";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-weight: 800;
+      color: white; }
+  .form__file__label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 0.1rem solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.4rem;
+    cursor: pointer;
+    padding: 0.5rem; }
+    .form__file__label__icon {
+      font-size: 4rem;
+      color: rgba(0, 0, 0, 0.4); }
+    .form__file__label__text {
+      font-size: 1.6rem;
+      color: rgba(0, 0, 0, 0.4);
+      text-transform: uppercase; }
+  .form__file__input {
+    display: none; }
+  .form__file__placeholder {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+    transform: translateX(0.5rem); }
 
 .sponsor-slider {
   width: 100%;
@@ -399,6 +447,24 @@ tr:nth-child(even) {
       .footer__l2__item__link {
         color: white;
         text-decoration: none; }
+
+.dialog {
+  position: absolute;
+  top: 10rem;
+  left: 50%;
+  z-index: 10;
+  background-color: white;
+  padding: 1rem;
+  transform: translate(-50%);
+  border: 1px solid black; }
+  .dialog__head {
+    text-align: left;
+    font-size: 1.4rem;
+    cursor: pointer; }
+  .dialog__body {
+    margin-top: 1rem; }
+  .dialog__footer {
+    text-align: right; }
 
 .signin {
   min-height: 88vh;
@@ -580,7 +646,7 @@ tr:nth-child(even) {
     padding: 1rem; }
   .sponsors__body {
     padding: 2rem;
-    background-color: navy; }
+    background-color: #00001a; }
     .sponsors__body__container {
       max-width: 100rem;
       margin: 0rem auto; }

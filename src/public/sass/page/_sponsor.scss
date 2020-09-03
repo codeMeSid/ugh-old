@@ -22,7 +22,7 @@
   }
   &__body {
     padding: 2rem;
-    background-color: rgba(navy, 1);
+    background-color: darken(navy,20%);
     &__container {
       max-width: 100rem;
       margin: 0rem auto;

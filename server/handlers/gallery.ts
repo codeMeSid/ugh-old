@@ -3,11 +3,13 @@ import {
   HttpMethod,
   requireAdminAuth,
   currentUser,
+  validateRequest,
 } from "@monsid/ugh";
 import { galleryFetchController } from "../controllers/gallery/fetch";
 import { galleryFetchActiveController } from "../controllers/gallery/fetch-active";
 import { galleryAddController } from "../controllers/gallery/add";
 import { galleryUpdateActivityController } from "../controllers/gallery/update-activity";
+import { galleryAddValidator } from "../utils/validator/gallery/add";
 
 export const galleryHandler: Array<ApiSign> = [
   {
@@ -26,7 +28,12 @@ export const galleryHandler: Array<ApiSign> = [
     url: "/add",
     method: HttpMethod.Post,
     controller: galleryAddController,
-    middlewares: [currentUser, requireAdminAuth],
+    middlewares: [
+      galleryAddValidator,
+      validateRequest,
+      currentUser,
+      requireAdminAuth,
+    ],
   },
   {
     url: "/update/activity/:galleryId",
