@@ -2,7 +2,7 @@ const Input = ({ type = "text", placeholder, onChange = () => { }, noHelp = fals
     : {
         type?: string,
         placeholder: string,
-        onChange: (name: string, value: string) => any,
+        onChange: (name: string, value: any) => any,
         noHelp?: boolean,
         name: string,
         value?: any

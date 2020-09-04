@@ -50,6 +50,7 @@ const Sponsors = ({ currentUser, sponsors, sponsorships }
                     <Input name="phone" onChange={onChangeHandler} placeholder="phone(+91)*" value={phone} />
                     <Select
                         onSelect={onSelectHandler}
+                        name="pack"
                         value={`${sponsorshipIndex},${packIndex}`}
                         placeholder="Sponsorship Package"
                         options={sponsorships.map((sponsorship, sIndex) => {

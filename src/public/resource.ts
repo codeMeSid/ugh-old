@@ -28,3 +28,5 @@ export const outerMenuLinksNonAuth = [
   "signin",
   "signup",
 ];
+
+export const socialOptions = ["youtube", "twitch", "discord"];

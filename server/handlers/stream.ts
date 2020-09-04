@@ -3,18 +3,25 @@ import {
   HttpMethod,
   currentUser,
   requireAdminAuth,
+  validateRequest,
 } from "@monsid/ugh";
 import { streamAddController } from "../controllers/stream/add";
 import { streamFetchActiveController } from "../controllers/stream/fetch-active";
 import { streamFetchAllController } from "../controllers/stream/fetch-all";
 import { streamUpdateActivityController } from "../controllers/stream/update-activity";
+import { streamAddValidator } from "../utils/validator/stream/add";
 
 export const streamHandler: Array<ApiSign> = [
   {
     url: "/add",
     method: HttpMethod.Post,
     controller: streamAddController,
-    middlewares: [currentUser, requireAdminAuth],
+    middlewares: [
+      streamAddValidator,
+      validateRequest,
+      currentUser,
+      requireAdminAuth,
+    ],
   },
   {
     url: "/fetch/all",

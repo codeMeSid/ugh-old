@@ -5,10 +5,14 @@ import Button from "../../components/button/main";
 import { useRequest } from '../../hooks/use-request';
 import { CoinDoc } from '../../../server/models/coin';
 import Switch from 'react-switch';
+import DialogButton from '../../components/button/dialog';
+import Input from '../../components/input/input';
 
 const AdminCoinsDashboard = () => {
     // states
     const [coinData, setCoinData] = useState([]);
+    const [cost, setCost] = useState(0);
+    const [value, setValue] = useState(0);
     // components
     const SwitchBlade = (id: string, activity: boolean) => {
         return <Switch checked={activity} onChange={() => changeCoinActivity(id)} />
@@ -24,6 +28,18 @@ const AdminCoinsDashboard = () => {
             }))
         }
     });
+    const { doRequest: addCoinRequest } = useRequest({
+        url: "/api/ugh/coin/add",
+        body: { cost, value },
+        method: "post",
+        onSuccess: doRequest
+    });
+    const onChangeHandler = (name: string, val: any) => {
+        switch (name) {
+            case "cost": return setCost(val);
+            case "value": return setValue(val)
+        }
+    }
     // effects
     useEffect(() => {
         doRequest();
@@ -40,10 +56,10 @@ const AdminCoinsDashboard = () => {
     }
     // render
     return <SideLayout title={`coins(${coinData.length})`}>
-        <div style={{ display: "flex", alignItems: "center" }}>
-            <Button size="icon" text="+" style={{ marginBottom: 10, marginRight: 10 }} />
-            <h1>Add Coins</h1>
-        </div>
+        <DialogButton title="add coin" onAction={addCoinRequest}>
+            <Input name="cost" type="number" placeholder="cost" value={cost} onChange={onChangeHandler} />
+            <Input name="value" type="number" placeholder="value" value={value} onChange={onChangeHandler} />
+        </DialogButton>
         <Table headers={[
             { text: "value", isResponsive: false },
             { text: "cost", isResponsive: false },

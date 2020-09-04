@@ -15,6 +15,8 @@ export const streamAddController = async (req: Request, res: Response) => {
     case SocialTypes.Youtube:
       socialType = SocialTypes.Youtube;
       break;
+    default:
+      throw new BadRequestError("Social is invalid");
   }
   const existingStream = await Stream.findOne({ name, social: socialType });
   if (existingStream) throw new BadRequestError("Stream already exists");
