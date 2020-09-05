@@ -22,6 +22,8 @@ import { userFetchAllController } from "../controllers/user/all";
 import { userDetailController } from "../controllers/user/detail";
 import { signupValidator } from "../utils/validator/user/signup";
 import { signinValidator } from "../utils/validator/user/signin";
+import { userUpdateSettingController } from "../controllers/user/update-setting";
+import { userFetchDetailController } from "../controllers/user/fetch-detail";
 
 export const userHandlers: Array<ApiSign> = [
   // {
@@ -41,6 +43,12 @@ export const userHandlers: Array<ApiSign> = [
     method: HttpMethod.Get,
     controller: userFetchAllController,
     middlewares: [],
+  },
+  {
+    url: "/fetch/detail",
+    method: HttpMethod.Get,
+    controller: userFetchDetailController,
+    middlewares: [currentUser, requireAuth],
   },
   // {
   //   url: "/signout",
@@ -85,6 +93,12 @@ export const userHandlers: Array<ApiSign> = [
     method: HttpMethod.Post,
     controller: signinController,
     middlewares: [signinValidator, validateRequest],
+  },
+  {
+    url: "/update/setting",
+    method: HttpMethod.Put,
+    controller: userUpdateSettingController,
+    middlewares: [currentUser, requireAuth],
   },
   // {
   //   url: "/reset/:recoverykey",

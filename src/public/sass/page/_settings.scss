@@ -1,0 +1,17 @@
+.settings {
+  padding: 2rem;
+  background-image: url("../asset/settings.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &__body {
+    background-color: rgba(white, 0.6);
+    border-radius: 0.4rem;
+    padding: 2rem;
+  }
+  &__button {
+    margin-top: 2rem;
+  }
+}

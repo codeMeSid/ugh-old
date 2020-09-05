@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import SideLayout from "../../components/layout/sidelayout";
 import Table from "../../components/table";
-import Button from "../../components/button/main";
 import Switch from 'react-switch';
 import { useRequest } from '../../hooks/use-request';
 import { ConsoleDoc } from '../../../server/models/console';

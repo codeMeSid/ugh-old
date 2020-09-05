@@ -374,6 +374,14 @@ tr:nth-child(even) {
     text-transform: uppercase;
     margin-top: 0.2rem;
     transform: translateX(0.5rem); }
+  .form__checkbox {
+    display: flex;
+    align-items: center; }
+    .form__checkbox:not(:last-child) {
+      margin-bottom: 2rem; }
+    .form__checkbox__label {
+      margin-left: 0.5rem;
+      font-size: 1.6rem; }
 
 .sponsor-slider {
   width: 100%;
@@ -691,3 +699,18 @@ tr:nth-child(even) {
       .sponsors__card__links__item {
         color: white;
         font-size: 2rem; }
+
+.settings {
+  padding: 2rem;
+  background-image: url("../asset/settings.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+  .settings__body {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 0.4rem;
+    padding: 2rem; }
+  .settings__button {
+    margin-top: 2rem; }
