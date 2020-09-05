@@ -18,6 +18,7 @@ export const transactionCreateController = async (
     if (!user) throw new Error("transaction failed");
     if (!user.dob) throw new Error("date of birth not updated");
     payment = await paymentHandler.createOrder(parseInt(amount) * 100);
+    console.log({ amount });
     const transaction = await Transaction.build({
       amount: parseInt(amount),
       orderId: payment.receipt,
@@ -32,5 +33,5 @@ export const transactionCreateController = async (
   } finally {
     session.endSession();
   }
-  res.send(payment.id);
+  res.send(payment?.id);
 };

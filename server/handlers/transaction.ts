@@ -5,6 +5,7 @@ import {
   requireAuth,
   requireAdminAuth,
 } from "@monsid/ugh";
+
 import { transactionCreateController } from "../controllers/transaction/create";
 import { transactionVerifyController } from "../controllers/transaction/verify";
 import { transactionFetchAllController } from "../controllers/transaction/fetch-all";
@@ -31,7 +32,7 @@ export const transactionHandler: Array<ApiSign> = [
     middlewares: [currentUser, requireAuth],
   },
   {
-    url: "/verfiy/:coinId",
+    url: "/verify/:coinId",
     method: HttpMethod.Post,
     controller: transactionVerifyController,
     middlewares: [currentUser, requireAuth],

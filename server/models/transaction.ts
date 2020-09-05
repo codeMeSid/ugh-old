@@ -26,7 +26,7 @@ const transactionSchema = new mongoose.Schema(
     user: String,
     orderId: String,
     razorpayId: String,
-    amount: { type: Number, min: 100 },
+    amount: Number,
     createdAt: { type: mongoose.Schema.Types.Date, default: Date.now() },
     status: {
       type: String,
