@@ -8,7 +8,7 @@ import { AiOutlineMenu } from 'react-icons/ai';
 import { BsPlayFill } from 'react-icons/bs';
 import { FaTwitch } from 'react-icons/fa';
 
-const Streams = ({ currentUser, streams, errors }) => {
+const Streams = ({ streams, errors }) => {
     const [streamData] = useState(streams);
     const [streamOption, setStreamOption] = useState("all");
     const [streamArray, setStreamArray] = useState([]);
@@ -33,7 +33,7 @@ const Streams = ({ currentUser, streams, errors }) => {
         }
     }
 
-    return <MainLayout currentUser={currentUser}>
+    return <MainLayout>
         <section className="streams">
             <div className="streams__title">Streams</div>
             <div className="streams__subtitle">This is where you can browse through our streams</div>

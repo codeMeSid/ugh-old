@@ -6,7 +6,7 @@ import { UserDoc } from '../../server/models/user';
 import { useRequest } from '../hooks/use-request';
 import ProgressButton from '../components/button/progress';
 
-const Settings = ({ currentUser, user }: { currentUser: any, user: UserDoc }) => {
+const Settings = ({ user }: { user: UserDoc }) => {
     const [newTournamentWasAdded, setNewTournamentWasAdded] = useState(!!user.settings.newTournamentWasAdded);
     const [addedTournamentWasWon, setAddedTournamentWasWon] = useState(!!user.settings.addedTournamentWasWon);
     const [addedTournamentWillStart, setAddedTournamentWillStart] = useState(!!user.settings.addedTournamentWillStart);
@@ -27,7 +27,7 @@ const Settings = ({ currentUser, user }: { currentUser: any, user: UserDoc }) =>
         },
     })
 
-    return <MainLayout currentUser={currentUser}>
+    return <MainLayout>
         <div className="settings">
             <div className="settings__body">
                 <CheckInput value={newTournamentWasAdded} onChange={(val) => setNewTournamentWasAdded(val)} label="Notify via email/mobile when Someone Added a Tournament" />

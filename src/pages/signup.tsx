@@ -7,7 +7,7 @@ import SocialButton from "../components/button/social";
 import Link from "next/link";
 import { useRequest } from '../hooks/use-request';
 
-const SignUp = ({ currentUser }) => {
+const SignUp = () => {
     const [canRequest, setCanRequest] = useState(false);
     const [ughId, setUghId] = useState("");
     const [name, setName] = useState("");
@@ -31,7 +31,7 @@ const SignUp = ({ currentUser }) => {
             case 'password2': return setPassword2(value);
         }
     }
-    return <MainLayout currentUser={currentUser}>
+    return <MainLayout>
         <section className="signin">
             <h1 style={{ marginBottom: 10 }}>Register</h1>
             <Input placeholder="ugh id*" name="ughId" onChange={onChangeHandler} value={ughId} />

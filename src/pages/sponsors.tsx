@@ -10,8 +10,8 @@ import Option from '../components/input/option';
 import ProgressButton from '../components/button/progress';
 import { useRequest } from '../hooks/use-request';
 
-const Sponsors = ({ currentUser, sponsors, sponsorships }
-    : { currentUser: any, sponsors: any, sponsorships: Array<SponsorshipDoc> }) => {
+const Sponsors = ({ sponsors, sponsorships }
+    : { sponsors: any, sponsorships: Array<SponsorshipDoc> }) => {
     const [sponsorshipIndex, setSponsorshipIndex] = useState(0);
     const [packIndex, setPackIndex] = useState(0);
     const [email, setEmail] = useState("");
@@ -41,7 +41,7 @@ const Sponsors = ({ currentUser, sponsors, sponsorships }
         setSponsorshipIndex(val[0]);
         setPackIndex(val[1]);
     }
-    return <MainLayout currentUser={currentUser}>
+    return <MainLayout>
         <div className="sponsors">
             <div className="sponsors__head">
                 <div className="sponsors__title">Sponsor us</div>

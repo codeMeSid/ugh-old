@@ -5,7 +5,7 @@ import { CoinDoc } from "../../server/models/coin";
 import ShopCard from "../components/card/shop";
 
 const Shop = ({ currentUser, coins }: { currentUser: any, coins: Array<CoinDoc> }) => {
-    return <MainLayout currentUser={currentUser}>
+    return <MainLayout>
         <section className="shop">
             <div className="shop__container">
                 {coins.map(coin => {

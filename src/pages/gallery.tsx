@@ -2,8 +2,8 @@ import MainLayout from "../components/layout/mainlayout";
 import { serverRequest } from "../hooks/server-request";
 import { GalleryDoc } from "../../server/models/gallery";
 
-const Gallery = ({ currentUser, images }: { currentUser: any, images: Array<GalleryDoc> }) => {
-    return <MainLayout currentUser={currentUser}>
+const Gallery = ({ images }: { images: Array<GalleryDoc> }) => {
+    return <MainLayout >
         <section className="gallery">
             <div className="gallery__title">See our events in pictures</div>
             <div className="gallery__subtitle">and stay updated with atmosphere</div>

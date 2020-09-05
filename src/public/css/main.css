@@ -385,6 +385,7 @@ tr:nth-child(even) {
 
 .sponsor-slider {
   width: 100%;
+  height: 14rem;
   padding: 1rem;
   background-color: black; }
   .sponsor-slider__container {
@@ -714,3 +715,32 @@ tr:nth-child(even) {
     padding: 2rem; }
   .settings__button {
     margin-top: 2rem; }
+
+.about {
+  padding: 2rem;
+  min-height: 88vh;
+  background-image: url("../asset/about-bg.jpg");
+  background-size: cover;
+  background-position: center; }
+  .about__title {
+    text-align: center;
+    font-size: 3.6rem;
+    text-transform: uppercase;
+    color: white;
+    font-weight: 900;
+    margin-bottom: 2rem; }
+  .about__content {
+    color: white;
+    font-size: 2.4rem;
+    text-align: center;
+    width: 100rem;
+    margin: 0 auto;
+    line-height: 4rem;
+    word-wrap: break-word;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 1rem; }
+
+@media (max-width: 56.25em) {
+  .about__content {
+    width: 100%;
+    line-height: 3.2rem; } }
