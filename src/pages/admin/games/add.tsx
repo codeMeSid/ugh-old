@@ -77,7 +77,7 @@ const AddGame = ({ consoles }: { consoles: ConsoleDoc[] }) => {
 
 
     return <SideLayout title="add game">
-        <div className="details">
+        <div className="detail">
             <div className="row">
                 <Input placeholder="name" name="name" value={name} onChange={onChangeHandler} />
             </div>

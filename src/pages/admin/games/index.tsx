@@ -6,23 +6,20 @@ import { useRequest } from '../../../hooks/use-request';
 import { GameDoc } from '../../../../server/models/game';
 import Switch from 'react-switch';
 import Link from 'next/link';
-import DialogButton from '../../../components/button/dialog';
 
 const AdminGamesDashboard = () => {
-    // states
     const [gameData, setGameData] = useState([]);
     const SwitchBlade = (id: string, activity: boolean) => {
         return <Switch checked={activity} onChange={() => changeGameActivity(id)} />
     }
-    const TableLink = (name: string) => <Link href={`/admin/games/${name}`}>
+    const TableLink = (name: string, id: string) => <Link href={`/admin/games/${id}`}>
         <a className="table__link">{name.toUpperCase()}</a>
     </Link>
-    // request
     const { doRequest } = useRequest({
         url: "/api/ugh/game/fetch/all", body: {}, method: "get", onSuccess: (data: Array<GameDoc>) => {
             setGameData(data.map(game => ([
                 <>
-                    <div>{TableLink(game.name)}</div>
+                    <div>{TableLink(game.name, game.id)}</div>
                     <div>({game.console.toUpperCase()})</div>
                 </>,
                 <a href={game.imageUrl} target="_blank"><img className="gallery__image" src={game.imageUrl} /></a>,
@@ -30,11 +27,9 @@ const AdminGamesDashboard = () => {
             ])))
         }
     });
-    // effect
     useEffect(() => {
         doRequest();
-    }, [])
-    // method
+    }, []);
     const changeGameActivity = async (id: string) => {
         const { doRequest: updateGameRequest } = useRequest({
             url: `/api/ugh/game/update/activity/${id}`,
@@ -46,9 +41,9 @@ const AdminGamesDashboard = () => {
     }
     // render
     return <SideLayout title={`games(${gameData.length})`}>
-       <Link href="/admin/games/add">
-        <a><Button text="Add Game"/></a>
-       </Link>
+        <Link href="/admin/games/add">
+            <a><Button text="Add Game" /></a>
+        </Link>
         <Table headers={[
             { text: "name", isResponsive: false },
             { text: "image", isResponsive: false },

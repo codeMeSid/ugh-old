@@ -35,7 +35,7 @@ const AddSponsorship = () => {
         setPacks(updatedPacks);
     }
     return <SideLayout title="add pack">
-        <div className="details">
+        <div className="detail">
             <div className="row">
                 <div className="col">
                     <Input placeholder="name" name="name" onChange={onChangeHandler} value={name} />
