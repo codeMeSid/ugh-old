@@ -48,7 +48,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
   // upcoming -> cancel
   // 15 mins before start
   timer.schedule(
-    `${tournament.id}${tournament.id}`,
+    `${tournament.id}${tournament.id}${tournament.id}`,
     new Date(tournament.startDateTime.valueOf() - 1000 * 60 * 15),
     async ({ id }: { id: string }) => {
       const tournament = await Tournament.findById(id);
