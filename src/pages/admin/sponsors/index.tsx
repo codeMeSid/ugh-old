@@ -33,9 +33,13 @@ const AdminSponsorDashboard = () => {
                     <div>&#8377;{s.sponsorPack.pack.price}</div>
                 </div>,
                 s.isProccessed
-                    ? SwitchBlade(s.id, s.isActive)
+                    ? s.sponsorId
+                        ? <Link href={`/admin/sponsors/${s.id}`}>
+                            <a style={{ color: "orange" }}>Not updated</a>
+                        </Link>
+                        : SwitchBlade(s.id, s.isActive)
                     : <Link href={`/admin/sponsors/${s.id}`}>
-                        <a><Button text={"process".toUpperCase()} /></a>
+                        <a style={{ color: "blue" }}>Process</a>
                     </Link>
             ])))
         }

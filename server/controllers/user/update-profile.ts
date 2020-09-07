@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../../models/user";
-import { BadRequestError } from "@monsid/ugh";
+import { BadRequestError, UserActivity } from "@monsid/ugh";
 
 export const updateUserProfileController = async (
   req: Request,
@@ -10,6 +10,8 @@ export const updateUserProfileController = async (
   const { coins, role } = req.body;
   const user = await User.findById(userId);
   if (!user) throw new BadRequestError("Invalid account");
+  if (user.activity === UserActivity.Inactive)
+    throw new BadRequestError("User account inactive");
   user.set({ "wallet.coins": coins, role });
   await user.save();
   res.send(user);

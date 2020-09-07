@@ -9,13 +9,16 @@ import { sponsorAddController } from "../controllers/sponsor/add";
 import { sponsorFetchActiveController } from "../controllers/sponsor/fetch-active";
 import { sponsorFetchController } from "../controllers/sponsor/fetch";
 import { sponsorUpdateActivityController } from "../controllers/sponsor/update-activity";
+import { sponsorAddValidator } from "../utils/validator/sponsor/add";
+import { sponsorFetchDetailController } from "../controllers/sponsor/fetch-detail";
+import { sponsorProcessController } from "../controllers/sponsor/update-request";
 
 export const sponsorHandler: Array<ApiSign> = [
   {
     url: "/add",
     method: HttpMethod.Post,
     controller: sponsorAddController,
-    middlewares: [sponsorAddController, validateRequest],
+    middlewares: [sponsorAddValidator, validateRequest],
   },
   // done
   {
@@ -31,25 +34,22 @@ export const sponsorHandler: Array<ApiSign> = [
     controller: sponsorFetchController,
     middlewares: [currentUser, requireAdminAuth],
   },
-  // done
+  {
+    url: "/fetch/detail/:sponsorId",
+    method: HttpMethod.Get,
+    controller: sponsorFetchDetailController,
+    middlewares: [currentUser, requireAdminAuth],
+  },
   {
     url: "/update/activity/:sponsorId",
     method: HttpMethod.Put,
     controller: sponsorUpdateActivityController,
     middlewares: [currentUser, requireAdminAuth],
   },
-  // update request
-  // {
-  //   url: "/update/request/:sponsorId",
-  //   method: HttpMethod.Put,
-  //   controller: null,
-  //   middlewares: [currentUser, requireAdminAuth],
-  // },
-  // // update sponsor form
-  // {
-  //   url: "/update/form/:sponsorId",
-  //   method: HttpMethod.Put,
-  //   controller: null,
-  //   middlewares: [],
-  // },
+  {
+    url: "/update/process/:sponsorId",
+    method: HttpMethod.Put,
+    controller: sponsorProcessController,
+    middlewares: [currentUser, requireAdminAuth],
+  },
 ];

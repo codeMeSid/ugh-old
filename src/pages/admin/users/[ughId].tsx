@@ -15,7 +15,7 @@ const UserDetail = ({ user }: { user: UserDoc }) => {
     const [role, setRole] = useState(user?.role);
 
     const { doRequest } = useRequest({
-        url: `/api/ugh/user/update/profile/${user.id}`,
+        url: `/api/ugh/user/update/profile/${user?.id}`,
         body: { coins, role },
         method: "put",
         onSuccess: Router.reload
@@ -23,7 +23,7 @@ const UserDetail = ({ user }: { user: UserDoc }) => {
 
     const onChangeHandler = (_, val: number) => val < user?.wallet?.coins ? null : setCoins(val);
     const onSelectHandler = (e) => setRole(e.currentTarget.value);
-    return (<SideLayout title={user?.ughId}>
+    return (<SideLayout title={user?.ughId ? user?.ughId : "not found"}>
         <div className="detail">
             <div className="row">
                 <img src={user?.uploadUrl} className="detail__image" alt="User profile image" />
@@ -39,7 +39,7 @@ const UserDetail = ({ user }: { user: UserDoc }) => {
             <div className="row">
                 <div className="col"> <Input placeholder="ughId" value={user?.ughId} disabled={true} /></div>
                 <div className="col">
-                    <Input placeholder="date of birth" value={format(new Date(user?.dob), 'do MMMM yyy')} disabled={true} />
+                    <Input placeholder="date of birth" value={format(user?.dob ? new Date(user?.dob) : Date.now(), 'do MMMM yyy')} disabled={true} />
                 </div>
             </div>
             <div className="row">
@@ -105,7 +105,7 @@ const UserDetail = ({ user }: { user: UserDoc }) => {
 
 UserDetail.getInitialProps = async (ctx) => {
     const { ughId } = ctx.query;
-    const { data, errors } = await serverRequest(ctx, { url: `/api/ugh/user/fetch/detail/${ughId}`, body: {}, method: "get" });
+    const { data, errors } = await serverRequest(ctx, { url: `/api/ugh/user/fetch/detail/gen/${ughId}`, body: {}, method: "get" });
     return {
         user: data
     };

@@ -64,7 +64,7 @@ export const userHandlers: Array<ApiSign> = [
     middlewares: [currentUser],
   },
   {
-    url: "/fetch/detail/:ughId",
+    url: "/fetch/detail/gen/:ughId",
     method: HttpMethod.Get,
     controller: userDetailController,
     middlewares: [currentUser, requireAdminAuth],

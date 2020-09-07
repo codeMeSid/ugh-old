@@ -38,7 +38,7 @@ const TransactionDetail = ({ transaction }: { transaction: TransactionDoc }) => 
         <div className="row">
             <div className="col"><Input placeholder="amount" value={transaction?.amount} disabled /></div>
             <div className="col">
-                <Input placeholder="created at" value={format(new Date(transaction?.createdAt), "dd/MM/yyyy hh:mm a")} disabled />
+                <Input placeholder="created at" value={format(new Date(transaction?.createdAt ? transaction?.createdAt : Date.now()), "dd/MM/yyyy hh:mm a")} disabled />
             </div>
         </div>
         <div className="row">
