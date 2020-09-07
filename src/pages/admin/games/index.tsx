@@ -6,6 +6,7 @@ import { useRequest } from '../../../hooks/use-request';
 import { GameDoc } from '../../../../server/models/game';
 import Switch from 'react-switch';
 import Link from 'next/link';
+import DialogButton from '../../../components/button/dialog';
 
 const AdminGamesDashboard = () => {
     // states
@@ -45,10 +46,9 @@ const AdminGamesDashboard = () => {
     }
     // render
     return <SideLayout title={`games(${gameData.length})`}>
-        <div style={{ display: "flex", alignItems: "center" }}>
-            <Button size="icon" text="+" style={{ marginBottom: 10, marginRight: 10 }} />
-            <h1>Add Games</h1>
-        </div>
+       <Link href="/admin/games/add">
+        <a><Button text="Add Game"/></a>
+       </Link>
         <Table headers={[
             { text: "name", isResponsive: false },
             { text: "image", isResponsive: false },

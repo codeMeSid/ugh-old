@@ -20,7 +20,7 @@ export const consoleHandler: Array<ApiSign> = [
     middlewares: [currentUser, requireAdminAuth],
   },
   {
-    url: "/all/active",
+    url: "/fetch/active",
     method: HttpMethod.Get,
     controller: consoleAllActiveController,
     middlewares: [],
