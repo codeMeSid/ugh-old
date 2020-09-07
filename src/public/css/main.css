@@ -68,6 +68,7 @@ h1 {
     padding: 0.3rem;
     text-transform: uppercase;
     font-size: 1.2rem;
+    z-index: 2;
     cursor: pointer;
     visibility: hidden; }
 
@@ -818,3 +819,146 @@ tr:nth-child(even) {
 @media (max-width: 56.25em) {
   .col {
     margin: 0; } }
+
+.match__head {
+  padding-top: 12vh;
+  background-image: url("../asset/tournament.jpg");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  height: 100%;
+  position: relative; }
+  .match__head__container {
+    width: 100%;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin-top: 2rem;
+    padding: 2rem; }
+    .match__head__container__title {
+      color: white;
+      font-weight: bold;
+      font-size: 3.6rem;
+      text-align: center;
+      text-transform: capitalize; }
+    .match__head__container__subtitle {
+      color: white;
+      font-weight: bold;
+      font-size: 2rem;
+      margin-top: 1rem;
+      text-align: center;
+      text-transform: capitalize; }
+    .match__head__container__list {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 100rem;
+      margin-top: 2rem; }
+      .match__head__container__list__item {
+        width: 18rem;
+        margin: 0 0.5rem; }
+        .match__head__container__list__item__image {
+          width: 100%;
+          filter: grayscale(100%);
+          cursor: pointer;
+          transform: scale(1);
+          transition: all 300ms linear; }
+          .match__head__container__list__item__image:hover {
+            transform: scale(1.1); }
+          .match__head__container__list__item__image.active {
+            filter: grayscale(0%);
+            transform: scale(1); }
+          .match__head__container__list__item__image.button {
+            text-align: right; }
+            @media (max-width: 56.25em) {
+              .match__head__container__list__item__image.button {
+                text-align: center; } }
+
+.match__footer {
+  padding: 2rem;
+  background-color: #00001a;
+  min-height: 32rem; }
+  .match__footer__title {
+    font-size: 2.8rem;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4); }
+    .match__footer__title__side {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 30rem; }
+      .match__footer__title__side__item {
+        font-size: 1.8rem;
+        text-transform: capitalize;
+        cursor: pointer;
+        transition: color 300ms linear;
+        position: relative; }
+        .match__footer__title__side__item:first-child {
+          list-style: none; }
+        .match__footer__title__side__item:hover {
+          color: blue; }
+        .match__footer__title__side__item::before {
+          content: "";
+          height: 3px;
+          background-color: blue;
+          width: 0;
+          position: absolute;
+          top: 160%;
+          transition: width 300ms linear; }
+          @media (max-width: 56.25em) {
+            .match__footer__title__side__item::before {
+              top: 150%; } }
+        .match__footer__title__side__item:hover::before {
+          width: 100%; }
+        .match__footer__title__side__item.active {
+          color: blue; }
+          .match__footer__title__side__item.active::before {
+            content: "";
+            height: 3px;
+            background-color: blue;
+            width: 100%;
+            position: absolute;
+            top: 160%;
+            transition: width 300ms linear; }
+            @media (max-width: 56.25em) {
+              .match__footer__title__side__item.active::before {
+                top: 150%; } }
+  .match__footer__list {
+    margin: 0 auto;
+    margin-top: 2rem;
+    max-width: 100rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    min-width: 20rem; }
+    @media (max-width: 56.25em) {
+      .match__footer__list {
+        justify-content: center; } }
+    .match__footer__list__item {
+      width: 32rem;
+      height: 20rem;
+      position: relative;
+      cursor: pointer;
+      margin: 0.5rem; }
+      .match__footer__list__item__image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0; }
+      .match__footer__list__item__time {
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 5;
+        padding: 0.5rem;
+        color: white;
+        font-weight: bold;
+        font-size: 1.6rem;
+        position: absolute;
+        top: 2;
+        left: 2; }
