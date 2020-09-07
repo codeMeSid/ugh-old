@@ -7,7 +7,7 @@ export const sponsorshipAddController = async (req: Request, res: Response) => {
   const existingSponsorshipPack = await Sponsorship.findOne({
     $or: [{ name }, { color }],
   });
-  if (existingSponsorshipPack)
+  if (existingSponsorshipPack && existingSponsorshipPack.isActive === true)
     throw new BadRequestError("sponsorship pack already exists");
   const sponsorship = Sponsorship.build({
     name,

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import SideLayout from "../../../components/layout/sidelayout"
 import Table from "../../../components/table"
-import Button from "../../../components/button/main"
 import { useRequest } from '../../../hooks/use-request'
 import { SponsorshipDoc } from '../../../../server/models/sponsorship'
 import Switch from 'react-switch';
 import Link from 'next/link'
+import Button from '../../../components/button/main'
 
 const AdminSponsorshipDashboard = () => {
     const [sData, setSData] = useState([]);
@@ -36,7 +36,6 @@ const AdminSponsorshipDashboard = () => {
         doRequest();
     }, [])
     const changeSActivity = async (id: string) => {
-        console.log({ id })
         const { doRequest: updateSRequest } = useRequest({
             url: `/api/ugh/sponsorship/update/activity/${id}`,
             method: "put",
@@ -45,11 +44,13 @@ const AdminSponsorshipDashboard = () => {
         await updateSRequest();
         await doRequest();
     }
+   
     return <SideLayout title={`packs(${sData.length})`}>
-        <div style={{ display: "flex", alignItems: "center" }}>
-            <Button size="icon" text="+" style={{ marginBottom: 10, marginRight: 10 }} />
-            <h1>Add sponsorship</h1>
-        </div>
+        <Link href="/admin/sponsorships/add">
+            <a style={{ marginBottom: 20 }}>
+                <Button text="Add Pack" />
+            </a>
+        </Link>
         <Table headers={[
             { text: "name", isResponsive: false },
             { text: "packs", isResponsive: false },

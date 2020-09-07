@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
-import SideLayout from "../../../components/layout/sidelayout";
-import Table from "../../../components/table";
-import SocialButton from "../../../components/button/social";
-import { useRequest } from '../../../hooks/use-request';
-import { StreamDoc } from '../../../../server/models/stream';
+import SideLayout from "../../components/layout/sidelayout";
+import Table from "../../components/table";
+import SocialButton from "../../components/button/social";
+import { useRequest } from '../../hooks/use-request';
+import { StreamDoc } from '../../../server/models/stream';
 import Link from 'next/link';
 import Switch from 'react-switch';
-import { GameDoc } from '../../../../server/models/game';
-import DialogButton from '../../../components/button/dialog';
-import Input from '../../../components/input/input';
-import Select from '../../../components/input/select';
-import FileInput from '../../../components/input/file';
-import Option from '../../../components/input/option';
-import { socialOptions } from '../../../public/resource';
+import { GameDoc } from '../../../server/models/game';
+import DialogButton from '../../components/button/dialog';
+import Input from '../../components/input/input';
+import Select from '../../components/input/select';
+import FileInput from '../../components/input/file';
+import Option from '../../components/input/option';
+import { socialOptions } from '../../public/resource';
 
 const AdminStreamDashboard = () => {
     // states
@@ -36,7 +36,7 @@ const AdminStreamDashboard = () => {
         body: {}, method: "get",
         onSuccess: (data: Array<StreamDoc>) => {
             setStreamData(data.map(stream => ([<>
-                <div>{TableLink(stream.name.toUpperCase(), stream.id)}</div>
+                <div>{stream.name.toUpperCase()}</div>
                 <div>({stream.game.toUpperCase()})</div>
             </>,
             <a href={stream.href} >
