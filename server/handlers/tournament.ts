@@ -28,7 +28,7 @@ export const tournamentHandler: Array<ApiSign> = [
     middlewares: [],
   },
   // {
-  //   url: "/fetch/:tournamentId",
+  //   url: "/fetch/detail/:tournamentId",
   //   method: HttpMethod.Get,
   //   controller: null,
   //   middlewares: [],

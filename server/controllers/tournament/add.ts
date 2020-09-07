@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Tournament } from "../../models/tournament";
 import { timer, TournamentStatus } from "@monsid/ugh";
 import { Game } from "../../models/game";
+import { randomBytes } from "crypto";
 
 export const tournamentAddController = async (req: Request, res: Response) => {
   const {
@@ -29,10 +30,18 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     winnerCount: parseInt(winnerCount),
   });
   await tournament.save();
-  // upcoming -> started
+
+  startTournamentTimer(tournament.id, tournament.startDateTime);
+  start15MinCheckTournamentTimer(tournament.id, tournament.startDateTime);
+  endTournamentTimer(tournament.id, tournament.endDateTime);
+
+  res.send(true);
+};
+
+const startTournamentTimer = (id: string, startDateTime: Date) => {
   timer.schedule(
-    tournament.id,
-    tournament.startDateTime,
+    id,
+    new Date(startDateTime),
     async ({ id }: { id: string }) => {
       const tournament = await Tournament.findById(id);
       if (!tournament) return;
@@ -42,14 +51,18 @@ export const tournamentAddController = async (req: Request, res: Response) => {
       }
     },
     {
-      id: tournament.id,
+      id,
     }
   );
-  // upcoming -> cancel
-  // 15 mins before start
+};
+
+const start15MinCheckTournamentTimer = (id: string, startDateTime: Date) => {
+  const check15MinStartId = `${id}-${randomBytes(4)
+    .toString("hex")
+    .substr(0, 4)}`;
   timer.schedule(
-    `${tournament.id}${tournament.id}${tournament.id}`,
-    new Date(tournament.startDateTime.valueOf() - 1000 * 60 * 15),
+    check15MinStartId,
+    new Date(startDateTime.valueOf() - 1000 * 60 * 15),
     async ({ id }: { id: string }) => {
       const tournament = await Tournament.findById(id);
       if (!tournament) return;
@@ -57,18 +70,19 @@ export const tournamentAddController = async (req: Request, res: Response) => {
       const attendance =
         (tournament.players.length / tournament.playerCount) * 100;
       if (tournament.status === TournamentStatus.Upcoming && attendance < 50) {
-        tournament.set({ status: TournamentStatus.Completed });
+        tournament.set({ status: TournamentStatus.Cancelled });
         await tournament.save();
       }
     },
-    {
-      id: tournament.id,
-    }
+    { id }
   );
-  // started -> completed
+};
+
+const endTournamentTimer = (id: string, endDateTime: Date) => {
+  const endId = `${id}-${randomBytes(4).toString("hex").substr(0, 5)}`;
   timer.schedule(
-    `${tournament.id}${tournament.id}`,
-    tournament.endDateTime,
+    endId,
+    endDateTime,
     async ({ id }: { id: string }) => {
       const tournament = await Tournament.findById(id);
       if (!tournament) return;
@@ -77,9 +91,6 @@ export const tournamentAddController = async (req: Request, res: Response) => {
         await tournament.save();
       }
     },
-    {
-      id: tournament.id,
-    }
+    { id }
   );
-  res.send(true);
 };
