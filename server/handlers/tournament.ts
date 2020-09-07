@@ -7,6 +7,7 @@ import {
 } from "@monsid/ugh";
 import { tournamentAddController } from "../controllers/tournament/add";
 import { tournamentFetchAllController } from "../controllers/tournament/fetch-all";
+import { tournamentFetchDetailController } from "../controllers/tournament/fetch-detail";
 
 export const tournamentHandler: Array<ApiSign> = [
   // {
@@ -27,12 +28,12 @@ export const tournamentHandler: Array<ApiSign> = [
     controller: tournamentFetchAllController,
     middlewares: [],
   },
-  // {
-  //   url: "/fetch/detail/:tournamentId",
-  //   method: HttpMethod.Get,
-  //   controller: null,
-  //   middlewares: [],
-  // },
+  {
+    url: "/fetch/detail/:tournamentId",
+    method: HttpMethod.Get,
+    controller: tournamentFetchDetailController,
+    middlewares: [],
+  },
   {
     url: "/add",
     method: HttpMethod.Post,

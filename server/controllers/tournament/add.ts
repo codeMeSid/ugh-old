@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Tournament } from "../../models/tournament";
-import { timer, TournamentStatus } from "@monsid/ugh";
+import { timer, TournamentStatus, BadRequestError } from "@monsid/ugh";
 import { Game } from "../../models/game";
 import { randomBytes } from "crypto";
 
@@ -18,6 +18,21 @@ export const tournamentAddController = async (req: Request, res: Response) => {
 
   // TODO coin deduction logic
 
+  if (winnerCount >= playerCount)
+    throw new BadRequestError("Winner cannot be more than players");
+
+  if (Math.abs(Date.now() - new Date(startDateTime).valueOf()) < 1000 * 60 * 60)
+    throw new BadRequestError("Schedule tournament atleat 1 hr ahead");
+
+  if (
+    Math.abs(
+      new Date(endDateTime).valueOf() - new Date(startDateTime).valueOf()
+    ) <
+    1000 * 60 * 15
+  )
+    throw new BadRequestError(
+      "Tournament duration should be atleast 15 minutes"
+    );
   const game = await Game.findById(gameId);
   const tournament = Tournament.build({
     addedBy: req.currentUser,
@@ -25,6 +40,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     endDateTime: new Date(endDateTime),
     game,
     name,
+    group,
     playerCount: parseInt(playerCount),
     startDateTime: new Date(startDateTime),
     winnerCount: parseInt(winnerCount),

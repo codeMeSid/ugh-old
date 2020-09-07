@@ -1,14 +1,15 @@
 import { Request, Response } from "express";
 import { Tournament } from "../../models/tournament";
 
-export const tournamentFetchAllController = async (
+export const tournamentFetchDetailController = async (
   req: Request,
   res: Response
 ) => {
-  const tournaments = await Tournament.find().populate(
+  const { tournamentId } = req.params;
+  const tournament = await Tournament.findById(tournamentId).populate(
     "game",
     "name console imageUrl thumbnailUrl",
     "Games"
   );
-  res.send(tournaments);
+  res.send(tournament);
 };
