@@ -6,8 +6,10 @@ import ProgressButton from "../components/button/progress";
 import SocialButton from "../components/button/social";
 import Link from "next/link";
 import { useRequest } from '../hooks/use-request';
+import { fire } from '../../server/utils/firebase';
 
 const SignUp = () => {
+    const [user, setUser] = useState(null);
     const [canRequest, setCanRequest] = useState(false);
     const [ughId, setUghId] = useState("");
     const [name, setName] = useState("");
@@ -31,6 +33,24 @@ const SignUp = () => {
             case 'password2': return setPassword2(value);
         }
     }
+    const { doRequest: doSocialRequest } = useRequest({ url: "/api/ugh/user/social-auth", body: user, method: "post", onSuccess: () => Router.push("/profile") });
+    const onSocialAuthProvider = async (authFunc) => {
+        try {
+            const newUser = await authFunc();
+            const socialUser = {
+                name: newUser.displayName,
+                email: newUser.email,
+                uploadUrl: newUser.photoURL
+            }
+            setUser(socialUser);
+        } catch (error) {
+            console.log({ error })
+        }
+    }
+
+    useEffect(() => {
+        if (user) doSocialRequest()
+    }, [user])
     return <MainLayout>
         <section className="signin">
             <h1 style={{ marginBottom: 10 }}>Register</h1>
@@ -52,9 +72,9 @@ const SignUp = () => {
                 </div>
             </div>
             <div style={{ margin: ".5rem 0", fontSize: 16, fontWeight: 700 }}> Or Login with</div>
-            <SocialButton size="medium" type="facebook">Facebook</SocialButton>
+            <SocialButton onPress={() => { onSocialAuthProvider(fire.facebook) }} size="medium" type="facebook">Facebook</SocialButton>
             <div style={{ margin: "1rem 0" }} />
-            <SocialButton size="medium" type="gplus">Google</SocialButton>
+            <SocialButton onPress={() => { onSocialAuthProvider(fire.google) }} size="medium" type="gplus">Google</SocialButton>
         </section>
     </MainLayout>
 };
