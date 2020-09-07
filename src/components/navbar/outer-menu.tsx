@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { outerMenuLinks, outerMenuLinksAuth, outerMenuLinksNonAuth } from "../../public/resource";
 
-
 const OuterMenu = ({ currentUser, onClick }) => <div className="navbar__responsive-menu">
     {
         outerMenuLinks.map(link => {

@@ -28,7 +28,7 @@ const SignIn = () => {
             }} />
             <div className="signin__other">
                 <div style={{ textTransform: "capitalize", textAlign: "center", fontSize: 16, fontWeight: 700 }}>forgot password ?&nbsp;
-                    <Link href="/forgot-password">
+                    <Link href="/account/forgot-password">
                         <a style={{ textDecoration: "none" }}>Reset it</a>
                     </Link>
                 </div>

@@ -5,6 +5,6 @@ export const transactionFetchAllController = async (
   req: Request,
   res: Response
 ) => {
-  const transactions = await Transaction.find();
+  const transactions = await Transaction.find().sort({ status: -1 });
   res.send(transactions);
 };

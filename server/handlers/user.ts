@@ -24,6 +24,7 @@ import { signupValidator } from "../utils/validator/user/signup";
 import { signinValidator } from "../utils/validator/user/signin";
 import { userUpdateSettingController } from "../controllers/user/update-setting";
 import { userFetchDetailController } from "../controllers/user/fetch-detail";
+import { updateUserProfileController } from "../controllers/user/update-profile";
 
 export const userHandlers: Array<ApiSign> = [
   // {
@@ -62,12 +63,12 @@ export const userHandlers: Array<ApiSign> = [
     controller: currentUserController,
     middlewares: [currentUser],
   },
-  // {
-  //   url: "/:userId",
-  //   method: HttpMethod.Get,
-  //   controller: userDetailController,
-  //   middlewares: [currentUser, requireAdminAuth],
-  // },
+  {
+    url: "/fetch/detail/:ughId",
+    method: HttpMethod.Get,
+    controller: userDetailController,
+    middlewares: [currentUser, requireAdminAuth],
+  },
   // done
   {
     url: "/signup",
@@ -106,12 +107,18 @@ export const userHandlers: Array<ApiSign> = [
   //   controller: resetUserController,
   //   middlewares: [],
   // },
-  // {
-  //   url: "/update",
-  //   method: HttpMethod.Put,
-  //   controller: updateUserController,
-  //   middlewares: [currentUser, requireAuth],
-  // },
+  {
+    url: "/update/profile",
+    method: HttpMethod.Put,
+    controller: updateUserController,
+    middlewares: [currentUser, requireAuth],
+  },
+  {
+    url: "/update/profile/:userId",
+    method: HttpMethod.Put,
+    controller: updateUserProfileController,
+    middlewares: [currentUser, requireAdminAuth],
+  },
   // done
   {
     url: "/activity/:userId",

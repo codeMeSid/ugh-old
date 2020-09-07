@@ -1,9 +1,9 @@
-import "../public/css/main.css";
-import "react-awesome-button/dist/styles.css";
 import { serverRequest } from "../hooks/server-request";
 import TopNavbar from "../components/navbar/topnav";
 import SponsorSlider from "../components/sponsor-slider";
 import Footer from "../components/footer";
+import "../public/css/main.css";
+import "react-awesome-button/dist/styles.css";
 
 
 const AppComponent = ({ Component, pageProps, router, currentUser }) => {

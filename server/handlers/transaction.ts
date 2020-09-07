@@ -11,6 +11,8 @@ import { transactionVerifyController } from "../controllers/transaction/verify";
 import { transactionFetchAllController } from "../controllers/transaction/fetch-all";
 import { transactionFetchController } from "../controllers/transaction/fetch";
 import { transactionCreateRequestController } from "../controllers/transaction/create-request";
+import { transactionDetailController } from "../controllers/transaction/fetch-detail";
+import { transactionUpdateRequestController } from "../controllers/transaction/update-request";
 
 export const transactionHandler: Array<ApiSign> = [
   {
@@ -26,6 +28,18 @@ export const transactionHandler: Array<ApiSign> = [
     middlewares: [currentUser, requireAuth],
   },
   {
+    url: "/fetch/detail/:orderId",
+    method: HttpMethod.Get,
+    controller: transactionDetailController,
+    middlewares: [currentUser, requireAdminAuth],
+  },
+  {
+    url: "/create/request",
+    controller: transactionCreateRequestController,
+    method: HttpMethod.Get,
+    middlewares: [currentUser, requireAuth],
+  },
+  {
     url: "/create",
     method: HttpMethod.Post,
     controller: transactionCreateController,
@@ -38,11 +52,9 @@ export const transactionHandler: Array<ApiSign> = [
     middlewares: [currentUser, requireAuth],
   },
   {
-    url: "/create/request",
-    controller: transactionCreateRequestController,
-    method: HttpMethod.Get,
-    middlewares: [currentUser, requireAuth],
+    url: "/update/request/:orderId",
+    method: HttpMethod.Put,
+    controller: transactionUpdateRequestController,
+    middlewares: [currentUser, requireAdminAuth],
   },
-  // create withdraw request
-  // update withdraw request
 ];

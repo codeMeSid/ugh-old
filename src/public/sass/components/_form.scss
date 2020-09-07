@@ -42,8 +42,14 @@
   }
 
   &__select {
-    margin-bottom: 1rem;
-    color: #737f98;
+    min-width: 32rem;
+    width: 100%;
+    padding: 0.8rem 0.5rem;
+    font-size: 1.8rem;
+    background-color: rgba(grey, 0.2);
+    border-radius: 0.4rem;
+    border: none;
+    outline: none;
     &__option {
       padding: 1rem;
       &:hover,

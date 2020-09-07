@@ -319,8 +319,14 @@ tr:nth-child(even) {
       margin-top: 0.2rem;
       transition: all 100ms linear; }
   .form__select {
-    margin-bottom: 1rem;
-    color: #737f98; }
+    min-width: 32rem;
+    width: 100%;
+    padding: 0.8rem 0.5rem;
+    font-size: 1.8rem;
+    background-color: rgba(128, 128, 128, 0.2);
+    border-radius: 0.4rem;
+    border: none;
+    outline: none; }
     .form__select__option {
       padding: 1rem; }
       .form__select__option:hover, .form__select__option:focus {
@@ -777,3 +783,26 @@ tr:nth-child(even) {
     padding: 1rem; }
     .withdraw__head__warning__red {
       color: red; }
+
+.detail {
+  max-width: 80rem;
+  margin: 0 auto;
+  text-align: center; }
+  .detail__image {
+    width: 20rem;
+    background-color: rgba(128, 128, 128, 0.2);
+    height: auto;
+    margin-bottom: 0.5rem; }
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 1rem 0; }
+
+.col {
+  margin: 0 1rem; }
+
+@media (max-width: 56.25em) {
+  .col {
+    margin: 0; } }

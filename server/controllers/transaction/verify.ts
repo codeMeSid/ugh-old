@@ -22,20 +22,15 @@ export const transactionVerifyController = async (
   session.startTransaction();
   try {
     const reciept = await paymentHandler.verifyTransaction(paymentId, orderId);
-    infolog(reciept);
     const transaction = await Transaction.findOne({ orderId: reciept }).session(
       session
     );
-    info(JSON.stringify(transaction));
     transaction.set({
       razorpayId: paymentId,
       status: TransactionTypes.Captured,
     });
-    info(JSON.stringify(transaction));
     const user = await User.findById(id).session(session);
-    info(JSON.stringify(user));
     const coins = await Coin.findById(coinId).session(session);
-    info(JSON.stringify(coins));
     user.set({ "wallet.coins": user.wallet.coins + coins.value });
     await transaction.save({ session });
     await user.save({ session });

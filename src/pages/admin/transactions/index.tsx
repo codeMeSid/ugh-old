@@ -1,25 +1,13 @@
 import { useState, useEffect } from 'react';
 import SideLayout from "../../../components/layout/sidelayout"
 import Table from "../../../components/table"
-import Button from "../../../components/button/main"
 import { useRequest } from '../../../hooks/use-request';
 import { TransactionDoc } from '../../../../server/models/transaction';
 import Link from 'next/link';
-
+import {format} from 'date-fns'
 
 const AdminTransactionDashboard = () => {
     const [tData, setTData] = useState([]);
-
-    const formatDate = (date: Date) => {
-        const d = new Date(date);
-        const day = d.getDate();
-        const month = d.getMonth();
-        const year = d.getFullYear();
-        const hour = d.getHours() < 10 ? '0' + d.getHours() : d.getHours();
-        const minutes = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
-        const timeHandle = d.getHours() < 12 ? "am" : "pm";
-        return `${day}/${month}/${year} ${hour}:${minutes}${timeHandle}`;
-    }
 
     const TableLink = (name: string, id: string) => <Link href={`/admin/transactions/${id}`}>
         <a className="table__link">{name}</a>
@@ -32,8 +20,8 @@ const AdminTransactionDashboard = () => {
             setTData(data.map(t => ([
                 TableLink(t.orderId, t.orderId),
                 <div>&#8377;{t.amount}</div>,
-                formatDate(t.createdAt),
-                t.status.toUpperCase()
+                format(new Date(t.createdAt),"dd/MM/yyyy hh:mm a"),
+                <div style={{ color: t.status=== "requested" ? "red" : "black" }}>{t.status.toUpperCase()}</div>
             ])))
         }
     });
@@ -41,10 +29,6 @@ const AdminTransactionDashboard = () => {
         doRequest();
     }, [])
     return <SideLayout title={`bank(${tData.length})`}>
-        <div style={{ display: "flex", alignItems: "center" }}>
-            <Button size="icon" text="+" style={{ marginBottom: 10, marginRight: 10 }} />
-            <h1>Create transaction</h1>
-        </div>
         <Table headers={[
             {
                 text: "trans id",

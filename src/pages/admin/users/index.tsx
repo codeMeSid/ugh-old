@@ -24,7 +24,7 @@ const AdminUserDashboard = () => {
         method: "get",
         onSuccess: (data: Array<UserDoc>) => {
             setUserData(data.map((user) => {
-                return [TableLink(user.ughId), user.name, user.email, user.wallet.coins, SwitchBlade(user.id, user.activity)]
+                return [user.id, TableLink(user.ughId), user.name, user.email, user.wallet.coins, SwitchBlade(user.id, user.activity)]
             }))
         }
     });
@@ -44,11 +44,13 @@ const AdminUserDashboard = () => {
     }
     // render
     return <SideLayout title={`users(${userData.length})`}>
-        <Table headers={[{ text: 'ughId', isResponsive: false },
-        { text: 'name', isResponsive: true },
-        { text: 'email', isResponsive: true },
-        { text: 'coins', isResponsive: false },
-        { text: 'status', isResponsive: false }]}
+        <Table headers={[
+            { text: "id", isResponsive: true },
+            { text: 'ughId', isResponsive: false },
+            { text: 'name', isResponsive: true },
+            { text: 'email', isResponsive: true },
+            { text: 'coins', isResponsive: false },
+            { text: 'status', isResponsive: false }]}
             data={userData} />
     </SideLayout>
 }
