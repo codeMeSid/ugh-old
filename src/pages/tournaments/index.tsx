@@ -68,7 +68,7 @@ const Tournaments = ({ tournaments }) => {
                 <div className="match__footer__list">
                     {matches.length >= 1 ? matches.map((match) => {
                         return <TournamentCard key={match.name} match={match} />
-                    }) : <div style={{ textAlign: "center", fontSize: "2.5rem", color: "white", textTransform: "capitalize" }}>Sorry no tournaments available</div>}
+                    }) : <div style={{ textAlign: "center", fontSize: "2.5rem", color: "white", textTransform: "capitalize" }}>Currently,No tournaments available</div>}
                 </div>
             </div>
         </div>

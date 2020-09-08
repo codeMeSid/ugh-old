@@ -1,1 +1,5 @@
-export default () => <></>
+const UserProfile = () => {
+    return <></>
+ }
+
+ export default UserProfile;

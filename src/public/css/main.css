@@ -959,13 +959,15 @@ tr:nth-child(even) {
         position: absolute;
         bottom: 0;
         z-index: 5;
-        padding: 0.5rem;
+        padding: 0.2rem;
         color: white;
         font-weight: bold;
-        font-size: 1.6rem; }
+        font-size: 1.6rem;
+        background-color: rgba(0, 0, 0, 0.7); }
       .match__footer__list__item__time {
+        background-color: rgba(0, 0, 0, 0.7);
         z-index: 5;
-        padding: 0.5rem;
+        padding: 0.2rem;
         color: white;
         font-weight: bold;
         font-size: 1.4rem;

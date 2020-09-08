@@ -21,10 +21,9 @@ const TournamentCard = ({ match }: { match: TournamentDoc }) => {
         const secondsLeft = Math.floor((delta % (msIn1Min)) / msIn1Sec);
         const diffTime = `${daysLeft} Days ${hoursLeft < 10 ? `0${hoursLeft}` : hoursLeft}h ${minsLeft < 10 ? `0${minsLeft}` : minsLeft}m ${secondsLeft < 10 ? `0${secondsLeft}` : secondsLeft}s`
 
-
         if (daysLeft >= 0 && hoursLeft >= 0 && minsLeft >= 0 && secondsLeft >= 0) {
             if (daysLeft === 0 && hoursLeft === 0 && minsLeft === 0 && secondsLeft === 0) {
-                if (match.status === "upcoming") Router.reload();
+                if (match.status === "upcoming") alert("Reload the page for updates");
                 stopTimer = true;
                 return setTimer(match.status.toUpperCase())
             }

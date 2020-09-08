@@ -19,17 +19,17 @@ export const tournamentAddController = async (req: Request, res: Response) => {
   // TODO coin deduction logic
   if (winnerCount >= playerCount)
     throw new BadRequestError("Winner cannot be more than players");
-  if (Math.abs(Date.now() - new Date(startDateTime).valueOf()) < 1000 * 60 * 60)
-    throw new BadRequestError("Schedule tournament atleat 1 hr ahead");
-  if (
-    Math.abs(
-      new Date(endDateTime).valueOf() - new Date(startDateTime).valueOf()
-    ) <
-    1000 * 60 * 15
-  )
-    throw new BadRequestError(
-      "Tournament duration should be atleast 15 minutes"
-    );
+  // if (Math.abs(Date.now() - new Date(startDateTime).valueOf()) < 1000 * 60 * 60)
+  //   throw new BadRequestError("Schedule tournament atleat 1 hr ahead");
+  // if (
+  //   Math.abs(
+  //     new Date(endDateTime).valueOf() - new Date(startDateTime).valueOf()
+  //   ) <
+  //   1000 * 60 * 15
+  // )
+  //   throw new BadRequestError(
+  //     "Tournament duration should be atleast 15 minutes"
+  //   );
   const game = await Game.findById(gameId);
   const tournament = Tournament.build({
     addedBy: req.currentUser,
@@ -43,15 +43,9 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     winnerCount: parseInt(winnerCount),
   });
   await tournament.save();
-  startTournamentTimer(tournament.id, tournament.startDateTime);
-  start15MinCheckTournamentTimer(tournament.id, tournament.startDateTime);
-  endTournamentTimer(tournament.id, tournament.endDateTime);
-  res.send(true);
-};
-
-const startTournamentTimer = (id: string, startDateTime: Date) => {
+  // start tournament
   timer.schedule(
-    id,
+    tournament.id,
     new Date(startDateTime),
     async ({ id }: { id: string }) => {
       const tournament = await Tournament.findById(id);
@@ -62,17 +56,12 @@ const startTournamentTimer = (id: string, startDateTime: Date) => {
       }
     },
     {
-      id,
+      id: tournament.id,
     }
   );
-};
-
-const start15MinCheckTournamentTimer = (id: string, startDateTime: Date) => {
-  const check15MinStartId = `${id}-${randomBytes(4)
-    .toString("hex")
-    .substr(0, 4)}`;
+  // check for match status 15mins before start
   timer.schedule(
-    check15MinStartId,
+    `${tournament.id}-15min`,
     new Date(new Date(startDateTime).valueOf() - 1000 * 60 * 15),
     async ({ id }: { id: string }) => {
       const tournament = await Tournament.findById(id);
@@ -85,14 +74,12 @@ const start15MinCheckTournamentTimer = (id: string, startDateTime: Date) => {
         await tournament.save();
       }
     },
-    { id }
+    { id: tournament.id }
   );
-};
 
-const endTournamentTimer = (id: string, endDateTime: Date) => {
-  const endId = `${id}-${randomBytes(4).toString("hex").substr(0, 5)}`;
+  // end tournament
   timer.schedule(
-    endId,
+    `${tournament.id}-end`,
     new Date(endDateTime),
     async ({ id }: { id: string }) => {
       const tournament = await Tournament.findById(id);
@@ -102,6 +89,7 @@ const endTournamentTimer = (id: string, endDateTime: Date) => {
         await tournament.save();
       }
     },
-    { id }
+    { id: tournament.id }
   );
+  res.send(true);
 };

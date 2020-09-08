@@ -6,14 +6,16 @@ import { format } from 'date-fns'
 import ProgressButton from "../../../components/button/progress";
 import { useRequest } from "../../../hooks/use-request";
 import Router from 'next/router';
+import { useState } from "react";
 
 const TransactionDetail = ({ transaction }: { transaction: TransactionDoc }) => {
-
+    const [tId, setTId] = useState("")
     const { doRequest: acceptRequest } = useRequest({
         url: `/api/ugh/transaction/update/request/${transaction?.orderId}`,
         method: "put",
         body: {
-            accepted: true
+            accepted: true,
+            razorpayId: tId
         },
         onSuccess: Router.reload
     });
@@ -32,7 +34,7 @@ const TransactionDetail = ({ transaction }: { transaction: TransactionDoc }) => 
                 <Input placeholder="order Id" value={transaction?.orderId} disabled />
             </div>
             <div className="col">
-                <Input placeholder="razorpay id" value={transaction?.razorpayId} disabled />
+                <Input placeholder="transactions id" onChange={(_, val) => setTId(val)} value={transaction?.razorpayId} disabled={transaction.status !== "requested"} />
             </div>
         </div>
         <div className="row">

@@ -23,7 +23,7 @@ const Withdraw = ({ transactions,
     return <MainLayout>
         <div className="withdraw">
             <div className="withdraw__head">
-                <div className="withdraw__head__title">withdraw coins</div>
+                <div className="withdraw__head__title">withdraw 240 coins</div>
                 <div className="withdraw__head__coins">you currently have {coins} coins</div>
                 {!walletBalance400 ? <div className="withdraw__head__warning">
                     <div>insufficient coins to withdraw.</div>
