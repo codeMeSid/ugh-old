@@ -16,7 +16,8 @@
     "heroku:postbuild": "npm run build"
   },
   "dependencies": {
-    "@monsid/ugh": "0.0.44",
+    "@monsid/ugh": "0.0.46",
+    "agendash": "^1.0.0",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",

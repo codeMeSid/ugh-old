@@ -27,9 +27,9 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     ) <
     1000 * 60 * 15
   )
-    throw new BadRequestError(
-      "Tournament duration should be atleast 15 minutes"
-    );
+  throw new BadRequestError(
+    "Tournament duration should be atleast 15 minutes"
+  );
   const game = await Game.findById(gameId);
   const tournament = Tournament.build({
     addedBy: req.currentUser,
@@ -72,6 +72,8 @@ export const tournamentAddController = async (req: Request, res: Response) => {
       if (tournament.status === TournamentStatus.Upcoming && attendance < 50) {
         tournament.set({ status: TournamentStatus.Cancelled });
         await tournament.save();
+        timer.cancel(id);
+        timer.cancel(`${id}-end`);
       }
     },
     { id: tournament.id }
