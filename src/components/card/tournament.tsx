@@ -26,6 +26,7 @@ const TournamentCard = ({ match }: { match: TournamentDoc }) => {
             if (daysLeft === 0 && hoursLeft === 0 && minsLeft === 0 && secondsLeft === 0) {
                 if (match.status === "upcoming") Router.reload();
                 stopTimer = true;
+                return setTimer(match.status.toUpperCase())
             }
             setTimer(diffTime);
         }
@@ -38,8 +39,14 @@ const TournamentCard = ({ match }: { match: TournamentDoc }) => {
     return <Link href={`/tournaments/${match.id}`}>
         <a className="match__footer__list__item">
             <img src={match.game.imageUrl} alt={match.game.name} className="match__footer__list__item__image" />
+            <div className="match__footer__list__item__detail"></div>
             <div className="match__footer__list__item__time">
-                {timer}
+                <div style={{ marginBottom: 2, fontSize: 18 }}>{match.name}</div>
+                <div>{timer}</div>
+            </div>
+            <div className="match__footer__list__item__entry">
+                <div style={{ marginBottom: 2 }}>Tournament Entry</div>
+                <div>{match.coins} coins</div>
             </div>
         </a>
     </Link>

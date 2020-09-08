@@ -8,25 +8,27 @@ import {
 import { tournamentAddController } from "../controllers/tournament/add";
 import { tournamentFetchAllController } from "../controllers/tournament/fetch-all";
 import { tournamentFetchDetailController } from "../controllers/tournament/fetch-detail";
+import { tournamentFetchAllMyController } from "../controllers/tournament/fetch-all-my";
+import { tournamentFetchAllActiveController } from "../controllers/tournament/fetch-active";
 
 export const tournamentHandler: Array<ApiSign> = [
-  // {
-  //   url: "/fetch/active",
-  //   method: HttpMethod.Get,
-  //   controller: null,
-  //   middlewares: [],
-  // },
-  // {
-  //   url: "/fetch/my/all",
-  //   method: HttpMethod.Get,
-  //   controller: null,
-  //   middlewares: [currentUser, requireAuth],
-  // },
+  {
+    url: "/fetch/all/active",
+    method: HttpMethod.Get,
+    controller: tournamentFetchAllActiveController,
+    middlewares: [],
+  },
+  {
+    url: "/fetch/all/my",
+    method: HttpMethod.Get,
+    controller: tournamentFetchAllMyController,
+    middlewares: [currentUser, requireAuth],
+  },
   {
     url: "/fetch/all",
     method: HttpMethod.Get,
     controller: tournamentFetchAllController,
-    middlewares: [],
+    middlewares: [currentUser, requireAdminAuth],
   },
   {
     url: "/fetch/detail/:tournamentId",

@@ -1,16 +1,15 @@
-import Button from "../../../components/button/main"
-import Input from '../../../components/input/input';
-import { serverRequest } from '../../../hooks/server-request';
-import { GameDoc } from '../../../../server/models/game';
-import Select from '../../../components/input/select';
-import Option from '../../../components/input/option';
-import { ConsoleDoc } from '../../../../server/models/console';
-import SideLayout from "../../../components/layout/sidelayout"
+import Button from "../components/button/main"
+import Input from '../components/input/input';
+import { serverRequest } from '../hooks/server-request';
+import { GameDoc } from '../../server/models/game';
+import Select from '../components/input/select';
+import Option from '../components/input/option';
+import { ConsoleDoc } from '../../server/models/console';
 import { useState } from "react";
-import { useRequest } from "../../../hooks/use-request";
+import { useRequest } from "../hooks/use-request";
 import Router from 'next/router';
-import { format } from 'date-fns';
-import ProgressButton from "../../../components/button/progress";
+import ProgressButton from "../components/button/progress";
+import MainLayout from "../components/layout/mainlayout";
 
 const AddTournament = ({ games, consoles }:
     { games: Array<GameDoc>, consoles: Array<ConsoleDoc> }) => {
@@ -22,7 +21,7 @@ const AddTournament = ({ games, consoles }:
     const [coins, setCoins] = useState(10);
     const [startDateTime, setStartDateTime] = useState("");
     const [endDateTime, setEndDateTime] = useState("");
-    const [winnerCount, setWinnerCount] = useState(0);
+    const [winnerCount, setWinnerCount] = useState(1);
 
     const { doRequest } = useRequest({
         url: "/api/ugh/tournament/add",
@@ -37,7 +36,7 @@ const AddTournament = ({ games, consoles }:
             group: games[gameIndex].groups[gIndex]
         },
         method: "post",
-        onSuccess: () => Router.replace("/admin/tournaments")
+        onSuccess: () => Router.replace("/my-tournament")
     })
     const onChangeHandler = (name: String, val: any) => {
         switch (name) {
@@ -45,7 +44,10 @@ const AddTournament = ({ games, consoles }:
             case 'coins': return setCoins(val);
             case 'startDateTime': return setStartDateTime(val)
             case 'endDateTime': return setEndDateTime(val);
-            case 'winnerCount': return setWinnerCount(val);
+            case 'winnerCount': {
+                if (val <= 0 || val >= games[gameIndex].participants[pIndex]) return;
+                else return setWinnerCount(val);
+            }
         }
     }
     const onSelectHandler = (e) => {
@@ -71,8 +73,9 @@ const AddTournament = ({ games, consoles }:
                 break;
         }
     }
-    return <SideLayout title="add match">
-        <div className="detail">
+    return <MainLayout>
+        <div className="detail" style={{ padding: "2rem" }}>
+            <h1>Add Tournament</h1>
             <div className="row">
                 <div className="col">
                     <Input placeholder="name" name="name" value={name} onChange={onChangeHandler} />
@@ -142,7 +145,7 @@ const AddTournament = ({ games, consoles }:
                 }} />
             </div>
         </div>
-    </SideLayout>
+    </MainLayout>
 }
 
 AddTournament.getInitialProps = async (ctx) => {

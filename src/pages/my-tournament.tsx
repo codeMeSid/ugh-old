@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import { serverRequest } from "../../hooks/server-request"
-import { TournamentDoc } from "../../../server/models/tournament";
-import MainLayout from "../../components/layout/mainlayout";
-import Tooltip from "../../components/tooltip";
-import Button from '../../components/button/main';
+import { serverRequest } from "../hooks/server-request"
+import { TournamentDoc } from "../../server/models/tournament";
+import MainLayout from "../components/layout/mainlayout";
+import Tooltip from "../components/tooltip";
+import Button from '../components/button/main';
 import { AiOutlineMenu } from 'react-icons/ai';
-import TournamentCard from '../../components/card/tournament';
+import TournamentCard from '../components/card/tournament';
 
 const Tournaments = ({ tournaments }) => {
     const [game, setGame] = useState('all');
@@ -76,7 +76,7 @@ const Tournaments = ({ tournaments }) => {
 }
 
 Tournaments.getInitialProps = async (ctx) => {
-    const { data }: { data: Array<TournamentDoc> } = await serverRequest(ctx, { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
+    const { data }: { data: Array<TournamentDoc> } = await serverRequest(ctx, { url: "/api/ugh/tournament/fetch/all/my", body: {}, method: "get" });
     const tournaments = {}
 
     data?.map(t => {

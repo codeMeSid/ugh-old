@@ -1,5 +1,6 @@
 export const profileMenuLinks = [
   "profile",
+  "add-tournament",
   "my-tournament",
   "withdraw",
   "settings",
@@ -19,6 +20,7 @@ export const outerMenuLinksAuth = [
   "profile",
   "withdraw",
   "my-tournament",
+  "add-tournament",
   "signout",
 ];
 export const outerMenuLinksNonAuth = [

@@ -951,16 +951,24 @@ tr:nth-child(even) {
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: 0; }
+        z-index: 0;
+        filter: grayscale(100%); }
         .match__footer__list__item__image:hover {
-          filter: blur(1px) grayscale(80%); }
-      .match__footer__list__item__time {
-        background-color: rgba(0, 0, 0, 0.7);
+          filter: grayscale(0%); }
+      .match__footer__list__item__entry {
+        position: absolute;
+        bottom: 0;
         z-index: 5;
         padding: 0.5rem;
         color: white;
         font-weight: bold;
-        font-size: 1.6rem;
+        font-size: 1.6rem; }
+      .match__footer__list__item__time {
+        z-index: 5;
+        padding: 0.5rem;
+        color: white;
+        font-weight: bold;
+        font-size: 1.4rem;
         position: absolute;
         top: 2;
         left: 2; }

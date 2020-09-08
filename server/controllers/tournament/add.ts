@@ -17,13 +17,10 @@ export const tournamentAddController = async (req: Request, res: Response) => {
   } = req.body;
 
   // TODO coin deduction logic
-
   if (winnerCount >= playerCount)
     throw new BadRequestError("Winner cannot be more than players");
-
   if (Math.abs(Date.now() - new Date(startDateTime).valueOf()) < 1000 * 60 * 60)
     throw new BadRequestError("Schedule tournament atleat 1 hr ahead");
-
   if (
     Math.abs(
       new Date(endDateTime).valueOf() - new Date(startDateTime).valueOf()
@@ -46,11 +43,9 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     winnerCount: parseInt(winnerCount),
   });
   await tournament.save();
-
   startTournamentTimer(tournament.id, tournament.startDateTime);
   start15MinCheckTournamentTimer(tournament.id, tournament.startDateTime);
   endTournamentTimer(tournament.id, tournament.endDateTime);
-
   res.send(true);
 };
 
@@ -78,7 +73,7 @@ const start15MinCheckTournamentTimer = (id: string, startDateTime: Date) => {
     .substr(0, 4)}`;
   timer.schedule(
     check15MinStartId,
-    new Date(startDateTime.valueOf() - 1000 * 60 * 15),
+    new Date(new Date(startDateTime).valueOf() - 1000 * 60 * 15),
     async ({ id }: { id: string }) => {
       const tournament = await Tournament.findById(id);
       if (!tournament) return;
@@ -98,7 +93,7 @@ const endTournamentTimer = (id: string, endDateTime: Date) => {
   const endId = `${id}-${randomBytes(4).toString("hex").substr(0, 5)}`;
   timer.schedule(
     endId,
-    endDateTime,
+    new Date(endDateTime),
     async ({ id }: { id: string }) => {
       const tournament = await Tournament.findById(id);
       if (!tournament) return;
