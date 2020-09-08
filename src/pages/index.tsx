@@ -2,11 +2,13 @@ import MainLayout from "../components/layout/mainlayout"
 import TournamentTab from "../components/tournament-tab"
 import { TournamentDoc } from "../../server/models/tournament"
 import { serverRequest } from "../hooks/server-request"
+import NewsTab from "../components/news-tab"
 
 const LandingPage = ({ matches }) => {
     return <MainLayout isFullscreen>
         <div className="landingpage" style={{ minHeight: "100vh", backgroundColor: "black" }}>
-            <div style={{height:500}}></div>
+            <div style={{ height: 500 }}></div>
+            <NewsTab />
             <TournamentTab matches={matches} />
         </div>
     </MainLayout>
