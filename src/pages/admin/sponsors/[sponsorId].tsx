@@ -4,15 +4,19 @@ import { SponsorDoc } from "../../../../server/models/sponsor";
 import Input from "../../../components/input/input";
 import ProgressButton from "../../../components/button/progress";
 import { useRequest } from "../../../hooks/use-request";
-import Router from 'next/router';
+import { useState } from "react";
 
 const SponsorDetail = ({ sponsor, baseUrl }: { sponsor: SponsorDoc, baseUrl: string }) => {
-
+    const [sponsorId, setSponsorId] = useState(sponsor?.sponsorId);
+    const [isProccessed, setIsProccessed] = useState(sponsor?.isProccessed);
     const { doRequest } = useRequest({
         url: `/api/ugh/sponsor/update/process/${sponsor?.id}`,
         method: "put",
         body: {},
-        onSuccess: Router.reload
+        onSuccess: (data) => {
+            setSponsorId(data.sponsorId);
+            setIsProccessed(data.isProccessed);
+        }
     })
 
     return <SideLayout title={"sponsor"}>
@@ -42,15 +46,15 @@ const SponsorDetail = ({ sponsor, baseUrl }: { sponsor: SponsorDoc, baseUrl: str
         </div>
         <div className="row">
             <div className="col">
-                {sponsor?.isProccessed ?
-                    <Input placeholder="sponsor link" value={`${baseUrl}/sponsors/${sponsor.sponsorId}`} disabled /> :
+                {isProccessed ?
+                    <Input placeholder="sponsor link" value={`${baseUrl}/sponsors/${sponsorId}`} disabled /> :
                     <ProgressButton onPress={async (_, next) => {
                         await doRequest();
                         next();
                     }} type="youtube" text="Process Request" />}
             </div>
             <div className="col">
-                {sponsor?.isProccessed && <ProgressButton onPress={async (_, next) => {
+                {isProccessed && <ProgressButton onPress={async (_, next) => {
                     await doRequest();
                     next();
                 }} text="Generate Link" type="link" />}

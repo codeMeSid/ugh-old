@@ -14,8 +14,8 @@ const AdminUserDashboard = () => {
         activity === 'inactive'
             ? <div style={{ color: "red", textTransform: "uppercase" }}>inactive</div>
             : <Switch onChange={() => changeUserActivity(id)} checked={activity === 'active'} />;
-    const TableLink = (id: string) => <Link href={`/admin/users/${id}`}>
-        <a className="table__link">{id}</a>
+    const TableLink = (name: string, id: string) => <Link href={`/admin/users/${id}`}>
+        <a className="table__link">{name}</a>
     </Link>
     // requests
     const { doRequest } = useRequest({
@@ -24,7 +24,7 @@ const AdminUserDashboard = () => {
         method: "get",
         onSuccess: (data: Array<UserDoc>) => {
             setUserData(data.map((user) => {
-                return [user.id, TableLink(user.ughId), user.name, user.email, user.wallet.coins, SwitchBlade(user.id, user.activity)]
+                return [TableLink(user.ughId, user.id), user.name, user.email, user.wallet.coins, SwitchBlade(user.id, user.activity)]
             }))
         }
     });
@@ -45,7 +45,6 @@ const AdminUserDashboard = () => {
     // render
     return <SideLayout title={`users(${userData.length})`}>
         <Table headers={[
-            { text: "id", isResponsive: true },
             { text: 'ughId', isResponsive: false },
             { text: 'name', isResponsive: true },
             { text: 'email', isResponsive: true },

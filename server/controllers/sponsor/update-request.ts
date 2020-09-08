@@ -13,5 +13,8 @@ export const sponsorProcessController = async (req: Request, res: Response) => {
   });
   await sponsor.save();
   // TODO send mail
-  res.send(true);
+  res.send({
+    sponsorId: sponsor.sponsorId,
+    isProccessed: sponsor.isProccessed,
+  });
 };

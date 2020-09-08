@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { TournamentDoc } from "../../../server/models/tournament";
-import Router from 'next/router';
 import Link from 'next/link';
 
 const TournamentCard = ({ match }: { match: TournamentDoc }) => {

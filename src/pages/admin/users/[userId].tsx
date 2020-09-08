@@ -104,8 +104,8 @@ const UserDetail = ({ user }: { user: UserDoc }) => {
 }
 
 UserDetail.getInitialProps = async (ctx) => {
-    const { ughId } = ctx.query;
-    const { data, errors } = await serverRequest(ctx, { url: `/api/ugh/user/fetch/detail/gen/${ughId}`, body: {}, method: "get" });
+    const { userId } = ctx.query;
+    const { data, errors } = await serverRequest(ctx, { url: `/api/ugh/user/fetch/detail/gen/${userId}`, body: {}, method: "get" });
     return {
         user: data
     };

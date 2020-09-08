@@ -19,17 +19,17 @@ export const tournamentAddController = async (req: Request, res: Response) => {
   // TODO coin deduction logic
   if (winnerCount >= playerCount)
     throw new BadRequestError("Winner cannot be more than players");
-  // if (Math.abs(Date.now() - new Date(startDateTime).valueOf()) < 1000 * 60 * 60)
-  //   throw new BadRequestError("Schedule tournament atleat 1 hr ahead");
-  // if (
-  //   Math.abs(
-  //     new Date(endDateTime).valueOf() - new Date(startDateTime).valueOf()
-  //   ) <
-  //   1000 * 60 * 15
-  // )
-  //   throw new BadRequestError(
-  //     "Tournament duration should be atleast 15 minutes"
-  //   );
+  if (Math.abs(Date.now() - new Date(startDateTime).valueOf()) < 1000 * 60 * 60)
+    throw new BadRequestError("Schedule tournament atleat 1 hr ahead");
+  if (
+    Math.abs(
+      new Date(endDateTime).valueOf() - new Date(startDateTime).valueOf()
+    ) <
+    1000 * 60 * 15
+  )
+    throw new BadRequestError(
+      "Tournament duration should be atleast 15 minutes"
+    );
   const game = await Game.findById(gameId);
   const tournament = Tournament.build({
     addedBy: req.currentUser,

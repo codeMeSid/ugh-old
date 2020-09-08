@@ -51,12 +51,12 @@ export const userHandlers: Array<ApiSign> = [
     controller: userFetchDetailController,
     middlewares: [currentUser, requireAuth],
   },
-  // {
-  //   url: "/signout",
-  //   method: HttpMethod.Get,
-  //   controller: signoutController,
-  //   middlewares: [],
-  // },
+  {
+    url: "/signout",
+    method: HttpMethod.Get,
+    controller: signoutController,
+    middlewares: [],
+  },
   {
     url: "/current",
     method: HttpMethod.Get,
@@ -64,7 +64,7 @@ export const userHandlers: Array<ApiSign> = [
     middlewares: [currentUser],
   },
   {
-    url: "/fetch/detail/gen/:ughId",
+    url: "/fetch/detail/gen/:userId",
     method: HttpMethod.Get,
     controller: userDetailController,
     middlewares: [currentUser, requireAdminAuth],

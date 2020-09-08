@@ -7,6 +7,7 @@ import ProgressButton from "../../../components/button/progress";
 import { useRequest } from "../../../hooks/use-request";
 import Router from 'next/router';
 import { useState } from "react";
+import Link from "next/link";
 
 const TransactionDetail = ({ transaction }: { transaction: TransactionDoc }) => {
     const [tId, setTId] = useState("")
@@ -45,7 +46,9 @@ const TransactionDetail = ({ transaction }: { transaction: TransactionDoc }) => 
         </div>
         <div className="row">
             <div className="col">
-                <Input placeholder="user" value={transaction?.user} disabled />
+                <Link href={`/admin/users/${transaction?.user}`}>
+                    <a style={{ cursor: "pointer" }}><Input placeholder="user" value={transaction?.user} disabled /></a>
+                </Link>
             </div>
             <div className="col">
                 <Input placeholder="status" value={transaction?.status?.toUpperCase()} disabled />
