@@ -50,7 +50,7 @@ const ShopCard = ({ coin, currentUser, apiKey }: { coin: CoinDoc, currentUser: a
                     await doRequest();
                     next()
                 }} text="BUY" type="link" size="small" />
-                : <Link href="/signin">
+                : <Link href="/login">
                     <a>
                         <Button type="link" size="small" text="BUY" />
                     </a>

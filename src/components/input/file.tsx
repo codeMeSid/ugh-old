@@ -3,15 +3,15 @@ import { fire } from '../../../server/utils/firebase';
 import { RiDeleteBin2Line } from 'react-icons/ri';
 import { AiOutlineFolderAdd } from 'react-icons/ai';
 
-const FileInput = ({ placeholder, onChange = () => { }, name }
+const FileInput = ({ placeholder, onChange = () => { }, name, value = "" }
     : {
         placeholder: string,
-        onChange: (name: string, value: string) => any,
+        onChange?: (name: string, value: string) => any,
         name: string,
+        value?: string
     }) => {
-    const filedId = Math.random();
-    const [progress, setProgress] = useState(0);
-    const [image, setImage] = useState("");
+    const [progress, setProgress] = useState(value.length > 0 ? 100 : 0);
+    const [image, setImage] = useState(value);
 
     const onChangeHandler = async (e) => {
         try {
@@ -35,11 +35,11 @@ const FileInput = ({ placeholder, onChange = () => { }, name }
             : progress > 0
                 ? <progress className="form__file__progress" value={progress} max={100} />
                 : <div className="form__group">
-                    <label htmlFor={`${filedId}`} className="form__file__label">
+                    <label htmlFor={`${name}`} className="form__file__label">
                         <span className="form__file__label__icon"><AiOutlineFolderAdd /></span>
                         <span className="form__file__label__text">upload file</span>
                     </label>
-                    <input id={`${filedId}`} type="file" className="form__file__input" onChange={onChangeHandler} />
+                    <input id={`${name}`} type="file" className="form__file__input" onChange={onChangeHandler} />
                 </div>}
         <small className="form__file__placeholder">{placeholder}</small>
     </div>

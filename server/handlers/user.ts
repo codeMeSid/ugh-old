@@ -33,12 +33,12 @@ export const userHandlers: Array<ApiSign> = [
   //   controller: activeUserController,
   //   middlewares: [],
   // },
-  // {
-  //   url: "/profile",
-  //   method: HttpMethod.Get,
-  //   controller: userProfileContoller,
-  //   middlewares: [currentUser, requireAuth],
-  // },
+  {
+    url: "/fetch/profile",
+    method: HttpMethod.Get,
+    controller: userProfileContoller,
+    middlewares: [currentUser, requireAuth],
+  },
   {
     url: "/fetch/all",
     method: HttpMethod.Get,

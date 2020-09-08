@@ -18,66 +18,65 @@ export const updateUserController = async (req: Request, res: Response) => {
     panUrl,
     country,
     state,
+    uploadUrl,
   } = req.body;
-
-  let userObj = {} as UserDoc;
-
+  const user = await User.findById(id);
+  if (!user) throw new BadRequestError("Invalid account");
+  if (uploadUrl) {
+    user.uploadUrl = uploadUrl;
+  }
   if (dob) {
     isValidDob(dob);
-    userObj.dob = dob;
+    user.dob = dob;
   }
   if (aadharCard) {
     filter.isUnfit({ aadharCard });
-    userObj.idProof.aadharCard = aadharCard;
+    user.idProof.aadharCard = aadharCard;
   }
   if (panCard) {
     filter.isUnfit({ panCard });
-    userObj.idProof.panCard = panCard;
+    user.idProof.panCard = panCard;
   }
   if (aadharUrl) {
-    userObj.idProof.aadharUrl = aadharUrl;
+    user.idProof.aadharUrl = aadharUrl;
   }
   if (panUrl) {
-    userObj.idProof.panUrl = panUrl;
+    user.idProof.panUrl = panUrl;
   }
   if (psnId) {
     filter.isUnfit({ psnId });
-    userObj.gamerProfile.psnId = psnId;
+    user.gamerProfile.psnId = psnId;
   }
   if (gamerTag) {
     filter.isUnfit({ gamerTag });
-    userObj.gamerProfile.gamerTag = gamerTag;
+    user.gamerProfile.gamerTag = gamerTag;
   }
   if (steamId) {
     filter.isUnfit({ steamId });
-    userObj.gamerProfile.steamId = steamId;
+    user.gamerProfile.steamId = steamId;
   }
   if (mobile) {
     filter.isUnfit({ mobile });
-    userObj.mobile = mobile;
+    user.mobile = mobile;
   }
   if (bio) {
     filter.isUnfit({ bio });
-    userObj.bio = bio;
+    user.bio = bio;
   }
   if (country) {
-    userObj.address.country = country;
+    user.address.country = country;
   }
   if (state) {
-    userObj.address.state = state;
+    user.address.state = state;
   }
-
-  const user = await User.findById(id);
-  if (!user) throw new BadRequestError("Invalid account");
   if (user.isSocial && user.activity === UserActivity.Inactive) {
     if (aadharCard && aadharUrl && dob) {
       isValidDob(dob);
       filter.isUnfit({ aadharCard });
-      userObj.activity = UserActivity.Active;
-      userObj.wallet.coins = 250;
+      user.activity = UserActivity.Active;
+      user.wallet.coins = 250;
     }
   }
-  user.set(userObj.toObject());
   await user.save();
-  res.send(user);
+  res.send(true);
 };

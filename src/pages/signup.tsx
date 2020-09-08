@@ -66,7 +66,7 @@ const SignUp = () => {
             }} />
             <div className="signin__other">
                 <div style={{ textTransform: "capitalize", textAlign: "center", fontSize: 16, fontWeight: 700 }}>already have an account ?&nbsp;
-                    <Link href="/signin">
+                    <Link href="/login">
                         <a style={{ textDecoration: "none" }}>Login</a>
                     </Link>
                 </div>

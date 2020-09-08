@@ -13,7 +13,7 @@ export const moreMenuLinks = [
   "about",
 ];
 export const navlinks = ["tournaments", "shop"];
-export const navlinksAuth = ["signin", "signup"];
+export const navlinksAuth = ["login", "signup"];
 export const outerMenuLinks = ["shop", "tournaments", "streams"];
 export const outerMenuLinksAuth = [
   "profile",
@@ -25,7 +25,7 @@ export const outerMenuLinksNonAuth = [
   "sponsors",
   "about",
   "how-to-play",
-  "signin",
+  "login",
   "signup",
 ];
 

@@ -13,7 +13,7 @@ const router = Router();
 router.use("/admin", currentUser, authAdminRoute);
 router.use("/settings", currentUser, authRoute);
 router.use("/withdraw", currentUser, authRoute);
-router.use("/signin", currentUser, nonAuthRoute);
+router.use("/login", currentUser, nonAuthRoute);
 router.use("/signup", currentUser, nonAuthRoute);
 
 router.all("*", currentUser, (req, res) => handle(req, res));
