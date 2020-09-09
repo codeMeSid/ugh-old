@@ -13,6 +13,7 @@ import { newsHandler } from "./news";
 import { tournamentHandler } from "./tournament";
 import { transactionHandler } from "./transaction";
 import { adminHandler } from "./admin";
+import { settingHandler } from "./settings";
 
 export const apiHandlers: Array<ApiSign> = [
   {
@@ -136,6 +137,16 @@ export const apiHandlers: Array<ApiSign> = [
     ({ url, controller, middlewares, method }): ApiSign => {
       return {
         url: `/transaction${url}`,
+        controller,
+        method,
+        middlewares: [...middlewares],
+      };
+    }
+  ),
+  ...Array.from(settingHandler).map(
+    ({ url, controller, middlewares, method }): ApiSign => {
+      return {
+        url: `/settings${url}`,
         controller,
         method,
         middlewares: [...middlewares],

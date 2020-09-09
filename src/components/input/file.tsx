@@ -3,12 +3,13 @@ import { fire } from '../../../server/utils/firebase';
 import { RiDeleteBin2Line } from 'react-icons/ri';
 import { AiOutlineFolderAdd } from 'react-icons/ai';
 
-const FileInput = ({ placeholder, onChange = () => { }, name, value = "" }
+const FileInput = ({ placeholder, onChange = () => { }, name, value = "", showImage }
     : {
         placeholder: string,
         onChange?: (name: string, value: string) => any,
         name: string,
-        value?: string
+        value?: string,
+        showImage?: boolean
     }) => {
     const [progress, setProgress] = useState(value.length > 0 ? 100 : 0);
     const [image, setImage] = useState(value);
@@ -17,8 +18,12 @@ const FileInput = ({ placeholder, onChange = () => { }, name, value = "" }
         try {
             const file = e.currentTarget.files[0];
             const url: any = await fire.storage(file, (data) => setProgress(data));
-            setImage(url);
             onChange(name, url);
+            if (showImage) {
+                setImage(url);
+                return
+            }
+            setProgress(0);
         } catch (error) {
             alert(error.message)
         }
