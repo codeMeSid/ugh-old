@@ -1,0 +1,59 @@
+.wallpaper {
+  height: 120vh;
+  position: relative;
+
+  &__dock {
+    width: 96vw;
+    height: 12rem;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    overflow-x: scroll;
+    &__item {
+      width: auto;
+      height: 100%;
+      filter: blur(0.1rem) grayscale(90%);
+      cursor: pointer;
+      &:not(:last-child) {
+        margin-right: 0.5rem;
+      }
+      &.active {
+        filter: blur(0) grayscale(0%);
+      }
+      &:hover {
+        filter: blur(0) grayscale(0%);
+      }
+    }
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+  }
+  &__progress {
+    max-width: 96vw;
+    position: absolute;
+    bottom: 14rem;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 0.2rem;
+    background-color: blue;
+    transition: width 300ms linear;
+  }
+  &__container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+  }
+  &__item {
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+  }
+}

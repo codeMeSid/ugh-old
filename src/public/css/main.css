@@ -525,6 +525,55 @@ tr:nth-child(even) {
       word-break: break-all;
       word-wrap: break-word; }
 
+.wallpaper {
+  height: 120vh;
+  position: relative; }
+  .wallpaper__dock {
+    width: 96vw;
+    height: 12rem;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    overflow-x: scroll; }
+    .wallpaper__dock__item {
+      width: auto;
+      height: 100%;
+      filter: blur(0.1rem) grayscale(90%);
+      cursor: pointer; }
+      .wallpaper__dock__item:not(:last-child) {
+        margin-right: 0.5rem; }
+      .wallpaper__dock__item.active {
+        filter: blur(0) grayscale(0%); }
+      .wallpaper__dock__item:hover {
+        filter: blur(0) grayscale(0%); }
+    .wallpaper__dock::-webkit-scrollbar {
+      width: 0;
+      height: 0; }
+  .wallpaper__progress {
+    max-width: 96vw;
+    position: absolute;
+    bottom: 14rem;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 0.2rem;
+    background-color: blue;
+    transition: width 300ms linear; }
+  .wallpaper__container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex; }
+  .wallpaper__item {
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-size: cover; }
+
 .signin {
   min-height: 88vh;
   display: flex;

@@ -3,11 +3,13 @@ import TournamentTab from "../components/tournament-tab"
 import { TournamentDoc } from "../../server/models/tournament"
 import { serverRequest } from "../hooks/server-request"
 import NewsTab from "../components/news-tab"
+import WallpaperSlider from "../components/wallpaper-slider"
 
-const LandingPage = ({ matches }) => {
+const LandingPage = ({ matches, wallpapers }) => {
+    console.log({ wallpapers })
     return <MainLayout isFullscreen>
         <div className="landingpage" style={{ minHeight: "100vh", backgroundColor: "black" }}>
-            <div style={{ height: 500 }}></div>
+            <WallpaperSlider wallpapers={wallpapers} />
             <NewsTab />
             <TournamentTab matches={matches} />
         </div>
@@ -16,6 +18,7 @@ const LandingPage = ({ matches }) => {
 
 LandingPage.getInitialProps = async (ctx) => {
     const { data, errors }: { data: Array<TournamentDoc>, errors: Array<any> } = await serverRequest(ctx, { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
+    const { data: wallpapers } = await serverRequest(ctx, { url: "/api/ugh/settings/fetch/wallpaper", body: {}, method: "get" });
     const matches = {
         upcoming: [],
         started: [],
@@ -31,7 +34,11 @@ LandingPage.getInitialProps = async (ctx) => {
         matches[tournament.status] = [...matches[tournament.status], tournament];
     })
 
-    return { matches, errors };
+    return {
+        matches,
+        wallpapers: wallpapers || [],
+        errors
+    };
 
 }
 

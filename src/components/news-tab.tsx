@@ -19,7 +19,7 @@ const NewsTab = () => {
         </div>
         <div className="news__list">
             {news.map((newsItem: NewsDoc) => {
-                return <div className="news__item">
+                return <div key={Math.random()} className="news__item">
                     <div className="news__item__title">{newsItem.title}</div>
                     <div className="news__item__desc">{newsItem.description}</div>
                 </div>
