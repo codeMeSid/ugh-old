@@ -3,18 +3,25 @@ import Button from "./main";
 import { GrClose } from 'react-icons/gr'
 import ProgressButton from './progress';
 
-const DialogButton = ({ title, children, onAction }) => {
+const DialogButton = ({ title, fullButton, children, onAction, style = {} }: { title: string, fullButton?: boolean, children: any, onAction: any, style?: any }) => {
     const [openDialog, setOpenDialog] = useState(false);
     return <>
         <div style={{ display: "flex", alignItems: "center" }}>
-            <Button onPress={() => setOpenDialog(!openDialog)} size="icon" text="+" style={{ marginBottom: 10, marginRight: 10 }} />
-            <h1 style={{ textTransform: "capitalize" }}>{title}</h1>
+            {
+                fullButton ?
+                    <>
+                        <Button text={title} size="large" type="link" onPress={() => setOpenDialog(!openDialog)} />
+                    </>
+                    : <>
+                        <Button onPress={() => setOpenDialog(!openDialog)} size="icon" text="+" style={{ marginBottom: 10, marginRight: 10 }} />
+                        <h1 style={{ textTransform: "capitalize" }}>{title}</h1></>
+            }
         </div>
-        {openDialog && <div className="dialog">
+        {openDialog && <div className="dialog" style={style}>
             <div className="dialog__head">
                 <GrClose onClick={() => setOpenDialog(false)} />
             </div>
-            <div className="dialog__body">
+            <div className="dialog__body" >
                 {children}
             </div>
             <div className="dialog__footer">

@@ -37,9 +37,8 @@ const TournamentCard = ({ match }: { match: TournamentDoc }) => {
     return <Link href={`/tournaments/${match.id}`}>
         <a className="match__footer__list__item">
             <img src={match.game.imageUrl} alt={match.game.name} className="match__footer__list__item__image" />
-            <div className="match__footer__list__item__detail"></div>
             <div className="match__footer__list__item__time">
-                <div style={{ marginBottom: 2, fontSize: 18 }}>{match.name}</div>
+                <div style={{ marginBottom: 2, fontSize: 18, textTransform: "uppercase" }}>{match.name}</div>
                 <div>{timer}</div>
             </div>
             <div className="match__footer__list__item__entry">

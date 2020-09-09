@@ -1,8 +1,15 @@
 import { Request, Response } from "express";
 import { Tournament } from "../../models/tournament";
-import { timer, TournamentStatus, BadRequestError } from "@monsid/ugh";
+import {
+  timer,
+  TournamentStatus,
+  BadRequestError,
+  UserRole,
+} from "@monsid/ugh";
 import { Game } from "../../models/game";
-import { randomBytes } from "crypto";
+import mongoose from "mongoose";
+import { Settings } from "../../models/settings";
+import { User } from "../../models/user";
 
 export const tournamentAddController = async (req: Request, res: Response) => {
   const {
@@ -15,83 +22,112 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     playerCount,
     group,
   } = req.body;
+  const msIn15Mins = 1000 * 60 * 15;
+  const msIn1Hr = 1000 * 60 * 60;
+  const sdt = new Date(startDateTime).valueOf();
+  const edt = new Date(endDateTime).valueOf();
+  const cdt = new Date().valueOf();
+  const wc = winnerCount;
+  const pc = playerCount;
+  const cUser = req.currentUser;
 
-  // TODO coin deduction logic
-  if (winnerCount >= playerCount)
-    throw new BadRequestError("Winner cannot be more than players");
-  if (Math.abs(Date.now() - new Date(startDateTime).valueOf()) < 1000 * 60 * 60)
-    throw new BadRequestError("Schedule tournament atleat 1 hr ahead");
-  if (
-    Math.abs(
-      new Date(endDateTime).valueOf() - new Date(startDateTime).valueOf()
-    ) <
-    1000 * 60 * 15
-  )
-  throw new BadRequestError(
-    "Tournament duration should be atleast 15 minutes"
-  );
-  const game = await Game.findById(gameId);
-  const tournament = Tournament.build({
-    addedBy: req.currentUser,
-    coins: parseInt(coins),
-    endDateTime: new Date(endDateTime),
-    game,
-    name,
-    group,
-    playerCount: parseInt(playerCount),
-    startDateTime: new Date(startDateTime),
-    winnerCount: parseInt(winnerCount),
-  });
-  await tournament.save();
-  // start tournament
-  timer.schedule(
-    tournament.id,
-    new Date(startDateTime),
-    async ({ id }: { id: string }) => {
-      const tournament = await Tournament.findById(id);
-      if (!tournament) return;
-      if (tournament.status === TournamentStatus.Upcoming) {
-        tournament.set({ status: TournamentStatus.Started });
-        await tournament.save();
-      }
-    },
-    {
-      id: tournament.id,
+  if (sdt <= cdt) throw new BadRequestError("Tournament cannot be in past");
+  if (sdt - cdt < msIn1Hr)
+    throw new BadRequestError("Schedule atleast 1hr ahead");
+  if (edt <= sdt) throw new BadRequestError("Cannot finish before Start");
+  if (edt - sdt < msIn15Mins)
+    throw new BadRequestError(
+      "Tournament duration should be atleast 15 minutes"
+    );
+  if (wc >= pc) throw new BadRequestError("Winner cannot be more than players");
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const game = await Game.findById(gameId).session(session);
+    if (!game) throw new BadRequestError("Invalid game");
+    const tournament = Tournament.build({
+      addedBy: cUser,
+      coins: parseInt(coins),
+      endDateTime: new Date(endDateTime),
+      game,
+      name,
+      group,
+      playerCount: parseInt(playerCount),
+      startDateTime: new Date(startDateTime),
+      winnerCount: parseInt(winnerCount),
+    });
+    if (cUser.role === UserRole.Player) {
+      const settings = await Settings.findOne().session(session);
+      const user = await User.findById(cUser.id).session(session);
+      if (!settings) throw new BadRequestError("system error");
+      if (!user) throw new BadRequestError("Invalid user");
+      const balance = user.wallet.coins;
+      const fees = settings.tournamentFees;
+      if (balance - fees < 0)
+        throw new BadRequestError("Insufficient balance to create tournament");
+      user.set({ "wallet.coins": balance - fees });
+      await user.save({ session });
     }
-  );
-  // check for match status 15mins before start
-  timer.schedule(
-    `${tournament.id}-15min`,
-    new Date(new Date(startDateTime).valueOf() - 1000 * 60 * 15),
-    async ({ id }: { id: string }) => {
-      const tournament = await Tournament.findById(id);
-      if (!tournament) return;
-      // players joined / players required
-      const attendance =
-        (tournament.players.length / tournament.playerCount) * 100;
-      if (tournament.status === TournamentStatus.Upcoming && attendance < 50) {
-        tournament.set({ status: TournamentStatus.Cancelled });
-        await tournament.save();
-        timer.cancel(id);
-        timer.cancel(`${id}-end`);
+    await tournament.save({ session });
+    await session.commitTransaction();
+    // start tournament
+    timer.schedule(
+      tournament.id,
+      new Date(startDateTime),
+      async ({ id }: { id: string }) => {
+        const tournament = await Tournament.findById(id);
+        if (!tournament) return;
+        if (tournament.status === TournamentStatus.Upcoming) {
+          tournament.set({ status: TournamentStatus.Started });
+          await tournament.save();
+        }
+      },
+      {
+        id: tournament.id,
       }
-    },
-    { id: tournament.id }
-  );
+    );
+    // check for match status 15mins before start
+    timer.schedule(
+      `${tournament.id}-15min`,
+      new Date(new Date(startDateTime).valueOf() - 1000 * 60 * 15),
+      async ({ id }: { id: string }) => {
+        const tournament = await Tournament.findById(id);
+        if (!tournament) return;
+        // players joined / players required
+        const attendance =
+          (tournament.players.length / tournament.playerCount) * 100;
+        if (
+          tournament.status === TournamentStatus.Upcoming &&
+          attendance < 50
+        ) {
+          tournament.set({ status: TournamentStatus.Cancelled });
+          await tournament.save();
+          timer.cancel(id);
+          timer.cancel(`${id}-end`);
+        }
+      },
+      { id: tournament.id }
+    );
 
-  // end tournament
-  timer.schedule(
-    `${tournament.id}-end`,
-    new Date(endDateTime),
-    async ({ id }: { id: string }) => {
-      const tournament = await Tournament.findById(id);
-      if (!tournament) return;
-      if (tournament.status === TournamentStatus.Started) {
-        tournament.set({ status: TournamentStatus.Completed });
-        await tournament.save();
-      }
-    },
-    { id: tournament.id }
-  );
+    // end tournament
+    timer.schedule(
+      `${tournament.id}-end`,
+      new Date(endDateTime),
+      async ({ id }: { id: string }) => {
+        const tournament = await Tournament.findById(id);
+        if (!tournament) return;
+        if (tournament.status === TournamentStatus.Started) {
+          tournament.set({ status: TournamentStatus.Completed });
+          await tournament.save();
+        }
+      },
+      { id: tournament.id }
+    );
+  } catch (error) {
+    await session.abortTransaction();
+    throw new BadRequestError(error.message);
+  }
+  await session.endSession();
   res.send(true);
 };

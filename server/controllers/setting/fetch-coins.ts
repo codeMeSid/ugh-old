@@ -6,5 +6,5 @@ export const settingFetchCoinsController = async (
   res: Response
 ) => {
   const settings = await Settings.findOne();
-  res.send(settings.tournamentFees);
+  res.send({ fees: settings.tournamentFees });
 };
