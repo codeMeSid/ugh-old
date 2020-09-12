@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { TournamentDoc } from "../../../server/models/tournament";
 import Link from 'next/link';
+import Router from 'next/router';
 
 const TournamentCard = ({ match }: { match: TournamentDoc }) => {
     const [timer, setTimer] = useState('');
@@ -22,7 +23,10 @@ const TournamentCard = ({ match }: { match: TournamentDoc }) => {
 
         if (daysLeft >= 0 && hoursLeft >= 0 && minsLeft >= 0 && secondsLeft >= 0) {
             if (daysLeft === 0 && hoursLeft === 0 && minsLeft === 0 && secondsLeft === 0) {
-                if (match.status === "upcoming") alert("Reload the page for updates");
+                if (match.status === "upcoming") {
+                    alert("Reload the page for updates");
+                    Router.reload();
+                }
                 stopTimer = true;
                 return setTimer(match.status.toUpperCase())
             }
@@ -34,7 +38,7 @@ const TournamentCard = ({ match }: { match: TournamentDoc }) => {
         if (!stopTimer) setTimeout(getBalanceTimer, 1000);
     }, [timer]);
 
-    return <Link href={`/tournaments/${match.id}`}>
+    return <Link href={`/tournaments/${match.regId}`}>
         <a className="match__footer__list__item">
             <img src={match.game.imageUrl} alt={match.game.name} className="match__footer__list__item__image" />
             <div className="match__footer__list__item__time">

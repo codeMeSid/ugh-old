@@ -4,7 +4,7 @@ import Table from "../../../components/table"
 import { useRequest } from '../../../hooks/use-request';
 import { TournamentDoc } from '../../../../server/models/tournament';
 import Link from 'next/link';
-import { format } from 'date-fns'
+import { format } from 'date-fns';
 import DialogButton from '../../../components/button/dialog';
 import Button from '../../../components/button/main';
 
@@ -22,7 +22,7 @@ const AdminTournamentDashboard = () => {
         onSuccess: (data: Array<TournamentDoc>) => {
             setTData(data.map(t => {
                 return [
-                    TableLink(t.name, t.id),
+                    TableLink(t.name, t.regId),
                     `${t.coins} coins`,
                     format(new Date(t.startDateTime), "dd/MM/yyyy hh:mm a"),
                     `${t.game.name} (${t.game.console.toUpperCase()})`,
@@ -38,7 +38,7 @@ const AdminTournamentDashboard = () => {
 
     return <SideLayout title={`match(${tData.length})`}>
         <Link href="/admin/tournaments/add">
-            <a>
+            <a style={{ marginBottom: 20 }}>
                 <Button text="Add Tournament" />
             </a>
         </Link>

@@ -22,7 +22,7 @@ const AddTournament = ({ games, consoles }:
     const [coins, setCoins] = useState(10);
     const [startDateTime, setStartDateTime] = useState("");
     const [endDateTime, setEndDateTime] = useState("");
-    const [winnerCount, setWinnerCount] = useState(0);
+    const [winnerCount, setWinnerCount] = useState(1);
 
     const { doRequest } = useRequest({
         url: "/api/ugh/tournament/add",

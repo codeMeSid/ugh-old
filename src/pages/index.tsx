@@ -6,7 +6,6 @@ import NewsTab from "../components/news-tab"
 import WallpaperSlider from "../components/wallpaper-slider"
 
 const LandingPage = ({ matches, wallpapers }) => {
-    console.log({ wallpapers })
     return <MainLayout isFullscreen>
         <div className="landingpage" style={{ minHeight: "100vh", backgroundColor: "black" }}>
             <WallpaperSlider wallpapers={wallpapers} />

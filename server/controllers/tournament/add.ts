@@ -10,6 +10,7 @@ import { Game } from "../../models/game";
 import mongoose from "mongoose";
 import { Settings } from "../../models/settings";
 import { User } from "../../models/user";
+import { randomBytes } from "crypto";
 
 export const tournamentAddController = async (req: Request, res: Response) => {
   const {
@@ -45,7 +46,12 @@ export const tournamentAddController = async (req: Request, res: Response) => {
   session.startTransaction();
   try {
     const game = await Game.findById(gameId).session(session);
+    const settings = await Settings.findOne().session(session);
     if (!game) throw new BadRequestError("Invalid game");
+    if (!settings) throw new BadRequestError("Failed to create tournament");
+    const totalWinnings = parseInt(playerCount) * parseInt(coins);
+    const earning = Math.round((settings.tournamentFees / 100) * totalWinnings);
+    const winnerCoin = totalWinnings - earning;
     const tournament = Tournament.build({
       addedBy: cUser,
       coins: parseInt(coins),
@@ -53,20 +59,21 @@ export const tournamentAddController = async (req: Request, res: Response) => {
       game,
       name,
       group,
+      regId: randomBytes(4).toString("hex").substr(0, 5),
       playerCount: parseInt(playerCount),
+      winnerCoin,
       startDateTime: new Date(startDateTime),
       winnerCount: parseInt(winnerCount),
     });
     if (cUser.role === UserRole.Player) {
-      const settings = await Settings.findOne().session(session);
       const user = await User.findById(cUser.id).session(session);
-      if (!settings) throw new BadRequestError("system error");
       if (!user) throw new BadRequestError("Invalid user");
       const balance = user.wallet.coins;
-      const fees = settings.tournamentFees;
+      const fees = tournament.coins;
       if (balance - fees < 0)
         throw new BadRequestError("Insufficient balance to create tournament");
       user.set({ "wallet.coins": balance - fees });
+      tournament.players.push(user);
       await user.save({ session });
     }
     await tournament.save({ session });
@@ -101,7 +108,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
           tournament.status === TournamentStatus.Upcoming &&
           attendance < 50
         ) {
-          tournament.set({ status: TournamentStatus.Cancelled });
+          tournament.set({ status: TournamentStatus.Completed });
           await tournament.save();
           timer.cancel(id);
           timer.cancel(`${id}-end`);

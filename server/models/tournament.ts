@@ -3,13 +3,16 @@ import { UserPayload, TournamentStatus, GameGroups } from "@monsid/ugh";
 import { UserDoc } from "./user";
 import { BracketDoc } from "./bracket";
 import { GameDoc } from "./game";
+import { randomBytes } from "crypto";
 
 interface TournamentAttrs {
   name: string;
   coins: number;
+  winnerCoin: number;
   playerCount: number;
   group?: GameGroups;
   winnerCount: number;
+  regId: string;
   game: GameDoc;
   addedBy: UserPayload;
   startDateTime: Date;
@@ -22,6 +25,8 @@ export interface TournamentDoc extends mongoose.Document {
   playerCount: number;
   group: GameGroups;
   winnerCount: number;
+  winnerCoin: number;
+  regId: string;
   players: Array<UserDoc>;
   game: GameDoc;
   addedBy: UserPayload;
@@ -45,6 +50,7 @@ const tournamentSchema = new mongoose.Schema(
       participants: Number,
     },
     winnerCount: Number,
+    winnerCoin: Number,
     players: [
       {
         refs: "Users",
@@ -60,6 +66,10 @@ const tournamentSchema = new mongoose.Schema(
       name: String,
       email: String,
       role: String,
+    },
+    regId: {
+      type: String,
+      required: true,
     },
     startDateTime: mongoose.Schema.Types.Date,
     endDateTime: mongoose.Schema.Types.Date,

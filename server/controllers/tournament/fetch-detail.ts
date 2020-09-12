@@ -6,10 +6,8 @@ export const tournamentFetchDetailController = async (
   res: Response
 ) => {
   const { tournamentId } = req.params;
-  const tournament = await Tournament.findById(tournamentId).populate(
-    "game",
-    "name console imageUrl thumbnailUrl",
-    "Games"
-  );
+  const tournament = await Tournament.findOne({ regId: tournamentId })
+    .populate("game", "name console imageUrl thumbnailUrl", "Games")
+    .populate("players", "ughId uploadUrl", "Users");
   res.send(tournament);
 };

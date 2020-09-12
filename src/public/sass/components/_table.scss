@@ -23,6 +23,9 @@ tr:nth-child(even) {
 
 .table__link {
   text-decoration: none;
+  color: blue;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 @include respond(tab-port) {

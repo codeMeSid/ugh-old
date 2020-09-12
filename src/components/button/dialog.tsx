@@ -3,14 +3,14 @@ import Button from "./main";
 import { GrClose } from 'react-icons/gr'
 import ProgressButton from './progress';
 
-const DialogButton = ({ title, fullButton, children, onAction, style = {} }: { title: string, fullButton?: boolean, children: any, onAction: any, style?: any }) => {
+const DialogButton = ({ title, fullButton, children, onAction, style = {}, size = "large", type = "link" }: { type?: string, size?: string, title: string, fullButton?: boolean, children: any, onAction?: any, style?: any }) => {
     const [openDialog, setOpenDialog] = useState(false);
     return <>
         <div style={{ display: "flex", alignItems: "center" }}>
             {
                 fullButton ?
                     <>
-                        <Button text={title} size="large" type="link" onPress={() => setOpenDialog(!openDialog)} />
+                        <Button text={title} size={size} type={type} onPress={() => setOpenDialog(!openDialog)} />
                     </>
                     : <>
                         <Button onPress={() => setOpenDialog(!openDialog)} size="icon" text="+" style={{ marginBottom: 10, marginRight: 10 }} />
@@ -24,14 +24,14 @@ const DialogButton = ({ title, fullButton, children, onAction, style = {} }: { t
             <div className="dialog__body" >
                 {children}
             </div>
-            <div className="dialog__footer">
+            {onAction && <div className="dialog__footer">
                 <Button onPress={() => setOpenDialog(false)} style={{ marginRight: 10 }} type="link" text="cancel" />
                 <ProgressButton type="primary" text="submit" onPress={async (_, next) => {
                     await onAction();
                     await next()
                     await setOpenDialog(false)
                 }} />
-            </div>
+            </div>}
         </div>}
     </>
 }

@@ -10,6 +10,8 @@ import { tournamentFetchAllController } from "../controllers/tournament/fetch-al
 import { tournamentFetchDetailController } from "../controllers/tournament/fetch-detail";
 import { tournamentFetchAllMyController } from "../controllers/tournament/fetch-all-my";
 import { tournamentFetchAllActiveController } from "../controllers/tournament/fetch-active";
+import { tournamentUpdateStatusController } from "../controllers/tournament/update-status";
+import { tournamentJoinController } from "../controllers/tournament/join";
 
 export const tournamentHandler: Array<ApiSign> = [
   {
@@ -37,10 +39,22 @@ export const tournamentHandler: Array<ApiSign> = [
     middlewares: [],
   },
   {
+    url: "/join/:tournamentId",
+    method: HttpMethod.Get,
+    controller: tournamentJoinController,
+    middlewares: [currentUser, requireAuth],
+  },
+  {
     url: "/add",
     method: HttpMethod.Post,
     controller: tournamentAddController,
     middlewares: [currentUser, requireAuth],
+  },
+  {
+    url: "/update/status/:tournamentId",
+    method: HttpMethod.Put,
+    controller: tournamentUpdateStatusController,
+    middlewares: [currentUser, requireAdminAuth],
   },
   // {
   //   url: "/update/:tournamentId",

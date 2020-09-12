@@ -3,8 +3,21 @@ import { TournamentDoc } from "../../../../server/models/tournament";
 import SideLayout from "../../../components/layout/sidelayout";
 import Input from "../../../components/input/input";
 import { format } from 'date-fns'
+import Select from "../../../components/input/select";
+import Option from "../../../components/input/option";
+import { useState } from "react";
+import ProgressButton from "../../../components/button/progress";
+import { useRequest } from "../../../hooks/use-request";
 
 const TournamentDetail = ({ tournament }: { tournament: TournamentDoc }) => {
+    const [status, setStatus] = useState(tournament?.status);
+
+    const { doRequest } = useRequest({
+        url: `/api/ugh/tournament/update/status/${tournament?.id}`,
+        body: { status },
+        method: "put"
+    })
+
     return <SideLayout title="Match detail">
         <div className="detail">
             <div className="row">
@@ -12,7 +25,11 @@ const TournamentDetail = ({ tournament }: { tournament: TournamentDoc }) => {
                     <Input placeholder="name" value={tournament?.name} disabled />
                 </div>
                 <div className="col">
-                    <Input placeholder="status" value={tournament?.status?.toUpperCase()} disabled />
+                    <Select name="status" onSelect={(e) => setStatus(e.currentTarget.value)} placeholder="status" value={status} options={
+                        ['upcoming', 'started', 'completed'].map(st => {
+                            return <Option key={st} display={st.toUpperCase()} value={st} />
+                        })
+                    } />
                 </div>
             </div>
             <div className="row">
@@ -25,10 +42,10 @@ const TournamentDetail = ({ tournament }: { tournament: TournamentDoc }) => {
             </div>
             <div className="row">
                 <div className="col">
-                    <Input placeholder="start by" value={format(new Date(tournament?.startDateTime), "dd/MM/yyyy hh:mm a")} disabled />
+                    <Input placeholder="start by" value={format(new Date(tournament?.startDateTime || Date.now()), "dd/MM/yyyy hh:mm a")} disabled />
                 </div>
                 <div className="col">
-                    <Input placeholder="end by" value={format(new Date(tournament?.endDateTime), "dd/MM/yyyy hh:mm a")} disabled />
+                    <Input placeholder="end by" value={format(new Date(tournament?.endDateTime || Date.now()), "dd/MM/yyyy hh:mm a")} disabled />
                 </div>
             </div>
             <div className="row">
@@ -44,8 +61,14 @@ const TournamentDetail = ({ tournament }: { tournament: TournamentDoc }) => {
                     <Input placeholder="game" value={`${tournament?.game?.name}-(${tournament?.game?.console})`} disabled />
                 </div>
                 <div className="col">
-                    <Input placeholder="grouping" value={tournament?.group} disabled />
+                    <Input placeholder="grouping" value={`${tournament?.group?.name}-${tournament?.group?.participants}`} disabled />
                 </div>
+            </div>
+            <div className="row">
+                <ProgressButton text="Submit" type="link" size="large" onPress={async (_, next) => {
+                    await doRequest();
+                    next();
+                }} />
             </div>
         </div>
     </SideLayout>
