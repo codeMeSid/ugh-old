@@ -8,12 +8,11 @@ import { ConsoleDoc } from '../../server/models/console';
 import { useState } from "react";
 import { useRequest } from "../hooks/use-request";
 import Router from 'next/router';
-import ProgressButton from "../components/button/progress";
 import MainLayout from "../components/layout/mainlayout";
 import DialogButton from "../components/button/dialog";
 
-const AddTournament = ({ games, consoles, fees }:
-    { games: Array<GameDoc>, consoles: Array<ConsoleDoc>, fees: number }) => {
+const AddTournament = ({ games, consoles }:
+    { games: Array<GameDoc>, consoles: Array<ConsoleDoc> }) => {
     const [consoleIndex, setConsoleIndex] = useState(0);
     const [gameIndex, setGameIndex] = useState(0);
     const [pIndex, setPIndex] = useState(0);
@@ -142,7 +141,7 @@ const AddTournament = ({ games, consoles, fees }:
             <div className="row">
                 <DialogButton fullButton title="Submit" onAction={doRequest} style={{ top: "20%" }}>
                     <div style={{ margin: "2rem auto", fontSize: "2rem", minWidth: "40rem", maxWidth: "50rem" }}>
-                        Creating tournament will cost you {fees} coins from your account
+                        Creating tournament will cost you {coins} coins from your account
                     </div>
                 </DialogButton>
             </div>
@@ -153,11 +152,9 @@ const AddTournament = ({ games, consoles, fees }:
 AddTournament.getInitialProps = async (ctx) => {
     const { data: consoles } = await serverRequest(ctx, { url: "/api/ugh/console/fetch/active", body: {}, method: "get" });
     const { data: games } = await serverRequest(ctx, { url: "/api/ugh/game/fetch/active", body: {}, method: "get" });
-    const { data } = await serverRequest(ctx, { url: "/api/ugh/settings/fetch/coins", body: {}, method: "get" })
     return {
         consoles: consoles || [],
-        games: games || [],
-        fees: data?.fees || 10
+        games: games || []
     };
 }
 

@@ -23,10 +23,10 @@ const TournamentCard = ({ match }: { match: TournamentDoc }) => {
 
         if (daysLeft >= 0 && hoursLeft >= 0 && minsLeft >= 0 && secondsLeft >= 0) {
             if (daysLeft === 0 && hoursLeft === 0 && minsLeft === 0 && secondsLeft === 0) {
-                if (match.status === "upcoming") {
-                    alert("Reload the page for updates");
-                    Router.reload();
-                }
+                // if (match.status === "upcoming") {
+                //     alert("Reload the page for updates");
+                //     Router.reload();
+                // }
                 stopTimer = true;
                 return setTimer(match.status.toUpperCase())
             }

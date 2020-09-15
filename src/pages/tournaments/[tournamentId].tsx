@@ -10,6 +10,7 @@ import Button from "../../components/button/main";
 import React, { useEffect, useState } from "react";
 import Router from 'next/router';
 import DialogButton from '../../components/button/dialog';
+import PlayerCard from '../../components/card/player';
 
 const TournamentDetail = ({ tournament, matches, currentUser }: { tournament: TournamentDoc, matches: any, currentUser: any }) => {
     const [timer, setTimer] = useState('');
@@ -28,18 +29,42 @@ const TournamentDetail = ({ tournament, matches, currentUser }: { tournament: To
         const minsLeft = Math.floor((delta % (msIn1Hour)) / (msIn1Min));
         const secondsLeft = Math.floor((delta % (msIn1Min)) / msIn1Sec);
         const diffTime = `${daysLeft} Days ${hoursLeft < 10 ? `0${hoursLeft}` : hoursLeft}h ${minsLeft < 10 ? `0${minsLeft}` : minsLeft}m ${secondsLeft < 10 ? `0${secondsLeft}` : secondsLeft}s`
-
         if (daysLeft >= 0 && hoursLeft >= 0 && minsLeft >= 0 && secondsLeft >= 0) {
             if (daysLeft === 0 && hoursLeft === 0 && minsLeft === 0 && secondsLeft === 0) {
-                if (tournament?.status === "upcoming") {
-                    alert("Reload the page for updates");
-                    Router.reload();
-                }
+                // if (tournament?.status === "upcoming") {
+                //     alert("Reload the page for updates");
+                //     Router.reload();
+                // }
                 stopTimer = true;
                 return setTimer(tournament?.status?.toUpperCase())
             }
             setTimer(diffTime);
         }
+    }
+
+    const JoinButton = () => {
+        if (!currentUser) return <Link href="/login">
+            <a>
+                <Button text="Join" type="link" size="small" />
+            </a>
+        </Link>
+        const userHasJoined = tournament?.players
+            .filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id))
+            .length > 0;
+        if (currentUser && tournament?.status === "upcoming" && !userHasJoined)
+            return <ProgressButton text="Join" type="link" size="small" onPress={async (_, next) => {
+                await doRequest();
+                next();
+            }} />
+        if (currentUser && tournament?.status === "upcoming" && userHasJoined)
+            return <Button text="Joined" type="facebook" size="small" />
+        if (currentUser && tournament?.status === "started" && userHasJoined) return <Link href={`/tournaments/game/${tournament?.regId}`}>
+            <a>
+                <Button text="Play" type="link" size="small" />
+            </a>
+        </Link>
+
+        return <Button text="Join" type="disabled" size="small" />
     }
 
     useEffect(() => {
@@ -72,28 +97,7 @@ const TournamentDetail = ({ tournament, matches, currentUser }: { tournament: To
                             <div className="tournament__card__body__upper__right">
                                 <div style={{ marginRight: 10, fontSize: 20, color: "white" }}> Tournament Prize {tournament?.winnerCoin} coins</div>
                                 <div style={{ marginRight: 10 }}>
-                                    {!currentUser
-                                        ? <Link href="/login">
-                                            <a>
-                                                <Button text="Join" type="link" size="small" />
-                                            </a>
-                                        </Link>
-                                        : tournament?.status === "started"
-                                            && tournament?.players.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id))
-                                            ? <>
-                                                <Link href={`/tournaments/game/${tournament?.regId}`}>
-                                                    <a>
-                                                        <Button text="Play" type="link" size="small" />
-                                                    </a>
-                                                </Link>
-                                            </>
-                                            : <>
-                                                <ProgressButton text="Join" type="link" size="small" onPress={async (_, next) => {
-                                                    await doRequest();
-                                                    next();
-                                                }} />
-                                            </>
-                                    }
+                                    {JoinButton()}
                                 </div>
                                 <div>
                                     {/* <Button text="View Rules"  size="medium" /> */}
@@ -130,14 +134,23 @@ const TournamentDetail = ({ tournament, matches, currentUser }: { tournament: To
                                     <div style={{ marginBottom: 10 }}>Ends On</div>
                                     <div>{format(new Date(tournament?.endDateTime || Date.now()), "dd/MM/yyyy hh:mm a")}</div>
                                 </div>
-
-                            </div>
-                            <div className="tournament__card__body__lower__right">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {currentUser
+                && tournament?.players
+                    .filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id))
+                    .length > 0
+                &&
+                <div className="tournament__container tournament__container--footer">
+                    <div className="tournament__container--footer__title">Live Players</div>
+                    <div className="tournament__container__list">
+                        {tournament?.players?.map(player => <PlayerCard key={Math.random()} player={player} />)}
+                    </div>
+                </div>
+            }
         </div>
         <TournamentTab matches={matches} />
     </MainLayout>
@@ -151,7 +164,6 @@ TournamentDetail.getInitialProps = async (ctx) => {
         body: {}
     });
     const { data, errors }: { data: Array<TournamentDoc>, errors: Array<any> } = await serverRequest(ctx, { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
-
     const matches = {
         upcoming: [],
         started: [],
@@ -162,13 +174,9 @@ TournamentDetail.getInitialProps = async (ctx) => {
             matches, errors
         }
     }
-
     data.forEach(tournament => {
         matches[tournament.status] = [...matches[tournament.status], tournament];
-    })
-
-    console.log(tournament);
-
+    });
     return { matches, tournament }
 }
 

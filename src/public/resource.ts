@@ -4,7 +4,7 @@ export const profileMenuLinks = [
   "my-tournament",
   "withdraw",
   "settings",
-  "logout",
+  "signout",
 ];
 export const moreMenuLinks = [
   "gallery",

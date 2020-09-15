@@ -1,0 +1,167 @@
+.profile {
+  min-height: 100vh;
+  background-color: #01071a;
+  padding-top: 12vh;
+  padding-bottom: 5rem;
+  &__container {
+    max-width: 80vw;
+    margin: 0 auto;
+    margin-top: 5rem;
+    box-shadow: 0 0.5rem 1.3rem rgba(black, 0.8);
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+  }
+  &__head {
+    height: 45rem;
+    background-image: url("../asset/profile.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 8rem;
+    display: flex;
+    flex-wrap: wrap;
+    &__left {
+      width: 30rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &__container {
+        width: 25rem;
+        height: 25rem;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 0.1rem solid rgba(gold, 0.4);
+      }
+    }
+    &__right {
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.6rem;
+      text-transform: uppercase;
+    }
+  }
+  &__body {
+    padding: 2rem;
+    &__top {
+      width: 100%;
+      border-bottom: 0.1rem solid rgba(gray, 0.4);
+      padding-bottom: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      &__left {
+        display: flex;
+      }
+      &__right {
+        margin-left: auto;
+      }
+      &__item {
+        padding: 0 2rem;
+        border-right: 0.1rem solid rgba(gray, 0.5);
+        &:first-child {
+          padding-right: 2rem;
+          padding-left: 0;
+        }
+        &__title {
+          font-size: 1.6rem;
+          color: rgba(white, 0.5);
+          text-transform: uppercase;
+          margin-bottom: 0.5rem;
+        }
+        &__value {
+          font-size: 1.6rem;
+          color: white;
+          text-transform: uppercase;
+        }
+      }
+    }
+    &__bottom {
+      display: flex;
+      flex-wrap: wrap-reverse;
+      margin-top: 1rem;
+      &__left {
+        width: 40rem;
+        min-height: 10rem;
+        &__title {
+          color: white;
+          font-size: 1.6rem;
+          text-transform: uppercase;
+        }
+        &__value {
+          margin-top: 1rem;
+          font-size: 1.6rem;
+          color: white;
+          word-wrap: break-word;
+          word-break: break-all;
+        }
+      }
+      &__right {
+        display: flex;
+        margin-left: auto;
+        align-items: center;
+      }
+      &__item {
+        color: white;
+        padding: 1rem;
+        text-align: center;
+        &__icon {
+          font-size: 2.5rem;
+        }
+        &__title {
+          color: rgba(white, 0.4);
+          text-transform: uppercase;
+          margin: 0.3rem 0;
+          font-size: 1.2rem;
+        }
+        &__value {
+          font-size: 1.6rem;
+        }
+      }
+    }
+  }
+}
+
+@include respond(tab-port) {
+  .profile {
+    &__container{
+    max-width: 90vw;
+
+    }
+    &__image {
+    }
+    &__head {
+      &__left {
+        width: 100%;
+      }
+      &__right {
+        width: 100%;
+      }
+    }
+    &__body {
+      &__top {
+        &__left {
+          justify-content: center;
+        }
+        &__right {
+          margin: 0 auto;
+          margin-top: 2rem;
+        }
+        &__item {
+        }
+      }
+      &__bottom {
+        &__left {
+        }
+        &__right {
+          width: 100%;
+          margin-bottom: 1rem;
+        }
+        &__item {
+        }
+      }
+    }
+  }
+}

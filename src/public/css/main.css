@@ -141,7 +141,7 @@ h1 {
 
 .navbar__logo {
   height: 5rem;
-  width: 14rem; }
+  width: 20rem; }
 
 .navbar__list {
   margin-left: auto; }
@@ -280,6 +280,35 @@ tr:nth-child(even) {
   max-width: 80rem;
   width: 100%;
   flex-wrap: wrap; }
+
+.player {
+  overflow: hidden;
+  padding: 0.8rem;
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 0.8rem 1.5rem black;
+  border: 0.1rem solid rgba(128, 128, 128, 0.2);
+  margin: 1rem; }
+  .player__profile {
+    width: 18rem;
+    height: 18rem;
+    margin: 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 1.5rem; }
+    .player__profile__image {
+      width: 100%;
+      height: 100%; }
+  .player__name {
+    font-size: 2.4rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    word-wrap: break-word;
+    word-break: break-all; }
 
 .gallery__image {
   width: 25rem; }
@@ -1064,8 +1093,20 @@ tr:nth-child(even) {
   background-color: #01071a;
   padding-top: 12vh; }
   .tournament__container {
-    width: 100vw;
+    max-width: 100vw;
     padding: 5rem 2rem; }
+    .tournament__container--footer {
+      padding: 2rem; }
+      .tournament__container--footer__title {
+        color: white;
+        font-size: 2.8rem;
+        max-width: 100vw;
+        padding-bottom: 1rem;
+        border-bottom: 0.1rem solid #686a76; }
+    .tournament__container__list {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 2rem; }
   .tournament__card {
     max-width: 100rem;
     margin: 0 auto;
@@ -1139,6 +1180,8 @@ tr:nth-child(even) {
               padding-left: 0.8rem; }
 
 @media (max-width: 56.25em) {
+  .tournament__container__list {
+    justify-content: center; }
   .tournament__card {
     min-height: 100rem;
     height: fit-content; }
@@ -1165,3 +1208,121 @@ tr:nth-child(even) {
             border-right: 0.1rem solid rgba(128, 128, 128, 0.4); }
           .tournament__card__body__lower__left__item:not(:first-child) {
             padding-left: 0.8rem; } }
+
+.profile {
+  min-height: 100vh;
+  background-color: #01071a;
+  padding-top: 12vh;
+  padding-bottom: 5rem; }
+  .profile__container {
+    max-width: 80vw;
+    margin: 0 auto;
+    margin-top: 5rem;
+    box-shadow: 0 0.5rem 1.3rem rgba(0, 0, 0, 0.8); }
+  .profile__image {
+    width: 100%;
+    height: 100%; }
+  .profile__head {
+    height: 45rem;
+    background-image: url("../asset/profile.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 8rem;
+    display: flex;
+    flex-wrap: wrap; }
+    .profile__head__left {
+      width: 30rem;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+      .profile__head__left__container {
+        width: 25rem;
+        height: 25rem;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 0.1rem solid rgba(255, 215, 0, 0.4); }
+    .profile__head__right {
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.6rem;
+      text-transform: uppercase; }
+  .profile__body {
+    padding: 2rem; }
+    .profile__body__top {
+      width: 100%;
+      border-bottom: 0.1rem solid rgba(128, 128, 128, 0.4);
+      padding-bottom: 1.5rem;
+      display: flex;
+      flex-wrap: wrap; }
+      .profile__body__top__left {
+        display: flex; }
+      .profile__body__top__right {
+        margin-left: auto; }
+      .profile__body__top__item {
+        padding: 0 2rem;
+        border-right: 0.1rem solid rgba(128, 128, 128, 0.5); }
+        .profile__body__top__item:first-child {
+          padding-right: 2rem;
+          padding-left: 0; }
+        .profile__body__top__item__title {
+          font-size: 1.6rem;
+          color: rgba(255, 255, 255, 0.5);
+          text-transform: uppercase;
+          margin-bottom: 0.5rem; }
+        .profile__body__top__item__value {
+          font-size: 1.6rem;
+          color: white;
+          text-transform: uppercase; }
+    .profile__body__bottom {
+      display: flex;
+      flex-wrap: wrap-reverse;
+      margin-top: 1rem; }
+      .profile__body__bottom__left {
+        width: 40rem;
+        min-height: 10rem; }
+        .profile__body__bottom__left__title {
+          color: white;
+          font-size: 1.6rem;
+          text-transform: uppercase; }
+        .profile__body__bottom__left__value {
+          margin-top: 1rem;
+          font-size: 1.6rem;
+          color: white;
+          word-wrap: break-word;
+          word-break: break-all; }
+      .profile__body__bottom__right {
+        display: flex;
+        margin-left: auto;
+        align-items: center; }
+      .profile__body__bottom__item {
+        color: white;
+        padding: 1rem;
+        text-align: center; }
+        .profile__body__bottom__item__icon {
+          font-size: 2.5rem; }
+        .profile__body__bottom__item__title {
+          color: rgba(255, 255, 255, 0.4);
+          text-transform: uppercase;
+          margin: 0.3rem 0;
+          font-size: 1.2rem; }
+        .profile__body__bottom__item__value {
+          font-size: 1.6rem; }
+
+@media (max-width: 56.25em) {
+  .profile__container {
+    max-width: 90vw; }
+  .profile__head__left {
+    width: 100%; }
+  .profile__head__right {
+    width: 100%; }
+  .profile__body__top__left {
+    justify-content: center; }
+  .profile__body__top__right {
+    margin: 0 auto;
+    margin-top: 2rem; }
+  .profile__body__bottom__right {
+    width: 100%;
+    margin-bottom: 1rem; } }

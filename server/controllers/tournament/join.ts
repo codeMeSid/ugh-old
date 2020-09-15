@@ -27,7 +27,12 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
       throw new Error("Tournament slots full");
     if (user.wallet.coins - tournament.coins < 0)
       throw new Error("Insufficient coins in account to enter tournament");
-    user.set({ "wallet.coins": user.wallet.coins - tournament.coins });
+    user.wallet.coins -= tournament.coins;
+    user.tournaments.push({
+      didWin: false,
+      id: tournament.id,
+      coins: tournament.winnerCoin,
+    });
     tournament.players.push(user);
     await tournament.save({ session });
     await user.save({ session });

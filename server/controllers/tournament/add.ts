@@ -72,12 +72,16 @@ export const tournamentAddController = async (req: Request, res: Response) => {
       const fees = tournament.coins;
       if (balance - fees < 0)
         throw new BadRequestError("Insufficient balance to create tournament");
-      user.set({ "wallet.coins": balance - fees });
+      user.wallet.coins -= fees;
+      user.tournaments.push({
+        id: tournament.id,
+        didWin: false,
+        coins: winnerCoin,
+      });
       tournament.players.push(user);
       await user.save({ session });
     }
-    await tournament.save({ session });
-    await session.commitTransaction();
+
     // start tournament
     timer.schedule(
       tournament.id,
@@ -108,6 +112,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
           tournament.status === TournamentStatus.Upcoming &&
           attendance < 50
         ) {
+          // TODO send mail and add back coins
           tournament.set({ status: TournamentStatus.Completed });
           await tournament.save();
           timer.cancel(id);
@@ -131,6 +136,8 @@ export const tournamentAddController = async (req: Request, res: Response) => {
       },
       { id: tournament.id }
     );
+    await tournament.save({ session });
+    await session.commitTransaction();
   } catch (error) {
     await session.abortTransaction();
     throw new BadRequestError(error.message);

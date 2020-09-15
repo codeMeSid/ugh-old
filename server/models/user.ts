@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import { Password, UserRecovery } from "@monsid/ugh";
+import { Password, UserRecovery, UserTournament } from "@monsid/ugh";
 import {
   UserActivity,
   UserRole,
@@ -38,6 +38,7 @@ export interface UserDoc extends mongoose.Document {
   role: UserRole;
   settings: UserSettings;
   recovery: UserRecovery;
+  tournaments: Array<UserTournament>;
 }
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
@@ -99,6 +100,16 @@ const userSchema = new mongoose.Schema(
         default: 0,
       },
     },
+    tournaments: [
+      {
+        id: String,
+        didWin: {
+          type: Boolean,
+          default: false,
+        },
+        coins: Number,
+      },
+    ],
     dob: mongoose.Schema.Types.Date,
     activity: {
       enum: Object.values(UserActivity),
