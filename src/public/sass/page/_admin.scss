@@ -19,6 +19,47 @@
   margin: 0 1rem;
 }
 
+.admin__settings {
+  max-width: 100rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  &__item {
+    margin: 0.4rem;
+    &__image {
+      position: relative;
+      height: 20rem;
+      width: 36rem;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      & img {
+        width: 100%;
+        height: 100%;
+      }
+      &__text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2rem;
+        text-transform: uppercase;
+        color: white;
+        font-weight: bold;
+        opacity: 0;
+      }
+      &:hover img {
+        filter: blur(10px) grayscale(20%);
+      }
+      &:hover &__text {
+        opacity: 1;
+      }
+    }
+  }
+}
+
 @include respond(tab-port) {
   .col {
     margin: 0;

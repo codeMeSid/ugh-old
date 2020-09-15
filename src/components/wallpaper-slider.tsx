@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import Button from "./button/main";
 
-const WallpaperSlider = ({ wallpapers }: { wallpapers: Array<string> }) => {
+const WallpaperSlider = ({ wallpapers }: { wallpapers: Array<any> }) => {
     const [progress, setProgress] = useState(0);
     const [activeIndex, setActiveIndex] = useState(0);
 
@@ -20,7 +21,14 @@ const WallpaperSlider = ({ wallpapers }: { wallpapers: Array<string> }) => {
             {
                 wallpapers.map((paper, index) => {
                     return index === activeIndex
-                        ? <div key={paper} style={{backgroundImage:`url(${paper})`}} className="wallpaper__item" />
+                        ? <div key={paper} style={{ backgroundImage: `url(${paper.uploadUrl})` }} className="wallpaper__item" >
+                            <div className="wallpaper__item__title">
+                                {paper.title && <div className="wallpaper__item__title__text">{paper.title}</div>}
+                                {paper.href && <a href={paper.href} className="wallpaper__item__href">
+                                    <Button text="CLICK HERE" />
+                                </a>}
+                            </div>
+                        </div>
                         : null
                 })
             }
@@ -29,7 +37,7 @@ const WallpaperSlider = ({ wallpapers }: { wallpapers: Array<string> }) => {
         <div className="wallpaper__dock">
             {
                 wallpapers.map((paper, index) => {
-                    return <img onClick={() => setActiveIndex(index)} key={paper} src={paper} alt={`ugh-${index + 1}`} className={`wallpaper__dock__item ${index === activeIndex ? "active" : ""}`} />
+                    return <img onClick={() => setActiveIndex(index)} key={paper.uploadUrl} src={paper.uploadUrl} alt={`ugh-${index + 1}`} className={`wallpaper__dock__item ${index === activeIndex ? "active" : ""}`} />
                 })
             }
         </div>

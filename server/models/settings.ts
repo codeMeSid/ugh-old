@@ -2,12 +2,20 @@ import mongoose from "mongoose";
 
 interface SettingsAttrs {
   tournamentFees: number;
-  wallpapers: Array<string>;
+  wallpapers: Array<{
+    uploadUrl: string;
+    href: string;
+    title: string;
+  }>;
 }
 
-interface SettingsDoc extends mongoose.Document {
+export interface SettingsDoc extends mongoose.Document {
   tournamentFees: number;
-  wallpapers: Array<string>;
+  wallpapers: Array<{
+    uploadUrl: string;
+    href: string;
+    title: string;
+  }>;
   updatedAt: Date;
 }
 
@@ -23,7 +31,9 @@ const settingsSchema = new mongoose.Schema(
     },
     wallpapers: [
       {
-        type: String,
+        uploadUrl: String,
+        href: String,
+        title: String,
       },
     ],
     updatedAt: {

@@ -605,7 +605,22 @@ tr:nth-child(even) {
     height: 100%;
     width: 100%;
     background-position: center;
-    background-size: cover; }
+    background-size: cover;
+    position: relative; }
+    .wallpaper__item__title {
+      color: white;
+      position: absolute;
+      top: 40%;
+      left: 2%; }
+      .wallpaper__item__title__text {
+        font-size: 3rem;
+        padding: 0.5rem;
+        word-wrap: break-word;
+        word-break: break-all;
+        text-transform: capitalize;
+        margin-bottom: 0.5rem;
+        background-color: rgba(0, 0, 0, 0.8);
+        max-width: 50rem; }
 
 .signin {
   min-height: 88vh;
@@ -928,6 +943,40 @@ tr:nth-child(even) {
 
 .col {
   margin: 0 1rem; }
+
+.admin__settings {
+  max-width: 100rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center; }
+  .admin__settings__item {
+    margin: 0.4rem; }
+    .admin__settings__item__image {
+      position: relative;
+      height: 20rem;
+      width: 36rem;
+      margin-bottom: 1rem;
+      cursor: pointer; }
+      .admin__settings__item__image img {
+        width: 100%;
+        height: 100%; }
+      .admin__settings__item__image__text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2rem;
+        text-transform: uppercase;
+        color: white;
+        font-weight: bold;
+        opacity: 0; }
+      .admin__settings__item__image:hover img {
+        filter: blur(10px) grayscale(20%); }
+      .admin__settings__item__image:hover .admin__settings__item__image__text {
+        opacity: 1; }
 
 @media (max-width: 56.25em) {
   .col {

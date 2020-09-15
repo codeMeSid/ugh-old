@@ -5,10 +5,15 @@ import ProgressButton from "../../components/button/progress";
 import { useState } from "react";
 import { useRequest } from "../../hooks/use-request";
 import FileInput from "../../components/input/file";
+import { SettingsDoc } from "../../../server/models/settings";
+import DialogButton from "../../components/button/dialog";
 
-const SettingsPage = ({ settings }) => {
+const SettingsPage = ({ settings }: { settings: SettingsDoc }) => {
     const [coins, setCoins] = useState(settings?.tournamentFees);
     const [wallpapers, setWallpapers] = useState(settings?.wallpapers || []);
+    const [uploadUrl, setUploadUrl] = useState("");
+    const [title, setTitle] = useState("");
+    const [href, setHref] = useState("");
     const { doRequest } = useRequest({
         url: "/api/ugh/settings/update",
         body: {
@@ -22,7 +27,9 @@ const SettingsPage = ({ settings }) => {
     const onChangeHandler = async (name: string, val: any) => {
         switch (name) {
             case "coins": return setCoins(val);
-            case "wallpaper": return setWallpapers([...wallpapers, val])
+            case 'title': return setTitle(val);
+            case 'uploadUrl': return setUploadUrl(val);
+            case 'href': return setHref(val);
         }
     }
 
@@ -34,24 +41,43 @@ const SettingsPage = ({ settings }) => {
             <div className="row">
                 <Input type="number" name="coins" placeholder="tournament fees" value={coins} onChange={onChangeHandler} />
             </div>
-            <div className="row">
-                {
-                    wallpapers.map((wallpaper, index) => {
-                        return <div key={wallpaper} onClick={() => onClickHandler(index)} style={{ width: 200, margin: "0 2px" }}>
-                            <img style={{ width: "100%", height: "auto", border: "1px solid gray" }} src={wallpaper} alt="ugh wallpaper" />
-                        </div>
-                    })
+            <DialogButton title="Add Wallpaper" style={{ position: "fixed" }} onAction={async () => {
+                if (uploadUrl) {
+                    setWallpapers([...wallpapers, { title, href, uploadUrl }]);
+                    setTitle("");
+                    setHref("");
+                    setUploadUrl("")
                 }
-            </div>
+                else return;
+            }} fullButton>
+                <FileInput name="uploadUrl" placeholder="wallpaper image" showImage onChange={onChangeHandler} />
+                <Input name="title" placeholder="title" value={title} onChange={onChangeHandler} />
+                <Input name="href" placeholder="href" value={href} onChange={onChangeHandler} />
+            </DialogButton>
             <div className="row">
-                <FileInput name="wallpaper" placeholder="wallpaper" onChange={onChangeHandler} />
+                <div className="admin__settings">
+                    {
+                        wallpapers.map((item, index) => {
+                            return <div key={Math.random()} className="admin__settings__item">
+                                <div onClick={() => onClickHandler(index)} className="admin__settings__item__image">
+                                    <img src={item.uploadUrl} alt="UGH WALLPAPER" />
+                                    <div className="admin__settings__item__image__text">
+                                        click to remove
+                                </div>
+                                </div>
+                                <Input name="title" placeholder="title" value={item.title} disabled />
+                                <Input name="href" placeholder="href" value={item.href} disabled />
+                            </div>
+                        })
+                    }
+                </div>
             </div>
             <ProgressButton text="UPDATE" type="link" size="large" onPress={async (_, next) => {
                 await doRequest();
                 next();
             }} />
         </div>
-    </SideLayout>
+    </SideLayout >
 }
 
 SettingsPage.getInitialProps = async (ctx) => {
@@ -60,6 +86,7 @@ SettingsPage.getInitialProps = async (ctx) => {
         method: "get",
         body: {}
     });
+    console.log(data.wallpapers);
     return {
         settings: data,
         errors

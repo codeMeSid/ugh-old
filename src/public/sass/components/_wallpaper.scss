@@ -55,5 +55,23 @@
     width: 100%;
     background-position: center;
     background-size: cover;
+    position: relative;
+    &__title {
+      color: white;
+      position: absolute;
+      top: 40%;
+      left: 2%;
+
+      &__text {
+        font-size: 3rem;
+        padding: 0.5rem;
+        word-wrap: break-word;
+        word-break: break-all;
+        text-transform: capitalize;
+        margin-bottom: 0.5rem;
+        background-color: rgba(black, 0.8);
+        max-width: 50rem;
+      }
+    }
   }
 }
