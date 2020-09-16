@@ -16,23 +16,16 @@ const LandingPage = ({ matches, wallpapers }) => {
 }
 
 LandingPage.getInitialProps = async (ctx) => {
-    const { data, errors }: { data: Array<TournamentDoc>, errors: Array<any> } = await serverRequest(ctx, { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
+    const { data: tournaments, errors }: { data: Array<TournamentDoc>, errors: Array<any> } = await serverRequest(ctx, { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
     const { data: wallpapers } = await serverRequest(ctx, { url: "/api/ugh/settings/fetch/wallpaper", body: {}, method: "get" });
     const matches = {
         upcoming: [],
         started: [],
         completed: []
     }
-    if (!data) {
-        return {
-            matches, errors
-        }
-    }
-
-    data.forEach(tournament => {
+    if (tournaments) tournaments.forEach(tournament => {
         matches[tournament.status] = [...matches[tournament.status], tournament];
     })
-
     return {
         matches,
         wallpapers: wallpapers || [],

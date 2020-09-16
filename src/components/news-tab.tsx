@@ -20,8 +20,8 @@ const NewsTab = () => {
         </div>
         <div className="news__list">
             {news.map((newsItem: NewsDoc) => {
-                return <Link href={`/news/${newsItem.id}`}>
-                    <a key={Math.random()} style={{ backgroundImage: `url(${newsItem?.uploadUrl})` }} className="news__item">
+                return <Link key={newsItem.id} href={`/news/${newsItem.id}`}>
+                    <a style={{ backgroundImage: `url(${newsItem?.uploadUrl})` }} className="news__item">
                         <div className="news__item__title">{newsItem.title}</div>
                     </a>
                 </Link>

@@ -42,7 +42,7 @@ const SettingsPage = ({ settings }: { settings: SettingsDoc }) => {
                 <Input type="number" name="coins" placeholder="tournament fees" value={coins} onChange={onChangeHandler} />
             </div>
             <DialogButton title="Add Wallpaper" style={{ position: "fixed" }} onAction={async () => {
-                if (uploadUrl) {
+                if (uploadUrl && title) {
                     setWallpapers([...wallpapers, { title, href, uploadUrl }]);
                     setTitle("");
                     setHref("");
@@ -52,7 +52,7 @@ const SettingsPage = ({ settings }: { settings: SettingsDoc }) => {
             }} fullButton>
                 <FileInput name="uploadUrl" placeholder="wallpaper image" showImage onChange={onChangeHandler} />
                 <Input name="title" placeholder="title" value={title} onChange={onChangeHandler} />
-                <Input name="href" placeholder="href" value={href} onChange={onChangeHandler} />
+                <Input name="href" placeholder="link" value={href} onChange={onChangeHandler} />
             </DialogButton>
             <div className="row">
                 <div className="admin__settings">
@@ -86,7 +86,6 @@ SettingsPage.getInitialProps = async (ctx) => {
         method: "get",
         body: {}
     });
-    console.log(data.wallpapers);
     return {
         settings: data,
         errors

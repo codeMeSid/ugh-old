@@ -21,7 +21,7 @@ const WallpaperSlider = ({ wallpapers }: { wallpapers: Array<any> }) => {
             {
                 wallpapers.map((paper, index) => {
                     return index === activeIndex
-                        ? <div key={paper} style={{ backgroundImage: `url(${paper.uploadUrl})` }} className="wallpaper__item" >
+                        ? <div key={paper?.uploadUrl} style={{ backgroundImage: `url(${paper.uploadUrl})` }} className="wallpaper__item" >
                             <div className="wallpaper__item__title">
                                 {paper.title && <div className="wallpaper__item__title__text">{paper.title}</div>}
                                 {paper.href && <a href={paper.href} className="wallpaper__item__href">
@@ -37,9 +37,7 @@ const WallpaperSlider = ({ wallpapers }: { wallpapers: Array<any> }) => {
         <div className="wallpaper__dock">
             {
                 wallpapers.map((paper, index) => {
-                    return <div key={paper.uploadUrl}>
-                        <img onClick={() => setActiveIndex(index)}  src={paper.uploadUrl} alt={`ugh-${index + 1}`} className={`wallpaper__dock__item ${index === activeIndex ? "active" : ""}`} />
-                    </div>
+                    return <img key={paper?.uploadUrl} onClick={() => setActiveIndex(index)} src={paper.uploadUrl} alt={`ugh-${index + 1}`} className={`wallpaper__dock__item ${index === activeIndex ? "active" : ""}`} />
                 })
             }
         </div>
