@@ -3,11 +3,13 @@ import mongoose from "mongoose";
 interface NewsAttrs {
   title: string;
   description: string;
+  uploadUrl: string;
 }
 
 export interface NewsDoc extends mongoose.Document {
   title: string;
   description: string;
+  uploadUrl: string;
   createdAt: Date;
   isActive: boolean;
 }
@@ -20,6 +22,7 @@ const newsSchema = new mongoose.Schema(
   {
     title: String,
     description: String,
+    uploadUrl: String,
     createdAt: {
       type: mongoose.Schema.Types.Date,
       default: Date.now(),

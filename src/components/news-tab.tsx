@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { NewsDoc } from "../../server/models/news";
 import { useRequest } from "../hooks/use-request";
+import Link from 'next/link';
 
 const NewsTab = () => {
     const [news, setNews] = useState([]);
@@ -19,10 +20,11 @@ const NewsTab = () => {
         </div>
         <div className="news__list">
             {news.map((newsItem: NewsDoc) => {
-                return <div key={Math.random()} className="news__item">
-                    <div className="news__item__title">{newsItem.title}</div>
-                    <div className="news__item__desc">{newsItem.description}</div>
-                </div>
+                return <Link href={`/news/${newsItem.id}`}>
+                    <a key={Math.random()} style={{ backgroundImage: `url(${newsItem?.uploadUrl})` }} className="news__item">
+                        <div className="news__item__title">{newsItem.title}</div>
+                    </a>
+                </Link>
             })}
         </div>
     </div>

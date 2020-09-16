@@ -10,6 +10,7 @@ import { newsFetchController } from "../controllers/news/fetch-all";
 import { newsFetchActiveController } from "../controllers/news/fetch-active";
 import { newsUpdateActiveController } from "../controllers/news/update-active";
 import { newsAddValidator } from "../utils/validator/news/add";
+import { newsFetchDetailController } from "../controllers/news/fetch-detail";
 
 export const newsHandler: Array<ApiSign> = [
   {
@@ -27,6 +28,12 @@ export const newsHandler: Array<ApiSign> = [
     url: "/fetch/active",
     method: HttpMethod.Get,
     controller: newsFetchActiveController,
+    middlewares: [],
+  },
+  {
+    url: "/fetch/detail/:newsId",
+    method: HttpMethod.Get,
+    controller: newsFetchDetailController,
     middlewares: [],
   },
   {

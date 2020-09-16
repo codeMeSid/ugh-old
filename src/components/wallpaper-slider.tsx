@@ -37,7 +37,9 @@ const WallpaperSlider = ({ wallpapers }: { wallpapers: Array<any> }) => {
         <div className="wallpaper__dock">
             {
                 wallpapers.map((paper, index) => {
-                    return <img onClick={() => setActiveIndex(index)} key={paper.uploadUrl} src={paper.uploadUrl} alt={`ugh-${index + 1}`} className={`wallpaper__dock__item ${index === activeIndex ? "active" : ""}`} />
+                    return <div key={paper.uploadUrl}>
+                        <img onClick={() => setActiveIndex(index)}  src={paper.uploadUrl} alt={`ugh-${index + 1}`} className={`wallpaper__dock__item ${index === activeIndex ? "active" : ""}`} />
+                    </div>
                 })
             }
         </div>

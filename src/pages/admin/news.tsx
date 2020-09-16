@@ -6,22 +6,24 @@ import { NewsDoc } from '../../../server/models/news'
 import Switch from 'react-switch';
 import DialogButton from '../../components/button/dialog'
 import Input from '../../components/input/input'
+import FileInput from '../../components/input/file'
 
 const AdminNewsDashboard = () => {
     const [newsData, setNewsData] = useState([]);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [uploadUrl, setUploadUrl] = useState("");
     const SwitchBlade = (id: string, activity: boolean) => {
         return <Switch checked={activity} onChange={() => changeNewsActivity(id)} />
     }
     const { doRequest } = useRequest({
         url: "/api/ugh/news/fetch/all", body: {}, method: "get", onSuccess: (data: Array<NewsDoc>) => {
-            setNewsData(data.map(news => ([news.title, news.description, SwitchBlade(news.id, news.isActive)])));
+            setNewsData(data.map(news => ([news.title, <a href={news?.uploadUrl || ""} target="_blank"><img className="gallery__image" src={news?.uploadUrl || ""} /></a>, SwitchBlade(news.id, news.isActive)])));
         }
     });
     const { doRequest: addNewsRequest } = useRequest({
         url: "/api/ugh/news/add",
-        body: { title, description },
+        body: { title, description, uploadUrl },
         method: "post",
         onSuccess: doRequest
     });
@@ -30,8 +32,9 @@ const AdminNewsDashboard = () => {
     }, []);
     const onChangeHandler = (name: string, val: string) => {
         switch (name) {
-            case "title": return setTitle(val)
-            case "description": return setDescription(val)
+            case "title": return setTitle(val);
+            case "description": return setDescription(val);
+            case 'uploadUrl': return setUploadUrl(val);
         };
     }
     const changeNewsActivity = async (id: string) => {
@@ -45,6 +48,7 @@ const AdminNewsDashboard = () => {
     }
     return <SideLayout title={`news(${newsData.length})`}>
         <DialogButton title="add news" onAction={addNewsRequest}>
+            <FileInput onChange={onChangeHandler} name="uploadUrl" placeholder="news image" showImage />
             <Input onChange={onChangeHandler} placeholder="title" name="title" value={title} />
             <Input onChange={onChangeHandler} placeholder="description" name="description" value={description} />
         </DialogButton>
@@ -54,7 +58,7 @@ const AdminNewsDashboard = () => {
                 isResponsive: false
             },
             {
-                text: "description",
+                text: "image",
                 isResponsive: false
             },
             {

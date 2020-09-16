@@ -540,23 +540,67 @@ tr:nth-child(even) {
   .news__list {
     height: 20rem;
     width: 100%;
-    overflow-y: scroll; }
+    display: flex;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    justify-content: flex-start; }
     .news__list::-webkit-scrollbar {
       width: 0; }
   .news__item {
-    padding: 0.5rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
+    width: 24rem;
+    height: 16rem;
+    margin-bottom: 0.5rem;
+    margin-right: 1rem;
+    border-radius: 2rem;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer; }
     .news__item__title {
-      font-size: 1.6rem;
-      font-weight: bold;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 1.5rem;
       text-transform: capitalize;
-      cursor: pointer; }
-    .news__item__desc {
-      margin-top: 0.2rem;
-      font-size: 1.4rem;
-      max-width: 60rem;
-      word-break: break-all;
-      word-wrap: break-word; }
+      opacity: 0; }
+    .news__item:hover .news__item__title {
+      opacity: 1; }
+    .news__item:hover {
+      filter: grayscale(100%); }
+  .news__container {
+    width: 90vw;
+    margin: 2rem auto;
+    min-height: 150vh; }
+    .news__container__image {
+      margin: 2rem 0;
+      width: 100%;
+      height: 50rem;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      border-radius: 1rem; }
+      @media (max-width: 56.25em) {
+        .news__container__image {
+          background-position: right; } }
+    .news__container__title {
+      font-size: 3rem;
+      text-transform: uppercase;
+      font-weight: bold; }
+    .news__container__time {
+      margin: 0.5rem 0;
+      width: 100%;
+      font-size: 2.2rem;
+      padding-bottom: 2rem;
+      border-bottom: 0.1rem solid rgba(128, 128, 128, 0.4); }
+    .news__container__description {
+      font-size: 2rem;
+      text-transform: capitalize;
+      word-wrap: break-word;
+      word-break: break-all; }
 
 .wallpaper {
   height: 120vh;
