@@ -25,6 +25,7 @@ import { signinValidator } from "../utils/validator/user/signin";
 import { userUpdateSettingController } from "../controllers/user/update-setting";
 import { userFetchDetailController } from "../controllers/user/fetch-detail";
 import { updateUserProfileController } from "../controllers/user/update-profile";
+import { userFetchProfileContoller } from "../controllers/user/fetch-profile";
 
 export const userHandlers: Array<ApiSign> = [
   // {
@@ -37,6 +38,12 @@ export const userHandlers: Array<ApiSign> = [
     url: "/fetch/profile",
     method: HttpMethod.Get,
     controller: userProfileContoller,
+    middlewares: [currentUser, requireAuth],
+  },
+  {
+    url: "/fetch/profile/:ughId",
+    method: HttpMethod.Get,
+    controller: userFetchProfileContoller,
     middlewares: [currentUser, requireAuth],
   },
   {

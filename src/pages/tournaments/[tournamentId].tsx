@@ -147,7 +147,7 @@ const TournamentDetail = ({ tournament, matches, currentUser }: { tournament: To
                 <div className="tournament__container tournament__container--footer">
                     <div className="tournament__container--footer__title">Live Players</div>
                     <div className="tournament__container__list">
-                        {tournament?.players?.map(player => <PlayerCard key={Math.random()} player={player} />)}
+                        {tournament?.players?.map(player => <PlayerCard key={Math.random()} currentUser={currentUser} player={player} />)}
                     </div>
                 </div>
             }
