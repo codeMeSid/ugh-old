@@ -1,0 +1,46 @@
+.message_handler {
+  position: fixed;
+  bottom: 5px;
+  right: 1rem;
+  width: 25vw;
+  display: flex;
+  flex-direction: column-reverse;
+  &__message {
+    min-height: 4.5rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    cursor: pointer;
+    &__icon {
+      font-size: 2.5rem;
+      margin-right: 0.5rem;
+    }
+    &__text {
+      font-size: 1.6rem;
+      text-transform: capitalize;
+    }
+    &__close {
+      margin-left: auto;
+      font-size: 1.8rem;
+    }
+    &--error {
+      background-color: rgb(255, 54, 54);
+      color: white;
+    }
+    &--success {
+      background-color: rgb(69, 146, 69);
+      color: white;
+    }
+    &:first-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@include respond(tab-port) {
+  .message_handler {
+    width: 50vw;
+  }
+}
