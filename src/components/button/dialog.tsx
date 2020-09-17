@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Button from "./main";
-import { GrClose } from 'react-icons/gr'
+import { GrClose } from 'react-icons/gr';
 import ProgressButton from './progress';
 
 const DialogButton = ({ title, fullButton, children, onAction, style = {}, size = "large", type = "link" }: { type?: string, size?: string, title: string, fullButton?: boolean, children: any, onAction?: any, style?: any }) => {
