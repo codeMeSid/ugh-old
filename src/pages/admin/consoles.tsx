@@ -11,21 +11,29 @@ const AdminConsolesDashboard = () => {
     // states
     const [consoleData, setConsoleData] = useState([]);
     const [name, setName] = useState("");
+    const [messages, setMessages] = useState([])
     // components
     const SwitchBlade = (id: string, activity: boolean) => {
         return <Switch checked={activity} onChange={() => changeConsoleActivity(id)} />
     }
     // request
     const { doRequest } = useRequest({
-        url: "/api/ugh/console/fetch/all", body: {}, method: "get", onSuccess: (data: Array<ConsoleDoc>) => {
-            setConsoleData(data.map(console => ([console.name.toUpperCase(), SwitchBlade(console.id, console.isActive)])));
-        }
+        url: "/api/ugh/console/fetch/all",
+        body: {},
+        method: "get",
+        onSuccess: (data: Array<ConsoleDoc>) => setConsoleData(data.map(console => ([console.name.toUpperCase(), SwitchBlade(console.id, console.isActive)]))),
+        onError: (errors) => setMessages(errors)
+
     });
     const { doRequest: addConsoleRequest } = useRequest({
         url: "/api/ugh/console/add",
         body: { name },
         method: "post",
-        onSuccess: doRequest
+        onSuccess: () => {
+            setMessages([{ message: "Console successfully added", type: "success" }])
+            doRequest();
+        },
+        onError: (errors) => setMessages(errors)
     })
     // effect
     useEffect(() => {
@@ -36,13 +44,15 @@ const AdminConsolesDashboard = () => {
         const { doRequest: updateConsoleRequest } = useRequest({
             url: `/api/ugh/console/update/activity/${id}`,
             method: "put",
-            body: {}
+            body: {},
+            onError: (errors) => setMessages(errors),
+            onSuccess: () => setMessages([{ message: "Console successfully updates", type: "success" }])
         });
         await updateConsoleRequest();
         await doRequest();
     }
     // render
-    return <SideLayout title={`console(${consoleData.length})`}>
+    return <SideLayout messages={messages} title={`console(${consoleData.length})`}>
         <DialogButton title="add console" onAction={addConsoleRequest}>
             <Input name="name" placeholder="name" onChange={(_, val) => setName(val)} value={name} />
         </DialogButton>

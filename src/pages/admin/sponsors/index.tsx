@@ -10,6 +10,7 @@ import Button from '../../../components/button/main';
 
 const AdminSponsorDashboard = () => {
     const [sData, setSData] = useState([]);
+    const [messages, setMessages] = useState([]);
     const SwitchBlade = (id: string, activity: boolean) => {
         return <Switch checked={activity} onChange={() => changeSActivity(id)} />
     }
@@ -42,7 +43,8 @@ const AdminSponsorDashboard = () => {
                         <a style={{ color: "blue" }}>Process</a>
                     </Link>
             ])))
-        }
+        },
+        onError: (errors) => setMessages(errors)
     })
     useEffect(() => {
         doRequest();
@@ -52,12 +54,14 @@ const AdminSponsorDashboard = () => {
         const { doRequest: updateSRequest } = useRequest({
             url: `/api/ugh/sponsor/update/activity/${id}`,
             method: "put",
-            body: {}
+            body: {},
+            onSuccess: () => setMessages([{ message: "Successfully updated", type: "success" }]),
+            onError: (errors) => setMessages(errors)
         });
         await updateSRequest();
         await doRequest();
     }
-    return <SideLayout title={`sponsors(${sData.length})`}>
+    return <SideLayout messages={messages} title={`sponsors(${sData.length})`}>
         <Table headers={[
             {
                 text: "name",

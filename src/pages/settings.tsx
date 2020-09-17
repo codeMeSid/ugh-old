@@ -6,13 +6,14 @@ import { UserDoc } from '../../server/models/user';
 import { useRequest } from '../hooks/use-request';
 import ProgressButton from '../components/button/progress';
 
-const Settings = ({ user }: { user: UserDoc }) => {
+const Settings = ({ user, errors }: { user: UserDoc, errors: any }) => {
     const [newTournamentWasAdded, setNewTournamentWasAdded] = useState(!!user.settings.newTournamentWasAdded);
     const [addedTournamentWasWon, setAddedTournamentWasWon] = useState(!!user.settings.addedTournamentWasWon);
     const [addedTournamentWillStart, setAddedTournamentWillStart] = useState(!!user.settings.addedTournamentWillStart);
     const [addedTournamentProofSent, setAddedTournamentProofSent] = useState(!!user.settings.addedTournamentProofSent);
     const [addedTournamentProofDenied, setAddedTournamentProofDenied] = useState(!!user.settings.addedTournamentProofDenied);
     const [activityInCreatedTournament, setActivityInCreatedTournament] = useState(!!user.settings.activityInCreatedTournament);
+    const [messages, setMessages] = useState(errors);
 
     const { doRequest } = useRequest({
         url: "/api/ugh/user/update/setting",
@@ -25,9 +26,11 @@ const Settings = ({ user }: { user: UserDoc }) => {
             addedTournamentProofDenied,
             activityInCreatedTournament,
         },
+        onError: (errors) => setMessages(errors),
+        onSuccess: () => setMessages({ message: "Settings updated successfully", type: "success" })
     })
 
-    return <MainLayout>
+    return <MainLayout messages={messages}>
         <div className="settings">
             <div className="settings__body">
                 <CheckInput value={newTournamentWasAdded} onChange={(val) => setNewTournamentWasAdded(val)} label="Notify via email/mobile when Someone Added a Tournament" />
@@ -50,7 +53,7 @@ const Settings = ({ user }: { user: UserDoc }) => {
 
 Settings.getInitialProps = async (ctx) => {
     const { data, errors } = await serverRequest(ctx, { url: "/api/ugh/user/fetch/detail", method: "get", body: {} });
-    return { user: data, errors };
+    return { user: data, errors: errors || [] };
 }
 
 export default Settings;

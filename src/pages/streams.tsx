@@ -33,7 +33,7 @@ const Streams = ({ streams, errors }) => {
         }
     }
 
-    return <MainLayout>
+    return <MainLayout messages={errors}>
         <section className="streams">
             <div className="streams__title">Streams</div>
             <div className="streams__subtitle">This is where you can browse through our streams</div>
@@ -83,7 +83,7 @@ Streams.getInitialProps = async (ctx) => {
     })
     return {
         streams,
-        errors
+        errors: errors ? errors : []
 
     }
 }

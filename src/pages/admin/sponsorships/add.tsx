@@ -11,6 +11,7 @@ const AddSponsorship = () => {
     const [name, setName] = useState("");
     const [color, setColor] = useState("#000008");
     const [packs, setPacks] = useState([{ duration: 6, price: 1000 }])
+    const [messages, setMessages] = useState([]);
 
     const { doRequest } = useRequest({
         url: "/api/ugh/sponsorship/add",
@@ -18,7 +19,8 @@ const AddSponsorship = () => {
             name, color, packs
         },
         method: "post",
-        onSuccess: () => Router.replace("/admin/sponsorships")
+        onSuccess: () => Router.replace("/admin/sponsorships"),
+        onError: (errors) => setMessages(errors)
     })
 
     const onChangeHandler = (name: string, val: string) => {
@@ -34,7 +36,7 @@ const AddSponsorship = () => {
         updatedPacks[index][name] = value;
         setPacks(updatedPacks);
     }
-    return <SideLayout title="add pack">
+    return <SideLayout messages={messages} title="add pack">
         <div className="detail">
             <div className="row">
                 <div className="col">

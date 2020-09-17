@@ -9,6 +9,7 @@ import Button from '../../../components/button/main'
 
 const AdminSponsorshipDashboard = () => {
     const [sData, setSData] = useState([]);
+    const [messages, setMessages] = useState([]);
     const SwitchBlade = (id: string, activity: boolean) => {
         return <Switch checked={activity} onChange={() => changeSActivity(id)} />
     }
@@ -30,7 +31,8 @@ const AdminSponsorshipDashboard = () => {
                 </ul>,
                 SwitchBlade(s.id, s.isActive)
             ])))
-        }
+        },
+        onError: (errors) => setMessages(errors)
     });
     useEffect(() => {
         doRequest();
@@ -39,13 +41,15 @@ const AdminSponsorshipDashboard = () => {
         const { doRequest: updateSRequest } = useRequest({
             url: `/api/ugh/sponsorship/update/activity/${id}`,
             method: "put",
-            body: {}
+            body: {},
+            onSuccess: () => setMessages([{ message: "Successfully updated", type: "success" }]),
+            onError: (errors) => setMessages(errors)
         });
         await updateSRequest();
         await doRequest();
     }
-   
-    return <SideLayout title={`packs(${sData.length})`}>
+
+    return <SideLayout messages={messages} title={`packs(${sData.length})`}>
         <Link href="/admin/sponsorships/add">
             <a style={{ marginBottom: 20 }}>
                 <Button text="Add Pack" />

@@ -5,6 +5,7 @@
   width: 25vw;
   display: flex;
   flex-direction: column-reverse;
+  z-index: 10;
   &__message {
     min-height: 4.5rem;
     margin-bottom: 1rem;

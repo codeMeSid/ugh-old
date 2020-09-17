@@ -9,6 +9,7 @@ import Link from 'next/link';
 const AdminUserDashboard = () => {
     // state
     const [userData, setUserData] = useState([]);
+    const [messages, setMessages] = useState([]);
     // components
     const SwitchBlade = (id: string, activity: string) =>
         activity === 'inactive'
@@ -22,11 +23,10 @@ const AdminUserDashboard = () => {
         url: "/api/ugh/user/fetch/all",
         body: {},
         method: "get",
-        onSuccess: (data: Array<UserDoc>) => {
-            setUserData(data.map((user) => {
-                return [TableLink(user.ughId, user.id), user.name, user.email, user.wallet.coins, SwitchBlade(user.id, user.activity)]
-            }))
-        }
+        onSuccess: (data: Array<UserDoc>) => setUserData(data.map((user) => {
+            return [TableLink(user.ughId, user.id), user.name, user.email, user.wallet.coins, SwitchBlade(user.id, user.activity)]
+        })),
+        onError: (errors) => setMessages(errors)
     });
     // effects
     useEffect(() => {
@@ -37,13 +37,15 @@ const AdminUserDashboard = () => {
         const { doRequest: updateUserRequest } = useRequest({
             url: `/api/ugh/user/activity/${id}`,
             method: "put",
-            body: {}
+            body: {},
+            onSuccess: () => setMessages([{ message: "User updated successfully", type: "success" }]),
+            onError: (errors) => setMessages(errors)
         });
         await updateUserRequest();
         await doRequest();
     }
     // render
-    return <SideLayout title={`users(${userData.length})`}>
+    return <SideLayout messages={messages} title={`users(${userData.length})`}>
         <Table headers={[
             { text: 'ughId', isResponsive: false },
             { text: 'name', isResponsive: true },

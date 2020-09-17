@@ -2,8 +2,8 @@ import MainLayout from "../components/layout/mainlayout";
 import { serverRequest } from "../hooks/server-request";
 import { GalleryDoc } from "../../server/models/gallery";
 
-const Gallery = ({ images }: { images: Array<GalleryDoc> }) => {
-    return <MainLayout >
+const Gallery = ({ images, errors }: { images: Array<GalleryDoc>, errors: any }) => {
+    return <MainLayout messages={errors}>
         <section className="gallery">
             <div className="gallery__title">See our events in pictures</div>
             <div className="gallery__subtitle">and stay updated with atmosphere</div>
@@ -35,7 +35,7 @@ Gallery.getInitialProps = async (ctx) => {
         });
     return {
         images: data || [],
-        errors
+        errors: errors || []
     }
 }
 

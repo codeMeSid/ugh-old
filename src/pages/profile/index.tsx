@@ -12,8 +12,8 @@ import { TournamentDoc } from "../../../server/models/tournament";
 import TournamentTab from "../../components/tournament-tab";
 const PlayerImg = require("../../public/asset/player.jpg");
 
-const UserProfile = ({ user, matches }: { user: UserDoc, matches: any }) => {
-    return <MainLayout isFullscreen>
+const UserProfile = ({ user, matches, errors }: { user: UserDoc, matches: any, errors: any }) => {
+    return <MainLayout messages={errors} isFullscreen>
         <div className="profile">
             <div className="profile__container">
                 <div className="profile__head">
@@ -91,9 +91,9 @@ const UserProfile = ({ user, matches }: { user: UserDoc, matches: any }) => {
 }
 
 UserProfile.getInitialProps = async (ctx) => {
-    const { data: tournaments }: { data: Array<TournamentDoc>, errors: Array<any> } = await serverRequest(ctx,
+    const { data: tournaments, errors: errorsA }: { data: Array<TournamentDoc>, errors: Array<any> } = await serverRequest(ctx,
         { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
-    const { data, errors } = await serverRequest(ctx, {
+    const { data: user, errors: errorsB } = await serverRequest(ctx, {
         url: "/api/ugh/user/fetch/profile",
         method: "get",
         body: {}
@@ -103,14 +103,13 @@ UserProfile.getInitialProps = async (ctx) => {
         started: [],
         completed: []
     }
-
-    if (tournaments) {
-        tournaments.forEach(tournament => {
-            matches[tournament.status] = [...matches[tournament.status], tournament];
-        })
-    }
-
-    return { user: data, matches }
+    if (tournaments) tournaments.forEach(tournament => {
+        matches[tournament.status] = [...matches[tournament.status], tournament];
+    })
+    const errors = [];
+    if (errorsA) errors.push(...errorsA);
+    if (errorsB) errors.push(...errorsB);
+    return { user, matches, errors }
 }
 
 export default UserProfile;

@@ -7,7 +7,7 @@ import Button from '../../components/button/main';
 import { AiOutlineMenu } from 'react-icons/ai';
 import TournamentCard from '../../components/card/tournament';
 
-const Tournaments = ({ tournaments }) => {
+const Tournaments = ({ tournaments, errors }) => {
     const [game, setGame] = useState('all');
     const [type, setType] = useState("upcoming");
     const [matches, setMatches] = useState([]);
@@ -26,7 +26,7 @@ const Tournaments = ({ tournaments }) => {
         }
         setMatches(newMatches.filter(t => t));
     }, [game, type])
-    return <MainLayout isFullscreen>
+    return <MainLayout messages={errors} isFullscreen>
         <div className="match">
             <div className="match__head">
                 <div className="match__head__container">
@@ -76,7 +76,7 @@ const Tournaments = ({ tournaments }) => {
 }
 
 Tournaments.getInitialProps = async (ctx) => {
-    const { data }: { data: Array<TournamentDoc> } = await serverRequest(ctx, { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
+    const { data, errors }: { data: Array<TournamentDoc>, errors: any } = await serverRequest(ctx, { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
     const tournaments = {}
 
     data?.map(t => {
@@ -92,7 +92,7 @@ Tournaments.getInitialProps = async (ctx) => {
             game: t.game
         }
     });
-    return { tournaments }
+    return { tournaments, errors: errors || [] }
 }
 
 export default Tournaments

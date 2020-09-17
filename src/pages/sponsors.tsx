@@ -17,6 +17,7 @@ const Sponsors = ({ sponsors, sponsorships }
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [message, setMessage] = useState("");
+    const [messages, setMessages] = useState([]);
     const { doRequest } = useRequest({
         url: "/api/ugh/sponsor/add", body: {
             email,
@@ -26,7 +27,17 @@ const Sponsors = ({ sponsors, sponsorships }
             name: sponsorships[sponsorshipIndex].name,
             color: sponsorships[sponsorshipIndex].color,
             message
-        }, method: "post"
+        },
+        method: "post",
+        onSuccess: () => {
+            setSponsorshipIndex(0);
+            setPackIndex(0);
+            setEmail("");
+            setPhone("");
+            setMessage("");
+            setMessages([{ message: "Request submitted", type: "success" }])
+        },
+        onError: (errors) => setMessages(errors)
     })
     const onChangeHandler = (name: string, value: string) => {
         switch (name) {
@@ -41,7 +52,7 @@ const Sponsors = ({ sponsors, sponsorships }
         setSponsorshipIndex(val[0]);
         setPackIndex(val[1]);
     }
-    return <MainLayout>
+    return <MainLayout messages={messages}>
         <div className="sponsors">
             <div className="sponsors__head">
                 <div className="sponsors__title">Sponsor us</div>

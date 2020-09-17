@@ -4,17 +4,20 @@ import { serverRequest } from "../hooks/server-request"
 import { GetServerSidePropsContext } from 'next';
 import { CoinDoc } from "../../server/models/coin";
 import ShopCard from "../components/card/shop";
+import { useState } from 'react';
 
-const Shop = ({ currentUser, coins, apiKey }: { currentUser: any, coins: Array<CoinDoc>, apiKey: string }) => {
+const Shop = ({ currentUser, coins, apiKey, errors }: { currentUser: any, coins: Array<CoinDoc>, apiKey: string, errors: any }) => {
+    const [messages, setMessages] = useState(errors);
     return <>
         <Head>
             <script src="https://checkout.razorpay.com/v1/checkout.js" />
         </Head>
-        <MainLayout>
+        <MainLayout messages={messages}>
             <section className="shop">
                 <div className="shop__container">
                     {coins.map(coin => {
                         return <ShopCard
+                            onError={(errors) => setMessages(errors)}
                             key={Math.random()}
                             coin={coin}
                             currentUser={currentUser}
@@ -32,7 +35,7 @@ Shop.getInitialProps = async (ctx: GetServerSidePropsContext) => {
     const req: any = ctx.req;
     return {
         coins: data || [],
-        errors,
+        errors: errors || [],
         currentUser: req?.currentUser,
         apiKey: process.env.RAZORPAY_ID
     };

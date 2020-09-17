@@ -8,39 +8,38 @@ import { useRequest } from "../hooks/use-request";
 import ProgressButton from "../components/button/progress";
 import Link from "next/link";
 import Router from 'next/router';
+import Input from "../components/input/input";
+import { useState } from "react";
 
-const Withdraw = ({ transactions,
-    walletBalance400,
-    withdrawRequestMade, coins }: { coins: number, transactions: Array<TransactionDoc>, walletBalance400: boolean, withdrawRequestMade: boolean }) => {
-
+const Withdraw = ({ transactions, coins, errors }: { coins: number, transactions: Array<TransactionDoc>, walletBalance400: boolean, withdrawRequestMade: boolean, errors: Array<any> }) => {
+    const [requestCoin, setRequestCoin] = useState(coins || 0);
+    const [messages, setMessages] = useState(errors);
     const { doRequest } = useRequest({
         url: "/api/ugh/transaction/create/request",
-        method: "get",
-        body: {},
+        method: "post",
+        body: {
+            coins: requestCoin
+        },
+        onError: (errors) => setMessages(errors),
         onSuccess: Router.reload
     });
 
-    return <MainLayout>
+    return <MainLayout messages={messages}>
         <div className="withdraw">
             <div className="withdraw__head">
-                <div className="withdraw__head__title">withdraw 240 coins</div>
                 <div className="withdraw__head__coins">you currently have {coins} coins</div>
-                {!walletBalance400 ? <div className="withdraw__head__warning">
-                    <div>insufficient coins to withdraw.</div>
-                    The minimum amount to withdraw is 400 coins.
-                    <div>For more details <span>
-                        <Link href={"/how-to-play"}>
-                            <a className="withdraw__head__warning__red">&gt; How to play</a>
-                        </Link>
-                    </span>.
-                    </div>
+                <div style={{ width: "35rem", margin: "0 auto" }} >
+                    <Input placeholder="withdraw coins" name="coins" type="number" value={requestCoin} onChange={(_, val) => setRequestCoin(val)} />
                 </div>
-                    : withdrawRequestMade
-                        ? <div className="withdraw__head__done">request made,waiting for admin response</div>
-                        : <ProgressButton type="link" text="Make Request" onPress={async (_, next) => {
-                            await doRequest();
-                            next()
-                        }} />}
+                <ProgressButton type="link" text="Make Request" onPress={async (_, next) => {
+                    if (requestCoin > coins || requestCoin <= 0) {
+                        next();
+                        setMessages([{ message: "Cannot withdraw more than balance" }])
+                        return;
+                    }
+                    await doRequest();
+                    next()
+                }} />
             </div>
             <div className="withdraw__body">
                 <Table headers={[
@@ -70,19 +69,17 @@ const Withdraw = ({ transactions,
 }
 
 Withdraw.getInitialProps = async (ctx) => {
-    const { data: transactions }: { data: Array<TransactionDoc> } = await serverRequest(ctx, { url: "/api/ugh/transaction/fetch", method: "get", body: {} });
-    const { data: user }: { data: UserDoc } = await serverRequest(ctx, { url: "/api/ugh/user/fetch/detail", method: "get", body: {} });
-    let withdrawRequestMade = false;
-    let walletBalance400 = false;
-    if (user) {
-        walletBalance400 = user.wallet.coins >= 400;
-        withdrawRequestMade = transactions.filter(transaction => transaction.status === "requested").length > 0;
-    }
+    const { data: transactions, errors: errorsA }: { data: Array<TransactionDoc>, errors: any } = await serverRequest(ctx, { url: "/api/ugh/transaction/fetch", method: "get", body: {} });
+    const { data: user, errors: errorsB }: { data: UserDoc, errors: any } = await serverRequest(ctx, { url: "/api/ugh/user/fetch/detail", method: "get", body: {} });
+
+    const errors = [];
+    if (errorsA) errors.push(...errorsA)
+    if (errorsB) errors.push(...errorsB)
+
     return {
         transactions: transactions || [],
-        walletBalance400,
-        withdrawRequestMade,
-        coins: user?.wallet?.coins || 0
+        coins: user?.wallet?.coins || 0,
+        errors
     }
 }
 

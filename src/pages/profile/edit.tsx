@@ -11,7 +11,7 @@ import ProgressButton from '../../components/button/progress';
 import { useRequest } from '../../hooks/use-request';
 import Router from 'next/router';
 
-const ProfileEdit = ({ user }: { user: UserDoc }) => {
+const ProfileEdit = ({ user, errors }: { user: UserDoc, errors: any }) => {
     const [uploadUrl, setUploadUrl] = useState(user?.uploadUrl);
     const [dob, setDob] = useState(user?.dob);
     const [mobile, setMobile] = useState(user?.mobile);
@@ -25,6 +25,7 @@ const ProfileEdit = ({ user }: { user: UserDoc }) => {
     const [country, setCountry] = useState(user?.address?.country ? user?.address?.country : "India");
     const [state, setState] = useState(user?.address?.state ? user?.address?.state : "Tamil Nadu");
     const [bio, setBio] = useState(user?.bio);
+    const [messages, setMessages] = useState(errors);
 
     const onChangeHandler = (name: string, val: string) => {
         switch (name) {
@@ -64,10 +65,12 @@ const ProfileEdit = ({ user }: { user: UserDoc }) => {
             bio,
             state,
             country
-        }, method: "put", onSuccess: () => Router.replace("/profile")
+        }, method: "put",
+        onSuccess: () => Router.replace("/profile"),
+        onError: (errors) => setMessages(errors)
     });
 
-    return <MainLayout>
+    return <MainLayout messages={messages}>
         <div style={{ padding: "2rem" }}>
             <h1 style={{ textAlign: "center" }}>Profile Edit</h1>
             <div className="row">
@@ -143,8 +146,8 @@ const ProfileEdit = ({ user }: { user: UserDoc }) => {
 }
 
 ProfileEdit.getInitialProps = async (ctx) => {
-    const { data, errors } = await serverRequest(ctx, { url: "/api/ugh/user/fetch/profile", body: {}, method: "get" });
-    return { user: data };
+    const { data: user, errors } = await serverRequest(ctx, { url: "/api/ugh/user/fetch/profile", body: {}, method: "get" });
+    return { user, errors: errors || [] };
 }
 
 export default ProfileEdit;

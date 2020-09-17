@@ -12,8 +12,9 @@ import Router from 'next/router';
 import DialogButton from '../../components/button/dialog';
 import PlayerCard from '../../components/card/player';
 
-const TournamentDetail = ({ tournament, matches, currentUser }: { tournament: TournamentDoc, matches: any, currentUser: any }) => {
+const TournamentDetail = ({ tournament, matches, currentUser, errors }: { tournament: TournamentDoc, matches: any, currentUser: any, errors: any }) => {
     const [timer, setTimer] = useState('');
+    const [messages, setMessages] = useState(errors);
     let stopTimer = false;
 
     const getBalanceTimer = () => {
@@ -75,10 +76,11 @@ const TournamentDetail = ({ tournament, matches, currentUser }: { tournament: To
         url: `/api/ugh/tournament/join/${tournament?.id}`,
         body: {},
         method: "get",
-        onSuccess: Router.reload
+        onSuccess: Router.reload,
+        onError: (errors) => setMessages(errors)
     });
 
-    return <MainLayout isFullscreen>
+    return <MainLayout messages={messages} isFullscreen>
         <div className="tournament">
             <div className="tournament__container">
                 <div className="tournament__card">
@@ -158,26 +160,27 @@ const TournamentDetail = ({ tournament, matches, currentUser }: { tournament: To
 
 TournamentDetail.getInitialProps = async (ctx) => {
     const { tournamentId } = ctx.query
-    const { data: tournament } = await serverRequest(ctx, {
+    const { data: tournament, errors: errorsA } = await serverRequest(ctx, {
         url: `/api/ugh/tournament/fetch/detail/${tournamentId}`,
         method: 'get',
         body: {}
     });
-    const { data, errors }: { data: Array<TournamentDoc>, errors: Array<any> } = await serverRequest(ctx, { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
+    const { data: tournaments, errors: errorsB }: { data: Array<TournamentDoc>, errors: Array<any> } = await serverRequest(ctx, { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
+
     const matches = {
         upcoming: [],
         started: [],
         completed: []
     }
-    if (!data) {
-        return {
-            matches, errors
-        }
-    }
-    data.forEach(tournament => {
+
+    if (tournaments) tournaments.forEach(tournament => {
         matches[tournament.status] = [...matches[tournament.status], tournament];
     });
-    return { matches, tournament }
+    const errors = []
+    if (errorsA) errors.push(...errorsA);
+    if (errorsB) errors.push(...errorsB);
+
+    return { matches, tournament, errors }
 }
 
 export default TournamentDetail;

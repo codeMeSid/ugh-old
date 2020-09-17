@@ -32,3 +32,5 @@ export const outerMenuLinksNonAuth = [
 ];
 
 export const socialOptions = ["youtube", "twitch", "discord"];
+
+export const itemsPerPage = 5;

@@ -13,6 +13,7 @@ const AdminCoinsDashboard = () => {
     const [coinData, setCoinData] = useState([]);
     const [cost, setCost] = useState(0);
     const [value, setValue] = useState(0);
+    const [messages, setMessages] = useState([])
     // components
     const SwitchBlade = (id: string, activity: boolean) => {
         return <Switch checked={activity} onChange={() => changeCoinActivity(id)} />
@@ -26,13 +27,18 @@ const AdminCoinsDashboard = () => {
             setCoinData(data.map(coin => {
                 return [coin.value, coin.cost, SwitchBlade(coin.id, coin.isActive)]
             }))
-        }
+        },
+        onError: (errors) => setMessages(errors)
     });
     const { doRequest: addCoinRequest } = useRequest({
         url: "/api/ugh/coin/add",
         body: { cost, value },
         method: "post",
-        onSuccess: doRequest
+        onSuccess: () => {
+            setMessages([{ message: "Coin successfully added", type: "success" }])
+            doRequest()
+        },
+        onError: (errors) => setMessages(errors)
     });
     const onChangeHandler = (name: string, val: any) => {
         switch (name) {
@@ -49,13 +55,15 @@ const AdminCoinsDashboard = () => {
         const { doRequest: updateCoinRequest } = useRequest({
             url: `/api/ugh/coin/update/activity/${id}`,
             method: "put",
-            body: {}
+            body: {},
+            onSuccess: () => setMessages([{ message: "Coin successfully updated", type: "success" }]),
+            onError: (errors) => setMessages(errors)
         });
         await updateCoinRequest();
         await doRequest();
     }
     // render
-    return <SideLayout title={`coins(${coinData.length})`}>
+    return <SideLayout messages={messages} title={`coins(${coinData.length})`}>
         <DialogButton title="add coin" onAction={addCoinRequest}>
             <Input name="cost" type="number" placeholder="cost" value={cost} onChange={onChangeHandler} />
             <Input name="value" type="number" placeholder="value" value={value} onChange={onChangeHandler} />

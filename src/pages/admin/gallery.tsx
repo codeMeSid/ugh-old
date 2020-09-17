@@ -14,15 +14,20 @@ const AdminGalleryDashboard = () => {
     const [galleryData, setGalleryData] = useState([]);
     const [name, setName] = useState("");
     const [imageUrl, setImageUrl] = useState("");
+    const [messages, setMessages] = useState([]);
     // components
     const SwitchBlade = (id: string, activity: boolean) => {
         return <Switch checked={activity} onChange={() => changeGalleryActivity(id)} />
     }
     // requests
     const { doRequest } = useRequest({
-        url: "/api/ugh/gallery/fetch/all", body: {}, method: "get", onSuccess: (data: Array<GalleryDoc>) => {
+        url: "/api/ugh/gallery/fetch/all",
+        body: {}, method: "get",
+        onSuccess: (data: Array<GalleryDoc>) => {
             setGalleryData(data.map(gallery => ([gallery.name.toUpperCase(), <a href={gallery.imageUrl} target="_blank"><img className="gallery__image" src={gallery.imageUrl} /></a>, SwitchBlade(gallery.id, gallery.isActive)])))
-        }
+        },
+        onError: (errors) => setMessages(errors)
+
     });
     const { doRequest: addGalleryRequest } = useRequest({
         url: "/api/ugh/gallery/add",
@@ -30,7 +35,11 @@ const AdminGalleryDashboard = () => {
             name, imageUrl
         },
         method: "post",
-        onSuccess: doRequest
+        onSuccess: () => {
+            setMessages([{ message: "Image added successfully", type: "success" }])
+            doRequest();
+        },
+        onError: (errors) => setMessages(errors)
     })
     // effect
     useEffect(() => {
@@ -47,13 +56,15 @@ const AdminGalleryDashboard = () => {
         const { doRequest: updateGalleryRequest } = useRequest({
             url: `/api/ugh/gallery/update/activity/${id}`,
             method: "put",
-            body: {}
+            body: {},
+            onSuccess: () => setMessages([{ message: "Updated successfully", type: "success" }]),
+            onError: (errors) => setMessages(errors)
         });
         await updateGalleryRequest();
         await doRequest();
     }
     // render
-    return <SideLayout title={`gallery(${galleryData.length})`}>
+    return <SideLayout messages={messages} title={`gallery(${galleryData.length})`}>
         <DialogButton title="add gallery" onAction={addGalleryRequest}>
             <Input name="name" placeholder="name" onChange={onChangeHandler} />
             <FileInput name="imageUrl" placeholder="gallery image" onChange={onChangeHandler} />

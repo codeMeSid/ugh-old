@@ -8,12 +8,14 @@ import FileInput from "../../components/input/file";
 import { SettingsDoc } from "../../../server/models/settings";
 import DialogButton from "../../components/button/dialog";
 
-const SettingsPage = ({ settings }: { settings: SettingsDoc }) => {
+const SettingsPage = ({ settings, errors }: { settings: SettingsDoc, errors: any }) => {
     const [coins, setCoins] = useState(settings?.tournamentFees);
     const [wallpapers, setWallpapers] = useState(settings?.wallpapers || []);
     const [uploadUrl, setUploadUrl] = useState("");
     const [title, setTitle] = useState("");
     const [href, setHref] = useState("");
+    const [messages, setMessages] = useState(errors);
+
     const { doRequest } = useRequest({
         url: "/api/ugh/settings/update",
         body: {
@@ -21,7 +23,9 @@ const SettingsPage = ({ settings }: { settings: SettingsDoc }) => {
             tournamentFees: coins,
             wallpapers
         },
-        method: "put"
+        method: "put",
+        onSuccess: () => setMessages([{ message: "Settings updated successfully", type: "success" }]),
+        onError: (errors) => setMessages(errors)
     });
 
     const onChangeHandler = async (name: string, val: any) => {
@@ -36,7 +40,7 @@ const SettingsPage = ({ settings }: { settings: SettingsDoc }) => {
     const onClickHandler = index => {
         setWallpapers(Array.from(wallpapers).filter((w, i) => i !== index));
     }
-    return <SideLayout title="settings">
+    return <SideLayout messages={messages} title="settings">
         <div className="detail">
             <div className="row">
                 <Input type="number" name="coins" placeholder="tournament fees" value={coins} onChange={onChangeHandler} />
@@ -88,7 +92,7 @@ SettingsPage.getInitialProps = async (ctx) => {
     });
     return {
         settings: data,
-        errors
+        errors: errors || []
     }
 }
 

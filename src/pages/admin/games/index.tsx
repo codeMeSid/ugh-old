@@ -9,6 +9,7 @@ import Link from 'next/link';
 
 const AdminGamesDashboard = () => {
     const [gameData, setGameData] = useState([]);
+    const [messages, setMessages] = useState([]);
     const SwitchBlade = (id: string, activity: boolean) => {
         return <Switch checked={activity} onChange={() => changeGameActivity(id)} />
     }
@@ -16,7 +17,10 @@ const AdminGamesDashboard = () => {
         <a className="table__link">{name.toUpperCase()}</a>
     </Link>
     const { doRequest } = useRequest({
-        url: "/api/ugh/game/fetch/all", body: {}, method: "get", onSuccess: (data: Array<GameDoc>) => {
+        url: "/api/ugh/game/fetch/all",
+        body: {},
+        method: "get",
+        onSuccess: (data: Array<GameDoc>) => {
             setGameData(data.map(game => ([
                 <>
                     <div>{TableLink(game.name, game.id)}</div>
@@ -25,7 +29,8 @@ const AdminGamesDashboard = () => {
                 <a href={game.imageUrl} target="_blank"><img className="gallery__image" src={game.imageUrl} /></a>,
                 SwitchBlade(game.id, game.isActive)
             ])))
-        }
+        },
+        onError: (errors) => setMessages(errors)
     });
     useEffect(() => {
         doRequest();
@@ -34,13 +39,15 @@ const AdminGamesDashboard = () => {
         const { doRequest: updateGameRequest } = useRequest({
             url: `/api/ugh/game/update/activity/${id}`,
             method: "put",
-            body: {}
+            body: {},
+            onSuccess: () => setMessages([{ message: "Game updated successfully", type: "success" }]),
+            onError: (errors) => setMessages(errors)
         });
         await updateGameRequest();
         await doRequest();
     }
     // render
-    return <SideLayout title={`games(${gameData.length})`}>
+    return <SideLayout messages={messages} title={`games(${gameData.length})`}>
         <Link href="/admin/games/add">
             <a><Button text="Add Game" /></a>
         </Link>

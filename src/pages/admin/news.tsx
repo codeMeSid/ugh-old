@@ -13,19 +13,25 @@ const AdminNewsDashboard = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [uploadUrl, setUploadUrl] = useState("");
+    const [messages, setMessages] = useState([]);
     const SwitchBlade = (id: string, activity: boolean) => {
         return <Switch checked={activity} onChange={() => changeNewsActivity(id)} />
     }
     const { doRequest } = useRequest({
-        url: "/api/ugh/news/fetch/all", body: {}, method: "get", onSuccess: (data: Array<NewsDoc>) => {
-            setNewsData(data.map(news => ([news.title, <a href={news?.uploadUrl || ""} target="_blank"><img className="gallery__image" src={news?.uploadUrl || ""} /></a>, SwitchBlade(news.id, news.isActive)])));
-        }
+        url: "/api/ugh/news/fetch/all",
+        body: {}, method: "get",
+        onSuccess: (data: Array<NewsDoc>) => setNewsData(data.map(news => ([news.title, <a href={news?.uploadUrl || ""} target="_blank"><img className="gallery__image" src={news?.uploadUrl || ""} /></a>, SwitchBlade(news.id, news.isActive)]))),
+        onError: (errors) => setMessages(errors)
     });
     const { doRequest: addNewsRequest } = useRequest({
         url: "/api/ugh/news/add",
         body: { title, description, uploadUrl },
         method: "post",
-        onSuccess: doRequest
+        onSuccess: () => {
+            setMessages([{ message: "News added successfully", type: "success" }])
+            doRequest()
+        },
+        onError: (errors) => setMessages(errors)
     });
     useEffect(() => {
         doRequest();
@@ -41,12 +47,14 @@ const AdminNewsDashboard = () => {
         const { doRequest: updateNewsRequest } = useRequest({
             url: `/api/ugh/news/update/activity/${id}`,
             method: "put",
-            body: {}
+            body: {},
+            onSuccess: () => setMessages([{ message: "Updated successfully", type: "success" }]),
+            onError: (errors) => setMessages(errors)
         });
         await updateNewsRequest();
         await doRequest();
     }
-    return <SideLayout title={`news(${newsData.length})`}>
+    return <SideLayout messages={messages} title={`news(${newsData.length})`}>
         <DialogButton title="add news" onAction={addNewsRequest}>
             <FileInput onChange={onChangeHandler} name="uploadUrl" placeholder="news image" showImage />
             <Input onChange={onChangeHandler} placeholder="title" name="title" value={title} />

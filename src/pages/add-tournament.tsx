@@ -11,8 +11,8 @@ import Router from 'next/router';
 import MainLayout from "../components/layout/mainlayout";
 import DialogButton from "../components/button/dialog";
 
-const AddTournament = ({ games, consoles }:
-    { games: Array<GameDoc>, consoles: Array<ConsoleDoc> }) => {
+const AddTournament = ({ games, consoles, errors }:
+    { games: Array<GameDoc>, consoles: Array<ConsoleDoc>, errors: any }) => {
     const [consoleIndex, setConsoleIndex] = useState(0);
     const [gameIndex, setGameIndex] = useState(0);
     const [pIndex, setPIndex] = useState(0);
@@ -22,6 +22,7 @@ const AddTournament = ({ games, consoles }:
     const [startDateTime, setStartDateTime] = useState("");
     const [endDateTime, setEndDateTime] = useState("");
     const [winnerCount, setWinnerCount] = useState(1);
+    const [messages, setMessages] = useState(errors);
 
     const { doRequest } = useRequest({
         url: "/api/ugh/tournament/add",
@@ -36,7 +37,8 @@ const AddTournament = ({ games, consoles }:
             group: games[gameIndex].groups[gIndex]
         },
         method: "post",
-        onSuccess: () => Router.replace("/my-tournament")
+        onSuccess: () => Router.replace("/my-tournament"),
+        onError: (errors) => setMessages(errors)
     })
     const onChangeHandler = (name: String, val: any) => {
         switch (name) {
@@ -73,7 +75,7 @@ const AddTournament = ({ games, consoles }:
                 break;
         }
     }
-    return <MainLayout>
+    return <MainLayout messages={messages}>
         <div className="detail" style={{ padding: "2rem" }}>
             <h1>Add Tournament</h1>
             <div className="row">
@@ -150,11 +152,15 @@ const AddTournament = ({ games, consoles }:
 }
 
 AddTournament.getInitialProps = async (ctx) => {
-    const { data: consoles } = await serverRequest(ctx, { url: "/api/ugh/console/fetch/active", body: {}, method: "get" });
-    const { data: games } = await serverRequest(ctx, { url: "/api/ugh/game/fetch/active", body: {}, method: "get" });
+    const { data: consoles, errors: errorsA } = await serverRequest(ctx, { url: "/api/ugh/console/fetch/active", body: {}, method: "get" });
+    const { data: games, errors: errorsB } = await serverRequest(ctx, { url: "/api/ugh/game/fetch/active", body: {}, method: "get" });
+    const errors = [];
+    if (errorsA) errors.push(...errorsA);
+    if (errorsB) errors.push(...errorsB);
     return {
         consoles: consoles || [],
-        games: games || []
+        games: games || [],
+        errors
     };
 }
 

@@ -11,7 +11,7 @@ import ProgressButton from '../../../components/button/progress';
 import { useRequest } from '../../../hooks/use-request';
 import Router from 'next/router';
 
-const AddGame = ({ consoles }: { consoles: ConsoleDoc[] }) => {
+const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) => {
     const [name, setName] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const [console, setConsole] = useState(consoles?.length >= 1 ? consoles[0]?.name : "");
@@ -21,7 +21,8 @@ const AddGame = ({ consoles }: { consoles: ConsoleDoc[] }) => {
     const [groups, setGroups] = useState([]);
     const [group, setGroup] = useState("duo");
     const [gParticipant, setGParticipant] = useState(2);
-
+    const [messages, setMessages] = useState(errors);
+ 
     const { doRequest } = useRequest({
         url: "/api/ugh/game/add", body: {
             name,
@@ -30,7 +31,10 @@ const AddGame = ({ consoles }: { consoles: ConsoleDoc[] }) => {
             thumbnailUrl,
             participants,
             groups,
-        }, method: "post", onSuccess: () => Router.replace("/admin/games")
+        },
+        method: "post",
+        onSuccess: () => Router.replace("/admin/games"),
+        onError: (errors) => setMessages(errors)
     })
 
     const onChangeHandler = (name: string, val: any) => {
@@ -76,7 +80,7 @@ const AddGame = ({ consoles }: { consoles: ConsoleDoc[] }) => {
     }
 
 
-    return <SideLayout title="add game">
+    return <SideLayout messages={messages} title="add game">
         <div className="detail">
             <div className="row">
                 <Input placeholder="name" name="name" value={name} onChange={onChangeHandler} />
@@ -145,7 +149,7 @@ AddGame.getInitialProps = async (ctx) => {
         method: "get",
         body: {}
     });
-    return { consoles: data || [], errors }
+    return { consoles: data || [], errors: errors || [] }
 }
 
 export default AddGame;

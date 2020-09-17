@@ -1,6 +1,6 @@
 import MessageHandler from "../message-handler"
 
-const MainLayout = ({ children, isFullscreen = false, messages }: { children?: any, isFullscreen?: boolean, messages?: Array<any> }) => {
+const MainLayout = ({ children, isFullscreen = false, messages }: { children?: any, isFullscreen?: boolean, messages?: any }) => {
     return <>
         <div className="layout layout--main">
             <div className="layout layout__body">
@@ -9,7 +9,7 @@ const MainLayout = ({ children, isFullscreen = false, messages }: { children?: a
 
             </div>
         </div>
-        <MessageHandler messageArray={messages} />
+        <MessageHandler messages={messages} />
     </>
 }
 

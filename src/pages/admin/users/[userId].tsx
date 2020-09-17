@@ -13,17 +13,19 @@ import Router from 'next/router';
 const UserDetail = ({ user }: { user: UserDoc }) => {
     const [coins, setCoins] = useState(user?.wallet?.coins || 0);
     const [role, setRole] = useState(user?.role);
+    const [messages, setMessages] = useState([]);
 
     const { doRequest } = useRequest({
         url: `/api/ugh/user/update/profile/${user?.id}`,
         body: { coins, role },
         method: "put",
-        onSuccess: Router.reload
+        onSuccess: Router.reload,
+        onError: (errors) => setMessages(errors)
     })
 
     const onChangeHandler = (_, val: number) => val < user?.wallet?.coins ? null : setCoins(val);
     const onSelectHandler = (e) => setRole(e.currentTarget.value);
-    return (<SideLayout title={user?.ughId ? user?.ughId : "not found"}>
+    return <SideLayout messages={messages} title={user?.ughId ? user?.ughId : "not found"}>
         <div className="detail">
             <div className="row">
                 <img src={user?.uploadUrl} className="detail__image" alt="User profile image" />
@@ -100,7 +102,7 @@ const UserDetail = ({ user }: { user: UserDoc }) => {
                 next();
             }} />
         </div>
-    </SideLayout>)
+    </SideLayout>
 }
 
 UserDetail.getInitialProps = async (ctx) => {

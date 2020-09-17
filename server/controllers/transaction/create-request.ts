@@ -8,9 +8,10 @@ export const transactionCreateRequestController = async (
   res: Response
 ) => {
   const { id } = req.currentUser;
+  const { coins } = req.body;
   const orderId = "ugh" + randomBytes(4).toString("hex").substr(0, 4);
   const transaction = Transaction.build({
-    amount: 240,
+    amount: coins,
     status: TransactionTypes.Requested,
     user: id,
     orderId,

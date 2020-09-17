@@ -7,7 +7,7 @@ import { useRequest } from "../../hooks/use-request";
 
 const Coin = require("../../public/asset/coins.png");
 
-const ShopCard = ({ coin, currentUser, apiKey }: { coin: CoinDoc, currentUser: any, apiKey: string }) => {
+const ShopCard = ({ coin, currentUser, apiKey, onError }: { coin: CoinDoc, currentUser: any, apiKey: string, onError: any }) => {
     const { doRequest } = useRequest({
         url: "/api/ugh/transaction/create",
         body: {
@@ -27,7 +27,8 @@ const ShopCard = ({ coin, currentUser, apiKey }: { coin: CoinDoc, currentUser: a
                             url: `/api/ugh/transaction/verify/${coin.id}`,
                             method: "post",
                             body: { orderId: razorpay_order_id, paymentId: razorpay_payment_id },
-                            onSuccess: () => Router.push("/withdraw")
+                            onSuccess: () => Router.push("/withdraw"),
+                            onError: (errors) => onError(errors)
                         });
                         await doRequest();
                     }
@@ -36,9 +37,11 @@ const ShopCard = ({ coin, currentUser, apiKey }: { coin: CoinDoc, currentUser: a
                 if (rzp) rzp.open();
             } catch (error) {
                 // add catch errors
+                onError(error.message);
             }
 
-        }
+        },
+        onError: (errors) => onError(errors)
     });
     return <div className="shop__card">
         <div className="shop__card__value">{coin.value} COINS</div>

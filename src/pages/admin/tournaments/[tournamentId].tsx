@@ -9,16 +9,19 @@ import { useState } from "react";
 import ProgressButton from "../../../components/button/progress";
 import { useRequest } from "../../../hooks/use-request";
 
-const TournamentDetail = ({ tournament }: { tournament: TournamentDoc }) => {
+const TournamentDetail = ({ tournament, errors }: { tournament: TournamentDoc, errors: any }) => {
     const [status, setStatus] = useState(tournament?.status);
+    const [messages, setMessages] = useState(errors)
 
     const { doRequest } = useRequest({
         url: `/api/ugh/tournament/update/status/${tournament?.id}`,
         body: { status },
-        method: "put"
+        method: "put",
+        onSuccess: () => setMessages([{ message: "Tournament successfully updated", type: "success" }]),
+        onError: (errors) => setMessages(errors)
     })
 
-    return <SideLayout title="Match detail">
+    return <SideLayout messages={messages} title="Match detail">
         <div className="detail">
             <div className="row">
                 <div className="col">
@@ -77,7 +80,7 @@ const TournamentDetail = ({ tournament }: { tournament: TournamentDoc }) => {
 TournamentDetail.getInitialProps = async (ctx) => {
     const { tournamentId } = ctx.query
     const { data, errors } = await serverRequest(ctx, { url: `/api/ugh/tournament/fetch/detail/${tournamentId}`, body: {}, method: "get" });
-    return { tournament: data }
+    return { tournament: data, errors: errors || [] }
 }
 
 export default TournamentDetail;

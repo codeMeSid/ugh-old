@@ -5,12 +5,11 @@ import { useRequest } from '../../../hooks/use-request';
 import { TournamentDoc } from '../../../../server/models/tournament';
 import Link from 'next/link';
 import { format } from 'date-fns';
-import DialogButton from '../../../components/button/dialog';
 import Button from '../../../components/button/main';
 
 const AdminTournamentDashboard = () => {
     const [tData, setTData] = useState([]);
-
+    const [messages, setMessages] = useState([])
     const TableLink = (name: string, id: string) => <Link href={`/admin/tournaments/${id}`}>
         <a className="table__link">{name}</a>
     </Link>
@@ -30,13 +29,14 @@ const AdminTournamentDashboard = () => {
                     t.status.toUpperCase()
                 ];
             }));
-        }
+        },
+        onError: (errors) => setMessages(errors)
     });
     useEffect(() => {
         doRequest();
     }, []);
 
-    return <SideLayout title={`match(${tData.length})`}>
+    return <SideLayout messages={messages} title={`match(${tData.length})`}>
         <Link href="/admin/tournaments/add">
             <a style={{ marginBottom: 20 }}>
                 <Button text="Add Tournament" />

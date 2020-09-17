@@ -12,14 +12,21 @@ const SignIn = () => {
     const [user, setUser] = useState(null);
     const [ughId, setUghId] = useState("");
     const [password, setPassword] = useState("");
-    const { doRequest } = useRequest({ url: "/api/ugh/user/signin", body: { ughId, password }, method: "post", onSuccess: () => Router.push("/profile") });
+    const [messages, setMessages] = useState([]);
+    const { doRequest } = useRequest({
+        url: "/api/ugh/user/signin",
+        body: { ughId, password },
+        method: "post",
+        onError: (errors) => setMessages(errors),
+        onSuccess: () => Router.push("/profile")
+    });
     const onChangeHandler = (name: string, value: string) => {
         switch (name) {
             case 'ughId': return setUghId(value);
             case 'password': return setPassword(value);
         }
     }
-    const { doRequest: doSocialRequest } = useRequest({ url: "/api/ugh/user/social-auth", body: user, method: "post", onSuccess: () => Router.push("/profile") });
+    const { doRequest: doSocialRequest } = useRequest({ url: "/api/ugh/user/social-auth", body: user, method: "post", onSuccess: () => Router.push("/profile"), onError: (errors) => setMessages(errors) });
     const onSocialAuthProvider = async (authFunc) => {
         try {
             const newUser = await authFunc();
@@ -30,14 +37,14 @@ const SignIn = () => {
             }
             setUser(socialUser);
         } catch (error) {
-            console.log({ error })
+            setMessages([{ message: "Social auth failed" }])
         }
     }
 
     useEffect(() => {
         if (user) doSocialRequest()
     }, [user])
-    return <MainLayout>
+    return <MainLayout messages={messages}>
         <section className="signin">
             <h1 style={{ marginBottom: 10 }}>Sign In</h1>
             <Input placeholder="ugh id*" name="ughId" onChange={onChangeHandler} />

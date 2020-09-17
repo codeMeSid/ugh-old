@@ -7,6 +7,7 @@ import Link from 'next/link';
 
 const AdminDashboard = () => {
     const [data, setData] = useState(null);
+    const [messages, setMessages] = useState([]);
     const pages = [
         "users",
         "tournaments",
@@ -20,12 +21,13 @@ const AdminDashboard = () => {
         url: "/api/ugh/admin/fetch/metrics",
         body: {},
         method: "get",
-        onSuccess: (val) => setData(val)
+        onSuccess: (val) => setData(val),
+        onError: (errors) => setMessages(errors)
     });
     useEffect(() => {
         doRequest();
     }, [])
-    return <SideLayout title="admin">
+    return <SideLayout messages={messages} title="admin">
         <div className="grid">
             {pages.map(page => {
                 return <Link key={page} href={`/admin/${page}`}>
@@ -34,14 +36,6 @@ const AdminDashboard = () => {
                     </a>
                 </Link>
             })}
-            {/* 
-            <NumberCard title= count={data?.tournaments} />
-            <NumberCard title= count={data?.sponsors} />
-            <NumberCard title= count={data?.streams} />
-            <NumberCard title= count={data?.consoles} />
-            <NumberCard title= count={data?.games} />
-            <NumberCard title= count={data?.news} />
-            <NumberCard title= count={data?.gallery} /> */}
         </div>
     </SideLayout>
 }

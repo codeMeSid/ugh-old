@@ -25,7 +25,7 @@ const SideLayout = ({ children, title, messages }: { children: any, title: strin
                 </div>
             </div>
         </div>
-        <MessageHandler messageArray={messages} />
+        <MessageHandler messages={messages} />
     </>
 }
 

@@ -36,7 +36,7 @@ export const transactionHandler: Array<ApiSign> = [
   {
     url: "/create/request",
     controller: transactionCreateRequestController,
-    method: HttpMethod.Get,
+    method: HttpMethod.Post,
     middlewares: [currentUser, requireAuth],
   },
   {

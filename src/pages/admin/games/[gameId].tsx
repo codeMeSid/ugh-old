@@ -3,8 +3,8 @@ import { GameDoc } from "../../../../server/models/game";
 import SideLayout from "../../../components/layout/sidelayout";
 import Input from "../../../components/input/input";
 
-const GameDetail = ({ game }: { game: GameDoc }) => {
-    return <SideLayout title={game?.name?.substr(0, 5)}>
+const GameDetail = ({ game, errors }: { game: GameDoc, errors: any }) => {
+    return <SideLayout messages={errors} title={game?.name?.substr(0, 5)}>
         <div className="detail">
             <div className="row">
                 <div className="col">
@@ -49,7 +49,7 @@ GameDetail.getInitialProps = async (ctx) => {
         body: {},
         method: "get"
     });
-    return { game: data, errors };
+    return { game: data, errors: errors || [] };
 }
 
 export default GameDetail;

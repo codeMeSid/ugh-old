@@ -6,20 +6,23 @@ import ProgressButton from "../../../components/button/progress";
 import { useRequest } from "../../../hooks/use-request";
 import { useState } from "react";
 
-const SponsorDetail = ({ sponsor, baseUrl }: { sponsor: SponsorDoc, baseUrl: string }) => {
+const SponsorDetail = ({ sponsor, baseUrl, errors }: { sponsor: SponsorDoc, baseUrl: string, errors: any }) => {
     const [sponsorId, setSponsorId] = useState(sponsor?.sponsorId);
     const [isProccessed, setIsProccessed] = useState(sponsor?.isProccessed);
+    const [messages, setMessages] = useState(errors);
     const { doRequest } = useRequest({
         url: `/api/ugh/sponsor/update/process/${sponsor?.id}`,
         method: "put",
         body: {},
         onSuccess: (data) => {
+            setMessages([{ message: "Update successfully", type: "success" }])
             setSponsorId(data.sponsorId);
             setIsProccessed(data.isProccessed);
-        }
+        },
+        onError: (errors) => setMessages(errors)
     })
 
-    return <SideLayout title={"sponsor"}>
+    return <SideLayout messages={messages} title={"sponsor"}>
         <div className="row">
             <div className="col"><Input placeholder="name" value={sponsor?.name} disabled /></div>
             <div className="col"><Input placeholder="email" value={sponsor?.contact?.email} disabled /></div>
@@ -65,14 +68,16 @@ const SponsorDetail = ({ sponsor, baseUrl }: { sponsor: SponsorDoc, baseUrl: str
 
 SponsorDetail.getInitialProps = async (ctx) => {
     const { sponsorId } = ctx.query
-    const { data, errors } = await serverRequest(ctx, {
+    const { data: sponsor, errors } = await serverRequest(ctx, {
         url: `/api/ugh/sponsor/fetch/detail/${sponsorId}`,
         method: "get",
         body: {}
     });
     const baseUrl = process.env.BASE_URL;
     return {
-        sponsor: data, errors, baseUrl
+        sponsor,
+        errors: errors || [],
+        baseUrl
     }
 }
 

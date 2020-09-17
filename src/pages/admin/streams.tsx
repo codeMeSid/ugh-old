@@ -23,17 +23,16 @@ const AdminStreamDashboard = () => {
     const [imageUrl, setImageUrl] = useState("");
     const [social, setSocial] = useState(socialOptions[0]);
     const [game, setGame] = useState("");
+    const [messages, setMessages] = useState([]);
     // components
     const SwitchBlade = (id: string, activity: boolean) => {
         return <Switch checked={activity} onChange={() => changeStreamActivity(id)} />
     }
-    const TableLink = (name: string, id: string) => <Link href={`/admin/streams/${id}`}>
-        <a className="table__link">{name}</a>
-    </Link>
     // request
     const { doRequest } = useRequest({
         url: "/api/ugh/stream/fetch/all",
-        body: {}, method: "get",
+        body: {},
+        method: "get",
         onSuccess: (data: Array<StreamDoc>) => {
             setStreamData(data.map(stream => ([<>
                 <div>{stream.name.toUpperCase()}</div>
@@ -44,13 +43,15 @@ const AdminStreamDashboard = () => {
             </a>,
             SwitchBlade(stream.id, stream.isActive)
             ])));
-        }
+        },
+        onError: (errors) => setMessages(errors)
     });
     const { doRequest: getGamesRequest } = useRequest({
         url: "/api/ugh/game/fetch/active",
         body: {},
         method: "get",
-        onSuccess: (data: Array<GameDoc>) => setGames(data)
+        onSuccess: (data: Array<GameDoc>) => setGames(data),
+        onError: (errors) => setMessages(errors)
     });
     const { doRequest: addStreamRequest } = useRequest({
         url: "/api/ugh/stream/add",
@@ -58,7 +59,11 @@ const AdminStreamDashboard = () => {
         body: {
             name, href, game, social, imageUrl
         },
-        onSuccess: doRequest
+        onSuccess: async () => {
+            setMessages([{ message: "Successfully added stream", type: "success" }])
+            doRequest();
+        },
+        onError: (errors) => setMessages(errors)
     })
     // effect
     useEffect(() => {
@@ -96,7 +101,7 @@ const AdminStreamDashboard = () => {
         }
     }
     // render
-    return <SideLayout title={`streams(${streamData.length})`}>
+    return <SideLayout messages={messages} title={`streams(${streamData.length})`}>
         <DialogButton title="add stream" onAction={addStreamRequest}>
             <Input name="name" placeholder="name" value={name} onChange={onChangeHandler} />
             <Input name="href" placeholder="href" value={href} onChange={onChangeHandler} />
@@ -108,7 +113,7 @@ const AdminStreamDashboard = () => {
                     return <Option display={name} value={name} key={name} />
                 })
             } />
-            <FileInput name="imageUrl" onChange={onChangeHandler} placeholder="thumbnail image" />
+            <FileInput name="imageUrl" onChange={onChangeHandler} placeholder="thumbnail image" showImage />
         </DialogButton>
         <Table headers={[
             {

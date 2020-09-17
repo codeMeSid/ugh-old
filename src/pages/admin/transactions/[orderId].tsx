@@ -9,8 +9,9 @@ import Router from 'next/router';
 import { useState } from "react";
 import Link from "next/link";
 
-const TransactionDetail = ({ transaction }: { transaction: TransactionDoc }) => {
-    const [tId, setTId] = useState("")
+const TransactionDetail = ({ transaction, errors }: { transaction: TransactionDoc, errors: any }) => {
+    const [tId, setTId] = useState("");
+    const [messages, setMessages] = useState(errors)
     const { doRequest: acceptRequest } = useRequest({
         url: `/api/ugh/transaction/update/request/${transaction?.orderId}`,
         method: "put",
@@ -18,7 +19,8 @@ const TransactionDetail = ({ transaction }: { transaction: TransactionDoc }) => 
             accepted: true,
             razorpayId: tId
         },
-        onSuccess: Router.reload
+        onSuccess: Router.reload,
+        onError: (errors) => setMessages(errors)
     });
     const { doRequest: rejectRequest } = useRequest({
         url: `/api/ugh/transaction/update/request/${transaction?.orderId}`,
@@ -26,10 +28,11 @@ const TransactionDetail = ({ transaction }: { transaction: TransactionDoc }) => 
         body: {
             accepted: false
         },
-        onSuccess: Router.reload
+        onSuccess: Router.reload,
+        onError: (errors) => setMessages(errors)
     });
 
-    return <SideLayout title={`${transaction?.orderId}`}>
+    return <SideLayout messages={messages} title={`${transaction?.orderId}`}>
         <div className="row">
             <div className="col">
                 <Input placeholder="order Id" value={transaction?.orderId} disabled />
@@ -78,7 +81,7 @@ TransactionDetail.getInitialProps = async (ctx) => {
         body: {},
         method: "get"
     });
-    return { transaction: data, errors };
+    return { transaction: data, errors: errors || [] };
 }
 export default TransactionDetail;
 
