@@ -10,11 +10,13 @@ export const gameAddController = async (req: Request, res: Response) => {
     imageUrl,
     participants,
     thumbnailUrl,
+    cutoff
   } = req.body;
   const existingGame = await Game.findOne({ name, console });
   if (existingGame) throw new BadRequestError("Game already exists");
   const game = Game.build({
     name,
+    cutoff,
     console,
     groups,
     imageUrl,

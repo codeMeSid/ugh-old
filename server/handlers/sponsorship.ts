@@ -3,19 +3,26 @@ import {
   HttpMethod,
   currentUser,
   requireAdminAuth,
+  validateRequest,
 } from "@monsid/ugh";
 import { sponsorshipAddController } from "../controllers/sponsorship/add";
 import { sponsorshipFetchController } from "../controllers/sponsorship/fetch";
 import { sponsorshipFetchActiveController } from "../controllers/sponsorship/fetch-active";
 import { sponsorshipUpdateActivityController } from "../controllers/sponsorship/update-activity";
 import { sponsorshipUpdateController } from "../controllers/sponsorship/update";
+import { sponsorAddValidator } from "../utils/validator/sponsor/add";
 
 export const sponsorshipHandler: Array<ApiSign> = [
   {
     url: "/add",
     method: HttpMethod.Post,
     controller: sponsorshipAddController,
-    middlewares: [currentUser, requireAdminAuth],
+    middlewares: [
+      sponsorAddValidator,
+      validateRequest,
+      currentUser,
+      requireAdminAuth,
+    ],
   },
   {
     url: "/fetch/all",

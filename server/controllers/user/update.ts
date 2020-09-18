@@ -4,6 +4,7 @@ import { BadRequestError, UserActivity, isValidDob, filter } from "@monsid/ugh";
 
 // TODO check for valid aadhar card
 export const updateUserController = async (req: Request, res: Response) => {
+  let isSocialActive = false;
   const { id } = req.currentUser;
   const {
     dob,
@@ -21,6 +22,7 @@ export const updateUserController = async (req: Request, res: Response) => {
     uploadUrl,
   } = req.body;
   const user = await User.findById(id);
+
   if (!user) throw new BadRequestError("Invalid account");
   if (uploadUrl) {
     user.uploadUrl = uploadUrl;
@@ -69,14 +71,15 @@ export const updateUserController = async (req: Request, res: Response) => {
   if (state) {
     user.address.state = state;
   }
+  console.log({user})
   if (user.isSocial && user.activity === UserActivity.Inactive) {
-    if (aadharCard && aadharUrl && dob) {
+    if (dob) {
       isValidDob(dob);
-      filter.isUnfit({ aadharCard });
+      isSocialActive = true;
       user.activity = UserActivity.Active;
       user.wallet.coins = 250;
     }
   }
   await user.save();
-  res.send(true);
+  res.send(isSocialActive);
 };

@@ -8,6 +8,7 @@ interface GameAttrs {
   groups: Array<GameGroups>;
   imageUrl: string;
   thumbnailUrl: string;
+  cutoff: number;
 }
 
 export interface GameDoc extends mongoose.Document {
@@ -18,6 +19,7 @@ export interface GameDoc extends mongoose.Document {
   imageUrl: string;
   thumbnailUrl: string;
   isActive: boolean;
+  cutoff: number;
 }
 
 interface GameModel extends mongoose.Model<GameDoc> {
@@ -30,6 +32,10 @@ const gameSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+    },
+    cutoff: {
+      type: Number,
+      default: 50,
     },
     console: {
       type: String,

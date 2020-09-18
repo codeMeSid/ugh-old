@@ -26,7 +26,12 @@ const SignIn = () => {
             case 'password': return setPassword(value);
         }
     }
-    const { doRequest: doSocialRequest } = useRequest({ url: "/api/ugh/user/social-auth", body: user, method: "post", onSuccess: () => Router.push("/profile"), onError: (errors) => setMessages(errors) });
+    const { doRequest: doSocialRequest } = useRequest({
+        url: "/api/ugh/user/social-auth",
+        body: user, method: "post",
+        onSuccess: (data) => Router.push(data ? "/profile?newauth=true" : "/profile"),
+        onError: (errors) => setMessages(errors)
+    });
     const onSocialAuthProvider = async (authFunc) => {
         try {
             const newUser = await authFunc();

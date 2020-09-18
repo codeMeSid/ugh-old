@@ -41,7 +41,7 @@ const SignUp = () => {
         body: user,
         method: "post",
         onError: (errors) => setMessages(errors),
-        onSuccess: () => Router.push("/profile")
+        onSuccess: (data) => Router.push(data ? "/profile?newauth=true" : "/profile"),
     });
 
     const onSocialAuthProvider = async (authFunc) => {

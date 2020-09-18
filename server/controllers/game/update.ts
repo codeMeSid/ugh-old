@@ -13,6 +13,7 @@ export const gameUpdateController = async (req: Request, res: Response) => {
     groups,
     imageUrl,
     thumbnailUrl,
+    cutoff,
   } = req.body;
 
   if (name) {
@@ -33,5 +34,9 @@ export const gameUpdateController = async (req: Request, res: Response) => {
   if (thumbnailUrl) {
     game.thumbnailUrl = thumbnailUrl;
   }
+  if (cutoff) {
+    game.cutoff = cutoff;
+  }
   await game.save();
+  res.send(true);
 };

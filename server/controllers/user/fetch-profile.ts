@@ -9,7 +9,5 @@ export const userFetchProfileContoller = async (
   const { ughId } = req.params;
   const user = await User.findOne({ ughId });
   if (!user) throw new BadRequestError("Player account invalid");
-  if (user.activity === UserActivity.Inactive)
-    throw new BadRequestError("Player account is Inactive");
   res.send(user);
 };

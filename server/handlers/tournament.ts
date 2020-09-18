@@ -4,6 +4,7 @@ import {
   currentUser,
   requireAuth,
   requireAdminAuth,
+  validateRequest,
 } from "@monsid/ugh";
 import { tournamentAddController } from "../controllers/tournament/add";
 import { tournamentFetchAllController } from "../controllers/tournament/fetch-all";
@@ -12,6 +13,7 @@ import { tournamentFetchAllMyController } from "../controllers/tournament/fetch-
 import { tournamentFetchAllActiveController } from "../controllers/tournament/fetch-active";
 import { tournamentUpdateStatusController } from "../controllers/tournament/update-status";
 import { tournamentJoinController } from "../controllers/tournament/join";
+import { tournamentAddValidator } from "../utils/validator/tournament/add";
 
 export const tournamentHandler: Array<ApiSign> = [
   {
@@ -48,7 +50,12 @@ export const tournamentHandler: Array<ApiSign> = [
     url: "/add",
     method: HttpMethod.Post,
     controller: tournamentAddController,
-    middlewares: [currentUser, requireAuth],
+    middlewares: [
+      tournamentAddValidator,
+      validateRequest,
+      currentUser,
+      requireAuth,
+    ],
   },
   {
     url: "/update/status/:tournamentId",
@@ -56,40 +63,4 @@ export const tournamentHandler: Array<ApiSign> = [
     controller: tournamentUpdateStatusController,
     middlewares: [currentUser, requireAdminAuth],
   },
-  // {
-  //   url: "/update/:tournamentId",
-  //   method: HttpMethod.Put,
-  //   controller: null,
-  //   middlewares: [currentUser, requireAuth],
-  // },
-  // {
-  //   url: "/update/join/:tournamentId",
-  //   method: HttpMethod.Put,
-  //   controller: null,
-  //   middlewares: [currentUser, requireAuth],
-  // },
-  // {
-  //   url: "/update/score/:tournamentId",
-  //   method: HttpMethod.Put,
-  //   controller: null,
-  //   middlewares: [],
-  // },
-  // {
-  //   url: "/update/dispute/raise/:tournamentId/:bracketId",
-  //   method: HttpMethod.Put,
-  //   controller: null,
-  //   middlewares: [currentUser, requireAuth],
-  // },
-  // {
-  //   url: "/update/dispute/resolve/:tournamentId/:bracketId",
-  //   method: HttpMethod.Put,
-  //   controller: null,
-  //   middlewares: [currentUser, requireAdminAuth],
-  // },
-  // {
-  //   url: "/update/cancel/:tournamentId",
-  //   method: HttpMethod.Put,
-  //   controller: null,
-  //   middlewares: [currentUser, requireAdminAuth],
-  // },
 ];

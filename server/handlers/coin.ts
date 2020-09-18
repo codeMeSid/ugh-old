@@ -14,7 +14,6 @@ import { coinUpdateController } from "../controllers/coin/update";
 import { coinAddValidator } from "../utils/validator/coin/add";
 
 export const coinHandler: Array<ApiSign> = [
-  // done
   {
     url: "/fetch/all",
     method: HttpMethod.Get,
@@ -38,17 +37,10 @@ export const coinHandler: Array<ApiSign> = [
       requireAdminAuth,
     ],
   },
-  // done
   {
     url: "/update/activity/:coinId",
     method: HttpMethod.Put,
     controller: coinUpdateActivityController,
     middlewares: [currentUser, requireAdminAuth],
   },
-  // {
-  //   url: "/update/:coinId",
-  //   method: HttpMethod.Put,
-  //   controller: coinUpdateController,
-  //   middlewares: [currentUser, requireAdminAuth],
-  // },
 ];

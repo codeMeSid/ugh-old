@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { User } from "../../models/user";
-import { generateToken } from "@monsid/ugh";
+import { generateToken, UserActivity } from "@monsid/ugh";
 import { randomBytes } from "crypto";
 import { JWT_KEY } from "../../utils/env-check";
 
-// TODO send email
 export const userSocialAuthController = async (req: Request, res: Response) => {
   const { email, uploadUrl, name } = req.body;
   let user = await User.findOne({ email, name });
+  let isNew = false;
   if (!user) {
     const ughId =
       `${name}`.trim().toLowerCase().substr(0, 3) +
@@ -20,6 +20,7 @@ export const userSocialAuthController = async (req: Request, res: Response) => {
     });
     user.isSocial = true;
     await user.save();
+    isNew = true;
   }
   const userJwt = generateToken(
     {
@@ -31,5 +32,5 @@ export const userSocialAuthController = async (req: Request, res: Response) => {
     JWT_KEY!
   );
   req.session = { ...req.session, jwt: userJwt };
-  res.status(200).send(user.role);
+  res.status(200).send(isNew);
 };

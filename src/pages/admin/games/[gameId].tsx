@@ -26,6 +26,9 @@ const GameDetail = ({ game, errors }: { game: GameDoc, errors: any }) => {
                     </a>
                 </div>
             </div>
+            <div className="row">
+                <Input placeholder="minimum player %" value={game?.cutoff || 50} disabled />
+            </div>
             <h2>Participants</h2>
             <div className="row">
                 {

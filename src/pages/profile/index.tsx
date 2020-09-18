@@ -3,7 +3,7 @@ import Button from "../../components/button/main";
 import MainLayout from "../../components/layout/mainlayout";
 import { serverRequest } from "../../hooks/server-request";
 import Link from 'next/link';
-import React from "react";
+import React, { useEffect } from "react";
 import { AiFillTrophy } from "react-icons/ai";
 import { FaPiggyBank } from "react-icons/fa";
 import { ImGift } from 'react-icons/im';
@@ -12,7 +12,12 @@ import { TournamentDoc } from "../../../server/models/tournament";
 import TournamentTab from "../../components/tournament-tab";
 const PlayerImg = require("../../public/asset/player.jpg");
 
-const UserProfile = ({ user, matches, errors }: { user: UserDoc, matches: any, errors: any }) => {
+const UserProfile = ({ user, matches, errors, isNewAuth, isSocialAuth }: { user: UserDoc, matches: any, errors: any, isNewAuth: boolean, isSocialAuth: boolean }) => {
+
+    useEffect(() => {
+        if (isNewAuth) alert("Welcome to UGH! Complete your profile, to get bonus prize of 250 UGH Coins.");
+        else if (isSocialAuth) alert("Congratulations!!! You've been awarded 250 UGH coins. Let's get cracking.");
+    }, []);
     return <MainLayout messages={errors} isFullscreen>
         <div className="profile">
             <div className="profile__container">
@@ -109,7 +114,9 @@ UserProfile.getInitialProps = async (ctx) => {
     const errors = [];
     if (errorsA) errors.push(...errorsA);
     if (errorsB) errors.push(...errorsB);
-    return { user, matches, errors }
+    const isNewAuth = ctx.query.newauth === "true";
+    const isSocialAuth = ctx.query.socialauth === "true";
+    return { user, matches, errors, isNewAuth, isSocialAuth }
 }
 
 export default UserProfile;

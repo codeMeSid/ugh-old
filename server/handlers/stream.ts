@@ -41,10 +41,4 @@ export const streamHandler: Array<ApiSign> = [
     controller: streamUpdateActivityController,
     middlewares: [currentUser, requireAdminAuth],
   },
-  //   {
-  //     url: "/update/:streamId",
-  //     method: HttpMethod.Put,
-  //     controller: null,
-  //     middlewares: [currentUser, requireAdminAuth],
-  //   },
 ];

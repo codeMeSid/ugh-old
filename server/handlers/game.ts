@@ -3,6 +3,7 @@ import {
   HttpMethod,
   currentUser,
   requireAdminAuth,
+  validateRequest,
 } from "@monsid/ugh";
 import { gameAddController } from "../controllers/game/add";
 import { gameFetchController } from "../controllers/game/fetch";
@@ -10,13 +11,19 @@ import { gameFetchActiveController } from "../controllers/game/fetch-active";
 import { gameUpdateActivityController } from "../controllers/game/activity";
 import { gameUpdateController } from "../controllers/game/update";
 import { gameFetchDetailController } from "../controllers/game/fetch-detail";
+import { gameAddValidator } from "../utils/validator/game/add";
 
 export const gameHandler: Array<ApiSign> = [
   {
     url: "/add",
     method: HttpMethod.Post,
     controller: gameAddController,
-    middlewares: [currentUser, requireAdminAuth],
+    middlewares: [
+      gameAddValidator,
+      validateRequest,
+      currentUser,
+      requireAdminAuth,
+    ],
   },
   {
     url: "/fetch/all",

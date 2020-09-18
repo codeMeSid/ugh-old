@@ -21,8 +21,9 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
     const [groups, setGroups] = useState([]);
     const [group, setGroup] = useState("duo");
     const [gParticipant, setGParticipant] = useState(2);
+    const [cutoff, setCutoff] = useState(50);
     const [messages, setMessages] = useState(errors);
- 
+
     const { doRequest } = useRequest({
         url: "/api/ugh/game/add", body: {
             name,
@@ -31,6 +32,7 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
             thumbnailUrl,
             participants,
             groups,
+            cutoff
         },
         method: "post",
         onSuccess: () => Router.replace("/admin/games"),
@@ -45,6 +47,7 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
             case 'participant': return setParticipant(val);
             case 'group': return setGroup(val);
             case 'gParticipant': return setGParticipant(val);
+            case 'cutoff': return setCutoff(val);
         }
     }
 
@@ -86,18 +89,23 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
                 <Input placeholder="name" name="name" value={name} onChange={onChangeHandler} />
             </div>
             <div className="row">
-                <Select
-                    value={console}
-                    name="console"
-                    onSelect={e => setConsole(e.currentTarget.value)}
-                    placeholder="console"
-                    options={consoles?.map((console: ConsoleDoc) => <Option key={console.name} value={console.name} display={console.name.toUpperCase()} />)} />
+                <div className="col">
+                    <Select
+                        value={console}
+                        name="console"
+                        onSelect={e => setConsole(e.currentTarget.value)}
+                        placeholder="console"
+                        options={consoles?.map((console: ConsoleDoc) => <Option key={console.name} value={console.name} display={console.name.toUpperCase()} />)} />
+                </div>
+                <div className="col">
+                    <Input placeholder="minimum player %" name="cutoff" onChange={onChangeHandler} value={cutoff} type="number" />
+                </div>
             </div>
             <div style={{ maxWidth: "40rem", margin: "0 auto" }}>
-                <FileInput name="imageUrl" placeholder="main image" onChange={onChangeHandler} />
+                <FileInput showImage name="imageUrl" placeholder="main image" onChange={onChangeHandler} />
             </div>
             <div style={{ maxWidth: "40rem", margin: "0 auto" }}>
-                <FileInput name="thumbnailUrl" placeholder="thmbnail image" onChange={onChangeHandler} />
+                <FileInput showImage name="thumbnailUrl" placeholder="thmbnail image" onChange={onChangeHandler} />
             </div>
             <div className="row">
                 <div className="col">

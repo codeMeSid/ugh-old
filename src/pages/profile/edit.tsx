@@ -66,7 +66,7 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc, errors: any }) => {
             state,
             country
         }, method: "put",
-        onSuccess: () => Router.replace("/profile"),
+        onSuccess: (data) => alert(data),//Router.replace(!!data ? "/profile?socialauth=true" : "/profile"),
         onError: (errors) => setMessages(errors)
     });
 
