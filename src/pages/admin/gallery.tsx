@@ -67,7 +67,7 @@ const AdminGalleryDashboard = () => {
     return <SideLayout messages={messages} title={`gallery(${galleryData.length})`}>
         <DialogButton title="add gallery" onAction={addGalleryRequest}>
             <Input name="name" placeholder="name" onChange={onChangeHandler} />
-            <FileInput name="imageUrl" placeholder="gallery image" onChange={onChangeHandler} />
+            <FileInput showImage name="imageUrl" placeholder="gallery image" onChange={onChangeHandler} />
         </DialogButton>
         <Table headers={[
             { text: "name", isResponsive: true },

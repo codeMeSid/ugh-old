@@ -23,6 +23,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     playerCount,
     group,
   } = req.body;
+
   const msIn15Mins = 1000 * 60 * 15;
   const msIn1Hr = 1000 * 60 * 60;
   const sdt = new Date(startDateTime).valueOf();
@@ -47,8 +48,10 @@ export const tournamentAddController = async (req: Request, res: Response) => {
   try {
     const game = await Game.findById(gameId).session(session);
     const settings = await Settings.findOne().session(session);
+    const user = await User.findById(cUser.id).session(session);
     if (!game) throw new BadRequestError("Invalid game");
     if (!settings) throw new BadRequestError("Failed to create tournament");
+    if (!user) throw new BadRequestError("Invalid user");
     const totalWinnings = parseInt(playerCount) * parseInt(coins);
     const earning = Math.round((settings.tournamentFees / 100) * totalWinnings);
     const winnerCoin = totalWinnings - earning;
@@ -66,7 +69,6 @@ export const tournamentAddController = async (req: Request, res: Response) => {
       winnerCount: parseInt(winnerCount),
     });
     if (cUser.role === UserRole.Player) {
-      const user = await User.findById(cUser.id).session(session);
       if (!user) throw new BadRequestError("Invalid user");
       const balance = user.wallet.coins;
       const fees = tournament.coins;
@@ -79,9 +81,10 @@ export const tournamentAddController = async (req: Request, res: Response) => {
         coins: winnerCoin,
       });
       tournament.players.push(user);
-      await user.save({ session });
     }
-
+    await user.save({ session });
+    await tournament.save({ session });
+    await session.commitTransaction();
     // start tournament
     timer.schedule(
       tournament.id,
@@ -96,11 +99,15 @@ export const tournamentAddController = async (req: Request, res: Response) => {
         // TODO create brackets
         // TODO assign players
 
-        const tournament = await Tournament.findById(id);
-        if (!tournament) return;
-        if (tournament.status === TournamentStatus.Upcoming) {
-          tournament.set({ status: TournamentStatus.Started });
-          await tournament.save();
+        try {
+          const tournament = await Tournament.findById(id);
+          if (!tournament) return;
+          if (tournament.status === TournamentStatus.Upcoming) {
+            tournament.set({ status: TournamentStatus.Started });
+            await tournament.save();
+          }
+        } catch (error) {
+          console.log("start");
         }
 
         //////////////////////////////////////////////////////////////
@@ -119,7 +126,6 @@ export const tournamentAddController = async (req: Request, res: Response) => {
       `${tournament.id}-15min`,
       new Date(new Date(startDateTime).valueOf() - 1000 * 60 * 15),
       async ({ id }: { id: string }) => {
-
         //////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////
@@ -127,24 +133,28 @@ export const tournamentAddController = async (req: Request, res: Response) => {
         //////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////
         // TODO remove tournament from all users
-        const tournament = await Tournament.findById(id).populate(
-          "game",
-          "cutoff",
-          "Games"
-        );
-        if (!tournament) return;
-        // players joined / players required
-        const attendance =
-          (tournament.players.length / tournament.playerCount) * 100;
-        if (
-          tournament.status === TournamentStatus.Upcoming &&
-          attendance < tournament.game.cutoff
-        ) {
-          // TODO send mail and add back coins
-          tournament.set({ status: TournamentStatus.Completed });
-          await tournament.save();
-          timer.cancel(id);
-          timer.cancel(`${id}-end`);
+        try {
+          const tournament = await Tournament.findById(id).populate(
+            "game",
+            "cutoff",
+            "Games"
+          );
+          if (!tournament) return;
+          // players joined / players required
+          const attendance =
+            (tournament.players.length / tournament.playerCount) * 100;
+          if (
+            tournament.status === TournamentStatus.Upcoming &&
+            attendance < tournament.game.cutoff
+          ) {
+            // TODO send mail and add back coins
+            tournament.set({ status: TournamentStatus.Completed });
+            await tournament.save();
+            timer.cancel(id);
+            timer.cancel(`${id}-end`);
+          }
+        } catch (error) {
+          console.log("start-15");
         }
 
         //////////////////////////////////////////////////////////////
@@ -162,21 +172,23 @@ export const tournamentAddController = async (req: Request, res: Response) => {
       `${tournament.id}-end`,
       new Date(endDateTime),
       async ({ id }: { id: string }) => {
-        const tournament = await Tournament.findById(id);
-        if (!tournament) return;
-        if (tournament.status === TournamentStatus.Started) {
-          tournament.set({ status: TournamentStatus.Completed });
-          await tournament.save();
+        try {
+          const tournament = await Tournament.findById(id);
+          if (!tournament) return;
+          if (tournament.status === TournamentStatus.Started) {
+            tournament.set({ status: TournamentStatus.Completed });
+            await tournament.save();
+          }
+        } catch (error) {
+          console.log("end");
         }
       },
       { id: tournament.id }
     );
-    await tournament.save({ session });
-    await session.commitTransaction();
   } catch (error) {
     await session.abortTransaction();
     throw new BadRequestError(error.message);
   }
-  await session.endSession();
+  session.endSession();
   res.send(true);
 };

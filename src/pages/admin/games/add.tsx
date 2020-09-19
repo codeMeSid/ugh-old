@@ -2,7 +2,7 @@ import { useState } from 'react';
 import SideLayout from "../../../components/layout/sidelayout";
 import Input from "../../../components/input/input";
 import FileInput from '../../../components/input/file';
-import { AiOutlineAppstoreAdd } from 'react-icons/ai';
+import { IoIosAddCircleOutline } from 'react-icons/io';
 import { serverRequest } from '../../../hooks/server-request';
 import { ConsoleDoc } from '../../../../server/models/console';
 import Select from '../../../components/input/select';
@@ -17,8 +17,8 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
     const [console, setConsole] = useState(consoles?.length >= 1 ? consoles[0]?.name : "");
     const [thumbnailUrl, setThumbnailUrl] = useState("");
     const [participant, setParticipant] = useState(5);
-    const [participants, setParticipants] = useState([1]);
-    const [groups, setGroups] = useState([]);
+    const [participants, setParticipants] = useState([4]);
+    const [groups, setGroups] = useState([{ name: "Single", participants: 1 }]);
     const [group, setGroup] = useState("duo");
     const [gParticipant, setGParticipant] = useState(2);
     const [cutoff, setCutoff] = useState(50);
@@ -112,7 +112,7 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
                     <Input placeholder="participant" name="participant" value={participant} type="number" onChange={onChangeHandler} />
                 </div>
                 <div className="col">
-                    <AiOutlineAppstoreAdd style={{ fontSize: "2.6rem", cursor: "pointer" }} onClick={onParticipantAddHandler} />
+                    <IoIosAddCircleOutline style={{ fontSize: "2.6rem", cursor: "pointer" }} onClick={onParticipantAddHandler} />
                 </div>
             </div>
             <div className="row">
@@ -131,12 +131,12 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
                 </div>
             </div>
             <div className="row">
-                <AiOutlineAppstoreAdd style={{ fontSize: "2.6rem", cursor: "pointer" }} onClick={onGroupAddHandler} />
+                <IoIosAddCircleOutline style={{ fontSize: "2.6rem", cursor: "pointer" }} onClick={onGroupAddHandler} />
             </div>
             <div className="row">
                 {
                     groups.map((val, index) => {
-                        return <div onClick={() => onPillGroupClickHanlder(index)} className="pill" key={val}>{val.name}-{val.participants}</div>
+                        return <div onClick={() => onPillGroupClickHanlder(index)} className="pill" key={Math.random()}>{val.name}-{val.participants}</div>
                     })
                 }
             </div>

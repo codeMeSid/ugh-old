@@ -28,9 +28,8 @@ const TournamentCard = ({ match }: { match: TournamentDoc }) => {
                 //     Router.reload();
                 // }
                 stopTimer = true;
-                return setTimer(match.status.toUpperCase())
             }
-            setTimer(diffTime);
+            return setTimer(diffTime);
         }
     }
 

@@ -28,12 +28,12 @@ const AddTournament = ({ games, consoles, errors }:
         url: "/api/ugh/tournament/add",
         body: {
             name,
-            coins,
-            winnerCount,
+            coins: coins || 0,
+            winnerCount: winnerCount || 0,
             startDateTime: new Date(startDateTime),
             endDateTime: new Date(endDateTime),
             game: games[gameIndex].id,
-            playerCount: games[gameIndex].participants[pIndex],
+            playerCount: games[gameIndex]?.participants[pIndex] || 0,
             group: games[gameIndex].groups[gIndex]
         },
         method: "post",

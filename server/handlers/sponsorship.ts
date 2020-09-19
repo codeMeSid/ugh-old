@@ -10,7 +10,7 @@ import { sponsorshipFetchController } from "../controllers/sponsorship/fetch";
 import { sponsorshipFetchActiveController } from "../controllers/sponsorship/fetch-active";
 import { sponsorshipUpdateActivityController } from "../controllers/sponsorship/update-activity";
 import { sponsorshipUpdateController } from "../controllers/sponsorship/update";
-import { sponsorAddValidator } from "../utils/validator/sponsor/add";
+import { sponsorshipAddValidator } from "../utils/validator/sponsorship/add";
 
 export const sponsorshipHandler: Array<ApiSign> = [
   {
@@ -18,7 +18,7 @@ export const sponsorshipHandler: Array<ApiSign> = [
     method: HttpMethod.Post,
     controller: sponsorshipAddController,
     middlewares: [
-      sponsorAddValidator,
+      sponsorshipAddValidator,
       validateRequest,
       currentUser,
       requireAdminAuth,

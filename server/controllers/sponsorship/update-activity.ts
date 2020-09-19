@@ -7,7 +7,6 @@ export const sponsorshipUpdateActivityController = async (
   res: Response
 ) => {
   const { sponsorshipId } = req.params;
-  console.log({ sponsorshipId });
   const sponsorship = await Sponsorship.findById(sponsorshipId);
   if (!sponsorship) throw new BadRequestError("Sponsorship doesnt exist");
   sponsorship.set({ isActive: !sponsorship.isActive });

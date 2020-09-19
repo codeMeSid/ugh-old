@@ -8,6 +8,8 @@ const {
   JWT_KEY,
   NODE_ENV,
   BASE_URL,
+  EMAIL,
+  PASSWORD,
 } = process.env;
 
 if (!PORT) {
@@ -40,6 +42,16 @@ if (!RAZORPAY_SECRET) {
   throw new Error();
 }
 
+if (!EMAIL) {
+  errorlog("EMAIL is required");
+  throw new Error();
+}
+
+if (!PASSWORD) {
+  errorlog("PASSWORD is required");
+  throw new Error();
+}
+
 export {
   PORT,
   MONGO_URI,
@@ -48,4 +60,6 @@ export {
   JWT_KEY,
   NODE_ENV,
   BASE_URL,
+  EMAIL,
+  PASSWORD,
 };

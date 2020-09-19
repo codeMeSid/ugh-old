@@ -32,7 +32,7 @@
       }
       &__list {
         display: flex;
-        justify-content: flex-start;
+        justify-content: center;
         flex-wrap: wrap;
         max-width: 100rem;
         margin-top: 2rem;
@@ -134,11 +134,10 @@
     &__list {
       margin: 0 auto;
       margin-top: 2rem;
-      max-width: 100rem;
+      max-width: 95vw;
       display: flex;
       flex-wrap: wrap;
       justify-content: flex-start;
-      min-width: 20rem;
       @include respond(tab-port) {
         & {
           justify-content: center;

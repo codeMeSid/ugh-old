@@ -3,15 +3,11 @@ import { body } from "express-validator";
 export const tournamentAddValidator = [
   body("name").not().isEmpty().withMessage("Name is required"),
   body("coins")
-    .not()
-    .isNumeric()
     .custom((val) => {
       return val > 0;
     })
     .withMessage("Entry coins required"),
   body("winnerCount")
-    .not()
-    .isNumeric()
     .custom((val) => {
       return val >= 1;
     })
@@ -35,8 +31,6 @@ export const tournamentAddValidator = [
     .withMessage("Match cannot end before starting"),
   body("game").not().isEmpty().withMessage("valid game is required"),
   body("playerCount")
-    .not()
-    .isNumeric()
     .custom((val) => {
       return val >= 1;
     })

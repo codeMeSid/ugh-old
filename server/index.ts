@@ -12,8 +12,15 @@ import {
 } from "@monsid/ugh";
 import { app, nextApp } from "./app";
 import { apiRouter } from "./routes/api-routes";
-import { MONGO_URI, RAZORPAY_ID, RAZORPAY_SECRET } from "./utils/env-check";
+import {
+  EMAIL,
+  MONGO_URI,
+  PASSWORD,
+  RAZORPAY_ID,
+  RAZORPAY_SECRET,
+} from "./utils/env-check";
 import { siteRouter } from "./routes/site-routes";
+import { mailer } from "./utils/mailer";
 
 const Agendash = require("agendash");
 const start = async () => {
@@ -33,6 +40,7 @@ const start = async () => {
     );
     await timer.connect(MONGO_URI);
     await paymentHandler.init(RAZORPAY_ID, RAZORPAY_SECRET);
+    mailer.init(PASSWORD, EMAIL);
     app.use("/jobs", currentUser, authAdminRoute, Agendash(timer._agenda));
     app.use("/api/ugh", apiRouter);
     app.use(errorHandler);
