@@ -19,7 +19,8 @@ const Sponsors = ({ sponsors, sponsorships }
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const { doRequest } = useRequest({
-        url: "/api/ugh/sponsor/add", body: {
+        url: "/api/ugh/sponsor/add",
+        body: {
             email,
             phone,
             duration: sponsorships[sponsorshipIndex].packs[packIndex].duration,
@@ -30,12 +31,12 @@ const Sponsors = ({ sponsors, sponsorships }
         },
         method: "post",
         onSuccess: () => {
+            setMessages([{ message: "Request submitted", type: "success" }])
             setSponsorshipIndex(0);
             setPackIndex(0);
             setEmail("");
             setPhone("");
             setMessage("");
-            setMessages([{ message: "Request submitted", type: "success" }])
         },
         onError: (errors) => setMessages(errors)
     })

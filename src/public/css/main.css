@@ -482,7 +482,7 @@ tr:nth-child(even) {
       margin-right: 0.7rem; }
 
 .footer {
-  background-color: blue;
+  background-color: #01071A;
   padding: 2rem; }
   .footer__l1 {
     text-align: center;
@@ -528,13 +528,17 @@ tr:nth-child(even) {
 
 .news {
   width: 100%;
-  background-color: white;
-  padding: 2rem; }
+  padding: 2rem;
+  background-image: url("../asset/news.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat; }
   .news__title {
     font-size: 2.8rem;
     text-transform: capitalize;
     padding-bottom: 1rem;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid white;
+    color: white;
     font-weight: bold; }
   .news__list {
     height: 20rem;
