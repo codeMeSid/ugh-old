@@ -11,15 +11,13 @@ export const featureHandlers: Array<ApiSign> = [
     method: HttpMethod.Get,
     controller: async (req: Request, res: Response) => {
       await mailer.send(
-        MailerTemplate.Welcome,
-        { username: "poplu" },
-        "siddhanthbajoria@gmail.com",
-        "sadasd"
+        MailerTemplate.Activation,
+        { href: `${process.env.BASE_URL}/login`, ughId: "Player" },
+        "siddhanthbajoria@gmail.com,Touseefb2@live.com",
+        "activation mail"
       );
       res.send("works");
     },
     middlewares: [],
   },
-  // payment
-  // refund
 ];

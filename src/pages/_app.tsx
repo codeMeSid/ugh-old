@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { serverRequest } from "../hooks/server-request";
 import TopNavbar from "../components/navbar/topnav";
 import SponsorSlider from "../components/sponsor-slider";
@@ -8,6 +9,10 @@ import "react-awesome-button/dist/styles.css";
 
 const AppComponent = ({ Component, pageProps, router, currentUser }) => {
   return <>
+    <Head>
+     
+    </Head>
+
     {!router.route.match('\/admin') && <TopNavbar currentUser={currentUser} />}
     <Component {...pageProps} key={router.route} currentUser={currentUser} />
     {!router.route.match('\/admin') && <SponsorSlider />}

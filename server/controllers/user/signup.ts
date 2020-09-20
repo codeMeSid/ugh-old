@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { filter, BadRequestError } from "@monsid/ugh";
 import { User } from "../../models/user";
+import { mailer } from "../../utils/mailer";
+import { MailerTemplate } from "../../utils/mailer-template";
 
-// TODO send email
 export const signupController = async (req: Request, res: Response) => {
   const { ughId, name, email, dob, password } = req.body;
   filter.isUnfit({ email });
@@ -18,5 +19,14 @@ export const signupController = async (req: Request, res: Response) => {
     password,
   });
   await newUser.save();
+  mailer.send(
+    MailerTemplate.Activation,
+    {
+      href: `${process.env.BASE_URL}/account/activate/${newUser.ughId}`,
+      ughId: newUser.ughId,
+    },
+    newUser.email,
+    "UGH Registeration"
+  );
   res.status(201).send(true);
 };

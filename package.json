@@ -2,8 +2,9 @@
   "name": "next-mern-ssr-template",
   "version": "1.0.0",
   "description": "",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "NODE_ENV=production node dist/index.js",
+    "start": "NODE_ENV=production node ./dist/index.js",
     "dev": "ts-node-dev --no-notify --project tsconfig.server.json server/index.ts & npm run sass:watch",
     "dev2": "ts-node --project tsconfig.server.json server/index.ts & npm run sass:watch",
     "dev:client": "next",
@@ -13,7 +14,9 @@
     "build:client": "next build",
     "build:server": "tsc --project tsconfig.server.json",
     "build": "npm run sass:build && npm run build:client && npm run build:server",
-    "heroku:postbuild": "npm run build"
+    "heroku:postbuild": "npm run build",
+    "gcp-build": "npm run build",
+    "deploy": "gcloud app deploy"
   },
   "dependencies": {
     "@monsid/ugh": "0.0.49",

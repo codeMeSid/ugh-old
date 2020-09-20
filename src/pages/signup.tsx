@@ -22,7 +22,7 @@ const SignUp = () => {
         body: { ughId, name, email, dob: new Date(dob), password },
         method: "post",
         onError: (errors) => setMessages(errors),
-        onSuccess: () => Router.push("/activation")
+        onSuccess: () => Router.push("/account/activate")
     });
 
     const onChangeHandler = (name: string, value: string) => {

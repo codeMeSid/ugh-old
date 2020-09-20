@@ -22,8 +22,6 @@ class Mailer {
   }
 
   async send(type: MailerTemplate, data: Object, to: string, subject: string) {
-    console.log({ meta: this.transporter.meta });
-
     const tempPath = path.join(__dirname, `/views/${type}.html`);
     const source = fs.readFileSync(tempPath, "utf-8").toString();
     const template = handlebar.compile(source);
@@ -32,7 +30,7 @@ class Mailer {
     return new Promise((resolve) => {
       return this.transporter.sendMail(
         {
-          from: process.env.EMAIL,
+          from: this.transporter.options.from,
           to,
           subject: subject || "Ultimate Gamers Hub Notification",
           html: htmlTemplate,
