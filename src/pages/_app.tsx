@@ -5,7 +5,6 @@ import SponsorSlider from "../components/sponsor-slider";
 import Footer from "../components/footer";
 import "../public/css/main.css";
 import "react-awesome-button/dist/styles.css";
-import "react-datepicker/dist/react-datepicker.css";
 
 
 const AppComponent = ({ Component, pageProps, router, currentUser }) => {
