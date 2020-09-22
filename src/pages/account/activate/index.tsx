@@ -11,9 +11,3 @@ export default () => <MainLayout>
         </div>
     </div>
 </MainLayout >
-{/* <div class="container">
- 	<div class="row">
-
-          <h3 align="center" style="margin-bottom: 198px ;color: white;font: 500 1.75em/1 "Montserrat",sans-serif;"> </h3> 
-          </div>
-      </div> */}
