@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Router from 'next/router'
 import MainLayout from "../components/layout/mainlayout";
 import Input from "../components/input/input";

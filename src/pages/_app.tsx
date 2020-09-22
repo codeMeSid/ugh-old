@@ -5,14 +5,14 @@ import SponsorSlider from "../components/sponsor-slider";
 import Footer from "../components/footer";
 import "../public/css/main.css";
 import "react-awesome-button/dist/styles.css";
+import "react-datepicker/dist/react-datepicker.css";
 
 
 const AppComponent = ({ Component, pageProps, router, currentUser }) => {
   return <>
     <Head>
-     
+      
     </Head>
-
     {!router.route.match('\/admin') && <TopNavbar currentUser={currentUser} />}
     <Component {...pageProps} key={router.route} currentUser={currentUser} />
     {!router.route.match('\/admin') && <SponsorSlider />}

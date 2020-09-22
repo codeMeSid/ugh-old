@@ -15,7 +15,10 @@ const Input = ({ type = "text", placeholder, onChange = () => { }, noHelp = fals
             case 'date':
                 const valDate = new Date(val);
                 const day = valDate.getDate() < 10 ? '0' + valDate.getDate() : valDate.getDate();
-                const month = valDate.getMonth() < 10 ? '0' + valDate.getMonth() : valDate.getMonth();
+                let month: any = valDate.getMonth();
+                if (month >= 0 && month < 9) month = `0${month + 1}`;
+                else if (month >= 9 && month < 11) month += 1;
+                else month = 12
                 const year = valDate.getFullYear();
                 return `${year}-${month}-${day}`
             default: return val
