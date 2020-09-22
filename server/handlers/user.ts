@@ -28,12 +28,6 @@ import { updateUserProfileController } from "../controllers/user/update-profile"
 import { userFetchProfileContoller } from "../controllers/user/fetch-profile";
 
 export const userHandlers: Array<ApiSign> = [
-  // {
-  //   url: "/active/:activationkey",
-  //   method: HttpMethod.Get,
-  //   controller: activeUserController,
-  //   middlewares: [],
-  // },
   {
     url: "/fetch/profile",
     method: HttpMethod.Get,
@@ -126,7 +120,12 @@ export const userHandlers: Array<ApiSign> = [
     controller: updateUserProfileController,
     middlewares: [currentUser, requireAdminAuth],
   },
-  // done
+  {
+    url: "/activate/:ughId",
+    method: HttpMethod.Put,
+    controller: activeUserController,
+    middlewares: [],
+  },
   {
     url: "/activity/:userId",
     method: HttpMethod.Put,
