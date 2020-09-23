@@ -27,7 +27,7 @@ const Settings = ({ user, errors }: { user: UserDoc, errors: any }) => {
             activityInCreatedTournament,
         },
         onError: (errors) => setMessages(errors),
-        onSuccess: () => setMessages({ message: "Settings updated successfully", type: "success" })
+        onSuccess: () => setMessages([{ message: "Settings updated successfully", type: "success" }])
     })
 
     return <MainLayout messages={messages}>
