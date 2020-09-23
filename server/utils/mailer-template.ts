@@ -8,4 +8,5 @@ export enum MailerTemplate {
   Start = "start",
   Win = "win",
   Winner = "winner",
+  Update = "update",
 }
