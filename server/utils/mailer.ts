@@ -4,7 +4,7 @@ import path from "path";
 import { createTransport } from "nodemailer";
 import { MailerTemplate } from "./mailer-template";
 import Mail from "nodemailer/lib/mailer";
-import { BadRequestError } from "@monsid/ugh";
+import {} from "date-fns";
 
 class Mailer {
   private transporter?: Mail;
@@ -36,8 +36,8 @@ class Mailer {
           html: htmlTemplate,
         },
         (err, info) => {
-          if (err) throw new BadRequestError("failed to send mail");
-          else if (info) resolve();
+          if (err) console.table({ type, to });
+          resolve();
         }
       );
     });
