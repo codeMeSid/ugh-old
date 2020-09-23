@@ -5,6 +5,6 @@ env_variables:
     MONGO_URI: "mongodb+srv://sid:GLmpWOpwHkDgygAs@cluster0-6knev.mongodb.net/ugh-lite"
     RAZORPAY_ID: "rzp_test_LUAmxJgsyx0lJ8"
     RAZORPAY_SECRET: "2nHgyJGgDFMv8Ga2D3qjhHxG"
-    EMAIL: "siddhanthbajoria@gmail.com"
-    PASSWORD: "Gmailgmail01"
+    EMAIL: "noreply@ultimategamershub.com"
+    PASSWORD: "ImsPz5wEgDtA"
     BASE_URL: "https://ultimategamershub.et.r.appspot.com"

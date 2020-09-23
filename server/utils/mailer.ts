@@ -4,13 +4,15 @@ import path from "path";
 import { createTransport } from "nodemailer";
 import { MailerTemplate } from "./mailer-template";
 import Mail from "nodemailer/lib/mailer";
-import {} from "date-fns";
+import { format } from "date-fns";
 
 class Mailer {
   private transporter?: Mail;
   init(password: string, email: string) {
     this.transporter = createTransport({
-      service: "gmail",
+      host: "smtp.zoho.in",
+      secure: true,
+      port: 465,
       auth: {
         user: email,
         pass: password,
@@ -30,13 +32,20 @@ class Mailer {
     return new Promise((resolve) => {
       return this.transporter.sendMail(
         {
-          from: this.transporter.options.from,
+          from: process.env.EMAIL,
           to,
           subject: subject || "Ultimate Gamers Hub Notification",
           html: htmlTemplate,
         },
         (err, info) => {
-          if (err) console.table({ type, to, err: err.message });
+          if (err)
+            console.table({
+              type,
+              to,
+              err: err.message,
+              info,
+              on: format(Date.now(), "dd/MM/yyyy hh:mm a"),
+            });
           resolve();
         }
       );
