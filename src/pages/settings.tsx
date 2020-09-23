@@ -7,12 +7,12 @@ import { useRequest } from '../hooks/use-request';
 import ProgressButton from '../components/button/progress';
 
 const Settings = ({ user, errors }: { user: UserDoc, errors: any }) => {
-    const [newTournamentWasAdded, setNewTournamentWasAdded] = useState(!!user.settings.newTournamentWasAdded);
-    const [addedTournamentWasWon, setAddedTournamentWasWon] = useState(!!user.settings.addedTournamentWasWon);
-    const [addedTournamentWillStart, setAddedTournamentWillStart] = useState(!!user.settings.addedTournamentWillStart);
-    const [addedTournamentProofSent, setAddedTournamentProofSent] = useState(!!user.settings.addedTournamentProofSent);
-    const [addedTournamentProofDenied, setAddedTournamentProofDenied] = useState(!!user.settings.addedTournamentProofDenied);
-    const [activityInCreatedTournament, setActivityInCreatedTournament] = useState(!!user.settings.activityInCreatedTournament);
+    const [newTournamentWasAdded, setNewTournamentWasAdded] = useState(!!user?.settings?.newTournamentWasAdded);
+    const [addedTournamentWasWon, setAddedTournamentWasWon] = useState(!!user?.settings?.addedTournamentWasWon);
+    const [addedTournamentWillStart, setAddedTournamentWillStart] = useState(!!user?.settings?.addedTournamentWillStart);
+    const [addedTournamentProofSent, setAddedTournamentProofSent] = useState(!!user?.settings?.addedTournamentProofSent);
+    const [addedTournamentProofDenied, setAddedTournamentProofDenied] = useState(!!user?.settings?.addedTournamentProofDenied);
+    const [activityInCreatedTournament, setActivityInCreatedTournament] = useState(!!user?.settings?.activityInCreatedTournament);
     const [messages, setMessages] = useState(errors);
 
     const { doRequest } = useRequest({

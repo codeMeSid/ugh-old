@@ -4,14 +4,15 @@ import { UserDoc } from "./user";
 interface BracketAttrs {
   teamA: {
     users: Array<UserDoc>;
-    hasRaisedDispute: boolean;
-    score: number;
+    hasRaisedDispute?: boolean;
+    score?: number;
   };
   teamB: {
     users: Array<UserDoc>;
-    hasRaisedDispute: boolean;
-    score: number;
+    hasRaisedDispute?: boolean;
+    score?: number;
   };
+  round: number;
 }
 
 export interface BracketDoc extends mongoose.Document {
@@ -28,6 +29,7 @@ export interface BracketDoc extends mongoose.Document {
     uploadUrl: Array<string>;
   };
   winner: string;
+  round: number;
 }
 
 interface BracketModel extends mongoose.Model<BracketDoc> {
@@ -69,6 +71,7 @@ const BracketSchema = new mongoose.Schema({
     },
     uploadUrl: [String],
   },
+  round: Number,
   winner: String,
 });
 

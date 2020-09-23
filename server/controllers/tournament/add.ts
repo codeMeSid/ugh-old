@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Tournament } from "../../models/tournament";
+import { Tournament, TournamentDoc } from "../../models/tournament";
 import {
   timer,
   TournamentStatus,
@@ -11,6 +11,10 @@ import mongoose from "mongoose";
 import { Settings } from "../../models/settings";
 import { User } from "../../models/user";
 import { randomBytes } from "crypto";
+import { mailer } from "../../utils/mailer";
+import { MailerTemplate } from "../../utils/mailer-template";
+import { shuffle } from "../../utils/shuffle";
+import { Bracket } from "../../models/bracket";
 
 export const tournamentAddController = async (req: Request, res: Response) => {
   const {
@@ -86,88 +90,153 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     await tournament.save({ session });
     await session.commitTransaction();
     // start tournament
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+
     timer.schedule(
       tournament.id,
       new Date(startDateTime),
       async ({ id }: { id: string }) => {
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        // TODO create brackets
-        // TODO assign players
-
+        const session = await mongoose.startSession();
         try {
-          const tournament = await Tournament.findById(id);
+          const tournament = await Tournament.findById(id)
+            .populate("players", "email ughId settings", "Users")
+            .session(session);
           if (!tournament) return;
-          if (tournament.status === TournamentStatus.Upcoming) {
-            tournament.set({ status: TournamentStatus.Started });
-            await tournament.save();
+          if (tournament.status !== TournamentStatus.Upcoming) return;
+          const users = shuffle(tournament.players);
+          const playersInTeam = tournament.group.participants;
+          let i = 0;
+          while (i < users.length) {
+            const teamA = users.slice(i, i + playersInTeam);
+            const teamB = users.slice(i + playersInTeam, i + 2 * playersInTeam);
+            if (teamA.length === 0) break;
+            if (teamA.length > 0 && teamA.length < playersInTeam) {
+              // TODO TBD
+            }
+            const bracket = Bracket.build({
+              teamA: {
+                users: teamA,
+              },
+              teamB: {
+                users: teamB,
+              },
+              round: 1,
+            });
+            if (teamB.length === 0) {
+              bracket.round = 2;
+            }
+            if (teamB.length > 0 && teamB.length < playersInTeam) {
+              // TODO TBD
+              // break;
+            }
+            await bracket.save({ session });
+            tournament.brackets.push(bracket);
+            i += 2 * playersInTeam;
           }
+          tournament.status = TournamentStatus.Started;
+          await tournament.save({ session });
+          users.forEach((user) => {
+            if (user.settings.addedTournamentWillStart)
+              mailer.send(
+                MailerTemplate.Start,
+                {
+                  ughId: user.ughId,
+                  tournamentName: tournament.name,
+                },
+                user.email,
+                `Tournament ${tournament.name} Started`
+              );
+          });
+          await session.commitTransaction();
         } catch (error) {
-          console.log("start");
+          await session.abortTransaction();
+          console.log({ m: "start", error: error.message });
         }
-
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
+        session.endSession();
       },
       {
         id: tournament.id,
       }
     );
-    // check for match status 15mins before start
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+
     timer.schedule(
       `${tournament.id}-15min`,
       new Date(new Date(startDateTime).valueOf() - 1000 * 60 * 15),
       async ({ id }: { id: string }) => {
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        // TODO remove tournament from all users
+        const session = await mongoose.startSession();
         try {
-          const tournament = await Tournament.findById(id).populate(
-            "game",
-            "cutoff",
-            "Games"
-          );
+          const tournament = await Tournament.findById(id)
+            .populate("game", "cutoff", "Games")
+            .session(session);
           if (!tournament) return;
-          // players joined / players required
           const attendance =
             (tournament.players.length / tournament.playerCount) * 100;
           if (
             tournament.status === TournamentStatus.Upcoming &&
             attendance < tournament.game.cutoff
           ) {
-            // TODO send mail and add back coins
             tournament.set({ status: TournamentStatus.Completed });
-            await tournament.save();
+            const users = await User.find({
+              _id: {
+                $in: tournament.players.map((playerId) => playerId),
+              },
+            }).session(session);
+            users.map(async (user) => {
+              user.set({
+                "wallet.coins": user.wallet.coins + tournament.coins,
+                tournaments: user.tournaments.filter(
+                  (tId) => JSON.stringify(tId) === JSON.stringify(tournament.id)
+                ),
+              });
+              await user.save({ session });
+            });
+            await tournament.save({ session });
+            await session.commitTransaction();
             timer.cancel(id);
             timer.cancel(`${id}-end`);
           }
         } catch (error) {
-          console.log("start-15");
+          await session.abortTransaction();
+          console.log({ m: "start-15", error: error.message });
         }
-
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
+        session.endSession();
       },
       { id: tournament.id }
     );
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
 
-    // end tournament
     timer.schedule(
       `${tournament.id}-end`,
       new Date(endDateTime),
@@ -180,15 +249,48 @@ export const tournamentAddController = async (req: Request, res: Response) => {
             await tournament.save();
           }
         } catch (error) {
+          console.log({ m: "end", error: error.message });
           console.log("end");
         }
       },
       { id: tournament.id }
     );
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+
+    sendTournamentAddedMail(tournament);
   } catch (error) {
     await session.abortTransaction();
     throw new BadRequestError(error.message);
   }
   session.endSession();
   res.send(true);
+};
+
+const sendTournamentAddedMail = async (tournament: TournamentDoc) => {
+  const users = await User.find({
+    "settings.newTournamentWasAdded": true,
+  });
+  users.forEach((user) => {
+    mailer.send(
+      MailerTemplate.New,
+      {
+        ughId: user.ughId,
+        tournamentName: tournament.name,
+        tournamentUrl: `${process.env.BASE_URL}/tournaments/${tournament.regId}`,
+      },
+      user.email,
+      "New UGH Tournament"
+    );
+  });
 };

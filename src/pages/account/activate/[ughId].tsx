@@ -17,7 +17,8 @@ const Activate = ({ ughId }) => {
     })
 
     useEffect(() => {
-        doRequest();
+        if (ughId) doRequest();
+        else setMessages([{ message: "Invalid Ugh Id" }]);
     }, []);
     return <MainLayout messages={messages}>
         <div style={{ minHeight: "88vh", textAlign: "center" }}>
