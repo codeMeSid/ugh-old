@@ -11,7 +11,7 @@ export const featureHandlers: Array<ApiSign> = [
     method: HttpMethod.Get,
     controller: async (req: Request, res: Response) => {
       await mailer.send(
-        MailerTemplate.Activation,
+        MailerTemplate.Activate,
         { href: `${process.env.BASE_URL}/login`, ughId: "Player" },
         "siddhanthbajoria@gmail.com,Touseefb2@live.com",
         "activation mail"

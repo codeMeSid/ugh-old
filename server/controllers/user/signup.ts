@@ -20,7 +20,7 @@ export const signupController = async (req: Request, res: Response) => {
   });
   await newUser.save();
   mailer.send(
-    MailerTemplate.Activation,
+    MailerTemplate.Activate,
     {
       href: `${process.env.BASE_URL}/account/activate/${newUser.ughId}`,
       ughId: newUser.ughId,

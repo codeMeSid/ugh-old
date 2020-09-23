@@ -1,6 +1,6 @@
 export enum MailerTemplate {
   Welcome = "welcome",
-  Activation = "activation",
+  Activate = "new-user",
   Dispute = "dispute",
   Join = "join",
   New = "new",
