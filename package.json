@@ -11,9 +11,10 @@
     "dev:server": "ts-node-dev --project tsconfig.server.json server/index.ts & npm run sass:watch",
     "sass:watch": "node-sass src/public/sass/main.scss src/public/css/main.css -w",
     "sass:build": "node-sass src/public/sass/main.scss src/public/css/main.css --output-style compressed",
+    "copy":"copyfiles -u server/utils/views/*.html -f dist/utils/views",
     "build:client": "next build",
     "build:server": "tsc --project tsconfig.server.json",
-    "build": "npm run sass:build && npm run build:client && npm run build:server",
+    "build": "npm run sass:build && npm run build:client && npm run build:server && npm run copy",
     "heroku:postbuild": "npm run build",
     "gcp-build": "npm run build",
     "deploy": "gcloud app deploy"
@@ -63,6 +64,7 @@
     "@types/nodemailer": "^6.4.0",
     "@types/react": "^16.9.36",
     "@types/response-time": "^2.3.4",
+    "copyfiles": "^2.3.0",
     "ts-node": "^9.0.0",
     "ts-node-dev": "^1.0.0-pre.52",
     "typescript": "^3.9.5"

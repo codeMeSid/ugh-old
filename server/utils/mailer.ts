@@ -22,7 +22,7 @@ class Mailer {
   }
 
   async send(type: MailerTemplate, data: Object, to: string, subject: string) {
-    const tempPath = path.join(__dirname, `/views/${type}.html`);
+    const tempPath = path.join(__dirname, `views/${type}.html`);
     const source = fs.readFileSync(tempPath, "utf-8").toString();
     const template = handlebar.compile(source);
     const htmlTemplate = template(data);
