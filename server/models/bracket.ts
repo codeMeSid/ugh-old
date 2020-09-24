@@ -12,6 +12,7 @@ interface BracketAttrs {
     hasRaisedDispute?: boolean;
     score?: number;
   };
+  regId: string;
   round: number;
 }
 
@@ -29,6 +30,7 @@ export interface BracketDoc extends mongoose.Document {
     uploadUrl: Array<string>;
   };
   winner: string;
+  regId: string;
   round: number;
 }
 
@@ -69,6 +71,7 @@ const BracketSchema = new mongoose.Schema(
       uploadUrl: [String],
     },
     round: Number,
+    regId: String,
     winner: String,
   },
   {

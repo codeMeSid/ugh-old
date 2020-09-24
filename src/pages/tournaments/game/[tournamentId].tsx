@@ -1,14 +1,23 @@
 import React from "react";
+import { BracketDoc } from "../../../../server/models/bracket";
+import BracketCard from "../../../components/card/bracket";
 import MainLayout from "../../../components/layout/mainlayout";
 import { serverRequest } from "../../../hooks/server-request";
 
-const BracketPage = ({ brackets }) => {
+const BracketPage = ({ brackets, currentUser }: { brackets?: Array<BracketDoc>, currentUser: any }) => {
     return <MainLayout>
-        <div>s</div>
-
+        <div className="brackets">
+            <h1 className="brackets__title">Welcome to tournament</h1>
+            <div className="brackets__container">
+                {
+                    brackets?.map((bracket) => {
+                        return <BracketCard currentUser={currentUser} bracket={bracket} key={Math.random()} />
+                    })
+                }
+            </div>
+        </div>
     </MainLayout>
 }
-
 BracketPage.getInitialProps = async (ctx) => {
     const { tournamentId } = ctx.query;
     const { data, errors } = await serverRequest(ctx, {
@@ -16,9 +25,8 @@ BracketPage.getInitialProps = async (ctx) => {
         method: "get",
         body: {}
     });
-    console.log(data[0].teamA);
     return {
-        brackets: data,
+        brackets: data || [],
         errors: errors || []
     }
 }

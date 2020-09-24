@@ -102,7 +102,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     //////////////////////////////////////////////////////
 
     timer.schedule(
-      tournament.id,
+      tournament.regId,
       new Date(startDateTime),
       async ({ id }: { id: string }) => {
         const session = await mongoose.startSession();
@@ -130,20 +130,18 @@ export const tournamentAddController = async (req: Request, res: Response) => {
                 user: teamB,
               },
               round: 1,
+              regId: randomBytes(4).toString("hex").substr(0, 5),
             });
             if (!teamB) {
               bracket.round = 2;
             }
-            // if (teamB.length > 0 && teamB.length < playersInTeam) {
-            //   // TODO TBD
-            //   // break;
-            // }
             await bracket.save({ session });
             tournament.brackets.push(bracket);
             i += 2;
           }
           tournament.status = TournamentStatus.Started;
           await tournament.save({ session });
+          await session.commitTransaction();
           users.forEach((user) => {
             if (user.settings.addedTournamentWillStart)
               mailer.send(
@@ -156,10 +154,9 @@ export const tournamentAddController = async (req: Request, res: Response) => {
                 `Tournament ${tournament.name} Started`
               );
           });
-          await session.commitTransaction();
         } catch (error) {
-          await session.abortTransaction();
           console.log({ m: "start", error: error.message });
+          await session.abortTransaction();
         }
         session.endSession();
       },
@@ -180,10 +177,11 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     //////////////////////////////////////////////////////
 
     timer.schedule(
-      `${tournament.id}-15min`,
+      `${tournament.regId}-15min`,
       new Date(new Date(startDateTime).valueOf() - 1000 * 60 * 15),
       async ({ id }: { id: string }) => {
         const session = await mongoose.startSession();
+        await session.startTransaction();
         try {
           const tournament = await Tournament.findById(id)
             .populate("game", "cutoff", "Games")
@@ -218,8 +216,8 @@ export const tournamentAddController = async (req: Request, res: Response) => {
             timer.cancel(`${id}-end`);
           }
         } catch (error) {
-          await session.abortTransaction();
           console.log({ m: "start-15", error: error.message });
+          await session.abortTransaction();
         }
         session.endSession();
       },
@@ -243,7 +241,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     //////////////////////////////////////////////////////
 
     timer.schedule(
-      `${tournament.id}-end`,
+      `${tournament.regId}-end`,
       new Date(endDateTime),
       async ({ id }: { id: string }) => {
         try {
