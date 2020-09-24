@@ -11,67 +11,72 @@ import Router from 'next/router';
 import MainLayout from "../components/layout/mainlayout";
 import DialogButton from "../components/button/dialog";
 
-const AddTournament = ({ games, consoles, errors }:
-    { games: Array<GameDoc>, consoles: Array<ConsoleDoc>, errors: any }) => {
-    const [consoleIndex, setConsoleIndex] = useState(0);
-    const [gameIndex, setGameIndex] = useState(0);
-    const [pIndex, setPIndex] = useState(0);
-    const [gIndex, setGIndex] = useState(0);
-    const [name, setName] = useState("");
-    const [coins, setCoins] = useState(10);
-    const [startDateTime, setStartDateTime] = useState("");
-    const [endDateTime, setEndDateTime] = useState("");
-    const [winnerCount, setWinnerCount] = useState(1);
+const AddTournament = ({ gs, cs, errors }:
+    { gs: Array<GameDoc>, cs: Array<ConsoleDoc>, errors: any }) => {
+    const [wc, setWc] = useState(1);
     const [messages, setMessages] = useState(errors);
+    const [games] = useState(gs);
+    const [game, setGame] = useState(0);
+    const [participants, setParticipants] = useState(0);
+    const [group, setGroup] = useState(0);
+    const [consoles] = useState(cs);
+    const [console, setConsole] = useState(0);
+    const [coins, setCoins] = useState(10);
+    const [name, setName] = useState("");
+    const [sdt, setSdt] = useState("");
+    const [edt, setEdt] = useState("");
+
 
     const { doRequest } = useRequest({
         url: "/api/ugh/tournament/add",
         body: {
             name,
             coins,
-            winnerCount,
-            startDateTime: new Date(startDateTime),
-            endDateTime: new Date(endDateTime),
-            game: games[gameIndex].id,
-            playerCount: games[gameIndex].participants[pIndex],
-            group: games[gameIndex].groups[gIndex]
+            winnerCount: wc,
+            startDateTime: new Date(sdt),
+            endDateTime: new Date(edt),
+            game: games[game].id,
+            playerCount: games[game].participants[participants],
+            group: games[game].groups[group]
         },
         method: "post",
         onSuccess: () => Router.replace("/my-tournament"),
         onError: (errors) => setMessages(errors)
-    })
+    });
     const onChangeHandler = (name: String, val: any) => {
         switch (name) {
             case 'name': return setName(val);
-            case 'coins': return setCoins(val);
-            case 'startDateTime': return setStartDateTime(val)
-            case 'endDateTime': return setEndDateTime(val);
-            case 'winnerCount': {
-                if (val <= 0 || val >= games[gameIndex].participants[pIndex]) return;
-                else return setWinnerCount(val);
-            }
+            case 'coins':
+                if (val > 0) return setCoins(parseInt(val));
+                else return;
+            case 'winnerCount':
+                if (val > 0) return setWc(parseInt(val));
+                else return;
+            case 'startDateTime': return setSdt(val)
+            case 'endDateTime': return setEdt(val);
         }
     }
     const onSelectHandler = (e) => {
         const name = e.currentTarget.name;
         const val = e.currentTarget.value;
         switch (name) {
-            case "consoleIndex":
-                setConsoleIndex(val);
-                setGameIndex(0);
-                setPIndex(0);
-                setGIndex(0);
+            case "console":
+                setConsole(parseInt(val));
+                setGame(0);
+                setParticipants(0);
+                setGroup(0);
                 break;
-            case 'gameIndex':
-                setGameIndex(val);
-                setPIndex(0);
-                setGIndex(0);
+            case "game":
+                setGame(parseInt(val));
+                setParticipants(0);
+                setGroup(0);
                 break;
-            case 'pIndex':
-                setPIndex(val);
+            case 'participants':
+                setParticipants(parseInt(val));
+                setGroup(0);
                 break;
-            case "gIndex":
-                setGIndex(val);
+            case "group":
+                setGroup(parseInt(val));
                 break;
         }
     }
@@ -88,14 +93,11 @@ const AddTournament = ({ games, consoles, errors }:
             </div>
             <div className="row">
                 <div className="col">
-                    <Input type="number" placeholder="winner count" name="winnerCount" value={winnerCount} onChange={onChangeHandler} />
+                    <Input type="number" placeholder="winner count" name="winnerCount" value={wc} onChange={onChangeHandler} />
                 </div>
                 <div className="col">
-                    <Select onSelect={onSelectHandler} name="consoleIndex" placeholder="console" value={consoleIndex} options={
-                        consoles
-                            ?.map((console: ConsoleDoc, index: number) => {
-                                return <Option key={console.name} display={console.name.toUpperCase()} value={index} />
-                            })
+                    <Select name="console" onSelect={onSelectHandler} value={console} placeholder="console" options={
+                        cs.map((c, index) => <Option key={c.name} display={c.name.toUpperCase()} value={index} />)
                     } />
                 </div>
             </div>
@@ -109,41 +111,30 @@ const AddTournament = ({ games, consoles, errors }:
             </div>
             <div className="row">
                 <div className="col">
-                    <Select onSelect={onSelectHandler} name="gameIndex" placeholder="game" value={gameIndex} options={
+                    <Select onSelect={onSelectHandler} name="game" placeholder="game" value={game} options={
                         games
-                            ?.filter(game => game.console === consoles[consoleIndex]?.name)
-                            ?.map((game: GameDoc, index: number) => {
-                                return <Option key={game.name} display={game.name} value={index} />
-                            })
+                            ?.filter(game => game.console === consoles[console]?.name)
+                            ?.map((g: GameDoc, index: number) => <Option key={g.name} display={g.name} value={index} />)
                     } />
                 </div>
                 <div className="col">
-                    <Select onSelect={onSelectHandler} name="pIndex" placeholder="participants" value={pIndex} options={
-                        games
-                            ?.filter(game => game.console === consoles[consoleIndex]?.name)[gameIndex]
-                            ?.participants
-                            ?.map((p, index: number) => {
-                                return <Option key={p} display={p} value={index} />
-                            })
+                    <Select onSelect={onSelectHandler} name="participants" placeholder="participants" value={participants} options={
+                        games[game].participants.map(
+                            (p, index) => <Option key={p} display={p} value={index} />)
                     } />
                 </div>
             </div>
             <div className="row">
                 <div className="col">
-                    <Select onSelect={onSelectHandler} name="gIndex" placeholder="group" value={gIndex} options={
-                        games
-                            ?.filter(game => game.console === consoles[consoleIndex]?.name)[gameIndex]
-                            ?.groups
-                            ?.map((g, index: number) => {
-                                return <Option key={g.name} display={`${g.name}-${g.participants}`} value={index} />
-                            })
+                    <Select onSelect={onSelectHandler} name="group" placeholder="group" value={group} options={
+                        games[game]?.groups?.map((g, index) => <Option key={g.name} display={`${g.name}-${g.participants}`} value={index} />)
                     } />
                 </div>
             </div>
             <div className="row">
-                <DialogButton fullButton title="Submit" onAction={doRequest} style={{ top: "20%" }}>
+                <DialogButton fullButton title="Submit" onAction={doRequest} style={{ top: "20%", position: "fixed" }}>
                     <div style={{ margin: "2rem auto", fontSize: "2rem", minWidth: "40rem", maxWidth: "50rem" }}>
-                        Creating tournament will cost you {coins} coins from your account
+                        Creating tournament will cost you {coins * (games[game]?.groups[group]?.participants || 1)} coins from your account
                     </div>
                 </DialogButton>
             </div>
@@ -158,8 +149,8 @@ AddTournament.getInitialProps = async (ctx) => {
     if (errorsA) errors.push(...errorsA);
     if (errorsB) errors.push(...errorsB);
     return {
-        consoles: consoles || [],
-        games: games || [],
+        cs: consoles || [],
+        gs: games || [],
         errors
     };
 }

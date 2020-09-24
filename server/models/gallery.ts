@@ -47,7 +47,7 @@ gallerySchema.statics.build = (attrs: GalleryAttrs) => {
 };
 
 const Gallery = mongoose.model<GalleryDoc, GalleryModel>(
-  "Gallery",
+  "Gallerys",
   gallerySchema
 );
 

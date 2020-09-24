@@ -36,6 +36,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
   const wc = winnerCount;
   const pc = playerCount;
   const cUser = req.currentUser;
+  const playersInGroup = group.participants;
 
   if (sdt <= cdt) throw new BadRequestError("Tournament cannot be in past");
   if (sdt - cdt < msIn1Hr)
@@ -46,7 +47,8 @@ export const tournamentAddController = async (req: Request, res: Response) => {
       "Tournament duration should be atleast 15 minutes"
     );
   if (wc >= pc) throw new BadRequestError("Winner cannot be more than players");
-
+  if (playerCount % playersInGroup !== 0)
+    throw new BadRequestError("Insufficient player slots");
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
@@ -72,6 +74,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
       startDateTime: new Date(startDateTime),
       winnerCount: parseInt(winnerCount),
     });
+    tournament.coins *= tournament.group.participants;
     if (cUser.role === UserRole.Player) {
       if (!user) throw new BadRequestError("Invalid user");
       const balance = user.wallet.coins;
@@ -110,34 +113,34 @@ export const tournamentAddController = async (req: Request, res: Response) => {
           if (!tournament) return;
           if (tournament.status !== TournamentStatus.Upcoming) return;
           const users = shuffle(tournament.players);
-          const playersInTeam = tournament.group.participants;
           let i = 0;
           while (i < users.length) {
-            const teamA = users.slice(i, i + playersInTeam);
-            const teamB = users.slice(i + playersInTeam, i + 2 * playersInTeam);
-            if (teamA.length === 0) break;
-            if (teamA.length > 0 && teamA.length < playersInTeam) {
-              // TODO TBD
-            }
+            // TODO
+            const teamA = users[i];
+            const teamB = users[i + 1];
+            if (!teamA) break;
+            // if (teamA.length > 0 && teamA.length < playersInTeam) {
+            //   // TODO TBD
+            // }
             const bracket = Bracket.build({
               teamA: {
-                users: teamA,
+                user: teamA,
               },
               teamB: {
-                users: teamB,
+                user: teamB,
               },
               round: 1,
             });
-            if (teamB.length === 0) {
+            if (!teamB) {
               bracket.round = 2;
             }
-            if (teamB.length > 0 && teamB.length < playersInTeam) {
-              // TODO TBD
-              // break;
-            }
+            // if (teamB.length > 0 && teamB.length < playersInTeam) {
+            //   // TODO TBD
+            //   // break;
+            // }
             await bracket.save({ session });
             tournament.brackets.push(bracket);
-            i += 2 * playersInTeam;
+            i += 2;
           }
           tournament.status = TournamentStatus.Started;
           await tournament.save({ session });
@@ -187,7 +190,9 @@ export const tournamentAddController = async (req: Request, res: Response) => {
             .session(session);
           if (!tournament) return;
           const attendance =
-            (tournament.players.length / tournament.playerCount) * 100;
+            ((tournament.players.length * tournament.group.participants) /
+              tournament.playerCount) *
+            100;
           if (
             tournament.status === TournamentStatus.Upcoming &&
             attendance < tournament.game.cutoff

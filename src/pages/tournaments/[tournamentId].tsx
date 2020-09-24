@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { TournamentDoc } from "../../../server/models/tournament";
 import ProgressButton from "../../components/button/progress";
 import MainLayout from "../../components/layout/mainlayout";
-import TournamentTab from "../../components/tournament-tab";
+// import TournamentTab from "../../components/tournament-tab";
 import { serverRequest } from "../../hooks/server-request";
 import { format } from 'date-fns';
 import { useRequest } from "../../hooks/use-request";
@@ -121,7 +121,7 @@ const TournamentDetail = ({ tournament, matches, currentUser, errors }: { tourna
                                 </div>
                                 <div className="tournament__card__body__lower__left__item">
                                     <div style={{ marginBottom: 10 }}>Participants</div>
-                                    <div>{tournament?.players?.length || 0}/{tournament?.playerCount || 0}</div>
+                                    <div>{tournament?.players?.length * tournament?.group?.participants || 0}/{tournament?.playerCount || 0}</div>
                                 </div>
                                 {tournament?.group
                                     && <div className="tournament__card__body__lower__left__item">
@@ -154,7 +154,7 @@ const TournamentDetail = ({ tournament, matches, currentUser, errors }: { tourna
                 </div>
             }
         </div>
-        <TournamentTab matches={matches} />
+        {/* <TournamentTab matches={matches} /> */}
     </MainLayout>
 }
 
@@ -165,22 +165,26 @@ TournamentDetail.getInitialProps = async (ctx) => {
         method: 'get',
         body: {}
     });
-    const { data: tournaments, errors: errorsB }: { data: Array<TournamentDoc>, errors: Array<any> } = await serverRequest(ctx, { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
+    // const { data: tournaments, errors: errorsB }: { data: Array<TournamentDoc>, errors: Array<any> } = await serverRequest(ctx, { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
 
-    const matches = {
-        upcoming: [],
-        started: [],
-        completed: []
-    }
+    // const matches = {
+    //     upcoming: [],
+    //     started: [],
+    //     completed: []
+    // }
 
-    if (tournaments) tournaments.forEach(tournament => {
-        matches[tournament.status] = [...matches[tournament.status], tournament];
-    });
+    // if (tournaments) tournaments.forEach(tournament => {
+    //     matches[tournament.status] = [...matches[tournament.status], tournament];
+    // });
     const errors = []
     if (errorsA) errors.push(...errorsA);
-    if (errorsB) errors.push(...errorsB);
+    // if (errorsB) errors.push(...errorsB);
 
-    return { matches, tournament, errors }
+    return {
+        // matches,
+        tournament,
+        errors
+    }
 }
 
 export default TournamentDetail;

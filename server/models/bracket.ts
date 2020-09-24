@@ -3,12 +3,12 @@ import { UserDoc } from "./user";
 
 interface BracketAttrs {
   teamA: {
-    users: Array<UserDoc>;
+    user: UserDoc;
     hasRaisedDispute?: boolean;
     score?: number;
   };
   teamB: {
-    users: Array<UserDoc>;
+    user: UserDoc;
     hasRaisedDispute?: boolean;
     score?: number;
   };
@@ -17,13 +17,13 @@ interface BracketAttrs {
 
 export interface BracketDoc extends mongoose.Document {
   teamA: {
-    users: Array<UserDoc>;
+    user: UserDoc;
     hasRaisedDispute: boolean;
     score: number;
     uploadUrl: Array<string>;
   };
   teamB: {
-    users: Array<UserDoc>;
+    user: UserDoc;
     hasRaisedDispute: boolean;
     score: number;
     uploadUrl: Array<string>;
@@ -36,44 +36,52 @@ interface BracketModel extends mongoose.Model<BracketDoc> {
   build(attrs: BracketAttrs): BracketDoc;
 }
 
-const BracketSchema = new mongoose.Schema({
-  teamA: {
-    users: [
-      {
+const BracketSchema = new mongoose.Schema(
+  {
+    teamA: {
+      user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users",
       },
-    ],
-    hasRaisedDispute: {
-      type: Boolean,
-      default: false,
+      hasRaisedDispute: {
+        type: Boolean,
+        default: false,
+      },
+      score: {
+        type: Number,
+        default: 0,
+      },
+      uploadUrl: [String],
     },
-    score: {
-      type: Number,
-      default: 0,
-    },
-    uploadUrl: [String],
-  },
-  teamB: {
-    users: [
-      {
+    teamB: {
+      user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users",
       },
-    ],
-    hasRaisedDispute: {
-      type: Boolean,
-      default: false,
+      hasRaisedDispute: {
+        type: Boolean,
+        default: false,
+      },
+      score: {
+        type: Number,
+        default: 0,
+      },
+      uploadUrl: [String],
     },
-    score: {
-      type: Number,
-      default: 0,
-    },
-    uploadUrl: [String],
+    round: Number,
+    winner: String,
   },
-  round: Number,
-  winner: String,
-});
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.password;
+        delete ret.__v;
+      },
+    },
+  }
+);
 
 BracketSchema.statics.build = (attrs: BracketAttrs) => {
   return new Bracket(attrs);

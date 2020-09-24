@@ -23,7 +23,10 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
       ).length > 0
     )
       throw new Error("Already in tournament");
-    if (tournament.players.length === tournament.playerCount)
+    if (
+      tournament.players.length * tournament.group.participants ===
+      tournament.playerCount
+    )
       throw new Error("Tournament slots full");
     if (user.wallet.coins - tournament.coins < 0)
       throw new Error("Insufficient coins in account to enter tournament");
