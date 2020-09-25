@@ -27,7 +27,12 @@ const GameDetail = ({ game, errors }: { game: GameDoc, errors: any }) => {
                 </div>
             </div>
             <div className="row">
-                <Input placeholder="minimum player %" value={game?.cutoff || 50} disabled />
+                <div className="col">
+                    <Input placeholder="minimum player %" value={game?.cutoff || 50} disabled />
+                </div>
+                <div className="col">
+                    <Input placeholder="game evaluation type" value={game?.gameType || "score"} disabled />
+                </div>
             </div>
             <h2>Participants</h2>
             <div className="row">

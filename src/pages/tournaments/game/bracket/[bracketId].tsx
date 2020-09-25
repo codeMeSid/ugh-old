@@ -8,9 +8,12 @@ import MainLayout from "../../../../components/layout/mainlayout";
 import { serverRequest } from "../../../../hooks/server-request";
 import { useRequest } from "../../../../hooks/use-request";
 
+// TODO add dispute logic and api
+// TODO make mobile compatible
+
 const BracketDetail = ({ match, errors, currentUser }: { match: BracketDoc, errors: Array<any>, currentUser: any }) => {
     const [messages, setMessages] = useState(errors);
-    const [bracket, setBracket] = useState(match);
+    const [bracket] = useState(match);
     const [timer, setTimer] = useState("");
     const [teamA, setTeamA] = useState(0);
     const [teamB, setTeamB] = useState(0);
@@ -26,14 +29,14 @@ const BracketDetail = ({ match, errors, currentUser }: { match: BracketDoc, erro
         url: `/api/ugh/tournament/update/bracket/${bracket?.regId}`,
         body: { teamA },
         method: "put",
-        onSuccess: (data) => setBracket(data),
+        onSuccess: Router.reload,
         onError: (errors) => setMessages(errors)
     });
     const { doRequest: doRequestB } = useRequest({
         url: `/api/ugh/tournament/update/bracket/${bracket?.regId}`,
         body: { teamB },
         method: "put",
-        onSuccess: (data) => setBracket(data),
+        onSuccess: Router.reload,
         onError: (errors) => setMessages(errors)
     });
     const onChangeHandler = (name: string, val: any) => {

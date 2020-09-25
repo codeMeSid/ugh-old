@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { GameGroups } from "@monsid/ugh";
+import { GameGroups, GameType } from "@monsid/ugh";
 
 interface GameAttrs {
   name: string;
@@ -9,6 +9,7 @@ interface GameAttrs {
   imageUrl: string;
   thumbnailUrl: string;
   cutoff: number;
+  gameType: GameType;
 }
 
 export interface GameDoc extends mongoose.Document {
@@ -20,6 +21,7 @@ export interface GameDoc extends mongoose.Document {
   thumbnailUrl: string;
   isActive: boolean;
   cutoff: number;
+  gameType: GameType;
 }
 
 interface GameModel extends mongoose.Model<GameDoc> {
@@ -42,6 +44,10 @@ const gameSchema = new mongoose.Schema(
       required: true,
     },
     participants: [Number],
+    gameType: {
+      type: "string",
+      enum: Object.values(GameType),
+    },
     groups: [
       {
         name: String,

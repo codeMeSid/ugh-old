@@ -11,7 +11,7 @@
     "dev:server": "ts-node-dev --project tsconfig.server.json server/index.ts & npm run sass:watch",
     "sass:watch": "node-sass src/public/sass/main.scss src/public/css/main.css -w",
     "sass:build": "node-sass src/public/sass/main.scss src/public/css/main.css --output-style compressed",
-    "copy":"copyfiles -u server/utils/views/*.html -f dist/utils/views",
+    "copy": "copyfiles -u server/utils/views/*.html -f dist/utils/views",
     "build:client": "next build",
     "build:server": "tsc --project tsconfig.server.json",
     "build": "npm run sass:build && npm run build:client && npm run build:server && npm run copy",
@@ -20,7 +20,7 @@
     "deploy": "gcloud app deploy"
   },
   "dependencies": {
-    "@monsid/ugh": "0.0.49",
+    "@monsid/ugh": "0.0.50",
     "agendash": "^1.0.0",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",

@@ -78,5 +78,5 @@ export const bracketUpdateController = async (req: Request, res: Response) => {
       }
     );
 
-  res.send(bracket);
+  res.send(true);
 };

@@ -15,6 +15,7 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
     const [name, setName] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const [console, setConsole] = useState(consoles?.length >= 1 ? consoles[0]?.name : "");
+    const [gameType, setGameType] = useState("score");
     const [thumbnailUrl, setThumbnailUrl] = useState("");
     const [participant, setParticipant] = useState(5);
     const [participants, setParticipants] = useState([4]);
@@ -32,7 +33,8 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
             thumbnailUrl,
             participants,
             groups,
-            cutoff
+            cutoff,
+            gameType
         },
         method: "post",
         onSuccess: () => Router.replace("/admin/games"),
@@ -86,7 +88,17 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
     return <SideLayout messages={messages} title="add game">
         <div className="detail">
             <div className="row">
-                <Input placeholder="name" name="name" value={name} onChange={onChangeHandler} />
+                <div className="col">
+                    <Input placeholder="name" name="name" value={name} onChange={onChangeHandler} />
+                </div>
+                <div className="col">
+                    <Select
+                        value={gameType}
+                        name="gameType"
+                        onSelect={e => setGameType(e.currentTarget.value)}
+                        placeholder="game evaluation type"
+                        options={["rank", "score"].map((type) => <Option key={type} value={type} display={type.toUpperCase()} />)} />
+                </div>
             </div>
             <div className="row">
                 <div className="col">
