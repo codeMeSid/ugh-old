@@ -32,8 +32,8 @@ export interface BracketDoc extends mongoose.Document {
   winner: string;
   regId: string;
   round: number;
+  updateBy: Date;
 }
-
 interface BracketModel extends mongoose.Model<BracketDoc> {
   build(attrs: BracketAttrs): BracketDoc;
 }
@@ -73,6 +73,7 @@ const BracketSchema = new mongoose.Schema(
     round: Number,
     regId: String,
     winner: String,
+    updateBy: mongoose.SchemaTypes.Date,
   },
   {
     toJSON: {

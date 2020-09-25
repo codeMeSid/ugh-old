@@ -15,6 +15,8 @@ import { tournamentUpdateStatusController } from "../controllers/tournament/upda
 import { tournamentJoinController } from "../controllers/tournament/join";
 import { tournamentAddValidator } from "../utils/validator/tournament/add";
 import { tournamentFetchBracketController } from "../controllers/tournament/fetch-bracket";
+import { tournamentFetchBracketDetailController } from "../controllers/tournament/fetch-bracket-detail";
+import { bracketUpdateController } from "../controllers/tournament/update-bracket";
 
 export const tournamentHandler: Array<ApiSign> = [
   {
@@ -48,6 +50,12 @@ export const tournamentHandler: Array<ApiSign> = [
     middlewares: [currentUser, requireAuth],
   },
   {
+    url: "/fetch/bracket/detail/:bracketId",
+    method: HttpMethod.Get,
+    controller: tournamentFetchBracketDetailController,
+    middlewares: [currentUser, requireAuth],
+  },
+  {
     url: "/fetch/bracket/:tournamentId",
     method: HttpMethod.Get,
     controller: tournamentFetchBracketController,
@@ -69,5 +77,11 @@ export const tournamentHandler: Array<ApiSign> = [
     method: HttpMethod.Put,
     controller: tournamentUpdateStatusController,
     middlewares: [currentUser, requireAdminAuth],
+  },
+  {
+    url: "/update/bracket/:bracketId",
+    method: HttpMethod.Put,
+    controller: bracketUpdateController,
+    middlewares: [currentUser, requireAuth],
   },
 ];

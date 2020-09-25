@@ -54,6 +54,7 @@
       flex-wrap: wrap;
       &__left {
         display: flex;
+        flex-wrap: wrap;
       }
       &__right {
         margin-left: auto;
@@ -61,6 +62,7 @@
       &__item {
         padding: 0 2rem;
         border-right: 0.1rem solid rgba(gray, 0.5);
+        margin: 0.2rem 0;
         &:first-child {
           padding-right: 2rem;
           padding-left: 0;
@@ -126,9 +128,8 @@
 
 @include respond(tab-port) {
   .profile {
-    &__container{
-    max-width: 90vw;
-
+    &__container {
+      max-width: 90vw;
     }
     &__image {
     }
