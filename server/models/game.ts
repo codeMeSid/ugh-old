@@ -5,6 +5,7 @@ interface GameAttrs {
   name: string;
   console: string;
   participants: Array<number>;
+  winners: Array<number>;
   groups: Array<GameGroups>;
   imageUrl: string;
   thumbnailUrl: string;
@@ -16,6 +17,7 @@ export interface GameDoc extends mongoose.Document {
   name: string;
   console: string;
   participants: Array<number>;
+  winners: Array<number>;
   groups: Array<GameGroups>;
   imageUrl: string;
   thumbnailUrl: string;
@@ -44,6 +46,7 @@ const gameSchema = new mongoose.Schema(
       required: true,
     },
     participants: [Number],
+    winners: [Number],
     gameType: {
       type: "string",
       enum: Object.values(GameType),

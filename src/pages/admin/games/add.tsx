@@ -19,6 +19,8 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
     const [thumbnailUrl, setThumbnailUrl] = useState("");
     const [participant, setParticipant] = useState(5);
     const [participants, setParticipants] = useState([4]);
+    const [winner, setWinner] = useState(1);
+    const [winners, setWinners] = useState([1]);
     const [groups, setGroups] = useState([{ name: "Single", participants: 1 }]);
     const [group, setGroup] = useState("duo");
     const [gParticipant, setGParticipant] = useState(2);
@@ -34,7 +36,8 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
             participants,
             groups,
             cutoff,
-            gameType
+            gameType,
+            winners
         },
         method: "post",
         onSuccess: () => Router.replace("/admin/games"),
@@ -50,6 +53,7 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
             case 'group': return setGroup(val);
             case 'gParticipant': return setGParticipant(val);
             case 'cutoff': return setCutoff(val);
+            case 'winner': return setWinner(val)
         }
     }
 
@@ -59,6 +63,15 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
             const uP = [...participants];
             uP.push(participant);
             setParticipants(uP);
+        }
+    }
+
+    const onWinnerAdd = () => {
+        const wIndex = winners.indexOf(winner);
+        if (wIndex === -1) {
+            const uW = [...winners];
+            uW.push(winner);
+            setWinners(uW);
         }
     }
 
@@ -82,6 +95,11 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
         const pills = [...groups];
         pills.splice(index, 1);
         setGroups(pills);
+    }
+    const onWinnerPillClickHanlder = (index) => {
+        const pills = [...winners];
+        pills.splice(index, 1);
+        setWinners(pills);
     }
 
 
@@ -131,6 +149,21 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
                 {
                     participants.map((val, index) => {
                         return <div onClick={() => onPillClickHanlder(index)} className="pill" key={val}>{val}</div>
+                    })
+                }
+            </div>
+            <div className="row">
+                <div className="col">
+                    <Input placeholder="winner" name="winner" value={winner} type="number" onChange={onChangeHandler} />
+                </div>
+                <div className="col">
+                    <IoIosAddCircleOutline style={{ fontSize: "2.6rem", cursor: "pointer" }} onClick={onWinnerAdd} />
+                </div>
+            </div>
+            <div className="row">
+                {
+                    winners.map((val, index) => {
+                        return <div onClick={() => onWinnerPillClickHanlder(index)} className="pill" key={val}>{val}</div>
                     })
                 }
             </div>

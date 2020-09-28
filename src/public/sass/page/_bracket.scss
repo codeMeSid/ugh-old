@@ -73,8 +73,20 @@
     color: rgba(white, 0.5);
     text-align: center;
     margin-top: 1.5rem;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     text-transform: uppercase;
+  }
+  &__score {
+    color: rgba(white, 0.5);
+    text-align: center;
+    margin-top: 1rem;
+    &__title {
+      font-size: 2rem;
+      text-transform: uppercase;
+    }
+    &__subtitle {
+      font-size: 3.6rem;
+    }
   }
 }
 

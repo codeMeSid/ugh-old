@@ -21,7 +21,7 @@ const AddTournament = ({ games, consoles, errors }:
     const [coins, setCoins] = useState(10);
     const [startDateTime, setStartDateTime] = useState("");
     const [endDateTime, setEndDateTime] = useState("");
-    const [winnerCount, setWinnerCount] = useState(1);
+    const [wI, setWI] = useState(0);
     const [messages, setMessages] = useState(errors);
 
     const { doRequest } = useRequest({
@@ -29,7 +29,7 @@ const AddTournament = ({ games, consoles, errors }:
         body: {
             name,
             coins: coins || 0,
-            winnerCount: winnerCount || 0,
+            winnerCount: games[gameIndex]?.winners[wI] || 1,
             startDateTime: new Date(startDateTime),
             endDateTime: new Date(endDateTime),
             game: games[gameIndex].id,
@@ -46,7 +46,7 @@ const AddTournament = ({ games, consoles, errors }:
             case 'coins': return setCoins(val);
             case 'startDateTime': return setStartDateTime(val)
             case 'endDateTime': return setEndDateTime(val);
-            case 'winnerCount': return setWinnerCount(val);
+            case 'winnerCount': return setWI(val);
         }
     }
     const onSelectHandler = (e) => {
@@ -58,17 +58,22 @@ const AddTournament = ({ games, consoles, errors }:
                 setGameIndex(0);
                 setPIndex(0);
                 setGIndex(0);
+                setWI(0);
                 break;
             case 'gameIndex':
                 setGameIndex(val);
                 setPIndex(0);
                 setGIndex(0);
+                setWI(0);
                 break;
             case 'pIndex':
                 setPIndex(val);
                 break;
             case "gIndex":
                 setGIndex(val);
+                break;
+            case "winnerIndex":
+                setWI(val);
                 break;
         }
     }
@@ -84,7 +89,11 @@ const AddTournament = ({ games, consoles, errors }:
             </div>
             <div className="row">
                 <div className="col">
-                    <Input type="number" placeholder="winner count" name="winnerCount" value={winnerCount} onChange={onChangeHandler} />
+                    <Select onSelect={onSelectHandler} name="winnerIndex" placeholder="winner" value={wI} options={
+                        games[gameIndex].winners?.map((w: number, index: number) => {
+                            return <Option key={w} display={w} value={index} />
+                        })
+                    } />
                 </div>
                 <div className="col">
                     <Select onSelect={onSelectHandler} name="consoleIndex" placeholder="console" value={consoleIndex} options={

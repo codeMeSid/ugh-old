@@ -46,6 +46,12 @@ const GameDetail = ({ game, errors }: { game: GameDoc, errors: any }) => {
                     game?.groups?.map(g => <div key={g.name} className="pill">{g.name}-{g.participants}</div>)
                 }
             </div>
+            <h2>winners</h2>
+            <div className="row">
+                {
+                    game?.winners?.map(w => <div key={w} className="pill">{w}</div>)
+                }
+            </div>
         </div>
     </SideLayout>
 }

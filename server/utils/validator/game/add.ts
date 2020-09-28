@@ -12,6 +12,18 @@ export const gameAddValidator = [
       return false;
     })
     .withMessage("Particpants required"),
+  body("groups")
+    .custom((val) => {
+      if (val.length >= 1) return true;
+      return false;
+    })
+    .withMessage("groups required"),
+  body("winners")
+    .custom((val) => {
+      if (val.length >= 1) return true;
+      return false;
+    })
+    .withMessage("groups required"),
   body("cutoff")
     .custom((val) => {
       return val >= 20;

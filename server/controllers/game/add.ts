@@ -12,6 +12,7 @@ export const gameAddController = async (req: Request, res: Response) => {
     thumbnailUrl,
     cutoff,
     gameType,
+    winners,
   } = req.body;
   const existingGame = await Game.findOne({ name, console });
   if (existingGame) throw new BadRequestError("Game already exists");
@@ -33,6 +34,7 @@ export const gameAddController = async (req: Request, res: Response) => {
     participants,
     thumbnailUrl,
     gameType: type,
+    winners,
   });
   await game.save();
   res.send(game);

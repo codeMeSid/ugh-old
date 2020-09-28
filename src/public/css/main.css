@@ -1562,8 +1562,17 @@ tr:nth-child(even) {
     color: rgba(255, 255, 255, 0.5);
     text-align: center;
     margin-top: 1.5rem;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     text-transform: uppercase; }
+  .bracket__score {
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    margin-top: 1rem; }
+    .bracket__score__title {
+      font-size: 2rem;
+      text-transform: uppercase; }
+    .bracket__score__subtitle {
+      font-size: 3.6rem; }
 
 .bracket__detail {
   background-color: #01071a;

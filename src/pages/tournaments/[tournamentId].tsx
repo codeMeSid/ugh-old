@@ -49,8 +49,7 @@ const TournamentDetail = ({ tournament, matches, currentUser, errors }: { tourna
                 <Button text="Join" type="link" size="small" />
             </a>
         </Link>
-        const userHasJoined = tournament?.players
-            .filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id))
+        const userHasJoined = tournament?.players?.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id))
             .length > 0;
         if (currentUser && tournament?.status === "upcoming" && !userHasJoined)
             return <ProgressButton text="Join" type="link" size="small" onPress={async (_, next) => {
@@ -142,8 +141,7 @@ const TournamentDetail = ({ tournament, matches, currentUser, errors }: { tourna
                 </div>
             </div>
             {currentUser
-                && tournament?.players
-                    .filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id))
+                && tournament?.players?.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id))
                     .length > 0
                 &&
                 <div className="tournament__container tournament__container--footer">

@@ -3,7 +3,6 @@ import { UserPayload, TournamentStatus, GameGroups } from "@monsid/ugh";
 import { UserDoc } from "./user";
 import { BracketDoc } from "./bracket";
 import { GameDoc } from "./game";
-import { randomBytes } from "crypto";
 
 interface TournamentAttrs {
   name: string;
@@ -34,6 +33,7 @@ export interface TournamentDoc extends mongoose.Document {
   endDateTime: Date;
   brackets: Array<BracketDoc>;
   status: TournamentStatus;
+  winners: Array<string>;
 }
 
 interface TournamentModel extends mongoose.Model<TournamentDoc> {
@@ -51,6 +51,7 @@ const tournamentSchema = new mongoose.Schema(
     },
     winnerCount: Number,
     winnerCoin: Number,
+    winner: [String],
     players: [
       {
         refs: "Users",

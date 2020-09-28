@@ -1,3 +1,4 @@
+import { GameType } from "@monsid/ugh";
 import mongoose from "mongoose";
 import { UserDoc } from "./user";
 
@@ -14,6 +15,7 @@ interface BracketAttrs {
   };
   regId: string;
   round: number;
+  gameType: GameType;
 }
 
 export interface BracketDoc extends mongoose.Document {
@@ -33,6 +35,8 @@ export interface BracketDoc extends mongoose.Document {
   regId: string;
   round: number;
   updateBy: Date;
+  uploadBy: Date;
+  gameType: GameType;
 }
 interface BracketModel extends mongoose.Model<BracketDoc> {
   build(attrs: BracketAttrs): BracketDoc;
@@ -74,6 +78,14 @@ const BracketSchema = new mongoose.Schema(
     regId: String,
     winner: String,
     updateBy: mongoose.SchemaTypes.Date,
+    uploadBy: {
+      type: mongoose.SchemaTypes.Date,
+      default: new Date(Date.now() + 1000 * 60 * 10),
+    },
+    gameType: {
+      type: "string",
+      enum: Object.values(GameType),
+    },
   },
   {
     toJSON: {
