@@ -52,7 +52,7 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
             case 'participant': return setParticipant(val);
             case 'group': return setGroup(val);
             case 'gParticipant': return setGParticipant(val);
-            case 'cutoff': return setCutoff(val);
+            case 'cutoff': return setCutoff(parseInt(val));
             case 'winner': return setWinner(val)
         }
     }

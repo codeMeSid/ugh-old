@@ -1497,120 +1497,88 @@ tr:nth-child(even) {
     width: 100%;
     margin-bottom: 1rem; } }
 
-.brackets {
+.bracket__list {
   min-height: 88vh;
+  padding: 2rem;
   background-color: #01071a;
-  padding-top: 2rem; }
-  .brackets__title {
-    color: white;
-    text-transform: uppercase;
-    text-align: center; }
-  .brackets__container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; }
+  display: flex;
+  flex-wrap: wrap; }
 
 .bracket {
-  width: 40rem;
+  width: fit-content;
+  width: 30rem;
   height: fit-content;
-  margin: 2rem;
-  padding: 1rem;
-  border-radius: 1rem;
-  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.5);
+  padding: 1rem 2.5rem;
+  box-shadow: 1rem 1rem 2rem 0.4rem rgba(0, 0, 0, 0.7);
   border: 0.1rem solid rgba(255, 255, 255, 0.1);
-  position: relative; }
-  .bracket__plag {
+  margin: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.8rem;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden; }
+  .bracket__winner {
     position: absolute;
-    top: 50%;
+    color: white;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-30deg);
-    border: 0.2rem solid red;
-    color: red;
-    text-transform: uppercase;
-    font-size: 5rem; }
-  .bracket__round {
-    font-size: 1.4rem;
+    font-size: 5rem;
+    font-weight: 100;
+    border: 0.2rem red solid;
+    padding: 0.5rem;
+    color: red; }
+  .bracket.active {
+    border: 0.5rem solid rgba(255, 255, 0, 0.6); }
+  .bracket__timer {
     text-align: center;
-    color: rgba(255, 255, 255, 0.5);
-    text-transform: uppercase; }
-  .bracket__container {
-    margin-top: 1rem;
-    display: flex;
-    justify-content: space-evenly; }
-  .bracket__player {
-    height: 15rem;
-    width: 15rem;
-    position: relative;
-    background-color: rgba(128, 128, 128, 0.3);
-    border-radius: 50%;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover; }
-    .bracket__player__name {
-      font-size: 1.8rem;
-      text-transform: uppercase;
-      text-align: center;
-      color: rgba(255, 255, 255, 0.5);
-      margin-top: 1rem; }
-    .bracket__player:hover {
-      filter: grayscale(100%); }
-  .bracket__vs {
-    margin: auto 0;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 2.5rem; }
-  .bracket__winner {
-    color: rgba(255, 255, 255, 0.5);
-    text-align: center;
-    margin-top: 1.5rem;
-    font-size: 1.6rem;
-    text-transform: uppercase; }
-  .bracket__score {
-    color: rgba(255, 255, 255, 0.5);
-    text-align: center;
-    margin-top: 1rem; }
-    .bracket__score__title {
-      font-size: 2rem;
-      text-transform: uppercase; }
-    .bracket__score__subtitle {
-      font-size: 3.6rem; }
-
-.bracket__detail {
-  background-color: #01071a;
-  position: relative; }
-  .bracket__detail__play {
-    height: 30rem;
-    width: 90vw;
-    display: flex;
-    flex-wrap: wrap;
-    padding: 2rem;
-    align-items: center;
-    margin: 0 auto; }
-    .bracket__detail__play--1 {
-      border-top: 0.1rem solid rgba(128, 128, 128, 0.4); }
-    .bracket__detail__play--2 {
-      flex-direction: row-reverse;
-      border-top: 0.1rem solid rgba(128, 128, 128, 0.4); }
-  .bracket__detail__input {
-    margin-left: 5rem;
-    display: flex;
-    align-items: center;
-    color: white; }
-    .bracket__detail__input__score {
-      text-align: center;
-      font-size: 8rem; }
-      .bracket__detail__input__score__title {
-        font-size: 2rem; }
-    .bracket__detail__input--1 {
-      margin-left: 0;
-      margin-right: 5rem; }
-  .bracket__detail__timer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    background-color: #01071a;
-    transform: translate(-50%, -50%);
-    padding: 1rem;
-    border: 0.1rem solid rgba(128, 128, 128, 0.4);
+    font-size: 2rem;
     color: white;
-    font-size: 3rem;
-    text-transform: capitalize; }
+    margin: 1rem 0; }
+  .bracket__profile {
+    margin: 1rem auto;
+    width: 20rem;
+    height: 20rem;
+    background-color: rgba(128, 128, 128, 0.2);
+    border-radius: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat; }
+  .bracket__button {
+    display: inline-block; }
+  .bracket__ughId {
+    text-transform: uppercase;
+    word-wrap: break-word; }
+  .bracket__rank {
+    margin: 1rem 0; }
+    .bracket__rank__title {
+      font-size: 1.2rem;
+      margin-right: 1rem; }
+    .bracket__rank__value {
+      font-size: 4.8rem; }
+    .bracket__rank__position {
+      font-size: 1.2rem; }
+  .bracket__proof {
+    position: relative; }
+    .bracket__proof__image {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      width: 20rem;
+      max-height: 20rem;
+      height: 100%; }
+    .bracket__proof__text {
+      position: absolute;
+      top: 50%;
+      left: 0%;
+      transform: translate(-50%, -50%);
+      font-size: 1.8rem;
+      opacity: 0;
+      font-weight: 900;
+      z-index: 1;
+      transition: opacity 300ms linear; }
+    .bracket__proof:hover .bracket__proof__text {
+      opacity: 1; }
+    .bracket__proof:hover .bracket__proof__image {
+      opacity: 0.8;
+      filter: blur(0.1rem); }

@@ -58,7 +58,7 @@ const TournamentDetail = ({ tournament, matches, currentUser, errors }: { tourna
             }} />
         if (currentUser && tournament?.status === "upcoming" && userHasJoined)
             return <Button text="Joined" type="facebook" size="small" />
-        if (currentUser && tournament?.status === "started" && userHasJoined) return <Link href={`/tournaments/game/${tournament?.regId}`}>
+        if (currentUser && tournament?.status === "started" && userHasJoined) return <Link href={`/game/${tournament?.regId}`}>
             <a>
                 <Button text="Play" type="link" size="small" />
             </a>
@@ -152,7 +152,6 @@ const TournamentDetail = ({ tournament, matches, currentUser, errors }: { tourna
                 </div>
             }
         </div>
-        {/* <TournamentTab matches={matches} /> */}
     </MainLayout>
 }
 
@@ -163,23 +162,12 @@ TournamentDetail.getInitialProps = async (ctx) => {
         method: 'get',
         body: {}
     });
-    // const { data: tournaments, errors: errorsB }: { data: Array<TournamentDoc>, errors: Array<any> } = await serverRequest(ctx, { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
-
-    // const matches = {
-    //     upcoming: [],
-    //     started: [],
-    //     completed: []
-    // }
-
-    // if (tournaments) tournaments.forEach(tournament => {
-    //     matches[tournament.status] = [...matches[tournament.status], tournament];
-    // });
+    
     const errors = []
     if (errorsA) errors.push(...errorsA);
-    // if (errorsB) errors.push(...errorsB);
+    
 
     return {
-        // matches,
         tournament,
         errors
     }

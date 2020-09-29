@@ -23,13 +23,13 @@ export interface BracketDoc extends mongoose.Document {
     user: UserDoc;
     hasRaisedDispute: boolean;
     score: number;
-    uploadUrl: Array<string>;
+    uploadUrl: string;
   };
   teamB: {
     user: UserDoc;
     hasRaisedDispute: boolean;
     score: number;
-    uploadUrl: Array<string>;
+    uploadUrl: string;
   };
   winner: string;
   regId: string;
@@ -57,7 +57,7 @@ const BracketSchema = new mongoose.Schema(
         type: Number,
         default: 0,
       },
-      uploadUrl: [String],
+      uploadUrl: String,
     },
     teamB: {
       user: {
@@ -72,7 +72,7 @@ const BracketSchema = new mongoose.Schema(
         type: Number,
         default: 0,
       },
-      uploadUrl: [String],
+      uploadUrl: String,
     },
     round: Number,
     regId: String,

@@ -13,7 +13,7 @@ import DialogButton from "../components/button/dialog";
 
 const AddTournament = ({ gs, cs, errors }:
     { gs: Array<GameDoc>, cs: Array<ConsoleDoc>, errors: any }) => {
-    const [wc, setWc] = useState(1);
+    const [wI, setWI] = useState(0);
     const [messages, setMessages] = useState(errors);
     const [games] = useState(gs);
     const [game, setGame] = useState(0);
@@ -32,12 +32,12 @@ const AddTournament = ({ gs, cs, errors }:
         body: {
             name,
             coins,
-            winnerCount: wc,
+            winnerCount: games[game]?.winners[wI],
             startDateTime: new Date(sdt),
             endDateTime: new Date(edt),
-            game: games[game].id,
-            playerCount: games[game].participants[participants],
-            group: games[game].groups[group]
+            game: games[game]?.id,
+            playerCount: games[game]?.participants[participants],
+            group: games[game]?.groups[group]
         },
         method: "post",
         onSuccess: () => Router.replace("/my-tournament"),
@@ -48,9 +48,6 @@ const AddTournament = ({ gs, cs, errors }:
             case 'name': return setName(val);
             case 'coins':
                 if (val > 0) return setCoins(parseInt(val));
-                else return;
-            case 'winnerCount':
-                if (val > 0) return setWc(parseInt(val));
                 else return;
             case 'startDateTime': return setSdt(val)
             case 'endDateTime': return setEdt(val);
@@ -78,6 +75,9 @@ const AddTournament = ({ gs, cs, errors }:
             case "group":
                 setGroup(parseInt(val));
                 break;
+            case "winners":
+                setWI(parseInt(val));
+                break;
         }
     }
     return <MainLayout messages={messages}>
@@ -93,7 +93,9 @@ const AddTournament = ({ gs, cs, errors }:
             </div>
             <div className="row">
                 <div className="col">
-                    <Input type="number" placeholder="winner count" name="winnerCount" value={wc} onChange={onChangeHandler} />
+                    <Select name="winners" onSelect={onSelectHandler} value={wI} placeholder="winner" options={
+                        gs[game]?.winners?.map((w, index) => <Option key={w} display={w} value={index} />)
+                    } />
                 </div>
                 <div className="col">
                     <Select name="console" onSelect={onSelectHandler} value={console} placeholder="console" options={

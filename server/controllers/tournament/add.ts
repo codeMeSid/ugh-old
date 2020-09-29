@@ -5,6 +5,7 @@ import {
   TournamentStatus,
   BadRequestError,
   UserRole,
+  GameType,
 } from "@monsid/ugh";
 import { Game } from "../../models/game";
 import mongoose from "mongoose";
@@ -15,6 +16,7 @@ import { mailer } from "../../utils/mailer";
 import { MailerTemplate } from "../../utils/mailer-template";
 import { shuffle } from "../../utils/shuffle";
 import { Bracket } from "../../models/bracket";
+import { winnerLogic } from "../../utils/winner-logic";
 
 export const tournamentAddController = async (req: Request, res: Response) => {
   const {
@@ -106,38 +108,55 @@ export const tournamentAddController = async (req: Request, res: Response) => {
       new Date(startDateTime),
       async ({ id }: { id: string }) => {
         const session = await mongoose.startSession();
+        await session.startTransaction();
         try {
           const tournament = await Tournament.findById(id)
             .populate("players", "email ughId settings", "Users")
+            .populate("game", "gameType", "Games")
             .session(session);
           if (!tournament) return;
           if (tournament.status !== TournamentStatus.Upcoming) return;
           const users = shuffle(tournament.players);
           let i = 0;
           while (i < users.length) {
-            // TODO
+            const regId = randomBytes(4).toString("hex").substr(0, 5);
             const teamA = users[i];
-            const teamB = users[i + 1];
             if (!teamA) break;
-            // if (teamA.length > 0 && teamA.length < playersInTeam) {
-            //   // TODO TBD
-            // }
-            const bracket = Bracket.build({
-              teamA: {
-                user: teamA,
-              },
-              teamB: {
-                user: teamB,
-              },
-              round: 1,
-              regId: randomBytes(4).toString("hex").substr(0, 5),
-            });
-            if (!teamB) {
-              bracket.round = 2;
+            if (tournament.game.gameType === GameType.Rank) {
+              const bracket = Bracket.build({
+                teamA: {
+                  user: teamA,
+                },
+                teamB: {
+                  user: undefined,
+                },
+                gameType: tournament.game.gameType,
+                regId,
+                round: 1,
+              });
+              await bracket.save({ session });
+              tournament.brackets.push(bracket);
+              i += 1;
+            } else if (tournament.game.gameType === GameType.Score) {
+              const teamB = users[i + 1];
+              const bracket = Bracket.build({
+                teamA: {
+                  user: teamA,
+                },
+                teamB: {
+                  user: teamB,
+                },
+                round: 1,
+                regId,
+                gameType: tournament.game.gameType,
+              });
+              if (!teamB) {
+                bracket.round = 2;
+              }
+              await bracket.save({ session });
+              tournament.brackets.push(bracket);
+              i += 2;
             }
-            await bracket.save({ session });
-            tournament.brackets.push(bracket);
-            i += 2;
           }
           tournament.status = TournamentStatus.Started;
           await tournament.save({ session });
@@ -232,13 +251,6 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     //////////////////////////////////////////////////////
     //////////////////////////////////////////////////////
     //////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////
 
     timer.schedule(
       `${tournament.regId}-end`,
@@ -251,6 +263,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
             tournament.set({ status: TournamentStatus.Completed });
             await tournament.save();
           }
+          winnerLogic(tournament.id, null, true);
         } catch (error) {
           console.log({ m: "end", error: error.message });
           console.log("end");

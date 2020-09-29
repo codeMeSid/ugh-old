@@ -14,6 +14,7 @@ import { tournamentHandler } from "./tournament";
 import { transactionHandler } from "./transaction";
 import { adminHandler } from "./admin";
 import { settingHandler } from "./settings";
+import { bracketHandler } from "./bracket";
 
 export const apiHandlers: Array<ApiSign> = [
   {
@@ -147,6 +148,16 @@ export const apiHandlers: Array<ApiSign> = [
     ({ url, controller, middlewares, method }): ApiSign => {
       return {
         url: `/settings${url}`,
+        controller,
+        method,
+        middlewares: [...middlewares],
+      };
+    }
+  ),
+  ...Array.from(bracketHandler).map(
+    ({ url, controller, middlewares, method }): ApiSign => {
+      return {
+        url: `/bracket${url}`,
         controller,
         method,
         middlewares: [...middlewares],

@@ -1,12 +1,9 @@
-import { BadRequestError } from "@monsid/ugh";
+import { BadRequestError, GameType } from "@monsid/ugh";
 import { Request, Response } from "express";
 import { Bracket } from "../../models/bracket";
 import { Tournament } from "../../models/tournament";
 
-export const tournamentFetchBracketController = async (
-  req: Request,
-  res: Response
-) => {
+export const fetchBracketController = async (req: Request, res: Response) => {
   const { tournamentId } = req.params;
   const { id } = req.currentUser;
   const tournament = await Tournament.findOne({ regId: tournamentId });
@@ -22,5 +19,13 @@ export const tournamentFetchBracketController = async (
     .populate("teamB.user", "ughId uploadUrl", "Users");
   if (brackets.length === 0)
     throw new BadRequestError("This tournament was hacked.");
-  res.send(brackets);
+  let playerHasUploadedScore = false;
+  if (brackets[0].gameType === GameType.Rank)
+    for (let i = 0; i < brackets.length; i++)
+      if (JSON.stringify(brackets[i].teamA.user.id) === JSON.stringify(id)) {
+        playerHasUploadedScore = brackets[i].teamA.score > 0;
+        break;
+      }
+
+  res.send({ brackets, playerHasUploadedScore });
 };

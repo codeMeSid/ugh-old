@@ -75,7 +75,7 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc, errors: any }) => {
             <h1 style={{ textAlign: "center" }}>Profile Edit</h1>
             <div className="row">
                 <div className="col">
-                    <FileInput name="uploadUrl" placeholder="profile image" value={uploadUrl} onChange={onChangeHandler} />
+                    <FileInput showImage name="uploadUrl" placeholder="profile image" value={uploadUrl} onChange={onChangeHandler} />
                 </div>
             </div>
             <div className="row">
@@ -112,11 +112,11 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc, errors: any }) => {
             </div>
             <div className="row">
                 <div className="col">
-                    <FileInput value={aadharUrl} name="aadharUrl" placeholder="aadhar proof" onChange={onChangeHandler} />
+                    <FileInput showImage value={aadharUrl} name="aadharUrl" placeholder="aadhar proof" onChange={onChangeHandler} />
                     <Input value={aadharCard} placeholder="aadhar number" name="aadharCard" onChange={onChangeHandler} />
                 </div>
                 <div className="col">
-                    <FileInput value={panUrl} name="panUrl" placeholder="pancard proof" onChange={onChangeHandler} />
+                    <FileInput showImage value={panUrl} name="panUrl" placeholder="pancard proof" onChange={onChangeHandler} />
                     <Input value={panCard} placeholder="pan card no." name="panCard" onChange={onChangeHandler} />
                 </div>
             </div>
