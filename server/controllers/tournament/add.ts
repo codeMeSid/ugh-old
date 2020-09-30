@@ -133,6 +133,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
                 gameType: tournament.game.gameType,
                 regId,
                 round: 1,
+                uploadBy: new Date(Date.now() + 1000 * 60 * 10),
               });
               await bracket.save({ session });
               tournament.brackets.push(bracket);
@@ -149,6 +150,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
                 round: 1,
                 regId,
                 gameType: tournament.game.gameType,
+                uploadBy: new Date(Date.now() + 1000 * 60 * 10),
               });
               if (!teamB) {
                 bracket.round = 2;

@@ -51,7 +51,7 @@ const tournamentSchema = new mongoose.Schema(
     },
     winnerCount: Number,
     winnerCoin: Number,
-    winner: [String],
+    winners: [String],
     players: [
       {
         refs: "Users",

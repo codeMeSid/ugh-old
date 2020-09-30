@@ -35,6 +35,7 @@ export const bracketRankUpdateController = async (
       if (bracket.winner) return;
       bracket.winner = bracket.teamA.user.ughId;
       bracket.updateBy = undefined;
+      bracket.uploadBy = undefined;
       await bracket.save();
       winnerLogic(tournamentId, bracket.id);
     },

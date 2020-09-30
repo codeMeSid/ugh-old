@@ -34,6 +34,7 @@ export const bracketAcceptProofController = async (
   if (accept) bracket.winner = ughId;
   else bracket.winner = "NIL-UGH";
   bracket.updateBy = undefined;
+  bracket.uploadBy = undefined;
   await bracket.save();
   winnerLogic(tournamentId, bracket.id);
   res.send(true);

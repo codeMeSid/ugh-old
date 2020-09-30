@@ -16,6 +16,7 @@ interface BracketAttrs {
   regId: string;
   round: number;
   gameType: GameType;
+  uploadBy: Date;
 }
 
 export interface BracketDoc extends mongoose.Document {
@@ -78,10 +79,7 @@ const BracketSchema = new mongoose.Schema(
     regId: String,
     winner: String,
     updateBy: mongoose.SchemaTypes.Date,
-    uploadBy: {
-      type: mongoose.SchemaTypes.Date,
-      default: new Date(Date.now() + 1000 * 60 * 10),
-    },
+    uploadBy: mongoose.SchemaTypes.Date,
     gameType: {
       type: "string",
       enum: Object.values(GameType),

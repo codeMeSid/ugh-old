@@ -63,7 +63,6 @@ DisputeDetail.getInitialProps = async (ctx) => {
         body: {},
         method: "get"
     });
-    console.log(data)
     return { bracket: data, errors: errors || [] }
 }
 
