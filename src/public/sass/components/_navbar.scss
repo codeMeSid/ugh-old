@@ -132,14 +132,33 @@
     height: 100%;
     display: block;
     text-align: center;
-  }
-  &--link {
-    color: white;
-  }
-  &--icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    cursor: pointer;
+    overflow-y: scroll;
+    transition: width 300ms linear;
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+    &--link {
+      color: white;
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      margin-left: 1rem;
+      cursor: pointer;
+      &__title {
+        font-size: 0rem;
+        text-transform: capitalize;
+        margin-left: 0.7rem;
+      }
+      &__icon {
+        font-size: 3rem;
+      }
+    }
+    &:hover {
+      width: 20rem;
+    }
+    &:hover &--link__title {
+      font-size: 2rem;
+    }
   }
 }
 

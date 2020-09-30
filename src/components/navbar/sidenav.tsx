@@ -3,7 +3,8 @@ import { GoHome } from 'react-icons/go';
 import { RiGalleryLine, RiGameLine, RiUser5Line, RiGamepadLine, RiSteamFill, RiBitCoinLine, RiBankLine, RiLifebuoyLine, RiSettings3Line } from 'react-icons/ri';
 import { VscDebugConsole } from 'react-icons/vsc';
 import { BsPeople, BsNewspaper } from 'react-icons/bs';
-import {AiOutlineMessage} from 'react-icons/ai'
+import { AiOutlineMessage } from 'react-icons/ai';
+import { GiCrossedSwords } from 'react-icons/gi';
 
 const SideNavbar = () => {
     return <>
@@ -23,6 +24,7 @@ const SideNavbar = () => {
             <NavlinkIcon Icon={RiGalleryLine} href="/admin/gallery" title="gallery" />
             <NavlinkIcon Icon={RiSettings3Line} href="/admin/settings" title="settings" />
             <NavlinkIcon Icon={AiOutlineMessage} href="/admin/messages" title="messages" />
+            <NavlinkIcon Icon={GiCrossedSwords} href="/admin/disputes" title="disputes" />
         </div>
         <div style={{ width: "5rem" }} />
     </>
