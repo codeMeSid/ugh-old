@@ -12,19 +12,19 @@ const SideNavbar = () => {
             <div style={{ marginTop: 5, marginBottom: 5, fontSize: 20, color: "white" }}>UGH</div>
             <NavlinkIcon Icon={GoHome} href="/admin" title="home" />
             <NavlinkIcon Icon={RiUser5Line} href="/admin/users" title="users" />
-            <NavlinkIcon Icon={RiGamepadLine} href="/admin/tournaments" title="tournaments" />
-            <NavlinkIcon Icon={RiBankLine} href="/admin/transactions" title="transactions" />
-            <NavlinkIcon Icon={BsPeople} href="/admin/sponsors" title="sponsors" />
-            <NavlinkIcon Icon={RiLifebuoyLine} href="/admin/sponsorships" title="sponsorships" />
-            <NavlinkIcon Icon={RiSteamFill} href="/admin/streams" title="streams" />
+            <NavlinkIcon Icon={AiOutlineMessage} href="/admin/messages" title="messages" />
             <NavlinkIcon Icon={RiBitCoinLine} href="/admin/coins" title="coins" />
             <NavlinkIcon Icon={VscDebugConsole} href="/admin/consoles" title="consoles" />
             <NavlinkIcon Icon={RiGameLine} href="/admin/games" title="games" />
+            <NavlinkIcon Icon={RiGamepadLine} href="/admin/tournaments" title="tournaments" />
+            <NavlinkIcon Icon={GiCrossedSwords} href="/admin/disputes" title="disputes" />
+            <NavlinkIcon Icon={RiBankLine} href="/admin/transactions" title="transactions" />
+            <NavlinkIcon Icon={RiSettings3Line} href="/admin/settings" title="settings" />
+            <NavlinkIcon Icon={RiLifebuoyLine} href="/admin/sponsorships" title="sponsorships" />
+            <NavlinkIcon Icon={BsPeople} href="/admin/sponsors" title="sponsors" />
+            <NavlinkIcon Icon={RiSteamFill} href="/admin/streams" title="streams" />
             <NavlinkIcon Icon={BsNewspaper} href="/admin/news" title="news" />
             <NavlinkIcon Icon={RiGalleryLine} href="/admin/gallery" title="gallery" />
-            <NavlinkIcon Icon={RiSettings3Line} href="/admin/settings" title="settings" />
-            <NavlinkIcon Icon={AiOutlineMessage} href="/admin/messages" title="messages" />
-            <NavlinkIcon Icon={GiCrossedSwords} href="/admin/disputes" title="disputes" />
         </div>
         <div style={{ width: "5rem" }} />
     </>
