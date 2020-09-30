@@ -5,7 +5,9 @@ import {
   requireAdminAuth,
   requireAuth,
 } from "@monsid/ugh";
+import { bracketFetchDisputes } from "../controllers/bracket/fetch-all-disputes";
 import { fetchBracketController } from "../controllers/bracket/fetch-bracket";
+import { bracketFetchDisputeDetail } from "../controllers/bracket/fetch-dispute-detail";
 import { bracketRankDisputeController } from "../controllers/bracket/rank-dispute";
 import { bracketAcceptProofController } from "../controllers/bracket/update-accept-rank-proof";
 import { bracketRankDisputeProofController } from "../controllers/bracket/update-proof";
@@ -15,7 +17,13 @@ export const bracketHandler: Array<ApiSign> = [
   {
     url: "/fetch/disputes",
     method: HttpMethod.Get,
-    controller: null,
+    controller: bracketFetchDisputes,
+    middlewares: [currentUser, requireAdminAuth],
+  },
+  {
+    url: "/fetch/dispute/detail/:bracketId",
+    method: HttpMethod.Get,
+    controller: bracketFetchDisputeDetail,
     middlewares: [currentUser, requireAdminAuth],
   },
   {

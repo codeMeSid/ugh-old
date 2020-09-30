@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import SideLayout from "../../../components/layout/sidelayout"
+import SideLayout from "../../../components/layout/sidelayout";
 import Table from "../../../components/table"
 import Button from "../../../components/button/main"
 import { useRequest } from '../../../hooks/use-request';
