@@ -9,16 +9,19 @@ const BracketList = ({ brackets, errors, userHasUploadedScore, currentUser, tour
     { brackets: Array<BracketDoc>, errors: any, userHasUploadedScore: boolean, currentUser: any, tournamentId: string }) => {
     const [messages, setMessages] = useState(errors);
     return <MainLayout messages={messages}>
+        <div className="bracket__title">brackets</div>
         <div className="bracket__list">
             {
                 brackets?.map(bracket => {
                     if (bracket.gameType === "score") return <BracketScoreCard
                         bracket={bracket}
+                        tournamentId={tournamentId}
+                        onError={(errors: any) => setMessages(errors)}
                         currentUser={currentUser} key={Math.random()} />
                     else return <BracketRankCard
                         bracket={bracket}
                         tournamentId={tournamentId}
-                        onError={(errors) => setMessages(errors)}
+                        onError={(errors: any) => setMessages(errors)}
                         userHasUploadedScore={userHasUploadedScore}
                         currentUser={currentUser} key={Math.random()} />
                 })

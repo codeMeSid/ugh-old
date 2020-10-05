@@ -3,6 +3,7 @@ import { useRequest } from "../../../hooks/use-request";
 import SideLayout from "../../../components/layout/sidelayout";
 import Table from "../../../components/table";
 import Link from 'next/link';
+import { DQ } from "../../../../server/utils/winner-logic/dq";
 
 interface Dispute {
   bracketId: string;
@@ -21,6 +22,15 @@ const AdminDisputeDashboard = () => {
   const TableLink = (id: string) => <Link href={`/admin/disputes/${id}`}>
     <a className="table__link">{id.toUpperCase()}</a>
   </Link>
+  const disputeReason = (dispute) => {
+    if (!dispute) return { value: false, color: "red" }
+    switch (dispute) {
+      case DQ.DisputeLost:
+      case DQ.ScoreNotUploaded: return { value: "Disqualified", color: "red" };
+      default: return { value: "Winner", color: "green" };
+    }
+  }
+
   const { doRequest } = useRequest({
     url: "/api/ugh/bracket/fetch/disputes",
     method: "get",
@@ -33,8 +43,8 @@ const AdminDisputeDashboard = () => {
           <div>ON: {dispute.ughId.on.toUpperCase()}</div>
         </>,
         dispute.gameType.toUpperCase(),
-        <a href={dispute.proof} target="_blank"><img style={{ maxWidth: 200, maxHeight: 200 }} src={dispute.proof} /></a>,
-        <div style={{ color: dispute.wasResolved ? "green" : "red" }}>{dispute.wasResolved ? "YES" : "NO"}</div>
+        dispute.proof ? <a href={dispute.proof} target="_blank"><img style={{ maxWidth: 200, maxHeight: 200 }} src={dispute.proof} /></a> : "Not Uploaded",
+        <div style={{ color: disputeReason(dispute.wasResolved).color }}>{disputeReason(dispute.wasResolved).value}</div>
       ]))
     },
     onError: (errors) => setMessages(errors),

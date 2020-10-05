@@ -1,15 +1,12 @@
 import { BadRequestError, GameType, timer } from "@monsid/ugh";
 import { Request, Response } from "express";
-import { Bracket } from "../../models/bracket";
-import { User } from "../../models/user";
+import { Bracket } from "../../../models/bracket";
+import { User } from "../../../models/user";
 import mongoose from "mongoose";
-import { mailer } from "../../utils/mailer";
-import { MailerTemplate } from "../../utils/mailer-template";
+import { mailer } from "../../../utils/mailer";
+import { MailerTemplate } from "../../../utils/mailer-template";
 
-export const bracketRankDisputeController = async (
-  req: Request,
-  res: Response
-) => {
+export const raiseDisputeController = async (req: Request, res: Response) => {
   const { id } = req.currentUser;
   const { bracketId } = req.params;
   const session = await mongoose.startSession();

@@ -7,16 +7,20 @@ interface BracketAttrs {
     user: UserDoc;
     hasRaisedDispute?: boolean;
     score?: number;
+    updateBy?: Date;
+    uploadBy?: Date;
   };
   teamB: {
     user: UserDoc;
     hasRaisedDispute?: boolean;
     score?: number;
+    updateBy?: Date;
+    uploadBy?: Date;
   };
   regId: string;
   round: number;
   gameType: GameType;
-  uploadBy: Date;
+  uploadBy?: Date;
 }
 
 export interface BracketDoc extends mongoose.Document {
@@ -25,12 +29,16 @@ export interface BracketDoc extends mongoose.Document {
     hasRaisedDispute: boolean;
     score: number;
     uploadUrl: string;
+    updateBy: Date;
+    uploadBy: Date;
   };
   teamB: {
     user: UserDoc;
     hasRaisedDispute: boolean;
     score: number;
     uploadUrl: string;
+    updateBy: Date;
+    uploadBy: Date;
   };
   winner: string;
   regId: string;
@@ -59,6 +67,8 @@ const BracketSchema = new mongoose.Schema(
         default: 0,
       },
       uploadUrl: String,
+      updateBy: mongoose.SchemaTypes.Date,
+      uploadBy: mongoose.SchemaTypes.Date,
     },
     teamB: {
       user: {
@@ -74,6 +84,8 @@ const BracketSchema = new mongoose.Schema(
         default: 0,
       },
       uploadUrl: String,
+      updateBy: mongoose.SchemaTypes.Date,
+      uploadBy: mongoose.SchemaTypes.Date,
     },
     round: Number,
     regId: String,

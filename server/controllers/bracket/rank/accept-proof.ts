@@ -1,13 +1,11 @@
 import { BadRequestError, UserRole } from "@monsid/ugh";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
-import { Bracket } from "../../models/bracket";
-import { winnerLogic } from "../../utils/winner-logic";
+import { Bracket } from "../../../models/bracket";
+import { winnerLogic } from "../../../utils/winner-logic";
+import { DQ } from "../../../utils/winner-logic/dq";
 
-export const bracketAcceptProofController = async (
-  req: Request,
-  res: Response
-) => {
+export const acceptProofController = async (req: Request, res: Response) => {
   const { bracketId } = req.params;
   const { id, role } = req.currentUser;
   const { accept, tournamentId } = req.body;
@@ -32,10 +30,10 @@ export const bracketAcceptProofController = async (
   if (!hasRaisedDispute) throw new BadRequestError("No issue was raised");
   if (accept && !uploadUrl) throw new BadRequestError("No proof was uploaded");
   if (accept) bracket.winner = ughId;
-  else bracket.winner = "NIL-UGH";
+  else bracket.winner = DQ.DisputeLost;
   bracket.updateBy = undefined;
   bracket.uploadBy = undefined;
   await bracket.save();
-  winnerLogic(tournamentId, bracket.id);
+  winnerLogic(tournamentId, bracket.id, false, "dispute accepted");
   res.send(true);
 };

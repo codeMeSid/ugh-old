@@ -15,11 +15,11 @@ export const tournamentAddValidator = [
   body("startDateTime")
     .not()
     .isDate()
-    .custom((val) => {
-      const date = new Date(val);
-      const msIn1Hr = 1000 * 60 * 60;
-      return date.valueOf() - Date.now().valueOf() >= msIn1Hr;
-    })
+    // .custom((val) => {
+    //   const date = new Date(val);
+    //   const msIn1Hr = 1000 * 60 * 60;
+    //   return date.valueOf() - Date.now().valueOf() >= msIn1Hr;
+    // })
     .withMessage("Match should be scheduled atleast 1 hour ahead"),
   body("endDateTime")
     .not()

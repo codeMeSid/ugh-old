@@ -5,6 +5,7 @@ import Router from 'next/router';
 import SideLayout from "../../../components/layout/sidelayout";
 import Input from "../../../components/input/input";
 import ProgressButton from "../../../components/button/progress";
+import { DQ } from "../../../../server/utils/winner-logic/dq";
 
 const DisputeDetail = ({ bracket: { team, winner, regId, gameType, tournamentId }, errors }: {
     bracket?: {
@@ -31,6 +32,14 @@ const DisputeDetail = ({ bracket: { team, winner, regId, gameType, tournamentId 
         });
         doRequest();
     }
+
+
+    const getStatus = () => {
+        if (winner === DQ.DisputeLost) return "Disqulified";
+        else return "Winner";
+    }
+
+
     return <SideLayout messages={messages} title={regId}>
         <div className="detail">
             <div className="row">
@@ -39,11 +48,16 @@ const DisputeDetail = ({ bracket: { team, winner, regId, gameType, tournamentId 
             <div className="row">
                 <Input placeholder={gameType} value={team?.score} disabled />
             </div>
+            {
+                winner && <div className="row">
+                    <Input placeholder="dispute status" value={getStatus()} disabled />
+                </div>
+            }
             <div className="row">
                 <a href={team?.uploadUrl} target="_blank"><img style={{ maxWidth: 400, maxHeight: 200 }} src={team?.uploadUrl} /></a>
             </div>
             {
-                winner ? null : <>
+                !winner && !team?.uploadUrl && <>
                     <ProgressButton type="whatsapp" text="Accept" size="medium" style={{ margin: "0 0.5rem" }} onPress={(_, next) => {
                         disputeHandler(true)
                     }} />

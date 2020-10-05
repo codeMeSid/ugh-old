@@ -32,10 +32,9 @@ const TournamentDetail = ({ tournament, matches, currentUser, errors }: { tourna
         const diffTime = `${daysLeft} Days ${hoursLeft < 10 ? `0${hoursLeft}` : hoursLeft}h ${minsLeft < 10 ? `0${minsLeft}` : minsLeft}m ${secondsLeft < 10 ? `0${secondsLeft}` : secondsLeft}s`
         if (daysLeft >= 0 && hoursLeft >= 0 && minsLeft >= 0 && secondsLeft >= 0) {
             if (daysLeft === 0 && hoursLeft === 0 && minsLeft === 0 && secondsLeft === 0) {
-                // if (tournament?.status === "upcoming") {
-                //     alert("Reload the page for updates");
-                //     Router.reload();
-                // }
+                if (tournament?.status === "upcoming") {
+                    setTimeout(() => Router.reload(), 10000);
+                }
                 stopTimer = true;
                 return setTimer(tournament?.status?.toUpperCase())
             }
@@ -52,10 +51,13 @@ const TournamentDetail = ({ tournament, matches, currentUser, errors }: { tourna
         const userHasJoined = tournament?.players?.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id))
             .length > 0;
         if (currentUser && tournament?.status === "upcoming" && !userHasJoined)
-            return <ProgressButton text="Join" type="link" size="small" onPress={async (_, next) => {
-                await doRequest();
-                next();
-            }} />
+            return <DialogButton style={{ position: "fixed" }} size="medium" title="Join" fullButton onAction={doRequest}>
+                <div style={{ fontSize: 20, marginBottom: 20 }}>You will be charged {tournament?.coins || 10} coins to join</div>
+            </DialogButton>
+        // return <ProgressButton text="Join" type="link" size="small" onPress={async (_, next) => {
+        //     await doRequest();
+        //     next();
+        // }} />
         if (currentUser && tournament?.status === "upcoming" && userHasJoined)
             return <Button text="Joined" type="facebook" size="small" />
         if (currentUser && tournament?.status === "started" && userHasJoined) return <Link href={`/game/${tournament?.regId}`}>
@@ -112,7 +114,7 @@ const TournamentDetail = ({ tournament, matches, currentUser, errors }: { tourna
                             <div className="tournament__card__body__lower__left">
                                 <div className="tournament__card__body__lower__left__item">
                                     <div style={{ marginBottom: 10 }}>Entry Coins</div>
-                                    <div>{tournament?.coins || 0} coins</div>
+                                    <div>{(tournament?.coins / tournament?.group?.participants) || 0} coins</div>
                                 </div>
                                 <div className="tournament__card__body__lower__left__item">
                                     <div style={{ marginBottom: 10 }}>Platform</div>
@@ -162,10 +164,10 @@ TournamentDetail.getInitialProps = async (ctx) => {
         method: 'get',
         body: {}
     });
-    
+
     const errors = []
     if (errorsA) errors.push(...errorsA);
-    
+
 
     return {
         tournament,

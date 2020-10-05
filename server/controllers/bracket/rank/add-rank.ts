@@ -1,10 +1,9 @@
 import { BadRequestError, NotAuthorizedError, timer } from "@monsid/ugh";
 import { Request, Response } from "express";
-import { Bracket } from "../../models/bracket";
-import { Tournament } from "../../models/tournament";
-import { winnerLogic } from "../../utils/winner-logic";
+import { Bracket } from "../../../models/bracket";
+import { winnerLogic } from "../../../utils/winner-logic";
 
-export const bracketRankUpdateController = async (
+export const addRankController = async (
   req: Request,
   res: Response
 ) => {
@@ -37,7 +36,7 @@ export const bracketRankUpdateController = async (
       bracket.updateBy = undefined;
       bracket.uploadBy = undefined;
       await bracket.save();
-      winnerLogic(tournamentId, bracket.id);
+      winnerLogic(tournamentId, bracket.id, false, "rank added");
     },
     { id: bracket.id, tournamentId }
   );

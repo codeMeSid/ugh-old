@@ -13,7 +13,7 @@ const PlayerCard = ({ player, currentUser }: { player: UserDoc, currentUser: any
         <div className="player__profile">
             <Link href={profileUrl}>
                 <a>
-                    <img src={player?.uploadUrl || PlayerImg} alt={player?.ughId} className="player__profile__image" />
+                    <div style={{ backgroundImage: `url(${player?.uploadUrl || PlayerImg})` }} className="player__profile__image" />
                 </a>
             </Link>
         </div>

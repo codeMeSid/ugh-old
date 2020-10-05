@@ -1,14 +1,11 @@
 import { BadRequestError } from "@monsid/ugh";
 import { Request, Response } from "express";
-import { Bracket } from "../../models/bracket";
+import { Bracket } from "../../../models/bracket";
 import mongoose from "mongoose";
-import { mailer } from "../../utils/mailer";
-import { MailerTemplate } from "../../utils/mailer-template";
+import { mailer } from "../../../utils/mailer";
+import { MailerTemplate } from "../../../utils/mailer-template";
 
-export const bracketRankDisputeProofController = async (
-  req: Request,
-  res: Response
-) => {
+export const addProofController = async (req: Request, res: Response) => {
   const { bracketId } = req.params;
   const { proof } = req.body;
   const { id } = req.currentUser;

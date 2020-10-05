@@ -7,23 +7,34 @@ import ProgressButton from "../button/progress";
 import FileInput from "../input/file";
 import Input from "../input/input";
 import Router from 'next/router';
+import { DQ } from "../../../server/utils/winner-logic/dq";
 
 const BracketRankCard = ({ userHasUploadedScore, currentUser, bracket, onError, tournamentId }: { userHasUploadedScore: boolean, currentUser: any, bracket: BracketDoc, onError: any, tournamentId: string }) => {
     const isUserBracket = JSON.stringify(bracket.teamA.user.id) === JSON.stringify(currentUser.id);
+    const result = bracket?.winner === DQ.DisputeLost || bracket?.winner === DQ.ScoreNotUploaded ? "Disqualified" : "Accepted";
+    const hasWinner = !!bracket?.winner;
+    const hasScore = bracket?.teamA?.score > 0;
     const canUpdateRank = isUserBracket && bracket.teamA.score === 0;
-    const canRaiseDispute = userHasUploadedScore && bracket.teamA.score !== 0 && !bracket.teamB.hasRaisedDispute;
+    const canRaiseDispute = userHasUploadedScore && bracket.teamA.score !== 0 && !bracket.teamB.hasRaisedDispute && !isUserBracket;
     const disputeHasBeenRaised = userHasUploadedScore && bracket.teamB.hasRaisedDispute;
     const canUploadProof = userHasUploadedScore && bracket.teamB.hasRaisedDispute && bracket.teamA.score !== 0 && !bracket.teamA.uploadUrl && isUserBracket;
     const isProofAvailable = (JSON.stringify(bracket?.teamB?.user?.id) === JSON.stringify(currentUser?.id) || isUserBracket) && bracket.teamA.uploadUrl;
-    const canAcceptProof = JSON.stringify(bracket?.teamB?.user?.id) === JSON.stringify(currentUser?.id) && userHasUploadedScore && bracket.teamB.hasRaisedDispute && bracket.teamA.score !== 0;
+    const canAcceptProof = JSON.stringify(bracket?.teamB?.user?.id) === JSON.stringify(currentUser?.id) && userHasUploadedScore && bracket.teamB.hasRaisedDispute && bracket.teamA.score !== 0 && bracket.teamA.uploadUrl;
     let stopTimer = false;
     // states
     const [utimer, setutimer] = useState("");
     const [ptimer, setptimer] = useState("");
     const [updateRank, setUpdateRank] = useState(false);
     const [raiseDispute, setRaiseDispute] = useState(true);
-    const [rank, setRank] = useState(0);
+    const [rank, setRank] = useState(1);
     const [proof, setProof] = useState("");
+    // function
+    const onChangeHandler = (name, val) => {
+        switch (name) {
+            case "rank": return setRank(val);
+            case "proof": return setProof(val);
+        }
+    }
     // effects
     useEffect(() => {
         if (bracket.uploadBy && !stopTimer)
@@ -70,6 +81,19 @@ const BracketRankCard = ({ userHasUploadedScore, currentUser, bracket, onError, 
             setptimer(diffTime);
         }
     }
+    const getReason = () => {
+        switch (bracket?.winner) {
+            case DQ.ScoreNotUploaded: return <div className="bracket__rank__reason">
+                <div className="bracket__rank__title">reason</div>
+                <div className="bracket__rank__value">Score not uploaded</div>
+            </div>
+            case DQ.DisputeLost: return <div className="bracket__rank__reason">
+                <div className="bracket__rank__reason__title">reason</div>
+                <div className="bracket__rank__reason__value">dispute lost</div>
+            </div>;
+            default: return null;
+        }
+    }
     // requests
     const { doRequest: updateScoreHandler } = useRequest({
         url: `/api/ugh/bracket/rank/add/${bracket.regId}`,
@@ -100,60 +124,61 @@ const BracketRankCard = ({ userHasUploadedScore, currentUser, bracket, onError, 
         onSuccess: Router.reload,
         onError
     });
-    return <div className={`bracket ${isUserBracket ? "active" : ""}`}>
-        <div>Final Round</div>
-        <div className="bracket__profile" style={{ backgroundImage: `url(${bracket.teamA.user?.uploadUrl})` }} />
-        <div className="bracket__ughId">{bracket.teamA.user.ughId} {isUserBracket && "(YOU)"}</div>
-        <div className="bracket__rank">
-            <span className="bracket__rank__title">Rank</span>
-            <span className="bracket__rank__value">{bracket.teamA.score || 0}</span>
-            <span className="bracket__rank__postion">{numberPostion(bracket.teamA.score || 0)}</span>
-        </div>
-        {bracket.winner && <div className="bracket__winner">Completed</div>}
-        {!bracket.winner && <div className="bracket__button">
-            {
-                canUpdateRank && <DialogButton disabled={!updateRank} type={"link"} title={updateRank ? "Update Rank" : `enable in ${utimer}`} onAction={updateScoreHandler} style={{ position: "fixed" }} fullButton>
-                    <Input placeholder="Upload Rank" value={rank} onChange={(n, v) => setRank(parseInt(v))} type="number" />
-                </DialogButton>
-            }
-            {
-                canRaiseDispute && <div className="bracket__timer">
-                    <div className="bracket__timer__value">{ptimer} left to</div>
-                    {isUserBracket
-                        ? <div style={{ marginTop: "1rem" }}>Raise Dispute</div>
-                        : <ProgressButton disabled={!raiseDispute} type={raiseDispute ? "youtube" : "disabled"} size="large" text="Raise Dispute" onPress={async (_, next) => {
+    return <div className="bracket__rank">
+        <div className="bracket__rank__profile" style={{ backgroundImage: `url(${bracket.teamA.user?.uploadUrl})` }} />
+        <div className="bracket__rank__ughId">{bracket.teamA.user.ughId} {isUserBracket && "(YOU)"}</div>
+        {hasScore && <div className="bracket__rank__score">
+            <span className="bracket__rank__score--title">rank</span>
+            <span className="bracket__rank__score--value">{bracket.teamA.score || 0}</span>
+            <span className="bracket__rank__score--position">{numberPostion(bracket.teamA.score || 0)}</span>
+        </div>}
+        {hasWinner && getReason()}
+        {hasWinner
+            ? <div className={`bracket__rank__result ${result === "Accepted" ? "active" : ""}`}>{result}</div>
+            : <>
+                {canUpdateRank && <div style={{ marginTop: 10 }}>
+                    <DialogButton disabled={!updateRank} type={"link"} title={updateRank ? "Update Rank" : utimer} onAction={updateScoreHandler} style={{ position: "fixed" }} fullButton>
+                        <Input placeholder="Upload Rank" type="number" value={rank} name="rank" onChange={onChangeHandler} />
+                    </DialogButton>
+                </div>}
+                {canRaiseDispute && <>
+                    <div style={{ textAlign: "center", fontSize: 18, color: "white" }}>{ptimer} to</div>
+                    <div style={{ textAlign: "center", display: "flex", marginTop: 10 }}>
+                        <ProgressButton disabled={!raiseDispute} type="youtube" size="large" text="Raise Dispute" style={{ display: "block" }} onPress={async (_, next) => {
                             await disputeHandler();
                             next();
-                        }} />}
-                </div>
-            }
-            {
-                disputeHasBeenRaised && <div className="bracket__dispute">{bracket.teamB.user?.ughId?.toUpperCase()} has raised dispute</div>
-            }
-            {
-                canUploadProof && <div style={{ display: "inline-block" }}>
-                    <DialogButton style={{ minWidth: "40rem", position: "fixed" }} type="github" title="Upload Proof" onAction={proofHandler} fullButton>
-                        <FileInput name="proof" placeholder="Rank Proof" onChange={(n, v) => setProof(v)} showImage />
-                    </DialogButton>
-                </div>
-            }
-            {
-                isProofAvailable && <div className="bracket__proof__container">
-                    <a className="bracket__proof" href={bracket?.teamA?.uploadUrl} target="_blank">
-                        <div className="bracket__proof__text">Click to View</div>
-                        <img src={bracket.teamA.uploadUrl} alt="UGH dispute proof" className="bracket__proof__image" />
-                    </a>
-                    {canAcceptProof && <div>
-                        <ProgressButton size="large" type="whatsapp" text="Accept Proof" onPress={async (_, next) => {
-                            await proofAcceptHandler();
-                            next();
                         }} />
-                        <ProgressButton style={{ marginTop: "1rem" }} size="large" type="facebook" text="Chat with Admin" />
+                    </div></>}
+                {
+                    disputeHasBeenRaised && <div className="bracket__rank__dispute">{bracket.teamB.user?.ughId?.toUpperCase()} raised dispute</div>
+                }
+                {
+                    canUploadProof && <div style={{ marginTop: 10 }}>
+                        <DialogButton style={{ width: "30rem", position: "fixed" }} onAction={proofHandler} type="github" title="Upload Proof" fullButton>
+                            <FileInput name="proof" placeholder="Rank Proof" showImage onChange={onChangeHandler} />
+                        </DialogButton>
                     </div>
-                    }
-                </div>
-            }
-        </div>}
+                }
+                {
+                    isProofAvailable && <div className="bracket__rank__proof">
+                        <div className="bracket__rank__proof__title">uploaded proof</div>
+                        <a href={bracket?.teamA?.uploadUrl} className="bracket__rank__proof__container" target="_blank">
+                            <img src={bracket?.teamA?.uploadUrl} alt="UGH PROOF" className="bracket__rank__proof__container__image" />
+                        </a>
+                        <a href={bracket?.teamA?.uploadUrl} className="bracket__rank__proof__link">Click to view</a>
+                    </div>
+                }
+                {
+                    canAcceptProof && <div className="bracket__rank__accept">
+                        <ProgressButton type="whatsapp" text="Accept" size="large" onPress={async (_, next) => { await proofAcceptHandler(); next() }} />
+                    </div>
+                }
+                {
+                    canAcceptProof && <div className="bracket__rank__accept">
+                        <ProgressButton type="youtube" text="Chat with Admin" size="large" />
+                    </div>
+                }
+            </>}
     </div>
 }
 
