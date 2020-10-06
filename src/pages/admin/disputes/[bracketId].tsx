@@ -57,7 +57,7 @@ const DisputeDetail = ({ bracket: { team, winner, regId, gameType, tournamentId 
                 <a href={team?.uploadUrl} target="_blank"><img style={{ maxWidth: 400, maxHeight: 200 }} src={team?.uploadUrl} /></a>
             </div>
             {
-                !winner && !team?.uploadUrl && <>
+                !winner && team?.uploadUrl && <>
                     <ProgressButton type="whatsapp" text="Accept" size="medium" style={{ margin: "0 0.5rem" }} onPress={(_, next) => {
                         disputeHandler(true)
                     }} />

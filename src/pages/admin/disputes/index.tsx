@@ -27,7 +27,8 @@ const AdminDisputeDashboard = () => {
     switch (dispute) {
       case DQ.DisputeLost:
       case DQ.ScoreNotUploaded: return { value: "Disqualified", color: "red" };
-      default: return { value: "Winner", color: "green" };
+      case undefined: return { value: "No", color: "red" };
+      default: return { value: "Yes", color: "green" };
     }
   }
 

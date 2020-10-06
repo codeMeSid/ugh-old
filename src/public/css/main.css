@@ -1562,7 +1562,7 @@ tr:nth-child(even) {
       margin-right: 0.5rem; }
   .bracket__score__winner {
     position: absolute;
-    top: 40%;
+    top: 38%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-30deg);
     font-size: 4.5rem;
@@ -1571,7 +1571,6 @@ tr:nth-child(even) {
     padding: 0.2rem; }
     .bracket__score__winner--winner {
       color: white;
-      top: 40%;
       background-color: lightgreen; }
       @media (max-width: 37.5em) {
         .bracket__score__winner--winner {
@@ -1618,7 +1617,7 @@ tr:nth-child(even) {
       width: 15rem; }
       .bracket__score__proof--image img {
         width: 15rem;
-        background-color: red; }
+        border: 0.1rem solid rgba(255, 0, 0, 0.4); }
     .bracket__score__proof--title {
       position: absolute;
       top: 50%;
