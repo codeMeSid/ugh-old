@@ -683,6 +683,10 @@ tr:nth-child(even) {
         text-transform: capitalize;
         margin-bottom: 0.5rem;
         max-width: 50rem; }
+  .wallpaper--404 {
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-position: center; }
 
 .message_handler {
   position: fixed;
