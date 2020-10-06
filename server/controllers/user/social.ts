@@ -24,7 +24,7 @@ export const userSocialAuthController = async (req: Request, res: Response) => {
   }
   const userJwt = generateToken(
     {
-      email: user.email,
+      ughId: user.ughId,
       id: user.id,
       role: user.role,
       name: user.name,

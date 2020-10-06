@@ -2,6 +2,7 @@ import { serverRequest } from "../../../hooks/server-request";
 import { GameDoc } from "../../../../server/models/game";
 import SideLayout from "../../../components/layout/sidelayout";
 import Input from "../../../components/input/input";
+import RichText from "../../../components/rich-text";
 
 const GameDetail = ({ game, errors }: { game: GameDoc, errors: any }) => {
     return <SideLayout messages={errors} title={game?.name?.substr(0, 5)}>
@@ -52,6 +53,10 @@ const GameDetail = ({ game, errors }: { game: GameDoc, errors: any }) => {
                     game?.winners?.map(w => <div key={w} className="pill">{w}</div>)
                 }
             </div>
+            <h2>rules</h2>
+            <div style={{ maxWidth: "60rem", width: "100%", margin: "0 auto" }}>
+                <RichText content={game?.rules} />
+            </div>
         </div>
     </SideLayout>
 }
@@ -63,6 +68,7 @@ GameDetail.getInitialProps = async (ctx) => {
         body: {},
         method: "get"
     });
+    console.log(data.rules)
     return { game: data, errors: errors || [] };
 }
 

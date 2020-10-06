@@ -1,8 +1,8 @@
 import { errorlog, GameType } from "@monsid/ugh";
 import mongoose from "mongoose";
-import { Bracket } from "../../models/bracket";
-import { Tournament } from "../../models/tournament";
-import { User } from "../../models/user";
+import { Bracket, BracketDoc } from "../../models/bracket";
+import { Tournament, TournamentDoc } from "../../models/tournament";
+import { User, UserDoc } from "../../models/user";
 import { rankLogger } from "./rank";
 import { scoreLogger } from "./score";
 
@@ -31,13 +31,20 @@ export const winnerLogic = async (
     const brackets = await Bracket.find({
       _id: { $in: tournament.brackets },
     }).session(session);
-    let updates;
+    const bracket = await Bracket.findOne({ regId: bracketId }).session(
+      session
+    );
+    let updates: {
+      updatedTournament: TournamentDoc;
+      updatedBrackets: Array<BracketDoc>;
+      updateUsers: Array<UserDoc>;
+    };
     switch (tournament.game.gameType) {
       case GameType.Rank:
         updates = await rankLogger(tournament, brackets, users);
         break;
       case GameType.Score:
-        updates = await scoreLogger(tournament, brackets, users);
+        updates = await scoreLogger(tournament, brackets, bracket, users);
         break;
     }
 

@@ -157,7 +157,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
               });
               if (teamB.length === 0) {
                 bracket.round = 2;
-                bracket.teamB.uploadBy = undefined;
+                bracket.teamA.uploadBy = undefined;
               }
               await bracket.save({ session });
               tournament.brackets.push(bracket);

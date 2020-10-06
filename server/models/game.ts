@@ -11,6 +11,7 @@ interface GameAttrs {
   thumbnailUrl: string;
   cutoff: number;
   gameType: GameType;
+  rules: string;
 }
 
 export interface GameDoc extends mongoose.Document {
@@ -24,6 +25,7 @@ export interface GameDoc extends mongoose.Document {
   isActive: boolean;
   cutoff: number;
   gameType: GameType;
+  rules: string;
 }
 
 interface GameModel extends mongoose.Model<GameDoc> {
@@ -51,6 +53,7 @@ const gameSchema = new mongoose.Schema(
       type: "string",
       enum: Object.values(GameType),
     },
+    rules: String,
     groups: [
       {
         name: String,

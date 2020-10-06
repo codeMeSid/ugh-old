@@ -21,6 +21,6 @@
     "**/*.tsx",
     "**/*.html",
     "src/hooks/use-request.ts",
-    "src/components/button.jsx"
+    "src/components/button.jsx", "src/pages/editor.tsx"
   ]
 }

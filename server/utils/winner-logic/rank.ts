@@ -2,11 +2,22 @@ import { BracketDoc } from "../../models/bracket";
 import { TournamentDoc } from "../../models/tournament";
 import { UserDoc } from "../../models/user";
 
+// check for all brackets has winner
+// if yes - filter out all non DQ
+// if no - check for if tournament is over
+// if yes - assign all non winner brackets as DQ and get winners
+// if no - return
 export const rankLogger = (
   tournament: TournamentDoc,
   brackets: BracketDoc[],
   users: UserDoc[]
-) => {};
+) => {
+  return {
+    updatedTournament: tournament,
+    updatedBrackets: brackets,
+    updateUsers: users,
+  };
+};
 
 // console.log(message);
 // try {

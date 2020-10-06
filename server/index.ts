@@ -7,7 +7,6 @@ import {
   paymentHandler,
   DatabaseConnectionError,
   currentUser,
-  requireAdminAuth,
   authAdminRoute,
 } from "@monsid/ugh";
 import { app, nextApp } from "./app";
@@ -21,6 +20,7 @@ import {
 } from "./utils/env-check";
 import { siteRouter } from "./routes/site-routes";
 import { mailer } from "./utils/mailer";
+import { messenger } from "./socket";
 
 const Agendash = require("agendash");
 const start = async () => {
@@ -45,9 +45,10 @@ const start = async () => {
     app.use("/api/ugh", apiRouter);
     app.use(errorHandler);
     app.use(siteRouter);
-    app.listen(process.env.PORT, () => {
+    const server = app.listen(process.env.PORT, () => {
       successlog(`SERVICE on port ${process.env.PORT}!!!!!!!!`);
     });
+    messenger.init(server);
   } catch (error) {
     errorlog(error);
     process.exit(1);

@@ -75,8 +75,9 @@
   }
 
   &--404 {
-    height: 100vh;
+    height: 88vh;
     background-repeat: no-repeat;
     background-position: center;
+    background-color: rgba(gray, 0.1);
   }
 }

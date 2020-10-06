@@ -10,6 +10,7 @@ import Option from '../../../components/input/option';
 import ProgressButton from '../../../components/button/progress';
 import { useRequest } from '../../../hooks/use-request';
 import Router from 'next/router';
+import TextEditor from '../../../components/editor';
 
 const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) => {
     const [name, setName] = useState("");
@@ -25,6 +26,7 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
     const [group, setGroup] = useState("duo");
     const [gParticipant, setGParticipant] = useState(2);
     const [cutoff, setCutoff] = useState(50);
+    const [rules, setRules] = useState("");
     const [messages, setMessages] = useState(errors);
 
     const { doRequest } = useRequest({
@@ -37,7 +39,8 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
             groups,
             cutoff,
             gameType,
-            winners
+            winners,
+            rules
         },
         method: "post",
         onSuccess: () => Router.replace("/admin/games"),
@@ -53,7 +56,8 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
             case 'group': return setGroup(val);
             case 'gParticipant': return setGParticipant(val);
             case 'cutoff': return setCutoff(parseInt(val));
-            case 'winner': return setWinner(val)
+            case 'winner': return setWinner(val);
+            case 'rules': return setRules(val)
         }
     }
 
@@ -184,6 +188,9 @@ const AddGame = ({ consoles, errors }: { consoles: ConsoleDoc[], errors: any }) 
                         return <div onClick={() => onPillGroupClickHanlder(index)} className="pill" key={Math.random()}>{val.name}-{val.participants}</div>
                     })
                 }
+            </div>
+            <div className="row">
+                <TextEditor name="rules" onChange={onChangeHandler} />
             </div>
             <div className="row">
                 <ProgressButton text="Submit" type="link" size="large" onPress={async (_, next) => {

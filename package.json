@@ -20,7 +20,8 @@
     "deploy": "gcloud app deploy"
   },
   "dependencies": {
-    "@monsid/ugh": "0.0.52",
+    "@monsid/ugh": "0.0.53",
+    "@tinymce/tinymce-react": "^3.7.0",
     "agendash": "^1.0.0",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
@@ -32,7 +33,7 @@
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "express-validator": "^6.5.0",
-    "firebase": "^7.21.0",
+    "firebase": "^7.22.1",
     "handlebars": "^4.7.6",
     "helmet": "^3.23.1",
     "mongoose": "^5.10.2",
@@ -47,7 +48,9 @@
     "react-loading-skeleton": "^2.1.1",
     "react-switch": "^5.0.1",
     "react-table": "^7.5.0",
-    "response-time": "^2.3.2"
+    "response-time": "^2.3.2",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.1"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
@@ -64,6 +67,8 @@
     "@types/nodemailer": "^6.4.0",
     "@types/react": "^16.9.36",
     "@types/response-time": "^2.3.4",
+    "@types/socket.io": "^2.1.11",
+    "@types/socket.io-client": "^1.4.34",
     "copyfiles": "^2.3.0",
     "ts-node": "^9.0.0",
     "ts-node-dev": "^1.0.0-pre.52",

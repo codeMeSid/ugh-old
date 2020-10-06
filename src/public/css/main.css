@@ -684,9 +684,10 @@ tr:nth-child(even) {
         margin-bottom: 0.5rem;
         max-width: 50rem; }
   .wallpaper--404 {
-    height: 100vh;
+    height: 88vh;
     background-repeat: no-repeat;
-    background-position: center; }
+    background-position: center;
+    background-color: rgba(128, 128, 128, 0.1); }
 
 .message_handler {
   position: fixed;

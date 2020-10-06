@@ -19,7 +19,7 @@ export const signinController = async (req: Request, res: Response) => {
   if (!isPasswordValid) throw new BadRequestError("Invalid Credentials");
   const userJwt = generateToken(
     {
-      email: user.email,
+      ughId: user.ughId,
       id: user.id,
       role: user.role,
       name: user.name,

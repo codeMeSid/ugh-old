@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Game } from "../../models/game";
-import { BadRequestError, GameType } from "@monsid/ugh";
+import { BadRequestError, GameType, infolog } from "@monsid/ugh";
 
 export const gameAddController = async (req: Request, res: Response) => {
   const {
@@ -13,6 +13,7 @@ export const gameAddController = async (req: Request, res: Response) => {
     cutoff,
     gameType,
     winners,
+    rules,
   } = req.body;
   const existingGame = await Game.findOne({ name, console });
   if (existingGame) throw new BadRequestError("Game already exists");
@@ -35,6 +36,7 @@ export const gameAddController = async (req: Request, res: Response) => {
     thumbnailUrl,
     gameType: type,
     winners,
+    rules,
   });
   await game.save();
   res.send(game);

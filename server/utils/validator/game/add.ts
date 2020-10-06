@@ -6,6 +6,7 @@ export const gameAddValidator = [
   body("thumbnailUrl").not().isEmpty().withMessage("thumbnail is required"),
   body("console").not().isEmpty().withMessage("console is required"),
   body("gameType").not().isEmpty().withMessage("Game scoring type is required"),
+  body("rules").not().isEmpty().withMessage("Game rules is required"),
   body("participants")
     .custom((val) => {
       if (val.length >= 1) return true;
