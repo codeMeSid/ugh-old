@@ -20,7 +20,7 @@
     "deploy": "gcloud app deploy"
   },
   "dependencies": {
-    "@monsid/ugh": "0.0.53",
+    "@monsid/ugh": "0.0.54",
     "@tinymce/tinymce-react": "^3.7.0",
     "agendash": "^1.0.0",
     "axios": "^0.19.2",

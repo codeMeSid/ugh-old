@@ -1,9 +1,9 @@
-import MainLayout from "../components/layout/mainlayout"
-import TournamentTab from "../components/tournament-tab"
-import { TournamentDoc } from "../../server/models/tournament"
-import { serverRequest } from "../hooks/server-request"
-import NewsTab from "../components/news-tab"
-import WallpaperSlider from "../components/wallpaper-slider"
+import MainLayout from "../components/layout/mainlayout";
+import TournamentTab from "../components/tournament-tab";
+import { TournamentDoc } from "../../server/models/tournament";
+import { serverRequest } from "../hooks/server-request";
+import NewsTab from "../components/news-tab";
+import WallpaperSlider from "../components/wallpaper-slider";
 
 const LandingPage = ({ matches, wallpapers, errors }) => {
     return <MainLayout messages={errors} isFullscreen>

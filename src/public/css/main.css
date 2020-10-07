@@ -619,7 +619,9 @@ tr:nth-child(even) {
       font-size: 2rem;
       text-transform: capitalize;
       word-wrap: break-word;
-      word-break: break-all; }
+      word-break: break-all;
+      width: 86vw;
+      margin: 0 auto; }
 
 .wallpaper {
   height: 120vh;
