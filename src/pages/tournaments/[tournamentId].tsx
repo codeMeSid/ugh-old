@@ -11,36 +11,11 @@ import React, { useEffect, useState } from "react";
 import Router from 'next/router';
 import DialogButton from '../../components/button/dialog';
 import PlayerCard from '../../components/card/player';
+import RichText from '../../components/rich-text';
+import Timer from '../../components/timer';
 
-const TournamentDetail = ({ tournament, matches, currentUser, errors }: { tournament: TournamentDoc, matches: any, currentUser: any, errors: any }) => {
-    const [timer, setTimer] = useState('');
+const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: TournamentDoc, matches: any, currentUser: any, errors: any }) => {
     const [messages, setMessages] = useState(errors);
-    let stopTimer = false;
-
-    const getBalanceTimer = () => {
-        const sdt = new Date(tournament?.startDateTime).getTime();
-        const cdt = new Date().getTime();
-        const msIn1Sec = 1000
-        const msIn1Min = msIn1Sec * 60;
-        const msIn1Hour = msIn1Min * 60;
-        const msIn1Day = msIn1Hour * 24;
-        const delta = sdt - cdt > 0 ? sdt - cdt : 0;
-        const daysLeft = Math.floor(delta / msIn1Day);
-        const hoursLeft = Math.floor((delta % (msIn1Day)) / (msIn1Hour));
-        const minsLeft = Math.floor((delta % (msIn1Hour)) / (msIn1Min));
-        const secondsLeft = Math.floor((delta % (msIn1Min)) / msIn1Sec);
-        const diffTime = `${daysLeft} Days ${hoursLeft < 10 ? `0${hoursLeft}` : hoursLeft}h ${minsLeft < 10 ? `0${minsLeft}` : minsLeft}m ${secondsLeft < 10 ? `0${secondsLeft}` : secondsLeft}s`
-        if (daysLeft >= 0 && hoursLeft >= 0 && minsLeft >= 0 && secondsLeft >= 0) {
-            if (daysLeft === 0 && hoursLeft === 0 && minsLeft === 0 && secondsLeft === 0) {
-                if (tournament?.status === "upcoming") {
-                    setTimeout(() => Router.reload(), 10000);
-                }
-                stopTimer = true;
-                return setTimer(tournament?.status?.toUpperCase())
-            }
-            setTimer(diffTime);
-        }
-    }
 
     const JoinButton = () => {
         if (!currentUser) return <Link href="/login">
@@ -54,10 +29,6 @@ const TournamentDetail = ({ tournament, matches, currentUser, errors }: { tourna
             return <DialogButton style={{ position: "fixed" }} size="medium" title="Join" fullButton onAction={doRequest}>
                 <div style={{ fontSize: 20, marginBottom: 20 }}>You will be charged {tournament?.coins || 10} coins to join</div>
             </DialogButton>
-        // return <ProgressButton text="Join" type="link" size="small" onPress={async (_, next) => {
-        //     await doRequest();
-        //     next();
-        // }} />
         if (currentUser && tournament?.status === "upcoming" && userHasJoined)
             return <Button text="Joined" type="facebook" size="small" />
         if (currentUser && tournament?.status === "started" && userHasJoined) return <Link href={`/game/${tournament?.regId}`}>
@@ -68,10 +39,6 @@ const TournamentDetail = ({ tournament, matches, currentUser, errors }: { tourna
 
         return <Button text="Join" type="disabled" size="small" />
     }
-
-    useEffect(() => {
-        if (!stopTimer) setTimeout(getBalanceTimer, 1000);
-    }, [timer]);
 
     const { doRequest } = useRequest({
         url: `/api/ugh/tournament/join/${tournament?.id}`,
@@ -87,7 +54,7 @@ const TournamentDetail = ({ tournament, matches, currentUser, errors }: { tourna
                 <div className="tournament__card">
                     <div className="tournament__card__head" style={{ backgroundImage: `url(${tournament?.game?.imageUrl})` }}>
                         <div className="tournament__card__head__title">{tournament?.name}</div>
-                        <div className="tournament__card__head__time">{timer}</div>
+                        <div className="tournament__card__head__time"><Timer canCountdown={!!tournament?.startDateTime} dateTime={tournament?.startDateTime} /></div>
                     </div>
                     <div className="tournament__card__body">
                         <div className="tournament__card__body__upper">
@@ -104,8 +71,11 @@ const TournamentDetail = ({ tournament, matches, currentUser, errors }: { tourna
                                 </div>
                                 <div>
                                     {/* <Button text="View Rules"  size="medium" /> */}
-                                    <DialogButton title="View Rules" type="github" size="medium" style={{ position: "fixed" }} fullButton>
+                                    <DialogButton title="View Rules" type="github" size="medium" style={{ position: "fixed", width: "35rem" }} fullButton>
                                         <h2>RULES OF THE GAME</h2>
+                                        <div style={{ width: "30rem", margin: "0 auto" }}>
+                                            <RichText content={tournament?.game?.rules} />
+                                        </div>
                                     </DialogButton>
                                 </div>
                             </div>
