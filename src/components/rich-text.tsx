@@ -2,7 +2,7 @@ const RichText = ({ content, textAlign = "left", fontSize = 18, className = "" }
     const style: any = {
         textAlign,
         marginTop: 10,
-        wordBreak: "break-all",
+        wordBreak: "break-word",
         wordWrap: "break-word",
         fontSize,
     };
