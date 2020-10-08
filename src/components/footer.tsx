@@ -11,7 +11,7 @@ const Footer = () => {
         <div className="footer__l2">
             <div className="footer__l2__item">
                 <div style={{ marginBottom: ".4rem" }}>Follow Us</div>
-                <div style={{ display: "flex",justifyContent:"center" }}>
+                <div style={{ display: "flex", justifyContent: "center" }}>
                     <div style={{ marginRight: 5 }}>
                         <SocialButton href="https://wzww.facebook.com/ultimategamershub/" size="icon" type="facebook" />
                     </div>
@@ -28,8 +28,13 @@ const Footer = () => {
             </div>
             <div className="footer__l2__item">
                 <Link href="/tac">
-                    <a className="footer__l2__item__link">Terms Of Use & Privacy Policy</a>
+                    <a className="footer__l2__item__link">Terms Of Use </a>
                 </Link>
+                &
+                <Link href="/privacy">
+                    <a className="footer__l2__item__link"> Privacy Policy</a>
+                </Link>
+
             </div>
         </div>
     </footer>
