@@ -53,7 +53,7 @@ const TournamentDetail = ({ tournament, errors }: { tournament: TournamentDoc, e
             </div>
             <div className="row">
                 <div className="col">
-                    <Input placeholder="added by" value={tournament?.addedBy?.email} disabled />
+                    <Input placeholder="added by" value={tournament?.addedBy?.ughId} disabled />
                 </div>
                 <div className="col">
                     <Input placeholder="winners" value={tournament?.winnerCount} disabled />

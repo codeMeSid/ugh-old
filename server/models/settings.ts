@@ -1,14 +1,5 @@
 import mongoose from "mongoose";
 
-interface SettingsAttrs {
-  tournamentFees: number;
-  wallpapers: Array<{
-    uploadUrl: string;
-    href: string;
-    title: string;
-  }>;
-}
-
 export interface SettingsDoc extends mongoose.Document {
   tournamentFees: number;
   wallpapers: Array<{
@@ -16,12 +7,14 @@ export interface SettingsDoc extends mongoose.Document {
     href: string;
     title: string;
   }>;
+  termsOfService: string;
+  privacyPolicy: string;
+  aboutUs: string;
+  howToPlay: string;
   updatedAt: Date;
 }
 
-interface SettingsModel extends mongoose.Model<SettingsDoc> {
-  build(attrs: SettingsAttrs): SettingsDoc;
-}
+interface SettingsModel extends mongoose.Model<SettingsDoc> {}
 
 const settingsSchema = new mongoose.Schema(
   {
@@ -36,6 +29,10 @@ const settingsSchema = new mongoose.Schema(
         title: String,
       },
     ],
+    termsOfService: String,
+    privacyPolicy: String,
+    aboutUs: String,
+    howToPlay: String,
     updatedAt: {
       type: mongoose.Schema.Types.Date,
     },
@@ -51,10 +48,6 @@ const settingsSchema = new mongoose.Schema(
     },
   }
 );
-
-settingsSchema.statics.build = (attrs: SettingsAttrs) => {
-  return new Settings(attrs);
-};
 
 export const Settings = mongoose.model<SettingsDoc, SettingsModel>(
   "Settings",

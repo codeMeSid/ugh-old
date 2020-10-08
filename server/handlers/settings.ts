@@ -7,7 +7,7 @@ import {
 } from "@monsid/ugh";
 import { settingFetchController } from "../controllers/setting/fetch-all";
 import { settingUpdateController } from "../controllers/setting/update";
-import { settingFetchWallpaperController } from "../controllers/setting/fetch-wallpaper";
+import { settingTypeFetchController } from "../controllers/setting/fetch-wallpaper";
 import { settingFetchCoinsController } from "../controllers/setting/fetch-coins";
 
 export const settingHandler: Array<ApiSign> = [
@@ -18,9 +18,9 @@ export const settingHandler: Array<ApiSign> = [
     middlewares: [currentUser, requireAdminAuth],
   },
   {
-    url: "/fetch/wallpaper",
+    url: "/fetch/:type",
     method: HttpMethod.Get,
-    controller: settingFetchWallpaperController,
+    controller: settingTypeFetchController,
     middlewares: [],
   },
   {

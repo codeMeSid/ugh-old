@@ -17,7 +17,7 @@ const LandingPage = ({ matches, wallpapers, errors }) => {
 
 LandingPage.getInitialProps = async (ctx) => {
     const { data: tournaments, errors: errorsA }: { data: Array<TournamentDoc>, errors: Array<any> } = await serverRequest(ctx, { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
-    const { data: wallpapers, errors: errorsB } = await serverRequest(ctx, { url: "/api/ugh/settings/fetch/wallpaper", body: {}, method: "get" });
+    const { data: wallpapers, errors: errorsB } = await serverRequest(ctx, { url: "/api/ugh/settings/fetch/wallpapers", body: {}, method: "get" });
     const matches = {
         upcoming: [],
         started: [],
