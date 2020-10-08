@@ -24,6 +24,7 @@
     padding-left: 3rem;
     height: 50rem;
     overflow-y: scroll;
+    overflow-x: hidden;
     &::-webkit-scrollbar {
       width: 0.4rem;
     }
