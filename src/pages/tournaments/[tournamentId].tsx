@@ -1,13 +1,11 @@
 import Link from 'next/link'
 import { TournamentDoc } from "../../../server/models/tournament";
-import ProgressButton from "../../components/button/progress";
 import MainLayout from "../../components/layout/mainlayout";
-// import TournamentTab from "../../components/tournament-tab";
 import { serverRequest } from "../../hooks/server-request";
 import { format } from 'date-fns';
 import { useRequest } from "../../hooks/use-request";
 import Button from "../../components/button/main";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Router from 'next/router';
 import DialogButton from '../../components/button/dialog';
 import PlayerCard from '../../components/card/player';

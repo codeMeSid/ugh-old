@@ -3,13 +3,13 @@ import { Message } from "@monsid/ugh";
 
 interface ConversationAttrs {
   users?: Array<string>;
-  isAdmin: boolean;
+  channel: string;
   messages: Array<Message>;
 }
 
 export interface ConversationDoc extends mongoose.Document {
   users?: Array<string>;
-  isAdmin: boolean;
+  channel: string;
   messages: Array<Message>;
 }
 
@@ -20,7 +20,7 @@ interface ConversationModel extends mongoose.Model<ConversationDoc> {
 const conversationSchema = new mongoose.Schema(
   {
     users: [String],
-    isAdmin: Boolean,
+    channel: String,
     messages: [
       {
         ughId: String,
