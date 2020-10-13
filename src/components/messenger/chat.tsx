@@ -1,0 +1,93 @@
+import { format } from "date-fns";
+import React, { Component } from "react";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { IoMdClose } from "react-icons/io";
+import { SocketMessage } from "../../../server/utils/interface/socket-message";
+import { useRequest } from "../../hooks/use-request";
+import { event } from "../../socket";
+
+
+const UserProfile = require("../../public/asset/user.svg");
+
+interface Props {
+    from: string;
+    to: string;
+    channel: string;
+    profile: any;
+    title: string;
+    onClose: any;
+    onOpenMenu: any;
+}
+
+class MessengerChat extends Component<Props> {
+
+    state = {
+        chats: [],
+        text: ""
+    }
+
+    constructor(props) {
+        super(props);
+        this.updateChat = this.updateChat.bind(this);
+    }
+
+    componentDidMount() {
+        event.recieveMessage(this.updateChat)
+    }
+    componentDidUpdate(prevProps, prevState) { }
+
+    updateChat = ({ channel, createdAt, from, text, to }: SocketMessage) => {
+        this.setState((ps: any) => ({ chats: [{ ughId: from, createdAt, text }, ...ps.chats] }))
+    }
+
+    async getConversation() {
+        let response;
+        const { doRequest } = useRequest({
+            url: "",
+            body: {},
+            method: "post",
+            onSuccess: (data) => {
+                response = data;
+            }
+        });
+        await doRequest();
+        return response;
+    }
+
+
+
+    render() {
+        const { profile, onOpenMenu, onClose, title, from, channel, to } = this.props;
+        const { chats, text } = this.state;
+        return <div className="messenger">
+            <div className="messenger__head">
+                <GiHamburgerMenu className="messenger__head__menu" onClick={onOpenMenu} />
+                <div className="messenger__head__profile" style={{ backgroundImage: `url(${profile || UserProfile})` }} />
+                <div className="messenger__head__name">{title}</div>
+                <IoMdClose className="messenger__head__close" onClick={onClose} />
+            </div>
+            <div className="messenger__body">
+                {chats.map(chat => {
+                    return <div className={`messenger__message ${chat.ughId === from ? "active" : ""}`}>
+                        {chat.ughId === from
+                            ? <div style={{ marginTop: 2 }} />
+                            : <div className="messenger__message__head">{chat.ughId}</div>}
+                        <div className="messenger__message__text">{chat.text}</div>
+                        <div className="messenger__message__date">{format(chat.createdAt, "hh:mm a")}</div>
+                    </div>
+                })}
+            </div>
+            <form className="messenger__form" onSubmit={(e) => {
+                e.preventDefault();
+                event.sendMessage({ to, from, channel, createdAt: Date.now(), text })
+                this.setState((ps: any) => ({ chats: [{ ughId: from, text, createdAt: Date.now() }, ...ps.chats], text: "" }));
+            }}>
+                <input onChange={(e) => {
+                    this.setState({ text: e.currentTarget.value })
+                }} type="text" className="messenger__input" placeholder="Enter text and hit Enter" value={text} />
+            </form>
+        </div>
+    }
+}
+
+export default MessengerChat

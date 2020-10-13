@@ -4,7 +4,7 @@ import { Bracket } from "../../../models/bracket";
 import { User } from "../../../models/user";
 import mongoose from "mongoose";
 import { mailer } from "../../../utils/mailer";
-import { MailerTemplate } from "../../../utils/mailer-template";
+import { MailerTemplate } from "../../../utils/enum/mailer-template";
 
 export const raiseDisputeController = async (req: Request, res: Response) => {
   const { id } = req.currentUser;

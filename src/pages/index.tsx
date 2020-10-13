@@ -4,14 +4,19 @@ import { TournamentDoc } from "../../server/models/tournament";
 import { serverRequest } from "../hooks/server-request";
 import NewsTab from "../components/news-tab";
 import WallpaperSlider from "../components/wallpaper-slider";
+import MessengerList from "../components/messenger";
 
-const LandingPage = ({ matches, wallpapers, errors }) => {
+const LandingPage = ({ matches, wallpapers, errors, currentUser }) => {
+
     return <MainLayout messages={errors} isFullscreen>
         <div className="landingpage" style={{ minHeight: "100vh", backgroundColor: "black" }}>
             <WallpaperSlider wallpapers={wallpapers} />
             <NewsTab />
             <TournamentTab matches={matches} />
         </div>
+        {currentUser && <MessengerList
+            from={currentUser.ughId}
+            chats={[{ to: "admin", channel: "admin", title: "admin" }]} />}
     </MainLayout>
 }
 

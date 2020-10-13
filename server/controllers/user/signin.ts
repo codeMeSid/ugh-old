@@ -7,7 +7,6 @@ import {
   generateToken,
 } from "@monsid/ugh";
 import { JWT_KEY } from "../../utils/env-check";
-import { messenger } from "../../socket";
 
 export const signinController = async (req: Request, res: Response) => {
   const { ughId, password } = req.body;

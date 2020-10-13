@@ -1,7 +1,7 @@
 import { ApiSign, HttpMethod } from "@monsid/ugh";
 import { Request, Response } from "express";
 import { mailer } from "../utils/mailer";
-import { MailerTemplate } from "../utils/mailer-template";
+import { MailerTemplate } from "../utils/enum/mailer-template";
 
 export const featureHandlers: Array<ApiSign> = [
   // agenda,

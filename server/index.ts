@@ -20,7 +20,7 @@ import {
 } from "./utils/env-check";
 import { siteRouter } from "./routes/site-routes";
 import { mailer } from "./utils/mailer";
-import { messenger } from "./socket";
+import { messenger } from "./utils/socket";
 
 const Agendash = require("agendash");
 const start = async () => {
@@ -39,7 +39,7 @@ const start = async () => {
       }
     );
     await timer.connect(MONGO_URI);
-    await paymentHandler.init(RAZORPAY_ID, RAZORPAY_SECRET);
+    paymentHandler.init(RAZORPAY_ID, RAZORPAY_SECRET);
     mailer.init(PASSWORD, EMAIL);
     app.use("/jobs", currentUser, authAdminRoute, Agendash(timer._agenda));
     app.use("/api/ugh", apiRouter);

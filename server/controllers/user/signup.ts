@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { filter, BadRequestError } from "@monsid/ugh";
 import { User } from "../../models/user";
 import { mailer } from "../../utils/mailer";
-import { MailerTemplate } from "../../utils/mailer-template";
+import { MailerTemplate } from "../../utils/enum/mailer-template";
 
 export const signupController = async (req: Request, res: Response) => {
   const { ughId, name, email, dob, password } = req.body;

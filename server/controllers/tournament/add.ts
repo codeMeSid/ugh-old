@@ -13,7 +13,7 @@ import { Settings } from "../../models/settings";
 import { User } from "../../models/user";
 import { randomBytes } from "crypto";
 import { mailer } from "../../utils/mailer";
-import { MailerTemplate } from "../../utils/mailer-template";
+import { MailerTemplate } from "../../utils/enum/mailer-template";
 import { shuffle } from "../../utils/shuffle";
 import { Bracket } from "../../models/bracket";
 import { winnerLogic } from "../../utils/winner-logic";

@@ -2,7 +2,7 @@ import { BadRequestError, NotAuthorizedError } from "@monsid/ugh";
 import { Request, Response } from "express";
 import { Bracket } from "../../../models/bracket";
 import { mailer } from "../../../utils/mailer";
-import { MailerTemplate } from "../../../utils/mailer-template";
+import { MailerTemplate } from "../../../utils/enum/mailer-template";
 
 export const addScoreProofController = async (req: Request, res: Response) => {
   const { bracketId } = req.params;

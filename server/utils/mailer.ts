@@ -2,7 +2,7 @@ import handlebar from "handlebars";
 import fs from "fs";
 import path from "path";
 import { createTransport } from "nodemailer";
-import { MailerTemplate } from "./mailer-template";
+import { MailerTemplate } from "./enum/mailer-template";
 import Mail from "nodemailer/lib/mailer";
 import { format } from "date-fns";
 
