@@ -2,12 +2,10 @@ import { format } from "date-fns";
 import React, { Component } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
+import { SocketChannel } from "../../../server/utils/enum/socket-channel";
 import { SocketMessage } from "../../../server/utils/interface/socket-message";
 import { useRequest } from "../../hooks/use-request";
 import { event } from "../../socket";
-
-
-const UserProfile = require("../../public/asset/user.svg");
 
 interface Props {
     from: string;
@@ -34,10 +32,27 @@ class MessengerChat extends Component<Props> {
     componentDidMount() {
         event.recieveMessage(this.updateChat)
     }
-    componentDidUpdate(prevProps, prevState) { }
+    componentDidUpdate(prevProps: Props, prevState) {
+        const { to } = prevProps;
+        if (to !== this.props.to) this.setState({ chats: [] });
+    }
 
-    updateChat = ({ channel, createdAt, from, text, to }: SocketMessage) => {
-        this.setState((ps: any) => ({ chats: [{ ughId: from, createdAt, text }, ...ps.chats] }))
+    updateChat = (data: SocketMessage) => {
+        let chat: any;
+        const { to, from } = this.props
+        switch (data.channel) {
+            case SocketChannel.Admin:
+                if (data.to === "admin" && data.from === to && from === "admin") chat = { ughId: data.from, text: data.text, createdAt: data.createdAt };
+                else if (data.from === "admin" && data.to === from) chat = { ughId: "admin", text: data.text, createdAt: data.createdAt };
+                break;
+            case SocketChannel.Match:
+                if (data.to === to) chat = { ughId: data.from, text: data.text, createdAt: data.createdAt };
+                break;
+            case SocketChannel.User:
+                if (data.to === from && data.from === to) chat = { ughId: data.from, text: data.text, createdAt: data.createdAt };
+                break;
+        }
+        if (chat) this.setState((ps: any) => ({ chats: [chat, ...ps.chats] }));
     }
 
     async getConversation() {
@@ -62,13 +77,13 @@ class MessengerChat extends Component<Props> {
         return <div className="messenger">
             <div className="messenger__head">
                 <GiHamburgerMenu className="messenger__head__menu" onClick={onOpenMenu} />
-                <div className="messenger__head__profile" style={{ backgroundImage: `url(${profile || UserProfile})` }} />
+                <div className="messenger__head__profile" style={{ backgroundImage: `url(${profile})` }} />
                 <div className="messenger__head__name">{title}</div>
                 <IoMdClose className="messenger__head__close" onClick={onClose} />
             </div>
             <div className="messenger__body">
                 {chats.map(chat => {
-                    return <div className={`messenger__message ${chat.ughId === from ? "active" : ""}`}>
+                    return <div key={Math.random()} className={`messenger__message ${chat.ughId === from ? "active" : ""}`}>
                         {chat.ughId === from
                             ? <div style={{ marginTop: 2 }} />
                             : <div className="messenger__message__head">{chat.ughId}</div>}

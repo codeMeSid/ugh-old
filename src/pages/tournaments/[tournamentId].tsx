@@ -11,18 +11,22 @@ import DialogButton from '../../components/button/dialog';
 import PlayerCard from '../../components/card/player';
 import RichText from '../../components/rich-text';
 import Timer from '../../components/timer';
+import MessengerList from '../../components/messenger';
 
 const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: TournamentDoc, matches: any, currentUser: any, errors: any }) => {
     const [messages, setMessages] = useState(errors);
-
+    const userHasJoined = tournament?.players?.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id)).length > 0;
+    const chats = tournament?.players?.map((user: any) => {
+        if (currentUser.ughId === user.ughId) return;
+        return ({ to: user.ughId, channel: 'user', profile: user?.uploadUrl, title: user.ughId })
+    }).filter(chat => chat);
     const JoinButton = () => {
         if (!currentUser) return <Link href="/login">
             <a>
                 <Button text="Join" type="link" size="small" />
             </a>
         </Link>
-        const userHasJoined = tournament?.players?.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id))
-            .length > 0;
+
         if (currentUser && tournament?.status === "upcoming" && !userHasJoined)
             return <DialogButton style={{ position: "fixed" }} size="medium" title="Join" fullButton onAction={doRequest}>
                 <div style={{ fontSize: 20, marginBottom: 20 }}>You will be charged {tournament?.coins || 10} coins to join</div>
@@ -122,6 +126,9 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                 </div>
             }
         </div>
+        {userHasJoined && <MessengerList
+            from={currentUser.ughId}
+            chats={[{ channel: "admin", title: "admin", to: "admin" }, { channel: "match", title: "tournament", to: tournament?.regId }, ...chats]} />}
     </MainLayout>
 }
 

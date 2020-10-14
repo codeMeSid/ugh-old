@@ -4,13 +4,21 @@ import { Message } from "@monsid/ugh";
 interface ConversationAttrs {
   users?: Array<string>;
   channel: string;
-  messages: Array<Message>;
+  messages: Array<{
+    ughId: string;
+    text: string;
+    createdAt: number;
+  }>;
 }
 
 export interface ConversationDoc extends mongoose.Document {
-  users?: Array<string>;
+  users: Array<string>;
   channel: string;
-  messages: Array<Message>;
+  messages: Array<{
+    ughId: string;
+    text: string;
+    createdAt: number;
+  }>;
 }
 
 interface ConversationModel extends mongoose.Model<ConversationDoc> {
@@ -25,6 +33,7 @@ const conversationSchema = new mongoose.Schema(
       {
         ughId: String,
         text: String,
+        createdAt: Number,
       },
     ],
   },
