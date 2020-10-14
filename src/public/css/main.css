@@ -738,6 +738,7 @@ tr:nth-child(even) {
   height: 36rem;
   width: 25rem;
   border-radius: 1rem;
+  border-bottom-right-radius: 0;
   overflow: hidden;
   box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.4); }
   .messenger__head {
@@ -863,7 +864,16 @@ tr:nth-child(even) {
         border-radius: 100%;
         background-position: center;
         background-repeat: no-repeat;
-        background-size: cover; }
+        background-size: cover;
+        position: relative; }
+        .messenger__contact__item__head__count {
+          position: absolute;
+          top: -0.25rem;
+          right: 0;
+          padding: 0.2rem;
+          background-color: red;
+          color: white;
+          border-radius: 100%; }
       .messenger__contact__item__title {
         margin: auto 0;
         width: 12rem;

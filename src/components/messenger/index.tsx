@@ -2,6 +2,9 @@ import React, { Component, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import MessengerChat from "./chat";
 import { SiGooglemessages } from 'react-icons/si';
+import { event } from "../../socket";
+import { Socket } from "socket.io-client";
+import { SocketChannel } from "../../../server/utils/enum/socket-channel";
 
 const UserProfile = require("../../public/asset/user.svg");
 
@@ -12,19 +15,62 @@ interface Props {
 
 class MessengerList extends Component<Props> {
     state = {
-        messengers: this.props.chats,
-        mIndex: 0,
+        messengers: this.formatChat(this.props.chats),
+        chat: this.formatChat(this.props.chats)[0],
         isOpen: false,
         isContactOpen: true
     }
 
+    constructor(props) {
+        super(props);
+        this.openChatHandler = this.openChatHandler.bind(this);
+    }
+
+    componentDidMount() {
+        event.recieveMessage((data) => {
+            // const { from, to, channel } = data;
+            const { messengers, chat } = this.state
+            const { from } = this.props
+            const uMessengers = messengers.map(messenger => {
+                const { to, channel } = messenger;
+                if (chat.to !== data.to) {
+                    switch (channel) {
+                        case SocketChannel.Admin:
+                            if (data.from === "admin" && data.from === to && data.to === from) messenger.count += 1;
+                            else if (data.to === "admin" && data.from === to) messenger.count += 1;
+                            break;
+                        case SocketChannel.Match:
+                            if (data.to === to && data.from !== this.props.from) messenger.count += 1
+                            break;
+                        case SocketChannel.User:
+                            break;
+                    }
+                }
+                return messenger;
+            });
+            this.setState({ messengers: uMessengers.sort((a, b) => b.count - a.count) })
+        });
+    }
+
     componentDidUpdate(prevProps: Props) {
         const { chats } = prevProps;
-        if (JSON.stringify(chats) !== JSON.stringify(this.props.chats)) this.setState({ messengers: chats, mIndex: 0 })
+        if (JSON.stringify(chats) !== JSON.stringify(this.props.chats)) this.setState({ messengers: this.formatChat(this.props.chats), mIndex: 0 })
+    }
+
+    formatChat(chats: Array<any>) {
+        return chats.map(chat => ({ ...chat, count: 0 }))
+    }
+
+    openChatHandler(index: number) {
+        const uMessengers = Array.from(this.state.messengers).map((m, i) => {
+            if (index === i) m.count = 0;
+            return m;
+        })
+        this.setState({ chat: uMessengers[index], messengers: uMessengers });
     }
 
     render() {
-        const { isContactOpen, isOpen, mIndex, messengers } = this.state;
+        const { isContactOpen, isOpen, chat, messengers } = this.state;
         const { from } = this.props;
         return !isOpen ? <>
             <div className="messenger__window" onClick={() => this.setState({ isOpen: true })}>
@@ -42,9 +88,11 @@ class MessengerList extends Component<Props> {
                             messengers.map((chat, index) => {
                                 return <div
                                     key={Math.random()}
-                                    onClick={() => this.setState({ mIndex: index })}
+                                    onClick={() => this.openChatHandler(index)}
                                     className="messenger__contact__item">
-                                    <div className="messenger__contact__item__head" style={{ backgroundImage: `url(${chat?.profile || UserProfile})` }} />
+                                    <div className="messenger__contact__item__head" style={{ backgroundImage: `url(${chat?.profile || UserProfile})` }} >
+                                        {chat.count > 0 && <div className="messenger__contact__item__head__count">{chat.count}</div>}
+                                    </div>
                                     <div className="messenger__contact__item__title">{chat.title}</div>
                                 </div>
                             })
@@ -55,10 +103,10 @@ class MessengerList extends Component<Props> {
                     onClose={() => this.setState({ isOpen: false })}
                     onOpenMenu={() => this.setState((ps: any) => ({ isContactOpen: !ps.isContactOpen }))}
                     from={from}
-                    to={messengers[mIndex]?.to}
-                    channel={messengers[mIndex]?.channel}
-                    profile={messengers[mIndex]?.profile || UserProfile}
-                    title={messengers[mIndex]?.title}
+                    to={chat?.to}
+                    channel={chat?.channel}
+                    profile={chat?.profile || UserProfile}
+                    title={chat?.title}
                 />
             </>
     }
