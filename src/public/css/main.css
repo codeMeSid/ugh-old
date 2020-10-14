@@ -873,7 +873,10 @@ tr:nth-child(even) {
           padding: 0.2rem;
           background-color: red;
           color: white;
-          border-radius: 100%; }
+          border-radius: 100%;
+          height: 1.5rem;
+          width: 1.5rem;
+          text-align: center; }
       .messenger__contact__item__title {
         margin: auto 0;
         width: 12rem;

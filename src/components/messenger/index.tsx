@@ -3,7 +3,6 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import MessengerChat from "./chat";
 import { SiGooglemessages } from 'react-icons/si';
 import { event } from "../../socket";
-import { Socket } from "socket.io-client";
 import { SocketChannel } from "../../../server/utils/enum/socket-channel";
 
 const UserProfile = require("../../public/asset/user.svg");
@@ -28,7 +27,6 @@ class MessengerList extends Component<Props> {
 
     componentDidMount() {
         event.recieveMessage((data) => {
-            // const { from, to, channel } = data;
             const { messengers, chat } = this.state
             const { from } = this.props
             const uMessengers = messengers.map(messenger => {
@@ -53,11 +51,11 @@ class MessengerList extends Component<Props> {
 
     componentDidUpdate(prevProps: Props) {
         const { chats } = prevProps;
-        if (JSON.stringify(chats) !== JSON.stringify(this.props.chats)) this.setState({ messengers: this.formatChat(this.props.chats), mIndex: 0 })
+        if (JSON.stringify(chats) !== JSON.stringify(this.props.chats)) this.setState({ messengers: this.formatChat(this.props.chats), chat: this.formatChat(this.props.chats)[0] })
     }
 
     formatChat(chats: Array<any>) {
-        return chats.map(chat => ({ ...chat, count: 0 }))
+        return chats.map(chat => ({ ...chat, count: 10 }))
     }
 
     openChatHandler(index: number) {

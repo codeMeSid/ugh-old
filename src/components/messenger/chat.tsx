@@ -86,8 +86,6 @@ class MessengerChat extends Component<Props> {
         return response;
     }
 
-
-
     render() {
         const { profile, onOpenMenu, onClose, title, from, channel, to } = this.props;
         const { chats, text } = this.state;
