@@ -55,7 +55,7 @@ class MessengerList extends Component<Props> {
     }
 
     formatChat(chats: Array<any>) {
-        return chats.map(chat => ({ ...chat, count: 10 }))
+        return chats.map(chat => ({ ...chat, count: 0 }))
     }
 
     openChatHandler(index: number) {
