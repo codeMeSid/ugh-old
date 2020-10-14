@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import React, { Component } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
+import { ConversationDoc } from "../../../server/models/message";
 import { SocketChannel } from "../../../server/utils/enum/socket-channel";
 import { SocketMessage } from "../../../server/utils/interface/socket-message";
 import { useRequest } from "../../hooks/use-request";
@@ -27,14 +28,30 @@ class MessengerChat extends Component<Props> {
     constructor(props) {
         super(props);
         this.updateChat = this.updateChat.bind(this);
+        this.getChat = this.getChat.bind(this);
     }
 
     componentDidMount() {
-        event.recieveMessage(this.updateChat)
+        event.recieveMessage(this.updateChat);
+        const { from, channel, to } = this.props;
+        if (to) this.getChat({ from, to, channel });
     }
-    componentDidUpdate(prevProps: Props, prevState) {
+    componentDidUpdate(prevProps: Props) {
         const { to } = prevProps;
-        if (to !== this.props.to) this.setState({ chats: [] });
+        const data = this.props;
+        if (to !== this.props.to) this.setState({ chats: [] }, async () => this.getChat({ to: data.to, channel: data.channel, from: data.from }));
+    }
+
+    getChat(data: { from: string, to: string, channel: string }) {
+        const { doRequest } = useRequest({
+            url: "/api/ugh/message/fetch",
+            body: data,
+            method: "post",
+            onSuccess: (data: ConversationDoc) => {
+                if (data) this.setState({ chats: data.messages.reverse() || [] })
+            }
+        });
+        doRequest();
     }
 
     updateChat = (data: SocketMessage) => {
@@ -91,6 +108,7 @@ class MessengerChat extends Component<Props> {
                         <div className="messenger__message__date">{format(chat.createdAt, "hh:mm a")}</div>
                     </div>
                 })}
+                {/* <div style={{ marginTop: 2 }} /> */}
             </div>
             <form className="messenger__form" onSubmit={(e) => {
                 e.preventDefault();
