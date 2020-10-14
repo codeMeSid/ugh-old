@@ -108,10 +108,10 @@ class MessengerChat extends Component<Props> {
                         <div className="messenger__message__date">{format(chat.createdAt, "hh:mm a")}</div>
                     </div>
                 })}
-                {/* <div style={{ marginTop: 2 }} /> */}
             </div>
             <form className="messenger__form" onSubmit={(e) => {
                 e.preventDefault();
+                if (!text) return;
                 event.sendMessage({ to, from, channel, createdAt: Date.now(), text })
                 this.setState((ps: any) => ({ chats: [{ ughId: from, text, createdAt: Date.now() }, ...ps.chats], text: "" }));
             }}>

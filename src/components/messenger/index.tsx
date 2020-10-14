@@ -33,18 +33,17 @@ class MessengerList extends Component<Props> {
             const { from } = this.props
             const uMessengers = messengers.map(messenger => {
                 const { to, channel } = messenger;
-                if (chat.to !== data.to) {
-                    switch (channel) {
-                        case SocketChannel.Admin:
-                            if (data.from === "admin" && data.from === to && data.to === from) messenger.count += 1;
-                            else if (data.to === "admin" && data.from === to) messenger.count += 1;
-                            break;
-                        case SocketChannel.Match:
-                            if (data.to === to && data.from !== this.props.from) messenger.count += 1
-                            break;
-                        case SocketChannel.User:
-                            break;
-                    }
+                switch (channel) {
+                    case SocketChannel.Admin:
+                        if (data.from === "admin" && chat.to !== "admin" && data.from === to && data.to === from) messenger.count += 1;
+                        else if (data.to === "admin" && chat.to !== data.from && data.from === to) messenger.count += 1;
+                        break;
+                    case SocketChannel.Match:
+                        if (chat.to !== data.to && data.to === to && data.from !== this.props.from) messenger.count += 1
+                        break;
+                    case SocketChannel.User:
+                        if (data.to === from && chat.to !== data.from) messenger.count += 1;
+                        break;
                 }
                 return messenger;
             });
