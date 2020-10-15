@@ -18,6 +18,7 @@ interface UserAttrs {
   dob?: Date;
   password?: string;
   uploadUrl?: string;
+  address?: UserAddress;
 }
 
 export interface UserDoc extends mongoose.Document {

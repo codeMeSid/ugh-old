@@ -7,6 +7,9 @@ import SocialButton from "../components/button/social";
 import Link from "next/link";
 import { useRequest } from '../hooks/use-request';
 import { fire } from '../../server/utils/firebase';
+import Select from '../components/input/select';
+import { locations } from '../public/location-resource';
+import Option from '../components/input/option';
 
 const SignUp = () => {
     const [user, setUser] = useState(null);
@@ -17,9 +20,17 @@ const SignUp = () => {
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
     const [messages, setMessages] = useState([]);
+    const [state, setState] = useState("Tamil Nadu");
     const { doRequest } = useRequest({
         url: "/api/ugh/user/signup",
-        body: { ughId, name, email, dob: new Date(dob), password },
+        body: {
+            ughId,
+            name,
+            email,
+            dob: new Date(dob),
+            password,
+            country: "India", state
+        },
         method: "post",
         onError: (errors) => setMessages(errors),
         onSuccess: () => Router.push("/account/activate")
@@ -70,6 +81,13 @@ const SignUp = () => {
             <Input placeholder="date of birth*" type="date" name="dob" onChange={onChangeHandler} value={dob} />
             <Input placeholder="password*" type="password" name="password" onChange={onChangeHandler} value={password} />
             <Input placeholder="confirm password*" type="password" name="password2" onChange={onChangeHandler} value={password2} />
+            <Input placeholder="country" value="India" disabled />
+            <Select name="state" placeholder="state" value={state} onSelect={(e) =>
+                setState(e.currentTarget.value)} options={
+                    locations.India.map(s => {
+                        return <Option key={s} display={s} value={s} />
+                    })
+                } />
             <ProgressButton text="Register" size="large" type="link" onPress={async (_, next) => {
                 if (password !== password2 || password.length === 0) {
                     setMessages([{ message: "passwords do not match" }])

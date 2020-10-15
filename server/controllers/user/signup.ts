@@ -5,7 +5,7 @@ import { mailer } from "../../utils/mailer";
 import { MailerTemplate } from "../../utils/enum/mailer-template";
 
 export const signupController = async (req: Request, res: Response) => {
-  const { ughId, name, email, dob, password } = req.body;
+  const { ughId, name, email, dob, password, state, country } = req.body;
   filter.isUnfit({ email });
   filter.isUnfit({ name });
   filter.isUnfit({ ughId });
@@ -17,6 +17,7 @@ export const signupController = async (req: Request, res: Response) => {
     ughId,
     dob,
     password,
+    address: { state, country },
   });
   await newUser.save();
   mailer.send(
