@@ -14,20 +14,19 @@
     font-weight: bold;
   }
   &__list {
-    height: 20rem;
     width: 100%;
     display: flex;
     margin-top: 1rem;
-    flex-wrap: wrap;
-    overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-x: scroll;
+    overflow-y: hidden;
     justify-content: flex-start;
     &::-webkit-scrollbar {
       width: 0;
     }
   }
   &__item {
-    width: 24rem;
+    min-width: 24rem;
+    max-width: 24rem;
     height: 16rem;
     margin-bottom: 0.5rem;
     margin-right: 1rem;
