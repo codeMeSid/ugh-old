@@ -97,7 +97,7 @@ class MessengerChat extends Component<Props> {
                 <IoMdClose className="messenger__head__close" onClick={onClose} />
             </div>
             <div className="messenger__body">
-                {chats.map(chat => {
+                {to && chats.map(chat => {
                     return <div key={Math.random()} className={`messenger__message ${chat.ughId === from ? "active" : ""}`}>
                         {chat.ughId === from
                             ? <div style={{ marginTop: 2 }} />
@@ -107,7 +107,7 @@ class MessengerChat extends Component<Props> {
                     </div>
                 })}
             </div>
-            <form className="messenger__form" onSubmit={(e) => {
+            {to && <form className="messenger__form" onSubmit={(e) => {
                 e.preventDefault();
                 if (!text) return;
                 event.sendMessage({ to, from, channel, createdAt: Date.now(), text })
@@ -116,7 +116,7 @@ class MessengerChat extends Component<Props> {
                 <input onChange={(e) => {
                     this.setState({ text: e.currentTarget.value })
                 }} type="text" className="messenger__input" placeholder="Enter text and hit Enter" value={text} />
-            </form>
+            </form>}
         </div>
     }
 }

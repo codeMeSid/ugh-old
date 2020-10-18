@@ -211,5 +211,23 @@
     &:hover {
       bottom: 1.5rem;
     }
+    &__count {
+      width: 1.8rem;
+      height: 1.8rem;
+      position: fixed;
+      bottom: 5rem;
+      right: 1rem;
+      color: white;
+      background-color: red;
+      border-radius: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: bottom 200ms linear;
+    }
+    &:hover &__count {
+      bottom: 5.5rem;
+    }
   }
 }

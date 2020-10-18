@@ -108,6 +108,18 @@ h1 {
   align-items: center;
   padding: 0 8rem; }
 
+.navbar__count {
+  position: absolute;
+  left: 3rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: red;
+  color: white;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
 .navbar__responsive-menu {
   position: fixed;
   top: 0;
@@ -910,6 +922,22 @@ tr:nth-child(even) {
       color: white; }
     .messenger__window:hover {
       bottom: 1.5rem; }
+    .messenger__window__count {
+      width: 1.8rem;
+      height: 1.8rem;
+      position: fixed;
+      bottom: 5rem;
+      right: 1rem;
+      color: white;
+      background-color: red;
+      border-radius: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: bottom 200ms linear; }
+    .messenger__window:hover .messenger__window__count {
+      bottom: 5.5rem; }
 
 .signin {
   min-height: 88vh;

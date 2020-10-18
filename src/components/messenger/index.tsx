@@ -13,9 +13,16 @@ interface Props {
 }
 
 class MessengerList extends Component<Props> {
+    chatNull = {
+        to: "",
+        channel: "",
+        count: 0,
+        title: "",
+        profile: ""
+    }
     state = {
         messengers: this.formatChat(this.props.chats),
-        chat: this.formatChat(this.props.chats)[0],
+        chat: this.chatNull,
         isOpen: false,
         isContactOpen: true
     }
@@ -33,11 +40,11 @@ class MessengerList extends Component<Props> {
                 const { to, channel } = messenger;
                 switch (channel) {
                     case SocketChannel.Admin:
-                        if (data.from === "admin" && chat.to !== "admin" && data.from === to && data.to === from) messenger.count += 1;
-                        else if (data.to === "admin" && chat.to !== data.from && data.from === to) messenger.count += 1;
+                        if (data.from === "admin" && chat?.to !== "admin" && data.from === to && data.to === from) messenger.count += 1;
+                        else if (data.to === "admin" && chat?.to !== data.from && data.from === to) messenger.count += 1;
                         break;
                     case SocketChannel.Match:
-                        if (chat.to !== data.to && data.to === to && data.from !== this.props.from) messenger.count += 1
+                        if (chat?.to !== data.to && data.to === to && data.from !== this.props.from) messenger.count += 1
                         break;
                     case SocketChannel.User:
                         if (data.to === from && chat.to !== data.from) messenger.count += 1;
@@ -69,9 +76,11 @@ class MessengerList extends Component<Props> {
     render() {
         const { isContactOpen, isOpen, chat, messengers } = this.state;
         const { from } = this.props;
+        const mNotificationCount = messengers.reduce((acc, mess) => acc + mess.count, 0);
         return !isOpen ? <>
             <div className="messenger__window" onClick={() => this.setState({ isOpen: true })}>
                 <SiGooglemessages className="messenger__window__icon" />
+                {mNotificationCount > 0 && <div className="messenger__window__count">{mNotificationCount}</div>}
             </div>
         </>
             : <>
@@ -97,7 +106,7 @@ class MessengerList extends Component<Props> {
                     </div>
                 </div>
                 <MessengerChat
-                    onClose={() => this.setState({ isOpen: false })}
+                    onClose={() => this.setState({ isOpen: false, chat: this.chatNull })}
                     onOpenMenu={() => this.setState((ps: any) => ({ isContactOpen: !ps.isContactOpen }))}
                     from={from}
                     to={chat?.to}
