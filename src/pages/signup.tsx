@@ -108,6 +108,13 @@ const SignUp = ({ ughIds, errors }) => {
                     next();
                     return
                 }
+                if (Array.from(ughIds).filter(({ ughId: u }) => {
+                    return u === ughId
+                }).length > 0) {
+                    setMessages([{ message: "UGH ID is already taken" }])
+                    next();
+                    return
+                }
                 await doRequest();
                 next();
             }} />

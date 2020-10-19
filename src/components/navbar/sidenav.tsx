@@ -12,7 +12,7 @@ import { SocketChannel } from "../../../server/utils/enum/socket-channel";
 
 class SideNavbar extends Component {
     state = {
-        mNC: 0
+        mNC: 10
     }
     componentDidMount() {
         event.recieveMessage(({ to, channel }) => {
@@ -27,8 +27,8 @@ class SideNavbar extends Component {
                 <NavlinkIcon Icon={GoHome} href="/admin" title="home" />
                 <NavlinkIcon Icon={RiUser5Line} href="/admin/users" title="users" />
                 <div style={{ position: "relative" }} onClick={() => this.setState({ mnc: 0 })}>
-                    <NavlinkIcon Icon={AiOutlineMessage} href="/admin/messages" title="messages" />
                     {mNC > 0 && <div className="navbar__count">{mNC}</div>}
+                    <NavlinkIcon Icon={AiOutlineMessage} href="/admin/messages" title="messages" />
                 </div>
                 <NavlinkIcon Icon={RiBitCoinLine} href="/admin/coins" title="coins" />
                 <NavlinkIcon Icon={VscDebugConsole} href="/admin/consoles" title="consoles" />
