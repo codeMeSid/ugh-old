@@ -8,4 +8,15 @@
   &__other {
     margin: 1.2rem 0;
   }
+  &__ughid {
+    width: 32rem;
+    margin: 0.2rem 0;
+    font-size: 1.4rem;
+    &--fail {
+      color: red;
+    }
+    &--success {
+      color: green;
+    }
+  }
 }

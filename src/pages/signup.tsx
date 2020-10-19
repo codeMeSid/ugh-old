@@ -10,8 +10,9 @@ import { fire } from '../../server/utils/firebase';
 import Select from '../components/input/select';
 import { locations } from '../public/location-resource';
 import Option from '../components/input/option';
+import { serverRequest } from '../hooks/server-request';
 
-const SignUp = () => {
+const SignUp = ({ ughIds, errors }) => {
     const [user, setUser] = useState(null);
     const [ughId, setUghId] = useState("");
     const [name, setName] = useState("");
@@ -19,7 +20,7 @@ const SignUp = () => {
     const [dob, setDob] = useState(new Date().toString());
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState(errors);
     const [state, setState] = useState("Tamil Nadu");
     const { doRequest } = useRequest({
         url: "/api/ugh/user/signup",
@@ -71,11 +72,24 @@ const SignUp = () => {
 
     useEffect(() => {
         if (user) doSocialRequest()
+        console.log({ ughIds })
     }, [user])
     return <MainLayout messages={messages}>
         <section className="signin">
             <h1 style={{ marginBottom: 10 }}>Register</h1>
             <Input placeholder="ugh id*" name="ughId" onChange={onChangeHandler} value={ughId} />
+            {
+                ughId.length > 4 ? (<div className="signin__ughid ">
+                    {Array.from(ughIds).filter(({ ughId: u }) => {
+                        return u === ughId
+                    }).length > 0 ? <div className="signin__ughid--fail">
+                            this UGH ID is already taken.
+                </div> : <div className="signin__ughid--success">
+                            UGH ID is available.
+                </div>
+                    }
+                </div>) : null
+            }
             <Input placeholder="name*" name="name" onChange={onChangeHandler} value={name} />
             <Input placeholder="email*" type="email" name="email" onChange={onChangeHandler} value={email} />
             <Input placeholder="date of birth*" type="date" name="dob" onChange={onChangeHandler} value={dob} />
@@ -111,5 +125,17 @@ const SignUp = () => {
         </section>
     </MainLayout>
 };
+
+SignUp.getInitialProps = async (ctx) => {
+    const { data, errors } = await serverRequest(ctx, {
+        url: "/api/ugh/user/fetch/players/ughId",
+        body: {},
+        method: "get"
+    })
+    return {
+        ughIds: data || [],
+        errors: errors || []
+    }
+}
 
 export default SignUp;

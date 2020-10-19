@@ -948,6 +948,14 @@ tr:nth-child(even) {
   margin: 2rem 0; }
   .signin__other {
     margin: 1.2rem 0; }
+  .signin__ughid {
+    width: 32rem;
+    margin: 0.2rem 0;
+    font-size: 1.4rem; }
+    .signin__ughid--fail {
+      color: red; }
+    .signin__ughid--success {
+      color: green; }
 
 .shop {
   min-height: 90vh;
