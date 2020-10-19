@@ -129,23 +129,23 @@ const userSchema = new mongoose.Schema(
       },
       addedTournamentWasWon: {
         type: Boolean,
-        default: true,
+        default: false,
       },
       addedTournamentWillStart: {
         type: Boolean,
-        default: true,
+        default: false,
       },
       addedTournamentProofSent: {
         type: Boolean,
-        default: true,
+        default: false,
       },
       addedTournamentProofDenied: {
         type: Boolean,
-        default: true,
+        default: false,
       },
       activityInCreatedTournament: {
         type: Boolean,
-        default: true,
+        default: false,
       },
     },
     recovery: {
