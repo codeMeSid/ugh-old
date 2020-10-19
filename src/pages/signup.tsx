@@ -72,7 +72,6 @@ const SignUp = ({ ughIds, errors }) => {
 
     useEffect(() => {
         if (user) doSocialRequest()
-        console.log({ ughIds })
     }, [user])
     return <MainLayout messages={messages}>
         <section className="signin">

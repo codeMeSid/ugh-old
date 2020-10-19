@@ -11,7 +11,6 @@ export const addScoreController = async (req: Request, res: Response) => {
   const bracket = await Bracket.findOne({ regId: bracketId });
   if (!bracket) throw new BadRequestError("Invalid match");
   if (bracket.winner) throw new BadRequestError("Match is over");
-  console.log({ bracketId, score, tournamentId });
   const isPlayerA = JSON.stringify(bracket.teamA.user) === JSON.stringify(id);
   const isPlayerB = JSON.stringify(bracket.teamB.user) === JSON.stringify(id);
   if (!isPlayerA && !isPlayerB) throw new NotAuthorizedError();

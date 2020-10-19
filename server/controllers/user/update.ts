@@ -71,7 +71,6 @@ export const updateUserController = async (req: Request, res: Response) => {
   if (state) {
     user.address.state = state;
   }
-  console.log({user})
   if (user.isSocial && user.activity === UserActivity.Inactive) {
     if (dob) {
       isValidDob(dob);

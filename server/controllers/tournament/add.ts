@@ -272,7 +272,6 @@ export const tournamentAddController = async (req: Request, res: Response) => {
           winnerLogic(tournament.id, null, true, "end");
         } catch (error) {
           console.log({ m: "end", error: error.message });
-          console.log("end");
         }
       },
       { id: tournament.id }

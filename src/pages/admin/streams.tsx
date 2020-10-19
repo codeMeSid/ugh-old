@@ -94,7 +94,6 @@ const AdminStreamDashboard = () => {
     const onSelectHandler = (e: any) => {
         const name = e.currentTarget.name;
         const value = e.currentTarget.value;
-        console.log({ name, value });
         switch (name) {
             case "social": return setSocial(value);
             case "game": return setGame(value);

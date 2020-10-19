@@ -50,7 +50,6 @@ const AdminSponsorDashboard = () => {
         doRequest();
     }, []);
     const changeSActivity = async (id: string) => {
-        console.log({ id })
         const { doRequest: updateSRequest } = useRequest({
             url: `/api/ugh/sponsor/update/activity/${id}`,
             method: "put",

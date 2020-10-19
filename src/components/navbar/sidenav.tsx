@@ -12,7 +12,7 @@ import { SocketChannel } from "../../../server/utils/enum/socket-channel";
 
 class SideNavbar extends Component {
     state = {
-        mNC: 10
+        mNC: 0
     }
     componentDidMount() {
         event.recieveMessage(({ to, channel }) => {

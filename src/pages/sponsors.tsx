@@ -47,9 +47,8 @@ const Sponsors = ({ sponsors, sponsorships }
             case "message": return setMessage(value);
         }
     }
-    const onSelectHandler = (e) => {
+    const onSelectHandler = (e: any) => {
         const val = `${e.currentTarget.value}`.split(",").map(num => parseInt(num));
-        console.log(val)
         setSponsorshipIndex(val[0]);
         setPackIndex(val[1]);
     }

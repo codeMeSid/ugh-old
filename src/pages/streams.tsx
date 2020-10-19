@@ -21,7 +21,6 @@ const Streams = ({ streams, errors }) => {
                 })
         else streamDataArray.push(...streamData[streamOption]);
         setStreamArray(streamDataArray);
-        console.log({ streamDataArray });
     }, [streamOption]);
 
     const getSocialButton = (type: string) => {

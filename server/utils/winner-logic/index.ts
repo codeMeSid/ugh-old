@@ -12,7 +12,6 @@ export const winnerLogic = async (
   isTournamentEnd?: boolean,
   message?: string
 ) => {
-  console.log({ message });
   const session = await mongoose.startSession();
   session.startTransaction();
   try {

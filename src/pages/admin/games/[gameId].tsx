@@ -68,7 +68,6 @@ GameDetail.getInitialProps = async (ctx) => {
         body: {},
         method: "get"
     });
-    console.log(data.rules)
     return { game: data, errors: errors || [] };
 }
 

@@ -7,7 +7,8 @@ import { FaPiggyBank } from "react-icons/fa";
 import { ImGift } from 'react-icons/im';
 import { TournamentDoc } from "../../../server/models/tournament";
 import TournamentTab from "../../components/tournament-tab";
-const PlayerImg = require("../../public/asset/player.jpg");
+const PlayerImg = require("../../public/asset/user.svg");
+
 
 const UserProfile = ({ user, matches, errors }: { user: UserDoc, matches: any, errors: any }) => {
     return <MainLayout messages={errors} isFullscreen>
