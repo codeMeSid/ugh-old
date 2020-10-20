@@ -9,7 +9,8 @@ import Option from '../../components/input/option';
 import { locations } from '../../public/location-resource';
 import ProgressButton from '../../components/button/progress';
 import { useRequest } from '../../hooks/use-request';
-import Router from 'next/router';
+import Link from 'next/link';
+import Button from '../../components/button/main';
 
 const ProfileEdit = ({ user, errors }: { user: UserDoc, errors: any }) => {
     const [uploadUrl, setUploadUrl] = useState(user?.uploadUrl);
@@ -66,12 +67,18 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc, errors: any }) => {
             state,
             country
         }, method: "put",
-        onSuccess: (data) => setMessages([{ message: "Updated Successfuly", type: "success" }]),
+        onSuccess: () => setMessages([{ message: "Updated Successfuly", type: "success" }]),
         onError: (errors) => setMessages(errors)
     });
 
     return <MainLayout messages={messages}>
         <div style={{ padding: "2rem" }}>
+
+            <Link href="/profile">
+                <a style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button text="Go Back To Profile" type="link" />
+                </a>
+            </Link>
             <h1 style={{ textAlign: "center" }}>Profile Edit</h1>
             <div className="row">
                 <div className="col">
