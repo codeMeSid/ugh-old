@@ -15,7 +15,7 @@ import MessengerList from '../../components/messenger';
 
 const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: TournamentDoc, matches: any, currentUser: any, errors: any }) => {
     const [messages, setMessages] = useState(errors);
-    const userHasJoined = tournament?.players?.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id)).length > 0;
+    const userHasJoined = currentUser?.role === "admin" || tournament?.players?.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id)).length > 0;
     const chats = tournament?.players?.map((user: any) => {
         if (currentUser.ughId === user.ughId) return;
         return ({ to: user.ughId, channel: 'user', profile: user?.uploadUrl, title: user.ughId })
@@ -127,8 +127,8 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
             }
         </div>
         {userHasJoined && <MessengerList
-            from={currentUser.ughId}
-            chats={[{ channel: "admin", title: "admin", to: "admin" }, { channel: "match", title: "tournament", to: tournament?.regId }, ...chats]} />}
+            from={currentUser?.role === "admin" ? "admin" : currentUser?.ughId}
+            chats={[{ channel: "admin", title: "chat with admin", to: "admin" }, { channel: "match", title: "match chat", to: tournament?.regId }, ...chats]} />}
     </MainLayout>
 }
 
