@@ -16,7 +16,7 @@ const Tournaments = ({ tournaments, errors }) => {
         if (game === "all") {
             Object.keys(tournaments).forEach((key) => {
                 const m = tournaments[key].items[type];
-                if (m) newMatches.push(...m);
+                if (m) newMatches.push(...m); TournamentCard
             });
         } else {
             if (tournaments[game]) {

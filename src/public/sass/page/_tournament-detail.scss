@@ -50,6 +50,22 @@
         font-weight: bold;
         color: white;
       }
+      &__winner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: rgba(white, 0.3);
+        cursor: pointer;
+        &__icon {
+          font-size: 25rem;
+        }
+        &__name {
+          text-align: center;
+          font-size: 3.6rem;
+          text-transform: uppercase;
+        }
+      }
     }
     &__body {
       width: 100%;

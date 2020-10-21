@@ -12,6 +12,7 @@ import PlayerCard from '../../components/card/player';
 import RichText from '../../components/rich-text';
 import Timer from '../../components/timer';
 import MessengerList from '../../components/messenger';
+import { IoIosTrophy } from 'react-icons/io';
 
 const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: TournamentDoc, matches: any, currentUser: any, errors: any }) => {
     const [messages, setMessages] = useState(errors);
@@ -57,6 +58,15 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                     <div className="tournament__card__head" style={{ backgroundImage: `url(${tournament?.game?.imageUrl})` }}>
                         <div className="tournament__card__head__title">{tournament?.name}</div>
                         <div className="tournament__card__head__time"><Timer canCountdown={!!tournament?.startDateTime} dateTime={tournament?.startDateTime} /></div>
+                        {
+                            tournament.winners.length > 0 && <div className="tournament__card__head__winner">
+                                <IoIosTrophy className="tournament__card__head__winner__icon" />
+                                <div className="tournament__card__head__winner__name">
+                                    <div>{tournament.winners[0].ughId}</div>
+                                    <div>{tournament.winners[0].coins} coins</div>
+                                </div>
+                            </div>
+                        }
                     </div>
                     <div className="tournament__card__body">
                         <div className="tournament__card__body__upper">

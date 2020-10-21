@@ -19,11 +19,9 @@ class MessageHandler extends Component<MHProps> {
         const { messages } = prevProps;
         const { messages: messagesArray } = this.props;
         if (JSON.stringify(messages) !== JSON.stringify(messagesArray)) {
-            this.setState({ messages: messagesArray ? messagesArray : [] })
+            this.setState({ messages: messagesArray || [] })
         }
-
     }
-
     onClickHandler(i: number) {
         this.setState((prevState: any) => {
             const updatedMessage = prevState.messages.filter((_, index) => i !== index);
@@ -42,18 +40,5 @@ class MessageHandler extends Component<MHProps> {
         </div>
     }
 }
-
-// const MessageHandler = ({ messageArray = [] }: { messageArray: Array<{ message: string, type?: string }> }) => {
-//     const [messages, setMessages] = useState(messageArray);
-//     const onClickHandler = (i: number) => {
-//         
-//         setMessages(updatedMessage);
-//     }
-//     useEffect(() => {
-//         setMessages(messageArray);
-//     }, [messageArray])
-//     return 
-// }
-
 
 export default MessageHandler;

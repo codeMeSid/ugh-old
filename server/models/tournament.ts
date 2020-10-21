@@ -33,7 +33,11 @@ export interface TournamentDoc extends mongoose.Document {
   endDateTime: Date;
   brackets: Array<BracketDoc>;
   status: TournamentStatus;
-  winners: Array<string>;
+  winners: Array<{
+    ughId: string;
+    coins: number;
+    position: number;
+  }>;
 }
 
 interface TournamentModel extends mongoose.Model<TournamentDoc> {
@@ -51,7 +55,13 @@ const tournamentSchema = new mongoose.Schema(
     },
     winnerCount: Number,
     winnerCoin: Number,
-    winners: [String],
+    winners: [
+      {
+        ughId: String,
+        coins: Number,
+        position: Number,
+      },
+    ],
     players: [
       {
         refs: "Users",
