@@ -53,6 +53,9 @@
     overflow-y: scroll;
     display: flex;
     flex-direction: column-reverse;
+    &.ugh {
+      flex-direction: column;
+    }
     &::-webkit-scrollbar {
       width: 0.2rem;
     }
@@ -77,6 +80,10 @@
       border-radius: 0.8rem;
       border-bottom-right-radius: 0;
     }
+    &.ugh {
+      width: 100%;
+      text-transform: capitalize;
+    }
     &__head {
       font-size: 1.2rem;
       color: red;
@@ -86,6 +93,9 @@
     &__text {
       word-wrap: break-word;
       word-break: break-all;
+      &.ugh {
+        margin: 1rem;
+      }
     }
     &__date {
       text-align: right;

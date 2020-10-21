@@ -792,6 +792,8 @@ tr:nth-child(even) {
     overflow-y: scroll;
     display: flex;
     flex-direction: column-reverse; }
+    .messenger__body.ugh {
+      flex-direction: column; }
     .messenger__body::-webkit-scrollbar {
       width: 0.2rem; }
     .messenger__body::-webkit-scrollbar-thumb {
@@ -812,6 +814,9 @@ tr:nth-child(even) {
       color: white;
       border-radius: 0.8rem;
       border-bottom-right-radius: 0; }
+    .messenger__message.ugh {
+      width: 100%;
+      text-transform: capitalize; }
     .messenger__message__head {
       font-size: 1.2rem;
       color: red;
@@ -820,6 +825,8 @@ tr:nth-child(even) {
     .messenger__message__text {
       word-wrap: break-word;
       word-break: break-all; }
+      .messenger__message__text.ugh {
+        margin: 1rem; }
     .messenger__message__date {
       text-align: right;
       font-size: 1rem;

@@ -96,8 +96,8 @@ class MessengerChat extends Component<Props> {
                 <div className="messenger__head__name">{title}</div>
                 <IoMdClose className="messenger__head__close" onClick={onClose} />
             </div>
-            <div className="messenger__body">
-                {to && chats.map(chat => {
+            <div className={`messenger__body ${to ? "" : "ugh"}`}>
+                {to ? chats.map(chat => {
                     return <div key={Math.random()} className={`messenger__message ${chat.ughId === from ? "active" : ""}`}>
                         {chat.ughId === from
                             ? <div style={{ marginTop: 2 }} />
@@ -105,7 +105,15 @@ class MessengerChat extends Component<Props> {
                         <div className="messenger__message__text">{chat.text}</div>
                         <div className="messenger__message__date">{format(chat.createdAt, "hh:mm a")}</div>
                     </div>
-                })}
+                }) : <>
+                        <div className="messenger__message ugh">
+                            <div className="messenger__message__head">{from}</div>
+                            <div className="messenger__message__text ugh">Select chat to message</div>
+                            <div className="messenger__message__date">{format(new Date(), "hh:mm a")}</div>
+                        </div>
+
+
+                    </>}
             </div>
             {to && <form className="messenger__form" onSubmit={(e) => {
                 e.preventDefault();
