@@ -14,9 +14,22 @@ const FileInput = ({ placeholder, onChange = () => { }, name, value = "", showIm
     const [progress, setProgress] = useState(value.length > 0 ? 100 : 0);
     const [image, setImage] = useState(value);
 
-    const onChangeHandler = async (e) => {
+    const onChangeHandler = async (e: any) => {
         try {
             const file = e.currentTarget.files[0];
+            const bytesIn1Mb = 1000000;
+            const fileSize = file.size / bytesIn1Mb;
+            const fileType = file.type.split("/")[1];
+            if (fileSize > 5) {
+                alert("file Size should be less than 5mb");
+                return;
+            }
+            const acceptedFileFormats = ["png", "jpg", "jpeg"];
+            const isValidFile = acceptedFileFormats.indexOf(fileType) > -1;
+            if (!isValidFile) {
+                alert("Only png,jpg and jpeg file formats allowed");
+                return;
+            }
             const url: any = await fire.storage(file, (data) => setProgress(data));
             onChange(name, url);
             if (showImage) {
@@ -35,6 +48,7 @@ const FileInput = ({ placeholder, onChange = () => { }, name, value = "", showIm
                 <RiDeleteBin2Line className="form__file__remove" onClick={() => {
                     setProgress(0);
                     setImage("");
+                    onChange(name, "")
                 }} />
             </div>
             : progress > 0

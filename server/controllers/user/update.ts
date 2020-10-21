@@ -24,9 +24,7 @@ export const updateUserController = async (req: Request, res: Response) => {
   const user = await User.findById(id);
 
   if (!user) throw new BadRequestError("Invalid account");
-  if (uploadUrl) {
-    user.uploadUrl = uploadUrl;
-  }
+  user.uploadUrl = uploadUrl;
   if (dob) {
     isValidDob(dob);
     user.dob = dob;
@@ -39,12 +37,10 @@ export const updateUserController = async (req: Request, res: Response) => {
     filter.isUnfit({ panCard });
     user.idProof.panCard = panCard;
   }
-  if (aadharUrl) {
-    user.idProof.aadharUrl = aadharUrl;
-  }
-  if (panUrl) {
-    user.idProof.panUrl = panUrl;
-  }
+  if (aadharUrl) user.idProof.aadharUrl = aadharUrl;
+
+  if (panUrl) user.idProof.panUrl = panUrl;
+
   if (psnId) {
     filter.isUnfit({ psnId });
     user.gamerProfile.psnId = psnId;
@@ -65,12 +61,11 @@ export const updateUserController = async (req: Request, res: Response) => {
     filter.isUnfit({ bio });
     user.bio = bio;
   }
-  if (country) {
-    user.address.country = country;
-  }
-  if (state) {
-    user.address.state = state;
-  }
+
+  if (country) user.address.country = country;
+
+  if (state) user.address.state = state;
+
   if (user.isSocial && user.activity === UserActivity.Inactive) {
     if (dob) {
       isValidDob(dob);

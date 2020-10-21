@@ -11,9 +11,8 @@ export default () => {
         url: "/api/ugh/user/signout",
         method: "get",
         body: {},
-        onSuccess: Router.reload
+        onSuccess: () => Router.replace("/")
     })
-
     useEffect(() => {
         doRequest();
     }, []);

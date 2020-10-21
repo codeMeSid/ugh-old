@@ -73,12 +73,6 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc, errors: any }) => {
 
     return <MainLayout messages={messages}>
         <div style={{ padding: "2rem" }}>
-
-            <Link href="/profile">
-                <a style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Button text="Go Back To Profile" type="link" />
-                </a>
-            </Link>
             <h1 style={{ textAlign: "center" }}>Profile Edit</h1>
             <div className="row">
                 <div className="col">
@@ -143,10 +137,15 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc, errors: any }) => {
                 <textarea placeholder="bio" value={bio} style={{ maxWidth: "60rem", width: "100%" }} onChange={(e) => setBio(e.currentTarget.value)} />
             </div>
             <div className="row">
-                <ProgressButton text="Update" type="youtube" size="large" onPress={async (_, next) => {
+                <ProgressButton text="Update" type="youtube" size="medium" onPress={async (_, next) => {
                     await doRequest();
                     next();
                 }} />
+                <Link href="/profile">
+                    <a style={{ marginLeft: 10 }}>
+                        <Button text="Go Back To Profile" type="link" />
+                    </a>
+                </Link>
             </div>
         </div>
     </MainLayout>
