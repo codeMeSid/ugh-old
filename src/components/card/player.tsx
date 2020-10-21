@@ -22,7 +22,6 @@ const PlayerCard = ({ player, currentUser }: { player: UserDoc, currentUser: any
                 {playerUghId}
             </a>
         </Link>
-        <Button text="CHAT" size="small" />
     </div>
 }
 

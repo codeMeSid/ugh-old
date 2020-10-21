@@ -101,22 +101,22 @@ const SignUp = ({ ughIds, errors }) => {
                         return <Option key={s} display={s} value={s} />
                     })
                 } />
-            <ProgressButton text="Register" size="large" type="link" onPress={async (_, next) => {
-                if (password !== password2 || password.length === 0) {
-                    setMessages([{ message: "passwords do not match" }])
+                <ProgressButton text="Register" size="large" type="link" onPress={async (_, next) => {
+                    if (password !== password2 || password.length === 0) {
+                        setMessages([{ message: "passwords do not match" }])
+                        next();
+                        return
+                    }
+                    if (Array.from(ughIds).filter(({ ughId: u }) => {
+                        return u === ughId
+                    }).length > 0) {
+                        setMessages([{ message: "UGH ID is already taken" }])
+                        next();
+                        return
+                    }
+                    await doRequest();
                     next();
-                    return
-                }
-                if (Array.from(ughIds).filter(({ ughId: u }) => {
-                    return u === ughId
-                }).length > 0) {
-                    setMessages([{ message: "UGH ID is already taken" }])
-                    next();
-                    return
-                }
-                await doRequest();
-                next();
-            }} />
+                }} />
             <div className="signin__other">
                 <div style={{ textTransform: "capitalize", textAlign: "center", fontSize: 16, fontWeight: 700 }}>already have an account ?&nbsp;
                     <Link href="/login">
