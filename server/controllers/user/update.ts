@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { User, UserDoc } from "../../models/user";
-import { BadRequestError, UserActivity, isValidDob, filter } from "@monsid/ugh";
+import { User } from "../../models/user";
+import { BadRequestError, UserActivity, isValidDob } from "@monsid/ugh";
+import { filter } from "../../utils/profanity-filter";
 
 // TODO check for valid aadhar card
 export const updateUserController = async (req: Request, res: Response) => {
@@ -24,47 +25,27 @@ export const updateUserController = async (req: Request, res: Response) => {
   const user = await User.findById(id);
 
   if (!user) throw new BadRequestError("Invalid account");
+  isValidDob(dob);
+  filter.isUnfit({ aadharCard });
+  filter.isUnfit({ panCard });
+  filter.isUnfit({ psnId });
+  filter.isUnfit({ gamerTag });
+  filter.isUnfit({ steamId });
+  filter.isUnfit({ mobile });
+  filter.isUnfit({ bio });
   user.uploadUrl = uploadUrl;
-  if (dob) {
-    isValidDob(dob);
-    user.dob = dob;
-  }
-  if (aadharCard) {
-    filter.isUnfit({ aadharCard });
-    user.idProof.aadharCard = aadharCard;
-  }
-  if (panCard) {
-    filter.isUnfit({ panCard });
-    user.idProof.panCard = panCard;
-  }
-  if (aadharUrl) user.idProof.aadharUrl = aadharUrl;
-
-  if (panUrl) user.idProof.panUrl = panUrl;
-
-  if (psnId) {
-    filter.isUnfit({ psnId });
-    user.gamerProfile.psnId = psnId;
-  }
-  if (gamerTag) {
-    filter.isUnfit({ gamerTag });
-    user.gamerProfile.gamerTag = gamerTag;
-  }
-  if (steamId) {
-    filter.isUnfit({ steamId });
-    user.gamerProfile.steamId = steamId;
-  }
-  if (mobile) {
-    filter.isUnfit({ mobile });
-    user.mobile = mobile;
-  }
-  if (bio) {
-    filter.isUnfit({ bio });
-    user.bio = bio;
-  }
-
-  if (country) user.address.country = country;
-
-  if (state) user.address.state = state;
+  user.dob = dob;
+  user.idProof.aadharCard = aadharCard;
+  user.idProof.panCard = panCard;
+  user.idProof.aadharUrl = aadharUrl;
+  user.idProof.panUrl = panUrl;
+  user.gamerProfile.psnId = psnId;
+  user.gamerProfile.gamerTag = gamerTag;
+  user.gamerProfile.steamId = steamId;
+  user.mobile = mobile;
+  user.bio = bio;
+  user.address.country = country;
+  user.address.state = state;
 
   if (user.isSocial && user.activity === UserActivity.Inactive) {
     if (dob) {
