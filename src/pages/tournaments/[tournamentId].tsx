@@ -14,6 +14,9 @@ import Timer from '../../components/timer';
 import MessengerList from '../../components/messenger';
 import { IoIosTrophy } from 'react-icons/io';
 
+const Logo = require("../../public/asset/logo-icon.png");
+
+
 const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: TournamentDoc, matches: any, currentUser: any, errors: any }) => {
     const [messages, setMessages] = useState(errors);
     const userHasJoined = currentUser?.role === "admin" || tournament?.players?.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id)).length > 0;
@@ -138,7 +141,7 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
         </div>
         {userHasJoined && <MessengerList
             from={currentUser?.role === "admin" ? "admin" : currentUser?.ughId}
-            chats={[{ channel: "admin", title: "chat with admin", to: "admin" }, { channel: "match", title: "match chat", to: tournament?.regId }, ...chats]} />}
+            chats={[{ channel: "admin", title: "chat with admin", to: "admin", profile: Logo }, { channel: "match", title: "match chat", to: tournament?.regId }, ...chats]} />}
     </MainLayout>
 }
 

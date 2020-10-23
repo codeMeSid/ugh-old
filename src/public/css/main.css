@@ -1431,7 +1431,8 @@ tr:nth-child(even) {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 30rem; }
+      width: 30rem;
+      margin-right: 5rem; }
       .match__footer__title__side__item {
         font-size: 1.8rem;
         text-transform: capitalize;

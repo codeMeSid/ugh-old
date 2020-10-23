@@ -6,6 +6,8 @@ import NewsTab from "../components/news-tab";
 import WallpaperSlider from "../components/wallpaper-slider";
 import MessengerList from "../components/messenger";
 
+const Logo = require("../public/asset/logo-icon.png");
+
 const LandingPage = ({ matches, wallpapers, errors, currentUser }) => {
 
     return <MainLayout messages={errors} isFullscreen>
@@ -16,7 +18,7 @@ const LandingPage = ({ matches, wallpapers, errors, currentUser }) => {
         </div>
         {currentUser && <MessengerList
             from={currentUser.ughId}
-            chats={[{ to: "admin", channel: "admin", title: "chat with admin" },]} />}
+            chats={[{ to: "admin", channel: "admin", title: "chat with admin", profile: Logo },]} />}
     </MainLayout>
 }
 
