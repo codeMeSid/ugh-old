@@ -105,7 +105,7 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc, errors: any }) => {
             </div>
             <div className="row">
                 <div className="col">
-                    <Input placeholder="stream Id" name="streamId" value={streamId} onChange={onChangeHandler} />
+                    <Input placeholder="steam Id" name="streamId" value={streamId} onChange={onChangeHandler} />
                 </div>
                 <div className="col">
                     <Input placeholder="gamer tag" name="gamerTag" value={gamerTag} onChange={onChangeHandler} />

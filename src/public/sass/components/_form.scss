@@ -40,6 +40,9 @@
       transition: all 100ms linear;
       text-align: left;
     }
+    &.white {
+      color: white;
+    }
   }
 
   &__select {
@@ -58,6 +61,9 @@
         border: none;
         background-color: rgba(grey, 0.4);
       }
+    }
+    &.white {
+      color: white;
     }
   }
 

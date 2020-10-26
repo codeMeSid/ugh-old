@@ -394,6 +394,8 @@ tr:nth-child(even) {
       margin-top: 0.2rem;
       transition: all 100ms linear;
       text-align: left; }
+    .form__input.white {
+      color: white; }
   .form__select {
     min-width: 32rem;
     width: 100%;
@@ -408,6 +410,8 @@ tr:nth-child(even) {
       .form__select__option:hover, .form__select__option:focus {
         border: none;
         background-color: rgba(128, 128, 128, 0.4); }
+    .form__select.white {
+      color: white; }
   .form__file__container {
     display: flex;
     align-items: center; }
@@ -513,8 +517,8 @@ tr:nth-child(even) {
       margin-right: 0.7rem; }
 
 .footer {
-  background-color: #01071A;
-  padding: 2rem; }
+  background-color: #01071a;
+  padding: 0.5rem 2rem; }
   .footer__l1 {
     text-align: center;
     color: white;
@@ -954,7 +958,15 @@ tr:nth-child(even) {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 2rem 0; }
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; }
+  .signin__container {
+    text-align: center;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+    color: white; }
   .signin__other {
     margin: 1.2rem 0; }
   .signin__ughid {

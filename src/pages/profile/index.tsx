@@ -82,7 +82,7 @@ const UserProfile = ({ user, matches, errors, isNewAuth, isSocialAuth }: { user:
                                     <a>
                                         <div className="profile__body__bottom__item__icon"><BsGear /></div>
                                         <div className="profile__body__bottom__item__title">user settings</div>
-                                        <div className="profile__body__bottom__item__value"></div>
+                                        <div className="profile__body__bottom__item__value" style={{ opacity: 0 }}>123</div>
                                     </a>
                                 </Link>
                             </div>

@@ -13,8 +13,11 @@ const AdminUserDashboard = () => {
     // components
     const SwitchBlade = (id: string, activity: string) =>
         activity === 'inactive'
-            ? <div style={{ color: "red", textTransform: "uppercase" }}>inactive</div>
-            : <Switch onChange={() => changeUserActivity(id)} checked={activity === 'active'} />;
+            ? <div style={{ color: "red", textTransform: "uppercase" }}>Unverified</div>
+            : <div>
+                <div style={{ color: "blue", textTransform: "uppercase" }}>{activity}</div>
+                <Switch onChange={() => changeUserActivity(id)} checked={activity === 'active'} />
+            </div>;
     const TableLink = (name: string, id: string) => <Link href={`/admin/users/${id}`}>
         <a className="table__link">{name}</a>
     </Link>
