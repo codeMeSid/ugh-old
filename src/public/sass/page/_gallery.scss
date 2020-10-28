@@ -1,7 +1,7 @@
 .gallery {
   padding: 2rem;
   min-height: 88vh;
-  background-color: rgb(230, 230, 230);
+  color: white;
   &__title {
     text-align: center;
     font-size: 3rem;
@@ -25,7 +25,6 @@
   }
   &__container {
     height: 20rem;
-
     overflow: hidden;
     margin: 1rem;
     box-shadow: 0 0.7rem 1rem 0.2rem rgba(black, 0.5);

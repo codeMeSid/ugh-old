@@ -2,6 +2,11 @@
   max-width: 80rem;
   margin: 0 auto;
   text-align: center;
+  &__bg {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
   &__image {
     width: 20rem;
     background-color: rgba(grey, 0.2);

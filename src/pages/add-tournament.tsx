@@ -11,6 +11,8 @@ import Router from 'next/router';
 import MainLayout from "../components/layout/mainlayout";
 import DialogButton from "../components/button/dialog";
 
+const bgImage = require("../public/asset/signup.jpg");
+
 const AddTournament = ({ gs, cs, errors }:
     { gs: Array<GameDoc>, cs: Array<ConsoleDoc>, errors: any }) => {
     const [wI, setWI] = useState(0);
@@ -81,64 +83,66 @@ const AddTournament = ({ gs, cs, errors }:
         }
     }
     return <MainLayout messages={messages}>
-        <div className="detail" style={{ padding: "2rem" }}>
-            <h1>Add Tournament</h1>
-            <div className="row">
-                <div className="col">
-                    <Input placeholder="name" name="name" value={name} onChange={onChangeHandler} />
-                </div>
-                <div className="col">
-                    <Input type="number" placeholder="coins" name="coins" value={coins} onChange={onChangeHandler} />
-                </div>
-            </div>
-            <div className="row">
-                <div className="col">
-                    <Select name="winners" onSelect={onSelectHandler} value={wI} placeholder="winner" options={
-                        gs[game]?.winners?.map((w, index) => <Option key={w} display={w} value={index} />)
-                    } />
-                </div>
-                <div className="col">
-                    <Select name="console" onSelect={onSelectHandler} value={console} placeholder="console" options={
-                        cs.map((c, index) => <Option key={c.name} display={c.name.toUpperCase()} value={index} />)
-                    } />
-                </div>
-            </div>
-            <div className="row">
-                <div className="col">
-                    <Input type="datetime-local" placeholder="start at" onChange={onChangeHandler} name="startDateTime" />
-                </div>
-                <div className="col">
-                    <Input type="datetime-local" placeholder="end at" onChange={onChangeHandler} name="endDateTime" />
-                </div>
-            </div>
-            <div className="row">
-                <div className="col">
-                    <Select onSelect={onSelectHandler} name="game" placeholder="game" value={game} options={
-                        games
-                            ?.filter(game => game.console === consoles[console]?.name)
-                            ?.map((g: GameDoc, index: number) => <Option key={g.name} display={g.name} value={index} />)
-                    } />
-                </div>
-                <div className="col">
-                    <Select onSelect={onSelectHandler} name="participants" placeholder="participants" value={participants} options={
-                        games[game].participants.map(
-                            (p, index) => <Option key={p} display={p} value={index} />)
-                    } />
-                </div>
-            </div>
-            <div className="row">
-                <div className="col">
-                    <Select onSelect={onSelectHandler} name="group" placeholder="group" value={group} options={
-                        games[game]?.groups?.map((g, index) => <Option key={g.name} display={`${g.name}-${g.participants}`} value={index} />)
-                    } />
-                </div>
-            </div>
-            <div className="row">
-                <DialogButton fullButton title="Submit" onAction={doRequest} style={{ top: "20%", position: "fixed" }}>
-                    <div style={{ margin: "2rem auto", fontSize: "2rem", minWidth: "40rem", maxWidth: "50rem" }}>
-                        Creating tournament will cost you {coins * (games[game]?.groups[group]?.participants || 1)} coins from your account
+        <div style={{ backgroundImage: `url(${bgImage})` }} className="detail__bg">
+            <div className="detail" style={{ padding: "2rem" }}>
+                <h1 style={{ color: "white" }}>Add Tournament</h1>
+                <div className="row">
+                    <div className="col">
+                        <Input placeholder="name" name="name" value={name} onChange={onChangeHandler} isWhite />
                     </div>
-                </DialogButton>
+                    <div className="col">
+                        <Input type="number" placeholder="coins" name="coins" value={coins} onChange={onChangeHandler} isWhite />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <Select name="winners" onSelect={onSelectHandler} value={wI} placeholder="winner" options={
+                            gs[game]?.winners?.map((w, index) => <Option key={w} display={w} value={index} />)
+                        } isWhite />
+                    </div>
+                    <div className="col">
+                        <Select name="console" onSelect={onSelectHandler} value={console} placeholder="console" options={
+                            cs.map((c, index) => <Option key={c.name} display={c.name.toUpperCase()} value={index} />)
+                        } isWhite />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <Input type="datetime-local" placeholder="start at" onChange={onChangeHandler} name="startDateTime" isWhite />
+                    </div>
+                    <div className="col">
+                        <Input type="datetime-local" placeholder="end at" onChange={onChangeHandler} name="endDateTime" isWhite />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <Select onSelect={onSelectHandler} name="game" placeholder="game" value={game} options={
+                            games
+                                ?.filter(game => game.console === consoles[console]?.name)
+                                ?.map((g: GameDoc, index: number) => <Option key={g.name} display={g.name} value={index} />)
+                        } isWhite />
+                    </div>
+                    <div className="col">
+                        <Select onSelect={onSelectHandler} name="participants" placeholder="participants" value={participants} options={
+                            games[game].participants.map(
+                                (p, index) => <Option key={p} display={p} value={index} />)
+                        } isWhite />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <Select onSelect={onSelectHandler} name="group" placeholder="group" value={group} options={
+                            games[game]?.groups?.map((g, index) => <Option key={g.name} display={`${g.name}-${g.participants}`} value={index} />)
+                        } isWhite />
+                    </div>
+                </div>
+                <div className="row">
+                    <DialogButton fullButton title="Submit" onAction={doRequest} style={{ top: "20%", position: "fixed" }}>
+                        <div style={{ margin: "2rem auto", fontSize: "2rem", minWidth: "40rem", maxWidth: "50rem" }}>
+                            Creating tournament will cost you {coins * (games[game]?.groups[group]?.participants || 1)} coins from your account
+                    </div>
+                    </DialogButton>
+                </div>
             </div>
         </div>
     </MainLayout>

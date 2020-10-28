@@ -6,10 +6,11 @@ import Table from "../components/table";
 import { format } from 'date-fns';
 import { useRequest } from "../hooks/use-request";
 import ProgressButton from "../components/button/progress";
-import Link from "next/link";
 import Router from 'next/router';
 import Input from "../components/input/input";
 import { useState } from "react";
+
+const bgImage = require("../public/asset/signup.jpg");
 
 const Withdraw = ({ transactions, coins, errors }: { coins: number, transactions: Array<TransactionDoc>, walletBalance400: boolean, withdrawRequestMade: boolean, errors: Array<any> }) => {
     const [requestCoin, setRequestCoin] = useState(coins || 0);
@@ -25,44 +26,46 @@ const Withdraw = ({ transactions, coins, errors }: { coins: number, transactions
     });
 
     return <MainLayout messages={messages}>
-        <div className="withdraw">
-            <div className="withdraw__head">
-                <div className="withdraw__head__coins">you currently have {coins} coins</div>
-                <div style={{ width: "35rem", margin: "0 auto" }} >
-                    <Input placeholder="withdraw coins" name="coins" type="number" value={requestCoin} onChange={(_, val) => setRequestCoin(val)} />
+        <div style={{ backgroundImage: `url(${bgImage})` }} className="detail__bg">
+            <div className="withdraw">
+                <div className="withdraw__head">
+                    <div className="withdraw__head__coins">you currently have {coins} coins</div>
+                    <div style={{ width: "35rem", margin: "0 auto" }} >
+                        <Input placeholder="withdraw coins" name="coins" type="number" value={requestCoin} onChange={(_, val) => setRequestCoin(val)} isWhite/>
+                    </div>
+                    <ProgressButton type="link" text="Make Request" onPress={async (_, next) => {
+                        if (requestCoin > coins || requestCoin <= 0) {
+                            next();
+                            setMessages([{ message: "Cannot withdraw more than balance" }])
+                            return;
+                        }
+                        await doRequest();
+                        next()
+                    }} />
                 </div>
-                <ProgressButton type="link" text="Make Request" onPress={async (_, next) => {
-                    if (requestCoin > coins || requestCoin <= 0) {
-                        next();
-                        setMessages([{ message: "Cannot withdraw more than balance" }])
-                        return;
-                    }
-                    await doRequest();
-                    next()
-                }} />
-            </div>
-            <div className="withdraw__body">
-                <Table headers={[
-                    {
-                        text: "refId",
-                        isResponsive: false
-                    },
-                    {
-                        text: "amount",
-                        isResponsive: false
-                    },
-                    {
-                        text: "created at",
-                        isResponsive: false
-                    },
-                    {
-                        text: "status",
-                        isResponsive: false
-                    }
-                ]} data={transactions.map(transaction => {
-                    const date = new Date(transaction.createdAt);
-                    return [transaction.orderId, `₹${transaction.amount}`, format(date, "dd/MM/yy,H:mm a"), transaction.status.toUpperCase()]
-                })} />
+                <div className="withdraw__body">
+                    <Table headers={[
+                        {
+                            text: "refId",
+                            isResponsive: false
+                        },
+                        {
+                            text: "amount",
+                            isResponsive: false
+                        },
+                        {
+                            text: "created at",
+                            isResponsive: false
+                        },
+                        {
+                            text: "status",
+                            isResponsive: false
+                        }
+                    ]} data={transactions.map(transaction => {
+                        const date = new Date(transaction.createdAt);
+                        return [transaction.orderId, `₹${transaction.amount}`, format(date, "dd/MM/yy,H:mm a"), transaction.status.toUpperCase()]
+                    })} />
+                </div>
             </div>
         </div>
     </MainLayout>

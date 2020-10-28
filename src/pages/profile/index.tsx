@@ -55,6 +55,22 @@ const UserProfile = ({ user, matches, errors, isNewAuth, isSocialAuth }: { user:
                             </Link>
                         </div>
                     </div>
+                    <div className="profile__body__top" style={{ marginTop: 10 }}>
+                        <div className="profile__body__top__left">
+                            {user?.gamerProfile?.psnId && <div className="profile__body__top__item">
+                                <div className="profile__body__top__item__title">psn id</div>
+                                <div className="profile__body__top__item__value">{user?.gamerProfile?.psnId}</div>
+                            </div>}
+                            {user?.gamerProfile?.gamerTag && <div className="profile__body__top__item">
+                                <div className="profile__body__top__item__title">gamer tag</div>
+                                <div className="profile__body__top__item__value">{user?.gamerProfile?.gamerTag}</div>
+                            </div>}
+                            {user?.gamerProfile?.steamId && <div className="profile__body__top__item">
+                                <div className="profile__body__top__item__title">steam id</div>
+                                <div className="profile__body__top__item__value">{user?.gamerProfile?.steamId}</div>
+                            </div>}
+                        </div>
+                    </div>
                     <div className="profile__body__bottom">
                         <div className="profile__body__bottom__left">
                             <div className="profile__body__bottom__left__title">bio</div>
@@ -116,6 +132,7 @@ UserProfile.getInitialProps = async (ctx) => {
     if (errorsB) errors.push(...errorsB);
     const isNewAuth = ctx.query.newauth === "true";
     const isSocialAuth = ctx.query.socialauth === "true";
+    console.log({ user });
     return { user, matches, errors, isNewAuth, isSocialAuth }
 }
 

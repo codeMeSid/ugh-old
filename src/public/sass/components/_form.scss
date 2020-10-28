@@ -43,6 +43,9 @@
     &.white {
       color: white;
     }
+    &.white:not(:placeholder-shown) ~ &__helper {
+     color: wheat;
+    }
   }
 
   &__select {

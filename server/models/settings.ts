@@ -11,6 +11,10 @@ export interface SettingsDoc extends mongoose.Document {
   privacyPolicy: string;
   aboutUs: string;
   howToPlay: string;
+  followUs: Array<{
+    type: string;
+    href: string;
+  }>;
   updatedAt: Date;
 }
 
@@ -27,6 +31,12 @@ const settingsSchema = new mongoose.Schema(
         uploadUrl: String,
         href: String,
         title: String,
+      },
+    ],
+    followUs: [
+      {
+        type: String,
+        href: String,
       },
     ],
     termsOfService: String,

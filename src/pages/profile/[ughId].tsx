@@ -43,6 +43,22 @@ const UserProfile = ({ user, matches, errors }: { user: UserDoc, matches: any, e
                         <div className="profile__body__top__right">
                         </div>
                     </div>
+                    <div className="profile__body__top" style={{ marginTop: 10 }}>
+                        <div className="profile__body__top__left">
+                            {user?.gamerProfile?.psnId && <div className="profile__body__top__item">
+                                <div className="profile__body__top__item__title">psn id</div>
+                                <div className="profile__body__top__item__value">{user?.gamerProfile?.psnId}</div>
+                            </div>}
+                            {user?.gamerProfile?.gamerTag && <div className="profile__body__top__item">
+                                <div className="profile__body__top__item__title">gamer tag</div>
+                                <div className="profile__body__top__item__value">{user?.gamerProfile?.gamerTag}</div>
+                            </div>}
+                            {user?.gamerProfile?.steamId && <div className="profile__body__top__item">
+                                <div className="profile__body__top__item__title">steam id</div>
+                                <div className="profile__body__top__item__value">{user?.gamerProfile?.steamId}</div>
+                            </div>}
+                        </div>
+                    </div>
                     <div className="profile__body__bottom">
                         <div className="profile__body__bottom__left">
                             <div className="profile__body__bottom__left__title">bio</div>
@@ -54,12 +70,11 @@ const UserProfile = ({ user, matches, errors }: { user: UserDoc, matches: any, e
                                 <div className="profile__body__bottom__item__title">total wins</div>
                                 <div className="profile__body__bottom__item__value">{user?.tournaments?.filter(match => match.didWin).length || 0}</div>
                             </div>
-                            <div className="profile__body__bottom__item">
+                            {/* <div className="profile__body__bottom__item">
                                 <div className="profile__body__bottom__item__icon"><FaPiggyBank /></div>
                                 <div className="profile__body__bottom__item__title">total earning</div>
                                 <div className="profile__body__bottom__item__value">{user?.tournaments?.filter(match => match.didWin)?.reduce((acc, match) => acc + match.coins, 0) || 0}</div>
-
-                            </div>
+                            </div> */}
                             <div className="profile__body__bottom__item">
                                 <div className="profile__body__bottom__item__icon"><ImGift /></div>
                                 <div className="profile__body__bottom__item__title">total tournament</div>

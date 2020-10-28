@@ -396,6 +396,8 @@ tr:nth-child(even) {
       text-align: left; }
     .form__input.white {
       color: white; }
+    .form__input.white:not(:placeholder-shown) ~ .form__input__helper {
+      color: wheat; }
   .form__select {
     min-width: 32rem;
     width: 100%;
@@ -1018,7 +1020,7 @@ tr:nth-child(even) {
 .gallery {
   padding: 2rem;
   min-height: 88vh;
-  background-color: #e6e6e6; }
+  color: white; }
   .gallery__title {
     text-align: center;
     font-size: 3rem;
@@ -1281,7 +1283,8 @@ tr:nth-child(even) {
     line-height: 3.2rem; } }
 
 .withdraw {
-  min-height: 88vh; }
+  min-height: 88vh;
+  color: white; }
   .withdraw__body {
     margin: 2rem auto;
     max-width: 80rem; }
@@ -1319,6 +1322,10 @@ tr:nth-child(even) {
   max-width: 80rem;
   margin: 0 auto;
   text-align: center; }
+  .detail__bg {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; }
   .detail__image {
     width: 20rem;
     background-color: rgba(128, 128, 128, 0.2);
