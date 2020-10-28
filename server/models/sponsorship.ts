@@ -5,12 +5,14 @@ interface SponsorshipAttrs {
   name: string;
   color: string;
   packs: Array<SponsorPack>;
+  description: string;
 }
 
 export interface SponsorshipDoc extends mongoose.Document {
   name: string;
   color: string;
   packs: Array<SponsorPack>;
+  description: string;
   isActive: boolean;
 }
 
@@ -34,6 +36,10 @@ const sponsorshipSchema = new mongoose.Schema(
         duration: Number,
       },
     ],
+    description: {
+      type: String,
+      required: true,
+    },
     isActive: {
       type: Boolean,
       default: true,

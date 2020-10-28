@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import SideLayout from "../../../components/layout/sidelayout";
 import Input from "../../../components/input/input";
 import { AiOutlineAppstoreAdd } from 'react-icons/ai';
@@ -6,17 +6,19 @@ import { HiOutlineDocumentRemove } from 'react-icons/hi'
 import ProgressButton from "../../../components/button/progress";
 import { useRequest } from "../../../hooks/use-request";
 import Router from 'next/router'
+import TextEditor from "../../../components/editor";
 
 const AddSponsorship = () => {
     const [name, setName] = useState("");
     const [color, setColor] = useState("#000008");
+    const [description, setDescription] = useState("")
     const [packs, setPacks] = useState([{ duration: 6, price: 1000 }])
     const [messages, setMessages] = useState([]);
 
     const { doRequest } = useRequest({
         url: "/api/ugh/sponsorship/add",
         body: {
-            name, color, packs
+            name, color, packs, description
         },
         method: "post",
         onSuccess: () => Router.replace("/admin/sponsorships"),
@@ -27,12 +29,12 @@ const AddSponsorship = () => {
         switch (name) {
             case 'name': return setName(val);
             case 'color': return setColor(val);
+            case "description": return setDescription(val)
         }
     }
 
     const onUpdateHandler = (index: number, name: string, value: number) => {
         const updatedPacks = [...packs];
-        if (value <= 0) return;
         updatedPacks[index][name] = value;
         setPacks(updatedPacks);
     }
@@ -71,6 +73,9 @@ const AddSponsorship = () => {
                         setPacks(updatedPacks)
                     }} style={{ fontSize: "3rem", cursor: "pointer" }} />
                 </div>}
+            </div>
+            <div className="row">
+                <TextEditor name="description" onChange={onChangeHandler} />
             </div>
             <div className="row">
                 <ProgressButton type="link" size="large" text="Submit" onPress={async (_, next) => {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { serverRequest } from "../hooks/server-request";
 import MainLayout from "../components/layout/mainlayout";
 import SponsorCard from "../components/card/sponsor";
@@ -9,6 +9,9 @@ import Select from '../components/input/select';
 import Option from '../components/input/option';
 import ProgressButton from '../components/button/progress';
 import { useRequest } from '../hooks/use-request';
+import DialogButton from '../components/button/dialog';
+import { AiOutlineInfoCircle } from 'react-icons/ai';
+import RichText from '../components/rich-text';
 
 const Sponsors = ({ sponsors, sponsorships }
     : { sponsors: any, sponsorships: Array<SponsorshipDoc> }) => {
@@ -51,6 +54,7 @@ const Sponsors = ({ sponsors, sponsorships }
         const val = `${e.currentTarget.value}`.split(",").map(num => parseInt(num));
         setSponsorshipIndex(val[0]);
         setPackIndex(val[1]);
+
     }
     return <MainLayout messages={messages}>
         <div className="sponsors">
@@ -80,11 +84,14 @@ const Sponsors = ({ sponsors, sponsorships }
                         placeholder="message"
                         name="message"
                         onChange={(e) => onChangeHandler(e.currentTarget.name, e.currentTarget.value)} />
-                    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                        <ProgressButton text="Submit" type="link" size="large" onPress={async (_, next) => {
+                    <div style={{ width: "100%", display: "flex", justifyContent: "space-evenly" }}>
+                        <ProgressButton text="Submit" type="link" size="medium" onPress={async (_, next) => {
                             await doRequest();
                             next();
                         }} />
+                        <DialogButton title="Pack Info" type="github" size="medium" fullButton style={{ maxWidth: 600, minWidth: 400 }}>
+                            <RichText content={sponsorships[sponsorshipIndex]?.description} />
+                        </DialogButton>
                     </div>
                 </div>
             </div>
@@ -108,7 +115,7 @@ const Sponsors = ({ sponsors, sponsorships }
                 </div>
             </div>
         </div>
-    </MainLayout>
+    </MainLayout >
 }
 
 Sponsors.getInitialProps = async (ctx) => {

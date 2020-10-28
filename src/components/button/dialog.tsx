@@ -10,7 +10,7 @@ const DialogButton = ({ title,
     style = {},
     size = "large",
     disabled,
-    type = "link" }: { type?: string, size?: string, title: string, fullButton?: boolean, children: any, onAction?: any, style?: any, disabled?: boolean }) => {
+    type = "link" }: { type?: string, size?: string, title: any, fullButton?: boolean, children: any, onAction?: any, style?: any, disabled?: boolean }) => {
     const [openDialog, setOpenDialog] = useState(false);
     return <>
         <div style={{ display: "flex", alignItems: "center" }}>
