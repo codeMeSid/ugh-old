@@ -21,8 +21,8 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
     const [messages, setMessages] = useState(errors);
     const userHasJoined = currentUser?.role === "admin" || tournament?.players?.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id)).length > 0;
     const chats = tournament?.players?.map((user: any) => {
-        if (currentUser.ughId === user.ughId) return;
-        return ({ to: user.ughId, channel: 'user', profile: user?.uploadUrl, title: user.ughId })
+        if (currentUser?.ughId === user?.ughId) return;
+        return ({ to: user?.ughId, channel: 'user', profile: user?.uploadUrl, title: user?.ughId })
     }).filter(chat => chat);
     const JoinButton = () => {
         if (!currentUser) return <Link href="/login">

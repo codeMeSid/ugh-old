@@ -89,8 +89,10 @@ const Sponsors = ({ sponsors, sponsorships }
                             await doRequest();
                             next();
                         }} />
-                        <DialogButton title="Pack Info" type="github" size="medium" fullButton style={{ maxWidth: 600, minWidth: 400 }}>
-                            <RichText content={sponsorships[sponsorshipIndex]?.description} />
+                        <DialogButton title="Pack Info" type="github" size="medium" fullButton style={{ maxWidth: 600, minWidth: 400, height: 500, position: "fixed", overflowY: "scroll" }}>
+                            <div style={{ padding: "0rem 1rem" }}>
+                                <RichText content={sponsorships[sponsorshipIndex]?.description} />
+                            </div>
                         </DialogButton>
                     </div>
                 </div>
