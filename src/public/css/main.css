@@ -915,8 +915,8 @@ tr:nth-child(even) {
       right: 26rem; }
       @media (max-width: 37.5em) {
         .messenger__contact.active {
-          right: 1rem;
-          bottom: 25rem; } }
+          right: 22rem;
+          bottom: 3rem; } }
   .messenger__window {
     z-index: 50;
     position: fixed;

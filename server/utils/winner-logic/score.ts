@@ -16,6 +16,7 @@ export const scoreLogger = async (
   users: UserDoc[]
 ) => {
   console.log("score");
+  return;
   return {
     updatedTournament: tournament,
     updatedBrackets: brackets,

@@ -13,6 +13,9 @@ import RichText from '../../components/rich-text';
 import Timer from '../../components/timer';
 import MessengerList from '../../components/messenger';
 import { IoIosTrophy } from 'react-icons/io';
+import IconDialogButton from '../../components/button/icon-dialog';
+import { AiOutlineInfoCircle } from 'react-icons/ai';
+import { prizeDistribution } from '../../../server/utils/prize-distribution';
 
 const Logo = require("../../public/asset/logo-icon.png");
 
@@ -30,20 +33,41 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                 <Button text="Join" type="link" size="small" />
             </a>
         </Link>
+        else if (tournament?.winners?.length > 0)
+            return <DialogButton style={{ position: "fixed", minWidth: 400 }} size="medium" title="Winner List" fullButton>
 
-        if (currentUser && tournament?.status === "upcoming" && !userHasJoined)
+                <table>
+                    <tr>
+                        <td>position</td>
+                        <td>UghId</td>
+                        <td>Prize</td>
+                    </tr>
+                    {tournament?.winners.map((winner) => {
+                        return <tr key={Math.random()} style={{ fontSize: 20 }}>
+                            <td>{winner.position}</td>
+                            <td>{winner.ughId}</td>
+                            <td>{winner.coins} coins</td>
+                        </tr>
+                    })}
+                </table>
+
+            </DialogButton>
+        else if (tournament?.players?.length * tournament?.group?.participants === tournament?.playerCount && !userHasJoined)
+            return <Button text="Slots Full" type="disabled" />
+        else if (currentUser && tournament?.status === "upcoming" && !userHasJoined)
             return <DialogButton style={{ position: "fixed" }} size="medium" title="Join" fullButton onAction={doRequest}>
                 <div style={{ fontSize: 20, marginBottom: 20 }}>You will be charged {tournament?.coins || 10} coins to join</div>
             </DialogButton>
-        if (currentUser && tournament?.status === "upcoming" && userHasJoined)
+        else if (currentUser && tournament?.status === "upcoming" && userHasJoined)
             return <Button text="Joined" type="facebook" size="small" />
-        if (currentUser && tournament?.status === "started" && userHasJoined) return <Link href={`/game/${tournament?.regId}`}>
+
+        else if (currentUser && tournament?.status === "started" && userHasJoined) return <Link href={`/game/${tournament?.regId}`}>
             <a>
                 <Button text="Play" type="link" size="small" />
             </a>
         </Link>
-
-        return <Button text="Join" type="disabled" size="small" />
+        else
+            return <Button text="Join" type="disabled" size="small" />
     }
 
     const { doRequest } = useRequest({
@@ -80,7 +104,26 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                                     className="tournament__card__body__upper__left__image" />
                             </div>
                             <div className="tournament__card__body__upper__right">
-                                <div style={{ marginRight: 10, fontSize: 20, color: "white" }}> Tournament Prize {tournament?.winnerCoin} coins</div>
+                                <div style={{ marginRight: 5, fontSize: 20, color: "white" }}> Tournament Prize {tournament?.winnerCoin} coins </div>
+                                <IconDialogButton Icon={AiOutlineInfoCircle} style={{ position: "fixed", minWidth: 400 }} iconStyle={{ color: "red", fontSize: 20, cursor: "pointer", marginRight: 5, }}>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                position
+                                            </td>
+                                            <td>
+                                                Prize
+                                            </td>
+                                        </tr>
+                                        {prizeDistribution(tournament.winnerCoin, tournament.winnerCount).map((prize, index) => {
+                                            return <tr key={Math.random()} style={{ fontSize: 20 }}>
+                                                <td>{index + 1}</td>
+                                                <td>{prize} coins</td>
+                                            </tr>
+                                        })}
+                                    </table>
+
+                                </IconDialogButton>
                                 <div style={{ marginRight: 10 }}>
                                     {JoinButton()}
                                 </div>

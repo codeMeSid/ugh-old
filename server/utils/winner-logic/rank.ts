@@ -1,3 +1,4 @@
+import { TournamentStatus } from "@monsid/ugh";
 import { BracketDoc } from "../../models/bracket";
 import { TournamentDoc } from "../../models/tournament";
 import { UserDoc } from "../../models/user";
@@ -9,6 +10,7 @@ export const rankLogger = async (
   brackets: BracketDoc[],
   users: UserDoc[]
 ) => {
+  console.log("enter rank");
   const bracketWinnersCount = brackets.filter((b) => b.winner).length;
   const unresolvedDisputeCount = brackets.filter(
     (b) => b.teamB.hasRaisedDispute && !b.winner
@@ -60,7 +62,8 @@ export const rankLogger = async (
       ughId: users[userIndex]?.ughId,
     };
   });
-
+  tournament.status = TournamentStatus.Completed;
+  console.log("leave rank");
   return {
     updatedTournament: tournament,
     updatedBrackets: brackets,

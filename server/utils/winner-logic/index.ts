@@ -1,4 +1,4 @@
-import { errorlog, GameType } from "@monsid/ugh";
+import { errorlog, GameType, timer, TournamentStatus } from "@monsid/ugh";
 import mongoose from "mongoose";
 import { Bracket, BracketDoc } from "../../models/bracket";
 import { Tournament, TournamentDoc } from "../../models/tournament";
@@ -24,6 +24,7 @@ export const winnerLogic = async (
       errorlog("tournament failed");
       return;
     }
+    if (tournament.winners.length >= 1) return;
     const users = await User.find({ _id: { $in: tournament.players } }).session(
       session
     );
@@ -33,6 +34,7 @@ export const winnerLogic = async (
     const bracket = await Bracket.findOne({ regId: bracketId }).session(
       session
     );
+    if (brackets.length === 0) return;
     let updates: {
       updatedTournament: TournamentDoc;
       updatedBrackets: Array<BracketDoc>;
@@ -47,16 +49,20 @@ export const winnerLogic = async (
         break;
     }
 
-    if (updates)
+    if (updates) {
       await Promise.all([
         updates.updateUsers.map(async (u) => await u.save({ session })),
         updates.updatedBrackets.map(async (b) => await b.save({ session })),
-        updates.updatedTournament.save({ session }),
       ]);
+      await updates.updatedTournament.save({ session });
+    }
+    if (updates.updatedTournament.status === TournamentStatus.Completed)
+      timer.cancel(`${tournament.regId}-end`);
     await session.commitTransaction();
   } catch (error) {
     console.log({ error: error.message });
     await session.abortTransaction();
   }
+  console.log("leave winner logic");
   session.endSession();
 };
