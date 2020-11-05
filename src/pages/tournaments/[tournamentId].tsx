@@ -23,10 +23,10 @@ const Logo = require("../../public/asset/logo-icon.png");
 const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: TournamentDoc, matches: any, currentUser: any, errors: any }) => {
     const [messages, setMessages] = useState(errors);
     const userHasJoined = tournament?.players?.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id)).length > 0;
-    const chats = tournament?.players?.map((user: any) => {
+    const chats = tournament && tournament.players ? tournament.players.map((user: any) => {
         if (currentUser?.ughId === user?.ughId) return;
         return ({ to: user?.ughId, channel: 'user', profile: user?.uploadUrl, title: user?.ughId })
-    }).filter(chat => chat);
+    }).filter(chat => chat) : [];
     const JoinButton = () => {
         if (!currentUser) return <Link href="/login">
             <a>
@@ -86,7 +86,7 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                         <div className="tournament__card__head__title">{tournament?.name}</div>
                         <div className="tournament__card__head__time"><Timer canCountdown={!!tournament?.startDateTime} dateTime={tournament?.startDateTime} /></div>
                         {
-                            tournament.winners.length > 0 && <div className="tournament__card__head__winner">
+                            tournament?.winners?.length > 0 && <div className="tournament__card__head__winner">
                                 <IoIosTrophy className="tournament__card__head__winner__icon" />
                                 <div className="tournament__card__head__winner__name">
                                     <div>{tournament.winners[0].ughId}</div>
@@ -182,9 +182,9 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                 </div>
             }
         </div>
-        {currentUser?.role === "admin" || userHasJoined && <MessengerList
+        {(currentUser?.role === "admin" || userHasJoined) && <MessengerList
             from={currentUser?.role === "admin" ? "admin" : currentUser?.ughId}
-            chats={[{ channel: "admin", title: "chat with admin", to: "admin", profile: Logo }, { channel: "match", title: "match chat", to: tournament?.regId }, ...chats]} />}
+            chats={[{ channel: "admin", title: "chat with admin", to: "admin", profile: Logo }, { channel: "match", title: "match chat", to: tournament ? tournament.regId : "match" }, ...chats]} />}
     </MainLayout>
 }
 
