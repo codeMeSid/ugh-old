@@ -56,7 +56,7 @@ export const winnerLogic = async (
       ]);
       await updates.updatedTournament.save({ session });
     }
-    if (updates.updatedTournament.status === TournamentStatus.Completed)
+    if (updates && updates.updatedTournament.status === TournamentStatus.Completed)
       timer.cancel(`${tournament.regId}-end`);
     await session.commitTransaction();
   } catch (error) {
