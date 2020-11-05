@@ -14,8 +14,15 @@ import { tournamentFetchAllActiveController } from "../controllers/tournament/fe
 import { tournamentUpdateStatusController } from "../controllers/tournament/update-status";
 import { tournamentJoinController } from "../controllers/tournament/join";
 import { tournamentAddValidator } from "../utils/validator/tournament/add";
+import { TournamentEvaluateController } from "../controllers/tournament/evaluate";
 
 export const tournamentHandler: Array<ApiSign> = [
+  {
+    url: "/evaluate/:regId",
+    method: HttpMethod.Get,
+    controller: TournamentEvaluateController,
+    middlewares: [currentUser, requireAdminAuth],
+  },
   {
     url: "/fetch/all/active",
     method: HttpMethod.Get,
@@ -46,7 +53,7 @@ export const tournamentHandler: Array<ApiSign> = [
     controller: tournamentJoinController,
     middlewares: [currentUser, requireAuth],
   },
- 
+
   {
     url: "/add",
     method: HttpMethod.Post,

@@ -7,7 +7,7 @@ import ProgressButton from "../button/progress";
 import FileInput from "../input/file";
 import Input from "../input/input";
 import Router from 'next/router';
-import { DQ } from "../../../server/utils/winner-logic/dq";
+import { DQ } from "../../../server/utils/enum/dq";
 
 const BracketRankCard = ({ userHasUploadedScore, currentUser, bracket, onError, tournamentId }: { userHasUploadedScore: boolean, currentUser: any, bracket: BracketDoc, onError: any, tournamentId: string }) => {
     const isUserBracket = JSON.stringify(bracket.teamA.user.id) === JSON.stringify(currentUser.id);

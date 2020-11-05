@@ -3,10 +3,7 @@ import { Request, Response } from "express";
 import { Bracket } from "../../../models/bracket";
 import { winnerLogic } from "../../../utils/winner-logic";
 
-export const addRankController = async (
-  req: Request,
-  res: Response
-) => {
+export const addRankController = async (req: Request, res: Response) => {
   const { id } = req.currentUser;
   const { bracketId } = req.params;
   const { rank, tournamentId } = req.body;
@@ -36,7 +33,7 @@ export const addRankController = async (
       bracket.updateBy = undefined;
       bracket.uploadBy = undefined;
       await bracket.save();
-      winnerLogic(tournamentId, bracket.id, false, "rank added");
+      winnerLogic(tournamentId, bracket.id, "rank added");
     },
     { id: bracket.id, tournamentId }
   );

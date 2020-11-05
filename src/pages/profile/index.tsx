@@ -132,7 +132,6 @@ UserProfile.getInitialProps = async (ctx) => {
     if (errorsB) errors.push(...errorsB);
     const isNewAuth = ctx.query.newauth === "true";
     const isSocialAuth = ctx.query.socialauth === "true";
-    console.log({ user });
     return { user, matches, errors, isNewAuth, isSocialAuth }
 }
 

@@ -9,9 +9,9 @@ import { scoreLogger } from "./score";
 export const winnerLogic = async (
   tournamentId: string,
   bracketId?: string,
-  isTournamentEnd?: boolean,
   message?: string
 ) => {
+  console.log({ message });
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
@@ -47,6 +47,12 @@ export const winnerLogic = async (
         break;
     }
 
+    if (updates)
+      await Promise.all([
+        updates.updateUsers.map(async (u) => await u.save({ session })),
+        updates.updatedBrackets.map(async (b) => await b.save({ session })),
+        updates.updatedTournament.save({ session }),
+      ]);
     await session.commitTransaction();
   } catch (error) {
     console.log({ error: error.message });

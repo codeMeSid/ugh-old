@@ -3,7 +3,7 @@ import { useRequest } from "../../../hooks/use-request";
 import SideLayout from "../../../components/layout/sidelayout";
 import Table from "../../../components/table";
 import Link from 'next/link';
-import { DQ } from "../../../../server/utils/winner-logic/dq";
+import { DQ } from "../../../../server/utils/enum/dq";
 
 interface Dispute {
   bracketId: string;

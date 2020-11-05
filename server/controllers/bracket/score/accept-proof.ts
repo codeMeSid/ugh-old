@@ -32,6 +32,6 @@ export const acceptScoreController = async (req: Request, res: Response) => {
     else bracket.winner = bracket.teamB.user.ughId;
   } else throw new BadRequestError("Invalid Request");
   await bracket.save();
-  winnerLogic(tournamentId, bracketId, false, "accept proof score dispute");
+  winnerLogic(tournamentId, bracketId, "accept proof score dispute");
   res.send(true);
 };

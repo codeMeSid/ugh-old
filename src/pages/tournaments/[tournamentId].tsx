@@ -19,7 +19,7 @@ const Logo = require("../../public/asset/logo-icon.png");
 
 const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: TournamentDoc, matches: any, currentUser: any, errors: any }) => {
     const [messages, setMessages] = useState(errors);
-    const userHasJoined = currentUser?.role === "admin" || tournament?.players?.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id)).length > 0;
+    const userHasJoined = tournament?.players?.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id)).length > 0;
     const chats = tournament?.players?.map((user: any) => {
         if (currentUser?.ughId === user?.ughId) return;
         return ({ to: user?.ughId, channel: 'user', profile: user?.uploadUrl, title: user?.ughId })
@@ -86,7 +86,7 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                                 </div>
                                 <div>
                                     {/* <Button text="View Rules"  size="medium" /> */}
-                                    <DialogButton title="View Rules" type="github" size="medium" style={{ position: "fixed", width: "35rem" }} fullButton>
+                                    <DialogButton title="View Rules" type="github" size="medium" style={{ position: "fixed", width: "38rem", height: "50rem", overflowY: "scroll" }} fullButton>
                                         <h2>RULES OF THE GAME</h2>
                                         <div style={{ width: "30rem", margin: "0 auto" }}>
                                             <RichText content={tournament?.game?.rules} />
@@ -139,7 +139,7 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                 </div>
             }
         </div>
-        {userHasJoined && <MessengerList
+        {currentUser?.role === "admin" || userHasJoined && <MessengerList
             from={currentUser?.role === "admin" ? "admin" : currentUser?.ughId}
             chats={[{ channel: "admin", title: "chat with admin", to: "admin", profile: Logo }, { channel: "match", title: "match chat", to: tournament?.regId }, ...chats]} />}
     </MainLayout>

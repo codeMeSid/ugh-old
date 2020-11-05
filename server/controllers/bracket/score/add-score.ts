@@ -58,7 +58,7 @@ export const addScoreController = async (req: Request, res: Response) => {
             .populate("teamB.user", "ughId email", "Users")
             .session(session);
           if (!bracket) throw new Error("Invalid Bracket");
-          if (bracket.winner) throw new Error("winner exists");
+          if (bracket.winner) return;
           if (bracket.teamA.hasRaisedDispute || bracket.teamB.hasRaisedDispute)
             throw new Error("dispute was raised");
           if (bracket.teamA.score > bracket.teamB.score)
@@ -71,7 +71,7 @@ export const addScoreController = async (req: Request, res: Response) => {
           await session.abortTransaction();
         }
         session.endSession();
-        winnerLogic(tournamentId, regId, false, "score teamA added");
+        winnerLogic(tournamentId, regId, "score teamA added");
       },
       { regId: bracketId, tournamentId }
     );
@@ -89,7 +89,7 @@ export const addScoreController = async (req: Request, res: Response) => {
             .populate("teamB.user", "ughId email", "Users")
             .session(session);
           if (!bracket) throw new Error("Invalid Bracket");
-          if (bracket.winner) throw new Error("winner exists");
+          if (bracket.winner) return;
           if (bracket.teamA.hasRaisedDispute || bracket.teamB.hasRaisedDispute)
             throw new Error("dispute was raised");
           if (bracket.teamA.score > bracket.teamB.score)
@@ -102,7 +102,7 @@ export const addScoreController = async (req: Request, res: Response) => {
           await session.abortTransaction();
         }
         session.endSession();
-        winnerLogic(tournamentId, regId, false, "score teamB added");
+        winnerLogic(tournamentId, regId,  "score teamB added");
       },
       { regId: bracketId, tournamentId }
     );

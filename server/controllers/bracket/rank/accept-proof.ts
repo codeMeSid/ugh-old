@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import { Bracket } from "../../../models/bracket";
 import { winnerLogic } from "../../../utils/winner-logic";
-import { DQ } from "../../../utils/winner-logic/dq";
+import { DQ } from "../../../utils/enum/dq";
 
 export const acceptProofController = async (req: Request, res: Response) => {
   const { bracketId } = req.params;
@@ -34,6 +34,6 @@ export const acceptProofController = async (req: Request, res: Response) => {
   bracket.updateBy = undefined;
   bracket.uploadBy = undefined;
   await bracket.save();
-  winnerLogic(tournamentId, bracket.id, false, "dispute accepted");
+  winnerLogic(tournamentId, bracket.id, "dispute accepted");
   res.send(true);
 };

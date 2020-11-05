@@ -5,7 +5,7 @@ import Router from 'next/router';
 import SideLayout from "../../../components/layout/sidelayout";
 import Input from "../../../components/input/input";
 import ProgressButton from "../../../components/button/progress";
-import { DQ } from "../../../../server/utils/winner-logic/dq";
+import { DQ } from "../../../../server/utils/enum/dq";
 
 const DisputeDetail = ({ bracket: { team, winner, regId, gameType, tournamentId }, errors }: {
     bracket?: {
