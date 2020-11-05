@@ -173,11 +173,6 @@ const BracketRankCard = ({ userHasUploadedScore, currentUser, bracket, onError, 
                         <ProgressButton type="whatsapp" text="Accept" size="large" onPress={async (_, next) => { await proofAcceptHandler(); next() }} />
                     </div>
                 }
-                {
-                    canAcceptProof && <div className="bracket__rank__accept">
-                        <ProgressButton type="youtube" text="Chat with Admin" size="large" />
-                    </div>
-                }
             </>}
     </div>
 }
