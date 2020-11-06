@@ -7,10 +7,11 @@ import { mailer } from "../../../utils/mailer";
 import { MailerTemplate } from "../../../utils/enum/mailer-template";
 
 export const raiseDisputeController = async (req: Request, res: Response) => {
-  const { id } = req.currentUser;
+  const { id, ughId } = req.currentUser;
   const { bracketId } = req.params;
   const session = await mongoose.startSession();
   session.startTransaction();
+  let disputeBy, disputeOn;
   try {
     const bracketA = await Bracket.findOne({ regId: bracketId })
       .populate("teamA.user", "email UghId", "Users")
@@ -29,6 +30,8 @@ export const raiseDisputeController = async (req: Request, res: Response) => {
     bracketA.teamB.user = user;
     await bracketA.save({ session });
     await session.commitTransaction();
+    disputeBy = user.ughId;
+    disputeOn = bracketA.teamA.user.ughId;
     mailer.send(
       MailerTemplate.Dispute,
       { ughId: bracketA.teamA.user.ughId, opponentUghId: user.ughId },
@@ -43,5 +46,5 @@ export const raiseDisputeController = async (req: Request, res: Response) => {
     throw new BadRequestError(error.message);
   }
   session.endSession();
-  res.send(true);
+  res.send({ disputeBy, disputeOn });
 };

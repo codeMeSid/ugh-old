@@ -1,8 +1,16 @@
-import { errorlog, GameType, timer, TournamentStatus } from "@monsid/ugh";
+import {
+  errorlog,
+  GameType,
+  infolog,
+  timer,
+  TournamentStatus,
+} from "@monsid/ugh";
 import mongoose from "mongoose";
 import { Bracket, BracketDoc } from "../../models/bracket";
 import { Tournament, TournamentDoc } from "../../models/tournament";
 import { User, UserDoc } from "../../models/user";
+import { MailerTemplate } from "../enum/mailer-template";
+import { mailer } from "../mailer";
 import { rankLogger } from "./rank";
 import { scoreLogger } from "./score";
 
@@ -22,9 +30,13 @@ export const winnerLogic = async (
       .session(session);
     if (!tournament) {
       errorlog("tournament failed");
+      infolog(tournamentId);
       return;
     }
-    if (tournament.winners.length >= 1) return;
+    if (tournament.winners.length >= 1) {
+      console.log("tournament already has winner");
+      return;
+    }
     const users = await User.find({ _id: { $in: tournament.players } }).session(
       session
     );
@@ -34,7 +46,10 @@ export const winnerLogic = async (
     const bracket = await Bracket.findOne({ regId: bracketId }).session(
       session
     );
-    if (brackets.length === 0) return;
+    if (brackets.length === 0) {
+      console.log("No Brackets");
+      return;
+    }
     let updates: {
       updatedTournament: TournamentDoc;
       updatedBrackets: Array<BracketDoc>;
@@ -53,12 +68,42 @@ export const winnerLogic = async (
       await Promise.all([
         updates.updateUsers.map(async (u) => await u.save({ session })),
         updates.updatedBrackets.map(async (b) => await b.save({ session })),
+        updates.updatedTournament.save({ session }),
       ]);
-      await updates.updatedTournament.save({ session });
     }
-    if (updates && updates.updatedTournament.status === TournamentStatus.Completed)
-      timer.cancel(`${tournament.regId}-end`);
+
     await session.commitTransaction();
+    if (
+      updates &&
+      updates.updatedTournament.status === TournamentStatus.Completed
+    )
+      timer.cancel(`${tournament.regId}-end`);
+    if (updates) {
+      const { updateUsers, updatedTournament } = updates;
+      const { name, winners } = updatedTournament;
+      updateUsers.forEach((user) => {
+        const { ughId } = user;
+        const userIndex = winners.findIndex((w) => w.ughId === ughId);
+        if (userIndex >= 0)
+          mailer.send(
+            MailerTemplate.Win,
+            {
+              ughId,
+              tournamentName: name,
+              prize: winners[userIndex].coins,
+            },
+            user.email,
+            "UGH TOURNAMENT WINNER"
+          );
+        else
+          mailer.send(
+            MailerTemplate.Winner,
+            { ughId, tournamentName: name, opponentUghId: winners[0].ughId },
+            user.email,
+            "UGH Tournament Better Luck Next Time !!!"
+          );
+      });
+    }
   } catch (error) {
     console.log({ error: error.message });
     await session.abortTransaction();

@@ -6,6 +6,10 @@ const WallpaperSlider = ({ wallpapers }: { wallpapers: Array<any> }) => {
     const [activeIndex, setActiveIndex] = useState(0);
 
     useEffect(() => {
+        return () => clearTimeout();
+    }, []);
+
+    useEffect(() => {
         setTimeout(() => {
             if (progress === 100) {
                 if (wallpapers.length > 0 && activeIndex >= 0 && activeIndex < wallpapers.length - 1) setActiveIndex(activeIndex + 1);

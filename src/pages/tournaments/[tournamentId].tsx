@@ -14,7 +14,7 @@ import Timer from '../../components/timer';
 import MessengerList from '../../components/messenger';
 import { IoIosTrophy } from 'react-icons/io';
 import IconDialogButton from '../../components/button/icon-dialog';
-import { AiOutlineInfoCircle } from 'react-icons/ai';
+import { BsFillInfoCircleFill } from 'react-icons/bs';
 import { prizeDistribution } from '../../../server/utils/prize-distribution';
 
 const Logo = require("../../public/asset/logo-icon.png");
@@ -67,7 +67,7 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
             </a>
         </Link>
         else
-            return <Button text="Join" type="disabled" size="small" />
+            return <Button text="Game Over" type="disabled" size="small" />
     }
 
     const { doRequest } = useRequest({
@@ -78,13 +78,25 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
         onError: (errors) => setMessages(errors)
     });
 
+    const getTimer = () => {
+        if (!tournament) return null;
+        const cdt = Date.now();
+        const sdt = new Date(tournament.startDateTime).getTime();
+        const edt = new Date(tournament.endDateTime).getTime();
+        if (cdt < sdt) return <Timer canCountdown={!!tournament.startDateTime} dateTime={tournament.startDateTime} placeholder="To Start" />;
+        else if (cdt < edt) return <Timer canCountdown={!!tournament.endDateTime} dateTime={tournament.endDateTime} placeholder="To End" />;
+        else return <div>Completed</div>
+    }
+
     return <MainLayout messages={messages} isFullscreen>
         <div className="tournament">
             <div className="tournament__container">
                 <div className="tournament__card">
                     <div className="tournament__card__head" style={{ backgroundImage: `url(${tournament?.game?.imageUrl})` }}>
                         <div className="tournament__card__head__title">{tournament?.name}</div>
-                        <div className="tournament__card__head__time"><Timer canCountdown={!!tournament?.startDateTime} dateTime={tournament?.startDateTime} /></div>
+                        <div className="tournament__card__head__time">
+                            {getTimer()}
+                        </div>
                         {
                             tournament?.winners?.length > 0 && <div className="tournament__card__head__winner">
                                 <IoIosTrophy className="tournament__card__head__winner__icon" />
@@ -104,8 +116,8 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                                     className="tournament__card__body__upper__left__image" />
                             </div>
                             <div className="tournament__card__body__upper__right">
-                                <div style={{ marginRight: 5, fontSize: 20, color: "white" }}> Tournament Prize {tournament?.winnerCoin} coins </div>
-                                <IconDialogButton Icon={AiOutlineInfoCircle} style={{ position: "fixed", minWidth: 400 }} iconStyle={{ color: "red", fontSize: 20, cursor: "pointer", marginRight: 5, }}>
+                                <div style={{ marginRight: 5, fontSize: 20, color: "white" }}>Match Prize {tournament?.winnerCoin} coins </div>
+                                <IconDialogButton Icon={BsFillInfoCircleFill} style={{ position: "fixed", minWidth: 400 }} iconStyle={{ color: "blue", fontSize: 20, cursor: "pointer", marginRight: 5, }}>
                                     <table>
                                         <tr>
                                             <td>
@@ -115,7 +127,7 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                                                 Prize
                                             </td>
                                         </tr>
-                                        {prizeDistribution(tournament.winnerCoin, tournament.winnerCount).map((prize, index) => {
+                                        {prizeDistribution(tournament?.winnerCoin, tournament.winnerCount).map((prize, index) => {
                                             return <tr key={Math.random()} style={{ fontSize: 20 }}>
                                                 <td>{index + 1}</td>
                                                 <td>{prize} coins</td>
@@ -184,7 +196,7 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
         </div>
         {(currentUser?.role === "admin" || userHasJoined) && <MessengerList
             from={currentUser?.role === "admin" ? "admin" : currentUser?.ughId}
-            chats={[{ channel: "admin", title: "admin", to: "admin", profile: Logo }, { channel: "match", title: "match chat", to: tournament ? tournament.regId : "match" }, ...chats]} />}
+            chats={[{ channel: "admin", title: "admin", to: "admin", profile: Logo }, { channel: "match", title: "match chat", to: tournament?.regId }, ...chats]} />}
     </MainLayout>
 }
 

@@ -33,7 +33,7 @@ export const addRankController = async (req: Request, res: Response) => {
       bracket.updateBy = undefined;
       bracket.uploadBy = undefined;
       await bracket.save();
-      winnerLogic(tournamentId, bracket.id, "rank added");
+      winnerLogic(tournamentId, null, "rank added");
     },
     { id: bracket.id, tournamentId }
   );

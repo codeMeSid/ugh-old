@@ -10,6 +10,7 @@ const Timer = (
         style = {},
         format = "D H M S",
         updateValue,
+        placeholder
     }
         : {
             dateTime: Date | string,
@@ -18,12 +19,15 @@ const Timer = (
             step?: number,
             className?: string,
             style?: CSSProperties,
-            format?: string
-            updateValue?: string
+            format?: string,
+            updateValue?: string,
+            placeholder?: string
         }) => {
     const [timer, setTimer] = useState('');
     let stopTimer = false;
-
+    useEffect(() => {
+        return () => clearTimeout();
+    }, []);
     useEffect(() => {
         if (canCountdown && !stopTimer) setTimeout(getTimer, step);
     }, [timer])
@@ -65,7 +69,10 @@ const Timer = (
         }
     }
 
-    return <div className={className} style={style}>{timer}</div>
+    return <div className={className} style={style}>
+        <div>{timer}</div>
+        <div>{placeholder}</div>
+    </div>
 }
 
 

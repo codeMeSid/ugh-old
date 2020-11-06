@@ -41,8 +41,8 @@ export const tournamentAddController = async (req: Request, res: Response) => {
   const playersInGroup = group.participants;
 
   if (sdt <= cdt) throw new BadRequestError("Tournament cannot be in past");
-  if (sdt - cdt < msIn1Hr)
-    throw new BadRequestError("Schedule atleast 1hr ahead");
+  // if (sdt - cdt < msIn1Hr)
+  //   throw new BadRequestError("Schedule atleast 1hr ahead");
   if (edt <= sdt) throw new BadRequestError("Cannot finish before Start");
   if (edt - sdt < msIn15Mins)
     throw new BadRequestError(
@@ -116,8 +116,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
             .session(session);
           if (!tournament) return;
           if (tournament.status !== TournamentStatus.Upcoming) return;
-          const users = shuffle(tournament.players); if (sdt - cdt < msIn1Hr)
-          throw new BadRequestError("Schedule atleast 1hr ahead");
+          const users = shuffle(tournament.players);
           let i = 0;
           while (i < users.length) {
             const regId = randomBytes(4).toString("hex").substr(0, 5);
@@ -202,53 +201,53 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     //////////////////////////////////////////////////////
     //////////////////////////////////////////////////////
 
-    timer.schedule(
-      `${tournament.regId}-15min`,
-      new Date(new Date(startDateTime).valueOf() - 1000 * 60 * 15),
-      async ({ id }: { id: string }) => {
-        const session = await mongoose.startSession();
-        await session.startTransaction();
-        try {
-          const tournament = await Tournament.findById(id)
-            .populate("game", "cutoff", "Games")
-            .session(session);
-          if (!tournament) return;
-          const attendance =
-            ((tournament.players.length * tournament.group.participants) /
-              tournament.playerCount) *
-            100;
-          if (
-            tournament.status === TournamentStatus.Upcoming &&
-            attendance < tournament.game.cutoff
-          ) {
-            tournament.set({ status: TournamentStatus.Completed });
-            const users = await User.find({
-              _id: {
-                $in: tournament.players.map((playerId) => playerId),
-              },
-            }).session(session);
-            users.map(async (user) => {
-              user.set({
-                "wallet.coins": user.wallet.coins + tournament.coins,
-                tournaments: user.tournaments.filter(
-                  (tId) => JSON.stringify(tId) === JSON.stringify(tournament.id)
-                ),
-              });
-              await user.save({ session });
-            });
-            await tournament.save({ session });
-            await session.commitTransaction();
-            timer.cancel(id);
-            timer.cancel(`${id}-end`);
-          }
-        } catch (error) {
-          console.log({ m: "start-15", error: error.message });
-          await session.abortTransaction();
-        }
-        session.endSession();
-      },
-      { id: tournament.id }
-    );
+    // timer.schedule(
+    //   `${tournament.regId}-15min`,
+    //   new Date(new Date(startDateTime).valueOf() - 1000 * 60 * 15),
+    //   async ({ id }: { id: string }) => {
+    //     const session = await mongoose.startSession();
+    //     await session.startTransaction();
+    //     try {
+    //       const tournament = await Tournament.findById(id)
+    //         .populate("game", "cutoff", "Games")
+    //         .session(session);
+    //       if (!tournament) return;
+    //       const attendance =
+    //         ((tournament.players.length * tournament.group.participants) /
+    //           tournament.playerCount) *
+    //         100;
+    //       if (
+    //         tournament.status === TournamentStatus.Upcoming &&
+    //         attendance < tournament.game.cutoff
+    //       ) {
+    //         tournament.set({ status: TournamentStatus.Completed });
+    //         const users = await User.find({
+    //           _id: {
+    //             $in: tournament.players.map((playerId) => playerId),
+    //           },
+    //         }).session(session);
+    //         users.map(async (user) => {
+    //           user.set({
+    //             "wallet.coins": user.wallet.coins + tournament.coins,
+    //             tournaments: user.tournaments.filter(
+    //               (tId) => JSON.stringify(tId) === JSON.stringify(tournament.id)
+    //             ),
+    //           });
+    //           await user.save({ session });
+    //         });
+    //         await tournament.save({ session });
+    //         await session.commitTransaction();
+    //         timer.cancel(id);
+    //         timer.cancel(`${id}-end`);
+    //       }
+    //     } catch (error) {
+    //       console.log({ m: "start-15", error: error.message });
+    //       await session.abortTransaction();
+    //     }
+    //     session.endSession();
+    //   },
+    //   { id: tournament.id }
+    // );
     //////////////////////////////////////////////////////
     //////////////////////////////////////////////////////
     //////////////////////////////////////////////////////
@@ -270,7 +269,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
             tournament.set({ status: TournamentStatus.Completed });
             await tournament.save();
           }
-          winnerLogic(tournament.id, null, "end");
+          winnerLogic(tournament.regId, null, "end");
         } catch (error) {
           console.log({ m: "end", error: error.message });
         }

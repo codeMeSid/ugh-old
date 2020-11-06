@@ -14,10 +14,13 @@ class Messenger {
     this.io.on("connect", (socket) => {
       successlog("Socket has joined");
       this.socket = socket;
-      this.socket.join(["admin", "match", "user"]);
+      this.socket.join(["admin", "match", "user", "bracket-rank"]);
       this.socket.on(SocketEvent.EventSend, (data) => {
         socket.to(data.channel).emit(SocketEvent.EventRecieve, data);
         this.saveMessage(data);
+      });
+      this.socket.on(SocketEvent.EventUpdate, (data) => {
+        this.io.to(data.channel).emit(SocketEvent.EventRecieve, data);
       });
     });
   }
@@ -39,7 +42,7 @@ class Messenger {
         break;
       case SocketChannel.Match:
         convo = await Conversation.findOne({
-          channel,
+          channel: `${channel}-${to}`,
         });
         break;
       case SocketChannel.User:
@@ -71,7 +74,7 @@ class Messenger {
         break;
       case SocketChannel.Match:
         convo = convo = Conversation.build({
-          channel,
+          channel: `${channel}-${to}`,
           messages: [{ ughId: from, text, createdAt }],
         });
         break;

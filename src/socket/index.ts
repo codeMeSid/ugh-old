@@ -9,8 +9,19 @@ export const event = {
     socket.emit(SocketEvent.EventJoin, name),
   sendMessage: (data: SocketMessage) =>
     socket.emit(SocketEvent.EventSend, data),
-  recieveMessage: (ufnc: (data: SocketMessage) => any) =>
-    socket.on(SocketEvent.EventRecieve, (data: SocketMessage) => {
+  recieveMessage: (ufnc: (data: any) => any) =>
+    socket.on(SocketEvent.EventRecieve, (data: any) => {
       ufnc(data);
     }),
+  bracketRankUpdate: (data: {
+    by: string;
+    on?: string;
+    type: string;
+    tournamentId: string;
+  }) => {
+    socket.emit(SocketEvent.EventUpdate, {
+      channel: SocketChannel.BracketRank,
+      ...data,
+    });
+  },
 };

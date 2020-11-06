@@ -23,7 +23,7 @@ const UserDetail = ({ user }: { user: UserDoc }) => {
         onError: (errors) => setMessages(errors)
     })
 
-    const onChangeHandler = (_, val: number) => val < user?.wallet?.coins ? null : setCoins(val);
+    const onChangeHandler = (_, val: number) => setCoins(val || 0);
     const onSelectHandler = (e) => setRole(e.currentTarget.value);
     return <SideLayout messages={messages} title={user?.ughId ? user?.ughId : "not found"}>
         <div className="detail">

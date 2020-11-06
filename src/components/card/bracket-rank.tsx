@@ -8,6 +8,7 @@ import FileInput from "../input/file";
 import Input from "../input/input";
 import Router from 'next/router';
 import { DQ } from "../../../server/utils/enum/dq";
+import { event } from "../../socket";
 
 const BracketRankCard = ({ userHasUploadedScore, currentUser, bracket, onError, tournamentId }: { userHasUploadedScore: boolean, currentUser: any, bracket: BracketDoc, onError: any, tournamentId: string }) => {
     const isUserBracket = JSON.stringify(bracket.teamA.user.id) === JSON.stringify(currentUser.id);
@@ -99,7 +100,7 @@ const BracketRankCard = ({ userHasUploadedScore, currentUser, bracket, onError, 
         url: `/api/ugh/bracket/rank/add/${bracket.regId}`,
         body: { rank, tournamentId },
         method: "post",
-        onSuccess: Router.reload,
+        onSuccess: () => event.bracketRankUpdate({ by: currentUser?.ughId, type: "score", tournamentId }),
         onError
     });
 
@@ -107,21 +108,21 @@ const BracketRankCard = ({ userHasUploadedScore, currentUser, bracket, onError, 
         url: `/api/ugh/bracket/rank/dispute/${bracket.regId}`,
         body: {},
         method: "get",
-        onSuccess: Router.reload,
+        onSuccess: ({ disputeBy: by, disputeOn: on }) => event.bracketRankUpdate({ by, on, type: "dispute", tournamentId }),
         onError
     });
     const { doRequest: proofHandler } = useRequest({
         url: `/api/ugh/bracket/rank/dispute/proof/${bracket.regId}`,
         body: { proof },
         method: "post",
-        onSuccess: Router.reload,
+        onSuccess: () => event.bracketRankUpdate({ by: currentUser?.ughId, type: "proof", tournamentId }),
         onError
     });
     const { doRequest: proofAcceptHandler } = useRequest({
         url: `/api/ugh/bracket/rank/dispute/accept/${bracket.regId}`,
         body: { accept: true, tournamentId },
         method: "post",
-        onSuccess: Router.reload,
+        onSuccess: () => event.bracketRankUpdate({ by: currentUser?.ughId, type: "accept", tournamentId }),
         onError
     });
     return <div className="bracket__rank">
