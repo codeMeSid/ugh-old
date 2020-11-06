@@ -183,9 +183,6 @@ const PlayerScoreCard = ({
                                                 next();
                                             }} />
                                         </div>
-                                        <div style={{ marginTop: 5 }}>
-                                            <ProgressButton text="Chat With Admin" type="youtube" style={{ width: "100%" }} />
-                                        </div>
                                     </div>
                                 }
                             </>}

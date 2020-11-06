@@ -184,7 +184,7 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
         </div>
         {(currentUser?.role === "admin" || userHasJoined) && <MessengerList
             from={currentUser?.role === "admin" ? "admin" : currentUser?.ughId}
-            chats={[{ channel: "admin", title: "chat with admin", to: "admin", profile: Logo }, { channel: "match", title: "match chat", to: tournament ? tournament.regId : "match" }, ...chats]} />}
+            chats={[{ channel: "admin", title: "admin", to: "admin", profile: Logo }, { channel: "match", title: "match chat", to: tournament ? tournament.regId : "match" }, ...chats]} />}
     </MainLayout>
 }
 
