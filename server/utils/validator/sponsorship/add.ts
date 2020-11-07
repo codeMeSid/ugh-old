@@ -8,4 +8,5 @@ export const sponsorshipAddValidator = [
       return val.length >= 1;
     })
     .withMessage("packs is required"),
+  body("description").not().isEmpty().withMessage("Desciption is required"),
 ];

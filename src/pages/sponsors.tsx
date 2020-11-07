@@ -26,10 +26,10 @@ const Sponsors = ({ sponsors, sponsorships }
         body: {
             email,
             phone,
-            duration: sponsorships[sponsorshipIndex].packs[packIndex].duration,
-            price: sponsorships[sponsorshipIndex].packs[packIndex].price,
-            name: sponsorships[sponsorshipIndex].name,
-            color: sponsorships[sponsorshipIndex].color,
+            duration: sponsorships[sponsorshipIndex]?.packs[packIndex]?.duration,
+            price: sponsorships[sponsorshipIndex]?.packs[packIndex]?.price,
+            name: sponsorships[sponsorshipIndex]?.name,
+            color: sponsorships[sponsorshipIndex]?.color,
             message
         },
         method: "post",
@@ -68,12 +68,12 @@ const Sponsors = ({ sponsors, sponsorships }
                         name="pack"
                         value={`${sponsorshipIndex},${packIndex}`}
                         placeholder="Sponsorship Package"
-                        options={sponsorships.map((sponsorship, sIndex) => {
-                            return sponsorship.packs.map((pack, pIndex) => {
+                        options={sponsorships?.map((sponsorship, sIndex) => {
+                            return sponsorship?.packs?.map((pack, pIndex) => {
                                 return <Option
                                     // style={{ backgroundColor: sponsorship.color }}
                                     key={Math.random()}
-                                    display={`${sponsorship.name.toUpperCase()} (${pack.duration} months - ₹${pack.price})`}
+                                    display={`${sponsorship?.name?.toUpperCase()} (${pack?.duration} months - ₹${pack?.price})`}
                                     value={`${sIndex},${pIndex}`}
                                 />
                             })
@@ -101,7 +101,7 @@ const Sponsors = ({ sponsors, sponsorships }
             <div className="sponsors__body">
                 <div className="sponsors__body__container">
                     {
-                        Object.keys(sponsors).map(sponsorKey => {
+                        Object.keys(sponsors||{})?.map(sponsorKey => {
                             return <div key={sponsorKey} className="sponsors__group">
                                 <div className="sponsors__group__title">{sponsorKey} members</div>
                                 <div className="sponsors__group__list">
@@ -124,7 +124,7 @@ Sponsors.getInitialProps = async (ctx) => {
     const sponsors = await serverRequest(ctx, { url: "/api/ugh/sponsor/fetch/active", body: {}, method: "get" });
     const sponsorships = await serverRequest(ctx, { url: "/api/ugh/sponsorship/fetch/active", body: {}, method: "get" });
     const packSponsors = {};
-    Array.from(sponsors.data || []).forEach((sponsor: SponsorDoc) => {
+    Array.from(sponsors?.data || []).forEach((sponsor: SponsorDoc) => {
         if (packSponsors[sponsor.sponsorPack.name]) {
             packSponsors[sponsor.sponsorPack.name] = [...packSponsors[sponsor.sponsorPack.name], sponsor];
         } else {

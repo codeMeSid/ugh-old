@@ -58,7 +58,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     const settings = await Settings.findOne().session(session);
     const user = await User.findById(cUser.id).session(session);
     if (!game) throw new BadRequestError("Invalid game");
-    if (!settings) throw new BadRequestError("Failed to create tournament");
+    if (!settings) throw new BadRequestError("Settings not upto date");
     if (!user) throw new BadRequestError("Invalid user");
     const totalWinnings = parseInt(playerCount) * parseInt(coins);
     const earning = Math.round((settings.tournamentFees / 100) * totalWinnings);
