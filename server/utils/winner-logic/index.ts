@@ -10,7 +10,9 @@ import { Bracket, BracketDoc } from "../../models/bracket";
 import { Tournament, TournamentDoc } from "../../models/tournament";
 import { User, UserDoc } from "../../models/user";
 import { MailerTemplate } from "../enum/mailer-template";
+import { SocketEvent } from "../enum/socket-event";
 import { mailer } from "../mailer";
+import { messenger } from "../socket";
 import { rankLogger } from "./rank";
 import { scoreLogger } from "./score";
 
@@ -76,8 +78,14 @@ export const winnerLogic = async (
     if (
       updates &&
       updates.updatedTournament.status === TournamentStatus.Completed
-    )
+    ) {
       timer.cancel(`${tournament.regId}-end`);
+      messenger?.socket.emit(SocketEvent.EventUpdate, {
+        by: "UGH",
+        tournamentId: tournament.regId,
+        type: "win",
+      });
+    }
     if (updates) {
       const { updateUsers, updatedTournament } = updates;
       const { name, winners } = updatedTournament;
