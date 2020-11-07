@@ -92,7 +92,7 @@
     }
     &__text {
       word-wrap: break-word;
-      word-break: break-all;
+      word-break: keep-all;
       &.ugh {
         margin: 1rem;
       }

@@ -10,6 +10,9 @@ import Router from 'next/router';
 import { DQ } from "../../../server/utils/enum/dq";
 import { event } from "../../socket";
 
+const PlayerImg = require("../../public/asset/player.jpg");
+
+
 const BracketRankCard = ({ userHasUploadedScore, currentUser, bracket, onError, tournamentId }: { userHasUploadedScore: boolean, currentUser: any, bracket: BracketDoc, onError: any, tournamentId: string }) => {
     const isUserBracket = JSON.stringify(bracket.teamA.user.id) === JSON.stringify(currentUser.id);
     const result = bracket?.winner === DQ.DisputeLost || bracket?.winner === DQ.ScoreNotUploaded ? "Disqualified" : "Accepted";
@@ -126,7 +129,7 @@ const BracketRankCard = ({ userHasUploadedScore, currentUser, bracket, onError, 
         onError
     });
     return <div className="bracket__rank">
-        <div className="bracket__rank__profile" style={{ backgroundImage: `url(${bracket.teamA.user?.uploadUrl})` }} />
+        <div className="bracket__rank__profile" style={{ backgroundImage: `url(${bracket.teamA.user?.uploadUrl || PlayerImg})` }} />
         <div className="bracket__rank__ughId">{bracket.teamA.user.ughId} {isUserBracket && "(YOU)"}</div>
         {hasScore && <div className="bracket__rank__score">
             <span className="bracket__rank__score--title">rank</span>

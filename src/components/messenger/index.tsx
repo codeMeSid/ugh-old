@@ -10,6 +10,7 @@ const UserProfile = require("../../public/asset/user.svg");
 interface Props {
     from: string;
     chats: Array<{ to: string; channel: string; profile?: string; title: string }>;
+    currentUser: any
 }
 
 class MessengerList extends Component<Props> {
@@ -75,8 +76,13 @@ class MessengerList extends Component<Props> {
 
     render() {
         const { isContactOpen, isOpen, chat, messengers } = this.state;
-        const { from } = this.props;
         const mNotificationCount = messengers.reduce((acc, mess) => acc + mess.count, 0);
+        const from = () => {
+            const { from, currentUser } = this.props;
+            if (!chat) return from;
+            else if (chat.channel === SocketChannel.Match && currentUser.role === "admin") return `admin-${from}`;
+            else return from;
+        }
         return !isOpen ? <>
             <div className="messenger__window" onClick={() => this.setState({ isOpen: true })}>
                 <SiGooglemessages className="messenger__window__icon" />
@@ -108,7 +114,7 @@ class MessengerList extends Component<Props> {
                 <MessengerChat
                     onClose={() => this.setState({ isOpen: false, chat: this.chatNull })}
                     onOpenMenu={() => this.setState((ps: any) => ({ isContactOpen: !ps.isContactOpen }))}
-                    from={from}
+                    from={from()}
                     to={chat?.to}
                     channel={chat?.channel}
                     profile={chat?.profile || UserProfile}

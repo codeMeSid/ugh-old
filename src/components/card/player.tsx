@@ -1,7 +1,6 @@
 import React from "react";
 import Link from 'next/link';
 import { UserDoc } from "../../../server/models/user"
-import Button from "../button/main";
 const PlayerImg = require("../../public/asset/player.jpg");
 
 const PlayerCard = ({ player, currentUser }: { player: UserDoc, currentUser: any }) => {

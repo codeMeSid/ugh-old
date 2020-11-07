@@ -47,7 +47,7 @@ class Messenger {
         break;
       case SocketChannel.User:
         convo = await Conversation.findOne({
-          users: { $in: [from, to] },
+          $and: [{ users: { $in: [to] } }, { users: { $in: [to] } }],
           channel,
         });
         break;

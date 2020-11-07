@@ -75,8 +75,9 @@ const BracketList = ({ brackets, errors, userHasUploadedScore, currentUser, tour
             }
         </div>
         <MessengerList
-            from={currentUser?.role === "admin" ? "admin" : currentUser?.ughId}
-            chats={[{ channel: "admin", title: "admin", to: "admin", profile: Logo }]} />
+            from={currentUser?.ughId}
+            currentUser={currentUser}
+            chats={[{ channel: "admin", title: "admin", to: "admin", profile: Logo }, { channel: "match", title: "match chat", to: tournamentId }]} />
     </MainLayout>
 }
 

@@ -28,6 +28,8 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
         return ({ to: user?.ughId, channel: 'user', profile: user?.uploadUrl, title: user?.ughId })
     }).filter(chat => chat) : [];
     const JoinButton = () => {
+        if (!currentUser && tournament?.status === "completed")
+            return <Button text="Game Over" type="disabled" size="medium" />
         if (!currentUser) return <Link href="/login">
             <a>
                 <Button text="Join" type="link" size="small" />
@@ -67,7 +69,7 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
             </a>
         </Link>
         else
-            return <Button text="Game Over" type="disabled" size="small" />
+            return <Button text="Game Over" type="disabled" size="medium" />
     }
 
     const { doRequest } = useRequest({
@@ -195,7 +197,8 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
             }
         </div>
         {(currentUser?.role === "admin" || userHasJoined) && <MessengerList
-            from={currentUser?.role === "admin" ? "admin" : currentUser?.ughId}
+            from={currentUser?.ughId}
+            currentUser={currentUser}
             chats={[{ channel: "admin", title: "admin", to: "admin", profile: Logo }, { channel: "match", title: "match chat", to: tournament?.regId }, ...chats]} />}
     </MainLayout>
 }

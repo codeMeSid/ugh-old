@@ -14,9 +14,13 @@ export const messageFetchController = async (req: Request, res: Response) => {
       filter = { channel: `${channel}-${to}` };
       break;
     case SocketChannel.User:
-      filter = { users: { $in: [to, from] }, channel };
+      filter = {
+        $and: [{ users: { $in: [to] } }, { users: { $in: [to] } }],
+        channel,
+      };
       break;
   }
   const conversation = await Conversation.findOne(filter);
+
   res.send(conversation);
 };

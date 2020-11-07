@@ -39,7 +39,7 @@ class MessengerChat extends Component<Props> {
     componentDidUpdate(prevProps: Props) {
         const { to } = prevProps;
         const data = this.props;
-        if (to !== this.props.to) this.setState({ chats: [] }, async () => this.getChat({ to: data.to, channel: data.channel, from: data.from }));
+        if (to !== data.to) this.setState({ chats: [] },() => this.getChat({ to: data.to, channel: data.channel, from: data.from }));
     }
 
     getChat(data: { from: string, to: string, channel: string }) {
