@@ -18,6 +18,7 @@ const LandingPage = ({ matches, wallpapers, errors, currentUser }) => {
         </div>
         {currentUser && <MessengerList
             from={currentUser.ughId}
+            currentUser={currentUser}
             chats={[{ to: "admin", channel: "admin", title: "admin", profile: Logo },]} />}
     </MainLayout>
 }

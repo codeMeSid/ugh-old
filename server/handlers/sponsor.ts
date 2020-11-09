@@ -12,6 +12,8 @@ import { sponsorUpdateActivityController } from "../controllers/sponsor/update-a
 import { sponsorAddValidator } from "../utils/validator/sponsor/add";
 import { sponsorFetchDetailController } from "../controllers/sponsor/fetch-detail";
 import { sponsorProcessController } from "../controllers/sponsor/update-request";
+import { sponsorFetchNewController } from "../controllers/sponsor/fetch-new";
+import { sponsorUpdateDetailController } from "../controllers/sponsor/update-detail";
 
 export const sponsorHandler: Array<ApiSign> = [
   {
@@ -41,6 +43,12 @@ export const sponsorHandler: Array<ApiSign> = [
     middlewares: [currentUser, requireAdminAuth],
   },
   {
+    url: "/fetch/:sponsorId",
+    method: HttpMethod.Get,
+    controller: sponsorFetchNewController,
+    middlewares: [],
+  },
+  {
     url: "/update/activity/:sponsorId",
     method: HttpMethod.Put,
     controller: sponsorUpdateActivityController,
@@ -51,5 +59,11 @@ export const sponsorHandler: Array<ApiSign> = [
     method: HttpMethod.Put,
     controller: sponsorProcessController,
     middlewares: [currentUser, requireAdminAuth],
+  },
+  {
+    url: "/update/detail/:sponsorId",
+    method: HttpMethod.Put,
+    controller: sponsorUpdateDetailController,
+    middlewares: [],
   },
 ];

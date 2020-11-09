@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { serverRequest } from "../hooks/server-request";
-import MainLayout from "../components/layout/mainlayout";
-import SponsorCard from "../components/card/sponsor";
-import { SponsorDoc } from "../../server/models/sponsor";
-import Input from "../components/input/input";
-import { SponsorshipDoc } from "../../server/models/sponsorship";
-import Select from '../components/input/select';
-import Option from '../components/input/option';
-import ProgressButton from '../components/button/progress';
-import { useRequest } from '../hooks/use-request';
-import DialogButton from '../components/button/dialog';
-import { AiOutlineInfoCircle } from 'react-icons/ai';
-import RichText from '../components/rich-text';
+import { serverRequest } from "../../hooks/server-request";
+import MainLayout from "../../components/layout/mainlayout";
+import SponsorCard from "../../components/card/sponsor";
+import { SponsorDoc } from "../../../server/models/sponsor";
+import Input from "../../components/input/input";
+import { SponsorshipDoc } from "../../../server/models/sponsorship";
+import Select from '../../components/input/select';
+import Option from '../../components/input/option';
+import ProgressButton from '../../components/button/progress';
+import { useRequest } from '../../hooks/use-request';
+import DialogButton from '../../components/button/dialog';
+import RichText from '../../components/rich-text';
 
 const Sponsors = ({ sponsors, sponsorships }
     : { sponsors: any, sponsorships: Array<SponsorshipDoc> }) => {

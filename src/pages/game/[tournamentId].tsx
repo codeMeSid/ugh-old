@@ -50,6 +50,9 @@ const BracketList = ({ brackets, errors, userHasUploadedScore, currentUser, tour
                 case "accept":
                     messagesUpdate.push({ message: `${mBy} accepted proof and lost dispute`, type: "success" });
                     break;
+                case "win":
+                    messagesUpdate.push({ message: `tournament over`, type: "success" });
+                    break;
             }
             setMessages(messagesUpdate);
         });

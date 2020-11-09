@@ -27,6 +27,10 @@ a {
   text-decoration: none;
   color: inherit; }
 
+option {
+  background-color: black;
+  color: white; }
+
 .loading-indicator {
   position: absolute;
   top: 50%;
@@ -267,7 +271,9 @@ th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
-  cursor: pointer; }
+  cursor: pointer;
+  word-wrap: break-word;
+  word-break: keep-all; }
 
 tr:nth-child(even) {
   background-color: #dddddd; }
