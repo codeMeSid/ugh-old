@@ -23,7 +23,7 @@ const SponsorSlider = () => {
 
             {sponsors.map((sponsor: SponsorDoc) => {
                 return (
-                    <a href={sponsor.website} style={sponsorCardStyle(sponsor)} className="sponsor-slider__card" key={Math.random()}>
+                    <a href={sponsor.website} style={sponsorCardStyle(sponsor)} target="_blank" className="sponsor-slider__card" key={Math.random()}>
                         <span className="sponsor-slider__card__name">{sponsor.name}</span>
                     </a>)
             })}

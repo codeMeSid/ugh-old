@@ -1,7 +1,7 @@
-FROM node:12.19.0-alpine3.10
+FROM node:14.15.0-alpine3.10
 
 # Setting working directory. All the path will be relative to WORKDIR
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Environment variable
 ENV PORT=3000
@@ -15,7 +15,7 @@ ENV PASSWORD=ImsPz5wEgDtA
 
 # Installing dependencies
 COPY package*.json ./
-RUN npm install --force
+RUN npm install --silent
 
 # Copying source files
 COPY . .

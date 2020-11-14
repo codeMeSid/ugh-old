@@ -14,6 +14,7 @@ import { sponsorFetchDetailController } from "../controllers/sponsor/fetch-detai
 import { sponsorProcessController } from "../controllers/sponsor/update-request";
 import { sponsorFetchNewController } from "../controllers/sponsor/fetch-new";
 import { sponsorUpdateDetailController } from "../controllers/sponsor/update-detail";
+import { sponsorUpdateValidator } from "../utils/validator/sponsor/update";
 
 export const sponsorHandler: Array<ApiSign> = [
   {
@@ -64,6 +65,6 @@ export const sponsorHandler: Array<ApiSign> = [
     url: "/update/detail/:sponsorId",
     method: HttpMethod.Put,
     controller: sponsorUpdateDetailController,
-    middlewares: [],
+    middlewares: [sponsorUpdateValidator, validateRequest],
   },
 ];

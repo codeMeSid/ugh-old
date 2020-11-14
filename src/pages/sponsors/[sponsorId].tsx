@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AiFillFacebook, AiFillLinkedin, AiFillTwitterSquare, AiFillYoutube } from "react-icons/ai";
-import { FaDiscord } from "react-icons/fa";
+import { FaDiscord, FaTrash } from "react-icons/fa";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import ProgressButton from "../../components/button/progress";
 import FileInput from "../../components/input/file";
@@ -20,9 +20,10 @@ const SponsorDetail = ({ sponsor, errors }) => {
     const [link, setLink] = useState("");
     const [socialList, setSocialList] = useState(sponsor?.links || []);
     const [social, setSocial] = useState("facebook")
-
+    const urlRegex = new RegExp("(https|http)(:\/\/)(ww[a-z0-9]?[.])([a-zA-z0-9]*)([.][a-z]*)+");
     const socialAddHandler = () => {
         if (!link) return;
+        if (!urlRegex.test(link)) return setMessages([{ message: "Invalid url format" }])
         setSocialList([...socialList, { name: social, href: link }]);
         setSocial("facebook");
         setLink("")
@@ -94,8 +95,12 @@ const SponsorDetail = ({ sponsor, errors }) => {
                 <div className="row">
                     <div className="col">
                         {socialList.length > 0 && <Table
-                            data={socialList.map(({ name, href }) => [<span style={{ textTransform: "capitalize" }}>{name}</span>, <a style={{ color: "blue" }} href={href} target="_blank">click here</a>])}
-                            headers={[{ isResponsive: false, text: "social media" }, { isResponsive: false, text: "link" }]}
+                            data={socialList.map(({ name, href }, index) => [
+                                <span style={{ textTransform: "capitalize" }}>{name}</span>,
+                                <a style={{ color: "blue" }} href={href} target="_blank">click here</a>,
+                                <FaTrash onClick={() => setSocialList(socialList.filter((s, i) => i !== index))} />
+                            ])}
+                            headers={[{ isResponsive: false, text: "social media" }, { isResponsive: false, text: "link" }, { isResponsive: false, text: "remove" }]}
                             hasLoader />}
                     </div>
                 </div>
@@ -125,7 +130,11 @@ const SponsorDetail = ({ sponsor, errors }) => {
 
                 <div className="row">
                     <ProgressButton type="whatsapp" text="Submit" size="large" onPress={async (_, next) => {
-                        if (!sponsor) return setMessages([{ message: "Invalid Link! Kindly ask admin to generate new link" }])
+                        if (!sponsor) return setMessages([{ message: "Invalid Link! Kindly ask admin to generate new link" }]);
+                        if (!urlRegex.test(website)) {
+                            next();
+                            return setMessages([{ message: "Invalid website url format" }])
+                        }
                         await doRequest()
                         next()
                     }} />

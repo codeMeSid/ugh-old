@@ -1,5 +1,6 @@
 import { SponsorDoc } from "../../../server/models/sponsor";
-import { FaLinkedin, FaTwitch, FaInstagram, FaYoutube, FaFacebookSquare, FaTwitter } from "react-icons/fa";
+import { FaLinkedin, FaTwitch, FaInstagram, FaYoutube, FaFacebookSquare, FaTwitter, FaDiscord } from "react-icons/fa";
+import React from "react";
 const iconLinks = {
     linkedin: (<FaLinkedin />),
     twitch: (<FaTwitch />),
@@ -7,6 +8,7 @@ const iconLinks = {
     youtube: (<FaYoutube />),
     facebook: (<FaFacebookSquare />),
     twitter: (<FaTwitter />),
+    discord: (<FaDiscord />)
 };
 
 const SponsorCard = ({ sponsor }: { sponsor: SponsorDoc }) =>
@@ -18,7 +20,7 @@ const SponsorCard = ({ sponsor }: { sponsor: SponsorDoc }) =>
         <div className="sponsors__card__links">
             {
                 sponsor.links.map(link => {
-                    return <a className="sponsors__card__links__item" style={{ margin: 5 }} href={link.href}>
+                    return <a className="sponsors__card__links__item" style={{ margin: 5 }} href={link.href} target="_blank">
                         {iconLinks[link.name]}
                     </a>
                 })

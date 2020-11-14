@@ -50,7 +50,7 @@ const SponsorDetail = ({ sponsor, baseUrl, errors }: { sponsor: SponsorDoc, base
         <div className="row">
             <div className="col">
                 {isProccessed ?
-                    <Input placeholder="sponsor link" value={`${baseUrl}/sponsors/${sponsorId}`} disabled /> :
+                    <Input placeholder="sponsor link" value={`${baseUrl}/sponsors/${sponsorId || "NA"}`} disabled /> :
                     <ProgressButton onPress={async (_, next) => {
                         await doRequest();
                         next();

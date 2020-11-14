@@ -13,13 +13,13 @@ const Footer = () => {
                 <div style={{ marginBottom: ".4rem" }}>Follow Us</div>
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <div style={{ marginRight: 5 }}>
-                        <SocialButton href="https://wzww.facebook.com/ultimategamershub/" target="_blank" size="icon" type="facebook" />
+                        <SocialButton href="https://www.facebook.com/ultimategamershub/" target="_blank" size="icon" type="facebook" />
                     </div>
                     <div style={{ marginRight: 5 }}>
                         <SocialButton href="http://twitter.com/" target="_blank" size="icon" type="twitter" />
                     </div>
                     <div style={{ marginRight: 5 }}>
-                        <Button href="https://www.twitch.tv/cricket" target="_blank" size="icon" text={<FaTwitch />} />
+                        <Button href="https://twitch.tv/ultimategamershub" target="_blank" size="icon" text={<FaTwitch />} />
                     </div>
                     <div>
                         <SocialButton href="https://www.youtube.com/channel/UCrRonf3Q69wDBnxnM1BOHog?view_as=subscriber" target="_blank" size="icon" type="youtube" />
