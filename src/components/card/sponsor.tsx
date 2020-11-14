@@ -16,7 +16,7 @@ const SponsorCard = ({ sponsor }: { sponsor: SponsorDoc }) =>
         <div className="sponsors__card__image">
             <img src={sponsor.imageUrl} alt={sponsor.contact.email} />
         </div>
-        <a href={sponsor.website} className="sponsors__card__name">{sponsor.name}</a>
+        <a href={sponsor.website} className="sponsors__card__name" target="_blank">{sponsor.name}</a>
         <div className="sponsors__card__links">
             {
                 sponsor.links.map(link => {
