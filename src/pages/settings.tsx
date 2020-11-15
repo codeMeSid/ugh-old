@@ -33,13 +33,11 @@ const Settings = ({ user, errors }: { user: UserDoc, errors: any }) => {
     return <MainLayout messages={messages}>
         <div className="settings">
             <div className="settings__body">
-                <CheckInput value={newTournamentWasAdded} onChange={(val) => setNewTournamentWasAdded(val)} label="Notify via email/mobile when Someone Added a Tournament" />
-                <CheckInput value={addedTournamentWasWon} onChange={(val) => setAddedTournamentWasWon(val)} label="Notify via email/mobile when Someone Wins a Tournament (Joined Only)" />
-                <CheckInput value={addedTournamentWillStart} onChange={(val) => setAddedTournamentWillStart(val)} label="Notify via email/mobile before your match starts (30mins before)" />
-                <CheckInput value={addedTournamentProofSent} onChange={(val) => setAddedTournamentProofSent(val)} label="Notify via email/mobile when Winner Sends Proof" />
-                <CheckInput value={addedTournamentProofDenied} onChange={(val) => setAddedTournamentProofDenied(val)} label="Notify via email/mobile when Opponent disagrees with the proof" />
-                <CheckInput value={activityInCreatedTournament} onChange={(val) => setActivityInCreatedTournament(val)} label="Notify via email/mobile when Someone Joins Tournament created by you." />
-
+                <CheckInput value={newTournamentWasAdded} onChange={(val) => setNewTournamentWasAdded(val)} label="Notify via email when Someone Added a Tournament" />
+                <CheckInput value={addedTournamentWasWon} onChange={(val) => setAddedTournamentWasWon(val)} label="Notify via email when Someone Wins a Tournament (Joined Only)" />
+                <CheckInput value={addedTournamentWillStart} onChange={(val) => setAddedTournamentWillStart(val)} label="Notify via email before your match starts (15mins before)" />
+                <CheckInput value={addedTournamentProofDenied} onChange={(val) => setAddedTournamentProofDenied(val)} label="Notify via email when Opponent raises dispute against your score" />
+                <CheckInput value={activityInCreatedTournament} onChange={(val) => setActivityInCreatedTournament(val)} label="Notify via email when Someone Joins Tournament created by you." />
             </div>
             <div className="settings__button">
                 <ProgressButton text="submit changes" size="large" type="secondary" onPress={async (_, next) => {

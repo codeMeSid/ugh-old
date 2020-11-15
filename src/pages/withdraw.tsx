@@ -9,17 +9,22 @@ import ProgressButton from "../components/button/progress";
 import Router from 'next/router';
 import Input from "../components/input/input";
 import { useState } from "react";
+import DialogButton from "../components/button/dialog";
+import Select from "../components/input/select";
+import Option from "../components/input/option";
 
 const bgImage = require("../public/asset/signup.jpg");
 
 const Withdraw = ({ transactions, coins, errors }: { coins: number, transactions: Array<TransactionDoc>, walletBalance400: boolean, withdrawRequestMade: boolean, errors: Array<any> }) => {
     const [requestCoin, setRequestCoin] = useState(coins || 0);
+    const [paymentMode, setPaymentMode] = useState("google pay");
     const [messages, setMessages] = useState(errors);
     const { doRequest } = useRequest({
         url: "/api/ugh/transaction/create/request",
         method: "post",
         body: {
-            coins: requestCoin
+            coins: requestCoin,
+            paymentMode
         },
         onError: (errors) => setMessages(errors),
         onSuccess: Router.reload
@@ -31,8 +36,17 @@ const Withdraw = ({ transactions, coins, errors }: { coins: number, transactions
                 <div className="withdraw__head">
                     <div className="withdraw__head__coins">you currently have {coins} coins</div>
                     <div style={{ width: "35rem", margin: "0 auto" }} >
-                        <Input placeholder="withdraw coins" name="coins" type="number" value={requestCoin} onChange={(_, val) => setRequestCoin(val)} isWhite/>
+                        <Input placeholder="withdraw coins" name="coins" type="number" value={requestCoin} onChange={(_, val) => setRequestCoin(val)} isWhite />
+                        <Select
+                            name="paymentMode"
+                            isWhite
+                            onSelect={e => setPaymentMode(e.currentTarget.value)}
+                            placeholder="Payment Method"
+                            value={paymentMode}
+                            options={["google pay", "paytm", "phone pe"].map(p => <Option value={p} display={p.toUpperCase()} key={p} />)}
+                        />
                     </div>
+
                     <ProgressButton type="link" text="Make Request" onPress={async (_, next) => {
                         if (requestCoin > coins || requestCoin <= 0) {
                             next();
@@ -42,6 +56,7 @@ const Withdraw = ({ transactions, coins, errors }: { coins: number, transactions
                         await doRequest();
                         next()
                     }} />
+
                 </div>
                 <div className="withdraw__body">
                     <Table headers={[

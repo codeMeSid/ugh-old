@@ -27,10 +27,8 @@ export const rankLogger = async (
       isTournamentComplete) &&
     unresolvedDisputeCount !== unresolvedDisputesWithNoProofCount
   ) {
-    console.log("rank dispute pending");
     return;
   } else if (!isTournamentComplete && brackets.length !== bracketWinnersCount) {
-    console.log("Match pending");
     return;
   }
   brackets = brackets.map((b) => {
@@ -73,7 +71,6 @@ export const rankLogger = async (
     };
   });
   tournament.status = TournamentStatus.Completed;
-  console.log("leave rank");
   return {
     updatedTournament: tournament,
     updatedBrackets: brackets,

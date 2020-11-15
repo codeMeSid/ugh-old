@@ -57,6 +57,11 @@ const TransactionDetail = ({ transaction, errors }: { transaction: TransactionDo
                 <Input placeholder="status" value={transaction?.status?.toUpperCase()} disabled />
             </div>
         </div>
+        <div className="row">
+            <div className="col">
+                <Input placeholder="Payment Mode" value={transaction?.paymentMode} disabled />
+            </div>
+        </div>
         {transaction?.status === "requested" && <div className="row">
             <div className="col" style={{ marginRight: 10 }}>
                 <ProgressButton onPress={async (_, next) => {

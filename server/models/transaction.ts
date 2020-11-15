@@ -6,6 +6,7 @@ interface TransactionAttrs {
   orderId: string;
   amount: number;
   status: TransactionTypes;
+  paymentMode?: string;
 }
 
 export interface TransactionDoc extends mongoose.Document {
@@ -15,6 +16,7 @@ export interface TransactionDoc extends mongoose.Document {
   amount: number;
   createdAt: Date;
   status: TransactionTypes;
+  paymentMode?: string;
 }
 
 interface TransactionModel extends mongoose.Model<TransactionDoc> {
@@ -32,6 +34,7 @@ const transactionSchema = new mongoose.Schema(
       type: String,
       enum: Object.values(TransactionTypes),
     },
+    paymentMode: String,
   },
   {
     toJSON: {

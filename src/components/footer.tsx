@@ -16,7 +16,7 @@ const Footer = () => {
                         <SocialButton href="https://www.facebook.com/ultimategamershub/" target="_blank" size="icon" type="facebook" />
                     </div>
                     <div style={{ marginRight: 5 }}>
-                        <SocialButton href="http://twitter.com/" target="_blank" size="icon" type="twitter" />
+                        <SocialButton href="https://twitter.com/ultimat79668532?s=11" target="_blank" size="icon" type="twitter" />
                     </div>
                     <div style={{ marginRight: 5 }}>
                         <Button href="https://twitch.tv/ultimategamershub" target="_blank" size="icon" text={<FaTwitch />} />
@@ -28,11 +28,11 @@ const Footer = () => {
             </div>
             <div className="footer__l2__item">
                 <Link href="/tac">
-                    <a className="footer__l2__item__link">Terms Of Use </a>
+                    <a className="footer__l2__item__link" target="_blank">Terms Of Use </a>
                 </Link>
                 &
                 <Link href="/privacy">
-                    <a className="footer__l2__item__link"> Privacy Policy</a>
+                    <a className="footer__l2__item__link" target="_blank"> Privacy Policy</a>
                 </Link>
 
             </div>
