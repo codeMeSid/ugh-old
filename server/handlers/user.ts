@@ -89,13 +89,12 @@ export const userHandlers: Array<ApiSign> = [
     controller: userSocialAuthController,
     middlewares: [],
   },
-  // {
-  //   url: "/recovery",
-  //   method: HttpMethod.Post,
-  //   controller: userRecoveryController,
-  //   middlewares: [],
-  // },
-  // done
+  {
+    url: "/recovery",
+    method: HttpMethod.Post,
+    controller: userRecoveryController,
+    middlewares: [],
+  },
   {
     url: "/signin",
     method: HttpMethod.Post,
@@ -108,12 +107,12 @@ export const userHandlers: Array<ApiSign> = [
     controller: userUpdateSettingController,
     middlewares: [currentUser, requireAuth],
   },
-  // {
-  //   url: "/reset/:recoverykey",
-  //   method: HttpMethod.Post,
-  //   controller: resetUserController,
-  //   middlewares: [],
-  // },
+  {
+    url: "/reset/:recoverykey",
+    method: HttpMethod.Put,
+    controller: resetUserController,
+    middlewares: [],
+  },
   {
     url: "/update/profile",
     method: HttpMethod.Put,

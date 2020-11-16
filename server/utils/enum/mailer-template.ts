@@ -9,4 +9,6 @@ export enum MailerTemplate {
   Win = "win",
   Winner = "winner",
   Update = "update",
+  ForgotPassword = "forgot-password",
+  Reset = "reset",
 }

@@ -4,7 +4,10 @@ import { BadRequestError } from "@monsid/ugh";
 
 export const coinAddController = async (req: Request, res: Response) => {
   const { cost, value } = req.body;
-  const existingCoin = await Coin.findOne({ $or: [{ cost }, { value }] });
+  const existingCoin = await Coin.findOne({
+    $or: [{ cost }, { value }],
+    isActive: true,
+  });
   if (existingCoin) throw new BadRequestError("Coin already exists");
   const coin = Coin.build({
     cost,

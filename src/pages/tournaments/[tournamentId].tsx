@@ -22,7 +22,7 @@ const Logo = require("../../public/asset/logo-icon.png");
 
 const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: TournamentDoc, matches: any, currentUser: any, errors: any }) => {
     const [messages, setMessages] = useState(errors);
-    const userHasJoined = tournament?.players?.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id)).length > 0;
+    const userHasJoined = tournament?.players?.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id))?.length > 0;
     const chats = tournament && tournament.players ? tournament.players.map((user: any) => {
         if (currentUser?.ughId === user?.ughId) return;
         return ({ to: user?.ughId, channel: 'user', profile: user?.uploadUrl, title: user?.ughId })
@@ -184,16 +184,15 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                     </div>
                 </div>
             </div>
-            {currentUser
-                && tournament?.players?.filter(player => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id))
-                    .length > 0
-                &&
+            {currentUser && userHasJoined
+                ?
                 <div className="tournament__container tournament__container--footer">
                     <div className="tournament__container--footer__title">Live Players</div>
                     <div className="tournament__container__list">
                         {tournament?.players?.map(player => <PlayerCard key={Math.random()} currentUser={currentUser} player={player} />)}
                     </div>
                 </div>
+                : null
             }
         </div>
         {(currentUser?.role === "admin" || userHasJoined) && <MessengerList
