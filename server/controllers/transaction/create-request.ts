@@ -18,10 +18,10 @@ export const transactionCreateRequestController = async (
   const userEarnings = user.tournaments
     .filter((t) => t.didWin)
     .reduce((acc, t) => acc + t.coins, 0);
-  // if (userEarnings < 300)
-  //   throw new BadRequestError(
-  //     "Earn minimum 300 UGH coins in winnings to make withdrawal request"
-  //   );
+  if (userEarnings < 300)
+    throw new BadRequestError(
+      "Earn minimum 300 UGH coins in winnings to make withdrawal request"
+    );
   const orderId = "ugh" + randomBytes(4).toString("hex").substr(0, 4);
   const transaction = Transaction.build({
     amount: coins,

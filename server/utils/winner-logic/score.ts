@@ -16,6 +16,12 @@ export const scoreLogger = async (
   users: UserDoc[]
 ) => {
   console.log("score");
+  console.log({
+    tournament,
+    brackets: brackets.length,
+    splBracket,
+    users: users.length,
+  });
   return;
   return {
     updatedTournament: tournament,
