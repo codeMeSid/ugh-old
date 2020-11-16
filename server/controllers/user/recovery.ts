@@ -8,7 +8,7 @@ import { BASE_URL } from "../../utils/env-check";
 
 export const userRecoveryController = async (req: Request, res: Response) => {
   const { email } = req.body;
-  const user = await User.findOne({ $or: [{ email }] });
+  const user = await User.findOne({ email });
   if (!user) throw new BadRequestError("Invalid Account");
   if (user.activity !== UserActivity.Active)
     throw new BadRequestError("Inactive Player account");
