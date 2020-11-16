@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { TransactionTypes } from "@monsid/ugh";
+import { UserDoc } from "./user";
 
 interface TransactionAttrs {
   user: string;
@@ -7,6 +8,8 @@ interface TransactionAttrs {
   amount: number;
   status: TransactionTypes;
   paymentMode?: string;
+  phone?: string;
+  userDetail?: UserDoc;
 }
 
 export interface TransactionDoc extends mongoose.Document {
@@ -16,7 +19,9 @@ export interface TransactionDoc extends mongoose.Document {
   amount: number;
   createdAt: Date;
   status: TransactionTypes;
-  paymentMode?: string;
+  paymentMode: string;
+  phone: string;
+  userDetail: UserDoc;
 }
 
 interface TransactionModel extends mongoose.Model<TransactionDoc> {
@@ -30,11 +35,13 @@ const transactionSchema = new mongoose.Schema(
     razorpayId: String,
     amount: Number,
     createdAt: { type: mongoose.Schema.Types.Date, default: Date.now() },
+    userDetail: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
     status: {
       type: String,
       enum: Object.values(TransactionTypes),
     },
     paymentMode: String,
+    phone: String,
   },
   {
     toJSON: {

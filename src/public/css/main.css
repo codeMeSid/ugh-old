@@ -276,7 +276,8 @@ th {
   word-break: keep-all; }
 
 tr:nth-child(even) {
-  background-color: #dddddd; }
+  background-color: #dddddd;
+  color: black; }
 
 .table__link {
   text-decoration: none;

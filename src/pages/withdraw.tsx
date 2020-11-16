@@ -9,7 +9,6 @@ import ProgressButton from "../components/button/progress";
 import Router from 'next/router';
 import Input from "../components/input/input";
 import { useState } from "react";
-import DialogButton from "../components/button/dialog";
 import Select from "../components/input/select";
 import Option from "../components/input/option";
 
@@ -18,12 +17,14 @@ const bgImage = require("../public/asset/signup.jpg");
 const Withdraw = ({ transactions, coins, errors }: { coins: number, transactions: Array<TransactionDoc>, walletBalance400: boolean, withdrawRequestMade: boolean, errors: Array<any> }) => {
     const [requestCoin, setRequestCoin] = useState(coins || 0);
     const [paymentMode, setPaymentMode] = useState("google pay");
+    const [phone, setPhone] = useState("");
     const [messages, setMessages] = useState(errors);
     const { doRequest } = useRequest({
         url: "/api/ugh/transaction/create/request",
         method: "post",
         body: {
             coins: requestCoin,
+            phone,
             paymentMode
         },
         onError: (errors) => setMessages(errors),
@@ -45,6 +46,7 @@ const Withdraw = ({ transactions, coins, errors }: { coins: number, transactions
                             value={paymentMode}
                             options={["google pay", "paytm", "phone pe"].map(p => <Option value={p} display={p.toUpperCase()} key={p} />)}
                         />
+                        <Input placeholder="Mobile No./ UPI ID" name="phone" type="text" value={phone} onChange={(_, val) => setPhone(val)} isWhite />
                     </div>
 
                     <ProgressButton type="link" text="Make Request" onPress={async (_, next) => {

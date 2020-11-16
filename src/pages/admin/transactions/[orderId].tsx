@@ -8,6 +8,7 @@ import { useRequest } from "../../../hooks/use-request";
 import Router from 'next/router';
 import { useState } from "react";
 import Link from "next/link";
+import FileInput from "../../../components/input/file";
 
 const TransactionDetail = ({ transaction, errors }: { transaction: TransactionDoc, errors: any }) => {
     const [tId, setTId] = useState("");
@@ -49,9 +50,11 @@ const TransactionDetail = ({ transaction, errors }: { transaction: TransactionDo
         </div>
         <div className="row">
             <div className="col">
-                <Link href={`/admin/users/${transaction?.user}`}>
-                    <a style={{ cursor: "pointer" }}><Input placeholder="user" value={transaction?.user} disabled /></a>
-                </Link>
+                {transaction?.userDetail
+                    ? <Input placeholder="UGH ID" value={transaction?.userDetail?.ughId} disabled />
+                    : <Link href={`/admin/users/${transaction?.user}`}>
+                        <a style={{ cursor: "pointer" }}><Input placeholder="user" value={transaction?.user} disabled /></a>
+                    </Link>}
             </div>
             <div className="col">
                 <Input placeholder="status" value={transaction?.status?.toUpperCase()} disabled />
@@ -61,7 +64,18 @@ const TransactionDetail = ({ transaction, errors }: { transaction: TransactionDo
             <div className="col">
                 <Input placeholder="Payment Mode" value={transaction?.paymentMode} disabled />
             </div>
+            {transaction?.userDetail && <div className="col">
+                <Input placeholder="Aadhar Card" value={transaction?.userDetail?.idProof?.aadharCard} disabled />
+            </div>}
         </div>
+        {transaction?.userDetail && <div className="row">
+
+            <a href={transaction?.userDetail?.idProof?.aadharUrl} target="_blank">
+                <div className="col">
+                    <FileInput name="a" placeholder="Aadhar card photo" value={transaction?.userDetail?.idProof?.aadharUrl} />
+                </div>
+            </a>
+        </div>}
         {transaction?.status === "requested" && <div className="row">
             <div className="col" style={{ marginRight: 10 }}>
                 <ProgressButton onPress={async (_, next) => {
@@ -76,6 +90,7 @@ const TransactionDetail = ({ transaction, errors }: { transaction: TransactionDo
                 }} text="Accept" size="medium" type="link" />
             </div>
         </div>}
+
     </SideLayout>
 }
 

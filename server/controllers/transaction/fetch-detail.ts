@@ -7,7 +7,11 @@ export const transactionDetailController = async (
   res: Response
 ) => {
   const { orderId } = req.params;
-  const transaction = await Transaction.findOne({ orderId });
+  const transaction = await Transaction.findOne({ orderId }).populate(
+    "userDetail",
+    "ughId idProof",
+    "Users"
+  );
   if (!transaction) throw new BadRequestError("Transaction does not exists");
   res.send(transaction);
 };
