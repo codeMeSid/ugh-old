@@ -13,6 +13,8 @@ export const transactionCreateRequestController = async (
   if (!phone) throw new BadRequestError("mobile no./UPI id required");
   const user = await User.findById(id);
   if (!user) throw new BadRequestError("Request failed");
+  if (!user.idProof.panCard || !user.idProof.panUrl)
+    throw new BadRequestError("Please update your Pan card details");
   if (!user.idProof.aadharCard || !user.idProof.aadharUrl)
     throw new BadRequestError("Please update your Aadhar card details");
   const userEarnings = user.tournaments

@@ -16,7 +16,10 @@ const ResetPassword = ({ recoveryToken }) => {
         url: `/api/ugh/user/reset/${recoveryToken}`,
         body: { password },
         method: "put",
-        onSuccess: () => Router.replace("/login"),
+        onSuccess: () => {
+            setMessages([{ message: "Password was reset successfully", type: "success" }])
+            setTimeout(() => Router.replace("/login"), 5000)
+        },
         onError: (data) => setMessages(data)
     });
     return <MainLayout messages={messages}>
