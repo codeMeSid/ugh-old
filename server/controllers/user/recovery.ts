@@ -19,10 +19,9 @@ export const userRecoveryController = async (req: Request, res: Response) => {
     key: user.ughId.substr(0, 3) + randomBytes(4).toString("hex").substr(0, 4),
   };
   user.set({ recovery });
-  console.log(user);
   await user.save();
   const resetLink = `${BASE_URL}/account/reset-password/${recovery.key}`;
-  await mailer.send(
+  mailer.send(
     MailerTemplate.ForgotPassword,
     { resetLink, ughId: user.ughId },
     user.email,

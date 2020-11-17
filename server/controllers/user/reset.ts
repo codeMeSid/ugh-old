@@ -19,7 +19,7 @@ export const resetUserController = async (req: Request, res: Response) => {
 
   user.set({ recovery: undefined, password });
   await user.save();
-  await mailer.send(
+  mailer.send(
     MailerTemplate.Reset,
     { ughId: user.ughId },
     user.email,

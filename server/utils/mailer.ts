@@ -38,7 +38,6 @@ class Mailer {
           html: htmlTemplate,
         },
         (err, info) => {
-          if (err)
             console.table({
               type,
               to,
