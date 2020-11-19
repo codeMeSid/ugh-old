@@ -56,6 +56,7 @@ export const winnerLogic = async (
       updatedTournament: TournamentDoc;
       updatedBrackets: Array<BracketDoc>;
       updateUsers: Array<UserDoc>;
+      newBracket?: BracketDoc;
     };
     switch (tournament.game.gameType) {
       case GameType.Rank:
@@ -71,6 +72,7 @@ export const winnerLogic = async (
         updates.updateUsers.map(async (u) => await u.save({ session })),
         updates.updatedBrackets.map(async (b) => await b.save({ session })),
         updates.updatedTournament.save({ session }),
+        updates.newBracket?.save({ session }),
       ]);
     }
 

@@ -139,7 +139,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
               tournament.brackets.push(bracket);
               i += 1;
             } else if (tournament.game.gameType === GameType.Score) {
-              const teamB = users.slice(i + 1, 1 + 2);
+              const teamB = users.slice(i + 1, i + 2);
               const bracket = Bracket.build({
                 teamA: {
                   user: teamA[0],
@@ -158,6 +158,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
               if (teamB.length === 0) {
                 bracket.round = 2;
                 bracket.teamA.uploadBy = undefined;
+                bracket.teamB.uploadBy = undefined;
               }
               await bracket.save({ session });
               tournament.brackets.push(bracket);

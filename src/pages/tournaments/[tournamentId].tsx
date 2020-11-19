@@ -16,6 +16,7 @@ import { IoIosTrophy } from 'react-icons/io';
 import IconDialogButton from '../../components/button/icon-dialog';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 import { prizeDistribution } from '../../../server/utils/prize-distribution';
+import { numberPostion } from '../../public/number-postion';
 
 const Logo = require("../../public/asset/logo-icon.png");
 
@@ -46,7 +47,7 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                     </tr>
                     {tournament?.winners.map((winner) => {
                         return <tr key={Math.random()} style={{ fontSize: 20 }}>
-                            <td>{winner.position}</td>
+                            <td>{`${winner?.position}${numberPostion(winner?.position)}`}</td>
                             <td>{winner.ughId}</td>
                             <td>{winner.coins} coins</td>
                         </tr>
@@ -131,7 +132,7 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                                         </tr>
                                         {prizeDistribution(tournament?.winnerCoin, tournament.winnerCount).map((prize, index) => {
                                             return <tr key={Math.random()} style={{ fontSize: 20 }}>
-                                                <td>{index + 1}</td>
+                                                <td>{`${index + 1}${numberPostion(index + 1)}`}</td>
                                                 <td>{prize} coins</td>
                                             </tr>
                                         })}
