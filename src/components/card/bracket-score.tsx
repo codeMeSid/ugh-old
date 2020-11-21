@@ -12,7 +12,8 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
     const A = {
         profilePic: bracket.teamA.user?.uploadUrl,
         ughId: bracket.teamA.user?.ughId,
-        hasScore: isBracketPlayer && bracket.teamA.score >= 0,
+        //isBracketPlayer && 
+        hasScore: bracket.teamA.score >= 0,
         score: bracket.teamA.score,
         updateScoreBy: bracket.teamA.uploadBy,
         raiseDisputeBy: bracket.teamA.updateBy,
@@ -23,7 +24,8 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
     const B = {
         profilePic: bracket.teamB.user?.uploadUrl,
         ughId: bracket.teamB.user?.ughId,
-        hasScore: isBracketPlayer && bracket.teamB.score >= 0,
+        // isBracketPlayer &&
+        hasScore: bracket.teamB.score >= 0,
         score: bracket.teamB.score,
         updateScoreBy: bracket.teamB.uploadBy,
         raiseDisputeBy: bracket.teamB.updateBy,
@@ -37,13 +39,14 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
         <div className="bracket__score__title">round {bracket?.round}</div>
         <div className="bracket__score__container">
             <PlayerScoreCard
+                tournamentId={tournamentId}
                 player={{
                     profilePic: A.profilePic,
                     ughId: A.ughId,
                     isCurrentUser: currentUser.ughId === A.ughId
                 }}
                 team={{
-                    hasScore: isBracketPlayer && A.hasScore,
+                    hasScore: A.hasScore,
                     score: A.score,
                     canUploadScore: isPlayerA && !A.hasScore,
                     updateScoreBy: A.updateScoreBy,
@@ -61,6 +64,7 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
                     hasWinner: !!bracket.winner
                 }}
                 opponent={{
+                    ughId: B.ughId,
                     raiseDisputeBy: A.raiseDisputeBy,
                     canRaiseDispute: isPlayerB && A.hasScore && B.hasScore && !B.hasRaisedDispute && !A.hasRaisedDispute,
                     hasRaisedDispute: isBracketPlayer && B.hasRaisedDispute,
@@ -71,13 +75,14 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
                 vs
             </div>
             <PlayerScoreCard
+                tournamentId={tournamentId}
                 player={{
                     profilePic: B.profilePic,
                     ughId: B.ughId,
                     isCurrentUser: currentUser.ughId === B.ughId
                 }}
                 team={{
-                    hasScore: isBracketPlayer && B.hasScore,
+                    hasScore: B.hasScore,
                     score: B.score,
                     canUploadScore: isPlayerB && !B.hasScore,
                     updateScoreBy: B.updateScoreBy,
@@ -95,6 +100,7 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
                     hasWinner: !!bracket.winner
                 }}
                 opponent={{
+                    ughId: A.ughId,
                     raiseDisputeBy: B.raiseDisputeBy,
                     canRaiseDispute: isPlayerA && A.hasScore && B.hasScore && !A.hasRaisedDispute && !B.hasRaisedDispute,
                     hasRaisedDispute: isBracketPlayer && A.hasRaisedDispute,

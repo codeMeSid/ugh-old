@@ -5,9 +5,10 @@ import FileInput from "../input/file";
 import Input from "../input/input";
 import { useRequest } from "../../hooks/use-request";
 import Router from 'next/router';
+import { event } from "../../socket";
 
 const PlayerScoreCard = ({
-    player, team, opponent, bracket
+    player, team, opponent, bracket, tournamentId
 }: {
     player: {
         profilePic?: string,
@@ -26,6 +27,7 @@ const PlayerScoreCard = ({
         proof?: string
     },
     opponent: {
+        ughId?: string,
         canRaiseDispute: boolean,
         raiseDisputeBy?: Date
         hasRaisedDispute: boolean,
@@ -38,6 +40,7 @@ const PlayerScoreCard = ({
         wasDisputeRaised: boolean
         hasWinner: boolean,
     },
+    tournamentId: string
 }) => {
 
     const [scoreTimer, setScoreTimer] = useState("");
@@ -94,28 +97,28 @@ const PlayerScoreCard = ({
         body: { score: rank, tournamentId: bracket.tournamentId },
         method: "post",
         onError: bracket.onError,
-        onSuccess: Router.reload
+        onSuccess: () => event.bracketRankUpdate({ by: player?.ughId, tournamentId, type: "score" })
     });
     const { doRequest: addProofHandler } = useRequest({
         url: `/api/ugh/bracket/score/dispute/proof/${bracket.regId}`,
         body: { proof },
         method: "post",
         onError: bracket.onError,
-        onSuccess: Router.reload
+        onSuccess: () => event.bracketRankUpdate({ by: player?.ughId, tournamentId, type: "proof" })
     });
     const { doRequest: acceptProofHandler } = useRequest({
         url: `/api/ugh/bracket/score/dispute/accept/${bracket.regId}`,
         body: { accept: true, tournamentId: bracket.tournamentId },
         method: "post",
         onError: bracket.onError,
-        onSuccess: Router.reload
+        onSuccess: () => event.bracketRankUpdate({ by: player?.ughId, tournamentId, type: "accept" })
     });
     const { doRequest: raiseDisputeHandler } = useRequest({
         url: `/api/ugh/bracket/score/dispute/${bracket.regId}`,
         body: {},
         method: "post",
         onError: bracket.onError,
-        onSuccess: Router.reload
+        onSuccess: () => event.bracketRankUpdate({ by: player?.ughId, on: opponent?.ughId, tournamentId, type: "dispute" })
     });
     return <>
         <div className="bracket__score__player">
