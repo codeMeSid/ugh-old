@@ -7,11 +7,11 @@ import { mailer } from "../../../utils/mailer";
 import { MailerTemplate } from "../../../utils/enum/mailer-template";
 
 export const raiseDisputeController = async (req: Request, res: Response) => {
-  const { id, ughId } = req.currentUser;
+  const { id } = req.currentUser;
   const { bracketId } = req.params;
   const session = await mongoose.startSession();
   session.startTransaction();
-  let disputeBy, disputeOn;
+  let disputeBy: string, disputeOn: string;
   try {
     const bracketA = await Bracket.findOne({ regId: bracketId })
       .populate("teamA.user", "email UghId", "Users")

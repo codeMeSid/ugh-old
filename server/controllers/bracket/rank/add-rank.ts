@@ -1,6 +1,7 @@
 import { BadRequestError, NotAuthorizedError, timer } from "@monsid/ugh";
 import { Request, Response } from "express";
 import { Bracket } from "../../../models/bracket";
+import { TournamentTime } from "../../../utils/enum/tournament-time";
 import { winnerLogic } from "../../../utils/winner-logic";
 
 export const addRankController = async (req: Request, res: Response) => {
@@ -14,7 +15,9 @@ export const addRankController = async (req: Request, res: Response) => {
   if (bracket.teamA.score > 0)
     throw new BadRequestError("Rank once updated cannot change now");
   bracket.teamA.score = rank;
-  bracket.updateBy = new Date(Date.now() + 1000 * 60 * 20);
+  bracket.updateBy = new Date(
+    Date.now() + TournamentTime.TournamentRankDisputeTime
+  );
   bracket.uploadBy = undefined;
   await bracket.save();
   timer.schedule(

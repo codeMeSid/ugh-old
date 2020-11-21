@@ -56,7 +56,7 @@ export const winnerLogic = async (
       updatedTournament: TournamentDoc;
       updatedBrackets: Array<BracketDoc>;
       updateUsers: Array<UserDoc>;
-      newBracket?: BracketDoc;
+      newBrackets?: Array<BracketDoc>;
     };
     switch (tournament.game.gameType) {
       case GameType.Rank:
@@ -72,7 +72,7 @@ export const winnerLogic = async (
         updates.updateUsers.map(async (u) => await u.save({ session })),
         updates.updatedBrackets.map(async (b) => await b.save({ session })),
         updates.updatedTournament.save({ session }),
-        updates.newBracket?.save({ session }),
+        updates?.newBrackets?.map(async (b) => await b.save({ session })),
       ]);
     }
 
@@ -91,28 +91,29 @@ export const winnerLogic = async (
     if (updates) {
       const { updateUsers, updatedTournament } = updates;
       const { name, winners } = updatedTournament;
-      updateUsers.forEach((user) => {
-        const { ughId } = user;
-        const userIndex = winners.findIndex((w) => w.ughId === ughId);
-        if (userIndex >= 0)
-          mailer.send(
-            MailerTemplate.Win,
-            {
-              ughId,
-              tournamentName: name,
-              prize: winners[userIndex].coins,
-            },
-            user.email,
-            "UGH TOURNAMENT WINNER"
-          );
-        else
-          mailer.send(
-            MailerTemplate.Winner,
-            { ughId, tournamentName: name, opponentUghId: winners[0].ughId },
-            user.email,
-            "UGH Tournament Better Luck Next Time !!!"
-          );
-      });
+      if (winners.length > 0)
+        updateUsers.forEach((user) => {
+          const { ughId } = user;
+          const userIndex = winners.findIndex((w) => w?.ughId === ughId);
+          if (userIndex >= 0)
+            mailer.send(
+              MailerTemplate.Win,
+              {
+                ughId,
+                tournamentName: name,
+                prize: winners[userIndex].coins,
+              },
+              user.email,
+              "UGH TOURNAMENT WINNER"
+            );
+          else
+            mailer.send(
+              MailerTemplate.Winner,
+              { ughId, tournamentName: name, opponentUghId: winners[0].ughId },
+              user.email,
+              "UGH Tournament Better Luck Next Time !!!"
+            );
+        });
     }
   } catch (error) {
     console.log({ error: error.message });

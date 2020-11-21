@@ -10,7 +10,7 @@ export const rankLogger = async (
   brackets: BracketDoc[],
   users: UserDoc[]
 ) => {
-  console.log("enter rank");
+  console.log("rank");
   const bracketWinnersCount = brackets.filter((b) => b.winner).length;
   const unresolvedDisputeCount = brackets.filter(
     (b) => b.teamB.hasRaisedDispute && !b.winner
@@ -71,6 +71,8 @@ export const rankLogger = async (
     };
   });
   tournament.status = TournamentStatus.Completed;
+
+  console.log("leave rank");
   return {
     updatedTournament: tournament,
     updatedBrackets: brackets,

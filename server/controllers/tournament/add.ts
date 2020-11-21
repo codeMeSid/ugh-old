@@ -17,6 +17,7 @@ import { MailerTemplate } from "../../utils/enum/mailer-template";
 import { shuffle } from "../../utils/shuffle";
 import { Bracket } from "../../models/bracket";
 import { winnerLogic } from "../../utils/winner-logic";
+import { TournamentTime } from "../../utils/enum/tournament-time";
 
 export const tournamentAddController = async (req: Request, res: Response) => {
   const {
@@ -133,7 +134,9 @@ export const tournamentAddController = async (req: Request, res: Response) => {
                 gameType: tournament.game.gameType,
                 regId,
                 round: 1,
-                uploadBy: new Date(Date.now() + 1000 * 60 * 20),
+                uploadBy: new Date(
+                  Date.now() + TournamentTime.TournamentRankUpdateTime
+                ),
               });
               await bracket.save({ session });
               tournament.brackets.push(bracket);
@@ -144,12 +147,16 @@ export const tournamentAddController = async (req: Request, res: Response) => {
                 teamA: {
                   user: teamA[0],
                   score: -1,
-                  uploadBy: new Date(Date.now() + 1000 * 60 * 20),
+                  uploadBy: new Date(
+                    Date.now() + TournamentTime.TournamentScoreUpdateTime
+                  ),
                 },
                 teamB: {
                   user: teamB[0],
                   score: -1,
-                  uploadBy: new Date(Date.now() + 1000 * 60 * 20),
+                  uploadBy: new Date(
+                    Date.now() + TournamentTime.TournamentScoreUpdateTime
+                  ),
                 },
                 round: 1,
                 regId,
@@ -203,8 +210,8 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     //////////////////////////////////////////////////////
 
     // timer.schedule(
-    //   `${tournament.regId}-15min`,
-    //   new Date(new Date(startDateTime).valueOf() - 1000 * 60 * 15),
+    //   `${tournament.regId}-check`,
+    // new Date(new Date(startDateTime).valueOf() - TournamentTime.TournamentCancelTime),
     //   async ({ id }: { id: string }) => {
     //     const session = await mongoose.startSession();
     //     await session.startTransaction();

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BracketDoc } from "../../../server/models/bracket";
+import { DQ } from "../../../server/utils/enum/dq";
 
 import PlayerScoreCard from "./score-player";
 const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
@@ -17,7 +18,7 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
         raiseDisputeBy: bracket.teamA.updateBy,
         proof: bracket.teamA.uploadUrl,
         hasRaisedDispute: bracket.teamA.hasRaisedDispute,
-        isWinner: bracket.teamA.user?.ughId === bracket.winner
+        isWinner: bracket.teamA.user?.ughId === bracket.winner && bracket.winner !== DQ.ScoreNotUploaded
     };
     const B = {
         profilePic: bracket.teamB.user?.uploadUrl,
@@ -28,7 +29,7 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
         raiseDisputeBy: bracket.teamB.updateBy,
         proof: bracket.teamB.uploadUrl,
         hasRaisedDispute: bracket.teamB.hasRaisedDispute,
-        isWinner: bracket.teamB.user?.ughId === bracket.winner
+        isWinner: bracket.teamB.user?.ughId === bracket.winner && bracket.winner !== DQ.ScoreNotUploaded
     };
 
     // render
@@ -38,7 +39,8 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
             <PlayerScoreCard
                 player={{
                     profilePic: A.profilePic,
-                    ughId: A.ughId
+                    ughId: A.ughId,
+                    isCurrentUser: currentUser.ughId === A.ughId
                 }}
                 team={{
                     hasScore: isBracketPlayer && A.hasScore,
@@ -60,7 +62,7 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
                 }}
                 opponent={{
                     raiseDisputeBy: A.raiseDisputeBy,
-                    canRaiseDispute: isPlayerB && A.hasScore && !B.hasRaisedDispute && !A.hasRaisedDispute,
+                    canRaiseDispute: isPlayerB && A.hasScore && B.hasScore && !B.hasRaisedDispute && !A.hasRaisedDispute,
                     hasRaisedDispute: isBracketPlayer && B.hasRaisedDispute,
                     canAcceptProof: isPlayerB && B.hasRaisedDispute && !!A.proof
                 }}
@@ -71,7 +73,8 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
             <PlayerScoreCard
                 player={{
                     profilePic: B.profilePic,
-                    ughId: B.ughId
+                    ughId: B.ughId,
+                    isCurrentUser: currentUser.ughId === B.ughId
                 }}
                 team={{
                     hasScore: isBracketPlayer && B.hasScore,
@@ -93,7 +96,7 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
                 }}
                 opponent={{
                     raiseDisputeBy: B.raiseDisputeBy,
-                    canRaiseDispute: isPlayerA && B.hasScore && !A.hasRaisedDispute && !B.hasRaisedDispute,
+                    canRaiseDispute: isPlayerA && A.hasScore && B.hasScore && !A.hasRaisedDispute && !B.hasRaisedDispute,
                     hasRaisedDispute: isBracketPlayer && A.hasRaisedDispute,
                     canAcceptProof: isPlayerA && A.hasRaisedDispute && !!B.proof
                 }}

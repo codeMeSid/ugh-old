@@ -2,6 +2,7 @@ import { BadRequestError, NotAuthorizedError, timer } from "@monsid/ugh";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import { Bracket } from "../../../models/bracket";
+import { TournamentTime } from "../../../utils/enum/tournament-time";
 import { winnerLogic } from "../../../utils/winner-logic";
 
 export const addScoreController = async (req: Request, res: Response) => {
@@ -19,7 +20,9 @@ export const addScoreController = async (req: Request, res: Response) => {
       throw new BadRequestError("Score already updated");
     bracket.teamA.score = score;
     bracket.teamA.uploadBy = undefined;
-    bracket.teamA.updateBy = new Date(Date.now() + 1000 * 60 * 20);
+    bracket.teamA.updateBy = new Date(
+      Date.now() + TournamentTime.TournamentScoreDisputeTime
+    );
     const hasTeamBUpdatedScore =
       bracket.teamB.score >= 0 && bracket.teamB.updateBy;
     if (hasTeamBUpdatedScore) {
@@ -34,7 +37,9 @@ export const addScoreController = async (req: Request, res: Response) => {
       throw new BadRequestError("Score already updated");
     bracket.teamB.score = score;
     bracket.teamB.uploadBy = undefined;
-    bracket.teamB.updateBy = new Date(Date.now() + 1000 * 60 * 20);
+    bracket.teamB.updateBy = new Date(
+      Date.now() + TournamentTime.TournamentScoreDisputeTime
+    );
     const hasTeamAUpdatedScore =
       bracket.teamA.score >= 0 && bracket.teamA.updateBy;
     if (hasTeamAUpdatedScore) {
@@ -102,7 +107,7 @@ export const addScoreController = async (req: Request, res: Response) => {
           await session.abortTransaction();
         }
         session.endSession();
-        winnerLogic(tournamentId, regId,  "score teamB added");
+        winnerLogic(tournamentId, regId, "score teamB added");
       },
       { regId: bracketId, tournamentId }
     );

@@ -12,7 +12,7 @@ const PlayerScoreCard = ({
     player: {
         profilePic?: string,
         ughId?: string,
-        //     isCurrentUser,
+        isCurrentUser: Boolean,
     },
     team: {
         score: number,
@@ -143,10 +143,8 @@ const PlayerScoreCard = ({
                                 color: "white",
                                 margin: ".5rem 0"
                             }}>
-                                <div>{opponent.hasRaisedDispute && "opponent "}</div>
-                                <div>{team.hasRaisedDispute && "You "}</div>
-                    raised dispute
-                </div>
+                                <div>{opponent.hasRaisedDispute && "dispute was raised"}</div>
+                            </div>
                         }
                         {
                             team.canUploadProof && <div>
