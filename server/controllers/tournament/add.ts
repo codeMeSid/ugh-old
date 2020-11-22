@@ -166,6 +166,41 @@ export const tournamentAddController = async (req: Request, res: Response) => {
                 bracket.round = 2;
                 bracket.teamA.uploadBy = undefined;
                 bracket.teamB.uploadBy = undefined;
+              } else {
+                //////////////////////////////////
+                //////////////////////////////////
+                //////////////////////////////////
+                //////////////////////////////////
+                //////////////////////////////////
+                //////////////////////////////////
+
+                const bracketCheckTimer = new Date(
+                  new Date(bracket.teamA.uploadBy).getTime() +
+                    TournamentTime.TournamentScoreCheckTime
+                );
+                timer.schedule(
+                  `${bracket.regId}-check`,
+                  bracketCheckTimer,
+                  async ({ regId, tournamentId }) => {
+                    const bracket = await Bracket.findOne({ regId });
+                    if (!bracket) return;
+                    const {
+                      teamA: { score: sA },
+                      teamB: { score: sB },
+                      winner,
+                    } = bracket;
+                    if (winner) return;
+                    if (sA !== -1 || sB !== -1) return;
+                    winnerLogic(tournamentId, regId, "score check timer");
+                  },
+                  { regId: bracket.regId, tournamentId: tournament.regId }
+                );
+                //////////////////////////////////
+                //////////////////////////////////
+                //////////////////////////////////
+                //////////////////////////////////
+                //////////////////////////////////
+                //////////////////////////////////
               }
               await bracket.save({ session });
               tournament.brackets.push(bracket);

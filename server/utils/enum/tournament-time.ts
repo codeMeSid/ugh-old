@@ -8,4 +8,7 @@ export enum TournamentTime {
   TournamentRankDisputeTime = msTom * 5,
   TournamentScoreUpdateTime = msTom * 5,
   TournamentScoreDisputeTime = msTom * 5,
+  //////////////////////////////////
+  //////////////////////////////////
+  TournamentScoreCheckTime = msTom * 25,
 }

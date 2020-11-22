@@ -1,5 +1,6 @@
-import { TournamentStatus } from "@monsid/ugh";
+import { timer, TournamentStatus } from "@monsid/ugh";
 import { randomBytes } from "crypto";
+import { winnerLogic } from ".";
 import { Bracket, BracketDoc } from "../../models/bracket";
 import { TournamentDoc } from "../../models/tournament";
 import { UserDoc } from "../../models/user";
@@ -17,6 +18,7 @@ export const scoreLogger = async (
   const newBrackets: Array<any> = [];
   const requiredBracketCount = tournament.players.length - 1;
   const canCreateBracket = requiredBracketCount > brackets.length;
+
   if (splBracket && splBracket.winner !== DQ.ScoreNotUploaded) {
     console.log("spl bracket");
     const nextBracketIndex = brackets.findIndex(
@@ -25,7 +27,106 @@ export const scoreLogger = async (
     const userIndex = users.findIndex(
       (user) => user.ughId === splBracket.winner
     );
-    if (nextBracketIndex !== -1) {
+    //////////////////////////////////
+    //////////////////////////////////
+    //////////////////////////////////
+    //////////////////////////////////
+    // IF THE CHECK TIMER IS TRIGGERED THEN TAKE AN EMPTY WAITING BRACKET AND SHIFT TO NEXT/NEW BRACKET
+    if (splBracket.teamA.score === -1 && splBracket.teamB.score === -1) {
+      console.log("score not uploaded");
+      const bracketIndex = brackets.findIndex(
+        (b) => b.regId === splBracket.regId
+      );
+      brackets[bracketIndex].winner = DQ.ScoreNotUploaded;
+      const emptyBracketIndex = brackets.findIndex(
+        (b) => b.round === splBracket.round + 1 && !b.teamB.user
+      );
+
+      if (emptyBracketIndex === -1) return;
+
+      const emptyBracket = brackets[emptyBracketIndex];
+      const emptyUserIndex = users.findIndex(
+        (u) => JSON.stringify(emptyBracket.teamA.user) === JSON.stringify(u.id)
+      );
+      brackets[emptyBracketIndex].winner = users[emptyUserIndex]?.ughId;
+      //////////////////////////////////
+      //////////////////////////////////
+      //////////////////////////////////
+      //////////////////////////////////
+      //////////////////////////////////
+      //////////////////////////////////
+
+      if (emptyBracket) {
+        const newNextBracketIndex = brackets.findIndex(
+          (b) => b.round === emptyBracket.round + 1 && !b.teamB.user
+        );
+
+        if (newNextBracketIndex !== -1) {
+          console.log("jump to next bracket");
+          const uploadBy = new Date(
+            Date.now() + TournamentTime.TournamentScoreUpdateTime
+          );
+          brackets[newNextBracketIndex].teamB = {
+            user: emptyBracket.teamA.user,
+            uploadBy,
+            hasRaisedDispute: false,
+            score: -1,
+            updateBy: undefined,
+            uploadUrl: "",
+          };
+          brackets[newNextBracketIndex].teamA.uploadBy = uploadBy;
+          const bracketCheckTimer = new Date(
+            new Date(uploadBy).getTime() +
+              TournamentTime.TournamentScoreCheckTime
+          );
+          timer.schedule(
+            `${brackets[newNextBracketIndex].regId}-check`,
+            bracketCheckTimer,
+            async ({ regId, tournamentId }) => {
+              const bracket = await Bracket.findOne({ regId });
+              if (!bracket) return;
+              const {
+                teamA: { score: sA },
+                teamB: { score: sB },
+                winner,
+              } = bracket;
+              if (winner) return;
+              if (sA !== -1 || sB !== -1) return;
+              winnerLogic(tournamentId, regId, "score check timer");
+            },
+            {
+              regId: brackets[newNextBracketIndex].regId,
+              tournamentId: tournament.regId,
+            }
+          );
+        } else if (canCreateBracket) {
+          console.log("can create and jump to next bracket");
+          const regId = randomBytes(4).toString("hex").substr(0, 5);
+          const newBracket = Bracket.build({
+            gameType: splBracket.gameType,
+            regId,
+            round: splBracket.round + 1,
+            teamA: {
+              user: emptyBracket.teamA.user,
+              score: -1,
+            },
+            teamB: {
+              user: undefined,
+              score: -1,
+            },
+          });
+          tournament.brackets.push(newBracket);
+          newBrackets.push(newBracket);
+        }
+      }
+      //////////////////////////////////
+      //////////////////////////////////
+      //////////////////////////////////
+      //////////////////////////////////
+      //////////////////////////////////
+      //////////////////////////////////
+      //////////////////////////////////
+    } else if (nextBracketIndex !== -1) {
       console.log("next bracket");
       const uploadBy = new Date(
         Date.now() + TournamentTime.TournamentScoreUpdateTime
@@ -39,6 +140,29 @@ export const scoreLogger = async (
         uploadUrl: "",
       };
       brackets[nextBracketIndex].teamA.uploadBy = uploadBy;
+      const bracketCheckTimer = new Date(
+        new Date(uploadBy).getTime() + TournamentTime.TournamentScoreCheckTime
+      );
+      timer.schedule(
+        `${brackets[nextBracketIndex].regId}-check`,
+        bracketCheckTimer,
+        async ({ regId, tournamentId }) => {
+          const bracket = await Bracket.findOne({ regId });
+          if (!bracket) return;
+          const {
+            teamA: { score: sA },
+            teamB: { score: sB },
+            winner,
+          } = bracket;
+          if (winner) return;
+          if (sA !== -1 || sB !== -1) return;
+          winnerLogic(tournamentId, regId, "score check timer");
+        },
+        {
+          regId: brackets[nextBracketIndex].regId,
+          tournamentId: tournament.regId,
+        }
+      );
     } else if (canCreateBracket) {
       console.log("new bracket");
       const regId = randomBytes(4).toString("hex").substr(0, 5);
