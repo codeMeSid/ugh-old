@@ -79,24 +79,28 @@ export const winnerLogic = async (
 
     await session.commitTransaction();
     if (updates) {
-      messenger?.socket.emit(SocketEvent.EventUpdate, {
-        by: "UGH",
-        tournamentId: tournament.regId,
-        type: "update",
-        channel: SocketChannel.BracketRank,
-      });
+      messenger.io
+        .to(SocketChannel.BracketRank)
+        .emit(SocketEvent.EventRecieve, {
+          by: "UGH",
+          tournamentId: tournament.regId,
+          type: "update",
+          channel: SocketChannel.BracketRank,
+        });
     }
     if (
       updates &&
       updates.updatedTournament.status === TournamentStatus.Completed
     ) {
       timer.cancel(`${tournament.regId}-end`);
-      messenger?.socket.emit(SocketEvent.EventUpdate, {
-        by: "UGH",
-        tournamentId: tournament.regId,
-        type: "over",
-        channel: SocketChannel.BracketRank,
-      });
+      messenger.io
+        .to(SocketChannel.BracketRank)
+        .emit(SocketEvent.EventRecieve, {
+          by: "UGH",
+          tournamentId: tournament.regId,
+          type: "over",
+          channel: SocketChannel.BracketRank,
+        });
     }
     if (updates) {
       const { updateUsers, updatedTournament } = updates;

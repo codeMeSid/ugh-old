@@ -71,7 +71,7 @@ const PlayerScoreCard = ({
     // // methods 
     const onChangeHandler = (name, val) => {
         switch (name) {
-            case "score": setRank(parseInt(val));
+            case "score": if (val && parseInt(val) >= 0) setRank(parseInt(val));
             case "proof": setProof(val)
         }
     }

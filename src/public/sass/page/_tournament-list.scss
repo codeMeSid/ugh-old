@@ -154,10 +154,10 @@
         &__winner {
           position: absolute;
           top: 50%;
-          right: 20%;
+          left: 20%;
           color: rgba(white, 0.8);
           z-index: 5;
-          font-size: 20rem;
+          font-size: 18rem;
           transform: translate(-50%, -50%);
           opacity: 1;
           transition: opacity 300ms linear;
