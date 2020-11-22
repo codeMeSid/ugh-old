@@ -32,6 +32,7 @@ const BracketList = ({ brackets, errors, userHasUploadedScore, currentUser, tour
         event.recieveMessage(async (data) => {
             const { by, on, type, tournamentId: eTId } = data;
             const { ughId } = currentUser
+            if (!tournamentId) return;
             if (eTId !== tournamentId) return;
             await doRequest();
             const messagesUpdate = [...messages];
@@ -86,11 +87,13 @@ const BracketList = ({ brackets, errors, userHasUploadedScore, currentUser, tour
 
 BracketList.getInitialProps = async (ctx) => {
     const { tournamentId } = ctx.query;
-    const { data, errors } = await serverRequest(ctx, {
-        url: `/api/ugh/bracket/fetch/${tournamentId}`,
-        body: {},
-        method: "get"
-    });
+    if (tournamentId) {
+        const { data, errors } = await serverRequest(ctx, {
+            url: `/api/ugh/bracket/fetch/${tournamentId}`,
+            body: {},
+            method: "get"
+        });
+    }
     return { brackets: data?.brackets || [], userHasUploadedScore: !!data?.playerHasUploadedScore, errors: errors || [], tournamentId }
 }
 

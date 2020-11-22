@@ -38,8 +38,8 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
     return <div className="bracket__score">
         <div className="bracket__score__title">round {bracket?.round}</div>
         {(!A.hasScore && !B.hasScore && B?.ughId)
-            && <div className="bracket__score__title">
-                Round ends in <Timer dateTime={new Date(new Date(A.updateScoreBy).getTime() + TournamentTime.TournamentScoreCheckTime)} canCountdown />
+            && <div className="bracket__score__check-timer">
+                Round ends in <Timer dateTime={new Date(new Date(A.updateScoreBy).getTime() + TournamentTime.TournamentScoreCheckTime)} format={"M S"} canCountdown />
             </div>}
         <div className="bracket__score__container">
             <PlayerScoreCard

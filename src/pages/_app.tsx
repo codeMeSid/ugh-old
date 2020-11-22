@@ -19,7 +19,7 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
       <meta name="msapplication-TileColor" content="#ffc40d" />
       <meta name="theme-color" content="#ffffff" />
     </Head>
-    {!router.route.match('\/admin') && <TopNavbar currentUser={currentUser} />}
+    {!router.route.match('\/admin') && !router.route.match('\/admin') && <TopNavbar currentUser={currentUser} />}
     <Component {...pageProps} key={router.route} currentUser={currentUser} />
     {!router.route.match('\/admin') && <SponsorSlider />}
     {!router.route.match('\/admin') && <Footer />}
