@@ -37,7 +37,7 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
     // render
     return <div className="bracket__score">
         <div className="bracket__score__title">round {bracket?.round}</div>
-        {(!A.hasScore && !B.hasScore && B?.ughId)
+        {(!A.hasScore && !B.hasScore && B?.ughId && !bracket.winner)
             && <div className="bracket__score__check-timer">
                 Round ends in <Timer dateTime={new Date(new Date(A.updateScoreBy).getTime() + TournamentTime.TournamentScoreCheckTime)} format={"M S"} canCountdown />
             </div>}
@@ -72,7 +72,9 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
                     raiseDisputeBy: A.raiseDisputeBy,
                     canRaiseDispute: isPlayerB && A.hasScore && B.hasScore && !B.hasRaisedDispute && !A.hasRaisedDispute,
                     hasRaisedDispute: isBracketPlayer && B.hasRaisedDispute,
-                    canAcceptProof: isPlayerB && B.hasRaisedDispute && !!A.proof
+                    canAcceptProof: isPlayerB && B.hasRaisedDispute && !!A.proof,
+                    hasScore: B.hasScore,
+                    score: B.score
                 }}
             />
             <div className="bracket__score__container__vs">
@@ -108,7 +110,9 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
                     raiseDisputeBy: B.raiseDisputeBy,
                     canRaiseDispute: isPlayerA && A.hasScore && B.hasScore && !A.hasRaisedDispute && !B.hasRaisedDispute,
                     hasRaisedDispute: isBracketPlayer && A.hasRaisedDispute,
-                    canAcceptProof: isPlayerA && A.hasRaisedDispute && !!B.proof
+                    canAcceptProof: isPlayerA && A.hasRaisedDispute && !!B.proof,
+                    hasScore: A.hasScore,
+                    score: A.score
                 }}
             />
         </div>

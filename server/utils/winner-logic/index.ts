@@ -10,6 +10,7 @@ import { Bracket, BracketDoc } from "../../models/bracket";
 import { Tournament, TournamentDoc } from "../../models/tournament";
 import { User, UserDoc } from "../../models/user";
 import { MailerTemplate } from "../enum/mailer-template";
+import { SocketChannel } from "../enum/socket-channel";
 import { SocketEvent } from "../enum/socket-event";
 import { mailer } from "../mailer";
 import { messenger } from "../socket";
@@ -77,6 +78,14 @@ export const winnerLogic = async (
     }
 
     await session.commitTransaction();
+    if (updates) {
+      messenger?.socket.emit(SocketEvent.EventUpdate, {
+        by: "UGH",
+        tournamentId: tournament.regId,
+        type: "update",
+        channel: SocketChannel.BracketRank,
+      });
+    }
     if (
       updates &&
       updates.updatedTournament.status === TournamentStatus.Completed
@@ -85,7 +94,8 @@ export const winnerLogic = async (
       messenger?.socket.emit(SocketEvent.EventUpdate, {
         by: "UGH",
         tournamentId: tournament.regId,
-        type: "win",
+        type: "over",
+        channel: SocketChannel.BracketRank,
       });
     }
     if (updates) {
@@ -115,6 +125,7 @@ export const winnerLogic = async (
             );
         });
     }
+    console.log("winner logic transaction done");
   } catch (error) {
     console.log({ error: error.message });
     await session.abortTransaction();

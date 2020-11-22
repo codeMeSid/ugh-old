@@ -4,7 +4,6 @@ import ProgressButton from "../button/progress";
 import FileInput from "../input/file";
 import Input from "../input/input";
 import { useRequest } from "../../hooks/use-request";
-import Router from 'next/router';
 import { event } from "../../socket";
 
 const PlayerScoreCard = ({
@@ -28,6 +27,8 @@ const PlayerScoreCard = ({
     },
     opponent: {
         ughId?: string,
+        score?: number,
+        hasScore?: boolean,
         canRaiseDispute: boolean,
         raiseDisputeBy?: Date
         hasRaisedDispute: boolean,
@@ -70,7 +71,7 @@ const PlayerScoreCard = ({
     // // methods 
     const onChangeHandler = (name, val) => {
         switch (name) {
-            case "score": setRank(parseInt(val || 0));
+            case "score": setRank(parseInt(val));
             case "proof": setProof(val)
         }
     }
@@ -156,8 +157,16 @@ const PlayerScoreCard = ({
                         </div>
                     }
                     {team.canUploadScore && <div style={{ margin: "1rem 0" }}>
-                        <DialogButton disabled={!enableScoreUpload} title={enableScoreUpload ? "Update Score" : scoreTimer} style={{ position: "fixed" }} onAction={addScoreHandler} fullButton>
+                        <DialogButton disabled={!enableScoreUpload} title={enableScoreUpload ? "Update Score" : scoreTimer ? scoreTimer : "Waiting For Opponent..."} style={{ position: "fixed" }} onAction={async () => {
+                            await addScoreHandler()
+                            if (opponent.hasScore && rank === opponent.score) {
+                                raiseDisputeHandler()
+                            }
+                        }} fullButton>
                             <Input placeholder="score" name="score" value={rank} type="number" onChange={onChangeHandler} />
+                            {(opponent.hasScore && opponent.score === rank) && <div style={{ fontSize: 16, color: "red" }}>
+                                *If both teams have same score, dispute will be raised.
+                                </div>}
                         </DialogButton>
                     </div>}
                     {opponent.canRaiseDispute && <>

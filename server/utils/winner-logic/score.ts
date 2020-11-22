@@ -32,7 +32,11 @@ export const scoreLogger = async (
     //////////////////////////////////
     //////////////////////////////////
     // IF THE CHECK TIMER IS TRIGGERED THEN TAKE AN EMPTY WAITING BRACKET AND SHIFT TO NEXT/NEW BRACKET
-    if (splBracket.teamA.score === -1 && splBracket.teamB.score === -1) {
+    if (
+      splBracket.teamA.score === -1 &&
+      splBracket.teamB.score === -1 &&
+      !splBracket.winner
+    ) {
       console.log("score not uploaded");
       const bracketIndex = brackets.findIndex(
         (b) => b.regId === splBracket.regId

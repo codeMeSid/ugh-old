@@ -22,7 +22,6 @@ const BracketList = ({ brackets, errors, userHasUploadedScore, currentUser, tour
         body: {},
         method: "get",
         onSuccess: (data) => {
-            console.log(data);
             setMatches(data?.brackets || []);
             setUploadedScore(!!data?.playerHasUploadedScore);
         },
@@ -51,9 +50,13 @@ const BracketList = ({ brackets, errors, userHasUploadedScore, currentUser, tour
                 case "accept":
                     messagesUpdate.push({ message: `${mBy} accepted proof and lost dispute`, type: "success" });
                     break;
-                case "win":
+                case "over":
                     messagesUpdate.push({ message: `tournament over`, type: "success" });
                     break;
+                case "update":
+                    messagesUpdate.push({ message: `tournament updates`, type: "success" });
+                    break;
+
             }
             setMessages(messagesUpdate);
         });
@@ -95,7 +98,7 @@ BracketList.getInitialProps = async (ctx) => {
         });
         return { brackets: data?.brackets || [], userHasUploadedScore: !!data?.playerHasUploadedScore, errors: errors || [], tournamentId }
     }
-    return {errors:[{message:"Something went wrong, Save yourself!!!"}]};
+    return { errors: [{ message: "Something went wrong, Save yourself!!!" }] };
 }
 
 export default BracketList;
