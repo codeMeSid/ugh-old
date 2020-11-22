@@ -13,7 +13,7 @@ const Footer = () => {
                 <div style={{ marginBottom: ".4rem" }}>Follow Us</div>
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <div style={{ marginRight: 5 }}>
-                        <SocialButton href="https://www.facebook.com/ultimategamershub/" target="_blank" size="icon" type="facebook" />
+                        <SocialButton href="https://www.facebook.com/gamingugh/" target="_blank" size="icon" type="facebook" />
                     </div>
                     <div style={{ marginRight: 5 }}>
                         <SocialButton href="https://twitter.com/ultimat79668532?s=11" target="_blank" size="icon" type="twitter" />
