@@ -12,7 +12,6 @@ class Messenger {
   init(server: Server) {
     this.io = SocketIo(server);
     this.io.on("connect", (socket) => {
-      successlog("Socket has joined");
       this.socket = socket;
       this.socket.join(["admin", "match", "user", "bracket-rank"]);
       this.socket.on(SocketEvent.EventSend, (data) => {
@@ -24,6 +23,7 @@ class Messenger {
       });
     });
   }
+  
   async saveMessage(data: SocketMessage) {
     const { channel, createdAt, from, text, to } = data;
     let convo: ConversationDoc;

@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
+import { useRequest } from "../hooks/use-request";
 import Button from "./button/main";
 
-const WallpaperSlider = ({ wallpapers }: { wallpapers: Array<any> }) => {
+const WallpaperSlider = () => {
     const [progress, setProgress] = useState(0);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [wallpapers, setWallpapers] = useState([]);
+
+    const { doRequest } = useRequest({ url: "/api/ugh/settings/fetch/wallpapers", body: {}, method: "get", onSuccess: (data) => setWallpapers(data || []) })
 
     useEffect(() => {
+        doRequest();
         return () => clearTimeout();
     }, []);
 

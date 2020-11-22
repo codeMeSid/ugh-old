@@ -8,11 +8,11 @@ import MessengerList from "../components/messenger";
 
 const Logo = require("../public/asset/logo-icon.png");
 
-const LandingPage = ({ matches, wallpapers, errors, currentUser }) => {
+const LandingPage = ({ matches, errors, currentUser }) => {
 
     return <MainLayout messages={errors} isFullscreen>
         <div className="landingpage" style={{ minHeight: "100vh", backgroundColor: "black" }}>
-            <WallpaperSlider wallpapers={wallpapers} />
+            <WallpaperSlider/>
             <NewsTab />
             <TournamentTab matches={matches} />
         </div>
@@ -25,7 +25,6 @@ const LandingPage = ({ matches, wallpapers, errors, currentUser }) => {
 
 LandingPage.getInitialProps = async (ctx) => {
     const { data: tournaments, errors: errorsA }: { data: Array<TournamentDoc>, errors: Array<any> } = await serverRequest(ctx, { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
-    const { data: wallpapers, errors: errorsB } = await serverRequest(ctx, { url: "/api/ugh/settings/fetch/wallpapers", body: {}, method: "get" });
     const matches = {
         upcoming: [],
         started: [],
@@ -37,11 +36,9 @@ LandingPage.getInitialProps = async (ctx) => {
 
     const errors = [];
     if (errorsA) errors.push(...errorsA);
-    if (errorsB) errors.push(...errorsB)
 
     return {
         matches,
-        wallpapers: wallpapers || [],
         errors
     };
 
