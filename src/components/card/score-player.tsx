@@ -157,7 +157,7 @@ const PlayerScoreCard = ({
                         </div>
                     }
                     {team.canUploadScore && <div style={{ margin: "1rem 0" }}>
-                        <DialogButton disabled={!enableScoreUpload} title={enableScoreUpload ? "Update Score" : scoreTimer ? scoreTimer : "Waiting For Opponent..."} style={{ position: "fixed" }} onAction={async () => {
+                        <DialogButton disabled={!enableScoreUpload} title={enableScoreUpload ? "Update Score" : scoreTimer ? scoreTimer : "Waiting..."} style={{ position: "fixed" }} onAction={async () => {
                             await addScoreHandler()
                             if (opponent.hasScore && rank === opponent.score) {
                                 raiseDisputeHandler()
