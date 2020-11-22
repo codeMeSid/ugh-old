@@ -73,7 +73,7 @@ export const addScoreController = async (req: Request, res: Response) => {
           await bracket.save({ session });
           await session.commitTransaction();
         } catch (error) {
-          console.log({ error: error.message });
+          console.log({ msg: "add score player A", error: error.message });
           await session.abortTransaction();
         }
         session.endSession();
@@ -104,7 +104,7 @@ export const addScoreController = async (req: Request, res: Response) => {
           await bracket.save({ session });
           await session.commitTransaction();
         } catch (error) {
-          console.log({ error: error.message });
+          console.log({ msg: "add score player B", error: error.message });
           await session.abortTransaction();
         }
         session.endSession();

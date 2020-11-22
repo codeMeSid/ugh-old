@@ -14,13 +14,13 @@ export const scoreLogger = async (
   splBracket: BracketDoc,
   users: UserDoc[]
 ) => {
-  console.log("score");
+  
   const newBrackets: Array<any> = [];
   const requiredBracketCount = tournament.players.length - 1;
   const canCreateBracket = requiredBracketCount > brackets.length;
 
   if (splBracket && splBracket.winner !== DQ.ScoreNotUploaded) {
-    console.log("spl bracket");
+    
     const nextBracketIndex = brackets.findIndex(
       (b) => b.round === splBracket.round + 1 && !b.teamB.user
     );
@@ -37,7 +37,7 @@ export const scoreLogger = async (
       splBracket.teamB.score === -1 &&
       !splBracket.winner
     ) {
-      console.log("score not uploaded");
+      
       const bracketIndex = brackets.findIndex(
         (b) => b.regId === splBracket.regId
       );
@@ -65,7 +65,7 @@ export const scoreLogger = async (
           );
 
           if (newNextBracketIndex !== -1) {
-            console.log("jump to next bracket");
+            
             const uploadBy = new Date(
               Date.now() + TournamentTime.TournamentScoreUpdateTime
             );
@@ -103,7 +103,7 @@ export const scoreLogger = async (
               }
             );
           } else if (canCreateBracket) {
-            console.log("can create and jump to next bracket");
+            
             const regId = randomBytes(4).toString("hex").substr(0, 5);
             const newBracket = Bracket.build({
               gameType: emptyBracket.gameType,
@@ -133,7 +133,7 @@ export const scoreLogger = async (
       //////////////////////////////////
       //////////////////////////////////
     } else if (nextBracketIndex !== -1) {
-      console.log("next bracket");
+      
       const uploadBy = new Date(
         Date.now() + TournamentTime.TournamentScoreUpdateTime
       );
@@ -170,7 +170,7 @@ export const scoreLogger = async (
         }
       );
     } else if (canCreateBracket) {
-      console.log("new bracket");
+      
       const regId = randomBytes(4).toString("hex").substr(0, 5);
       const newBracket = Bracket.build({
         gameType: splBracket.gameType,
@@ -188,7 +188,7 @@ export const scoreLogger = async (
       tournament.brackets.push(newBracket);
       newBrackets.push(newBracket);
     } else {
-      console.log("winner declaration");
+      
       const sortedBrackets = brackets.sort((a, b) => b.round - a.round);
       const winnerBracket = sortedBrackets[0];
       const winnerCoins = prizeDistribution(
@@ -246,7 +246,7 @@ export const scoreLogger = async (
       tournament.status = TournamentStatus.Completed;
     }
   } else if (!splBracket) {
-    console.log("tournament over");
+    
     const unresolvedDispute = brackets.filter(
       (b) => (b.teamA.hasRaisedDispute || b.teamB.hasRaisedDispute) && !b.winner
     );
@@ -282,7 +282,7 @@ export const scoreLogger = async (
       else if (dB && !uuA) bWinner = users[userBIndex].ughId;
 
       brackets[bIndex].winner = bWinner;
-      console.log("score stack enter");
+      
       let {
         updateUsers,
         updatedBrackets,
@@ -293,10 +293,10 @@ export const scoreLogger = async (
       brackets = updatedBrackets;
       tournament = updatedTournament;
       if (nBs.length >= 1) newBrackets.push(...nBs);
-      console.log("score stack leave");
+      
     }
   }
-  console.log("leave score");
+  
   return {
     updatedTournament: tournament,
     updatedBrackets: brackets,

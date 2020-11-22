@@ -69,7 +69,7 @@ const SignUp = ({ ughIds, errors }) => {
             }
             setUser(socialUser);
         } catch (error) {
-            console.log({ error })
+            console.log({ msg: "signup", error: error.message })
         }
     }
 

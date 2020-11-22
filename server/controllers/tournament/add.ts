@@ -244,53 +244,55 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     //////////////////////////////////////////////////////
     //////////////////////////////////////////////////////
 
-    // timer.schedule(
-    //   `${tournament.regId}-check`,
-    // new Date(new Date(startDateTime).valueOf() - TournamentTime.TournamentCancelTime),
-    //   async ({ id }: { id: string }) => {
-    //     const session = await mongoose.startSession();
-    //     await session.startTransaction();
-    //     try {
-    //       const tournament = await Tournament.findById(id)
-    //         .populate("game", "cutoff", "Games")
-    //         .session(session);
-    //       if (!tournament) return;
-    //       const attendance =
-    //         ((tournament.players.length * tournament.group.participants) /
-    //           tournament.playerCount) *
-    //         100;
-    //       if (
-    //         tournament.status === TournamentStatus.Upcoming &&
-    //         attendance < tournament.game.cutoff
-    //       ) {
-    //         tournament.set({ status: TournamentStatus.Completed });
-    //         const users = await User.find({
-    //           _id: {
-    //             $in: tournament.players.map((playerId) => playerId),
-    //           },
-    //         }).session(session);
-    //         users.map(async (user) => {
-    //           user.set({
-    //             "wallet.coins": user.wallet.coins + tournament.coins,
-    //             tournaments: user.tournaments.filter(
-    //               (tId) => JSON.stringify(tId) === JSON.stringify(tournament.id)
-    //             ),
-    //           });
-    //           await user.save({ session });
-    //         });
-    //         await tournament.save({ session });
-    //         await session.commitTransaction();
-    //         timer.cancel(id);
-    //         timer.cancel(`${id}-end`);
-    //       }
-    //     } catch (error) {
-    //       console.log({ m: "start-15", error: error.message });
-    //       await session.abortTransaction();
-    //     }
-    //     session.endSession();
-    //   },
-    //   { id: tournament.id }
-    // );
+    timer.schedule(
+      `${tournament.regId}-check`,
+      new Date(
+        new Date(startDateTime).valueOf() - TournamentTime.TournamentCancelTime
+      ),
+      async ({ id }: { id: string }) => {
+        const session = await mongoose.startSession();
+        session.startTransaction();
+        try {
+          const tournament = await Tournament.findById(id)
+            .populate("game", "cutoff", "Games")
+            .session(session);
+          if (!tournament) return;
+          const attendance =
+            ((tournament.players.length * tournament.group.participants) /
+              tournament.playerCount) *
+            100;
+          if (
+            tournament.status === TournamentStatus.Upcoming &&
+            attendance < tournament.game.cutoff
+          ) {
+            tournament.set({ status: TournamentStatus.Completed });
+            const users = await User.find({
+              _id: {
+                $in: tournament.players.map((playerId) => playerId),
+              },
+            }).session(session);
+            users.map(async (user) => {
+              user.set({
+                "wallet.coins": user.wallet.coins + tournament.coins,
+                tournaments: user.tournaments.filter(
+                  (tId) => JSON.stringify(tId) === JSON.stringify(tournament.id)
+                ),
+              });
+              await user.save({ session });
+            });
+            await tournament.save({ session });
+            await session.commitTransaction();
+            timer.cancel(id);
+            timer.cancel(`${id}-end`);
+          }
+        } catch (error) {
+          console.log({ m: "start-15", error: error.message });
+          await session.abortTransaction();
+        }
+        session.endSession();
+      },
+      { id: tournament.id }
+    );
     //////////////////////////////////////////////////////
     //////////////////////////////////////////////////////
     //////////////////////////////////////////////////////

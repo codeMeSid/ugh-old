@@ -40,7 +40,7 @@ export const raiseDisputeController = async (req: Request, res: Response) => {
     );
     timer.cancel(bracketId);
   } catch (error) {
-    console.log({ message: error.message });
+    console.log({ msg: "rank raise dispute", message: error.message });
     await session.abortTransaction();
     session.endSession();
     throw new BadRequestError(error.message);

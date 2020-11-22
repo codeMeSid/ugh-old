@@ -67,7 +67,7 @@ export const acceptProofController = async (req: Request, res: Response) => {
     if (bracketB) await bracketB.save({ session });
     await session.commitTransaction();
   } catch (error) {
-    console.log({ error: error.message });
+    console.log({ msg: "rank accept proof", error: error.message });
     await session.abortTransaction();
   }
   session.endSession();

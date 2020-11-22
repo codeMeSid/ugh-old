@@ -10,7 +10,7 @@ export const rankLogger = async (
   brackets: BracketDoc[],
   users: UserDoc[]
 ) => {
-  console.log("rank");
+  
   const bracketWinnersCount = brackets.filter((b) => b.winner).length;
   const unresolvedDisputeCount = brackets.filter(
     (b) => b.teamB.hasRaisedDispute && !b.winner
@@ -72,7 +72,7 @@ export const rankLogger = async (
   });
   tournament.status = TournamentStatus.Completed;
 
-  console.log("leave rank");
+  
   return {
     updatedTournament: tournament,
     updatedBrackets: brackets,
@@ -93,7 +93,7 @@ export const rankLogger = async (
 //   brackets: BracketDoc[],
 //   users: UserDoc[]
 // ) => {
-//   console.log("enter rank");
+//   
 //   const bracketWinnersCount = brackets.filter((b) => b.winner).length;
 //   const unresolvedDisputeCount = brackets.filter(
 //     (b) => b.teamB.hasRaisedDispute && !b.winner
@@ -102,7 +102,7 @@ export const rankLogger = async (
 //   const tournamentEndDateTime = new Date(tournament.endDateTime).getTime();
 //   // check if disputes are yet to be resolved
 //   if (unresolvedDisputeCount >= 1) {
-//     console.log("rank dispute pending");
+//     
 //     return;
 //   }
 //   // check if match is over or if all the players have uploaded scores
@@ -116,7 +116,7 @@ export const rankLogger = async (
 //       return b;
 //     });
 //   } else {
-//     console.log("Match pending");
+//     
 //     return;
 //   }
 //   // filter out all the winners
@@ -153,7 +153,7 @@ export const rankLogger = async (
 //     };
 //   });
 //   tournament.status = TournamentStatus.Completed;
-//   console.log("leave rank");
+//   
 //   return {
 //     updatedTournament: tournament,
 //     updatedBrackets: brackets,

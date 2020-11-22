@@ -22,7 +22,6 @@ export const winnerLogic = async (
   bracketId?: string,
   message?: string
 ) => {
-  console.log({ message });
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
@@ -36,10 +35,8 @@ export const winnerLogic = async (
       infolog(tournamentId);
       return;
     }
-    if (tournament.winners.length >= 1) {
-      console.log("tournament already has winner");
-      return;
-    }
+    if (tournament.winners.length >= 1) return;
+
     const users = await User.find({ _id: { $in: tournament.players } }).session(
       session
     );
@@ -49,10 +46,8 @@ export const winnerLogic = async (
     const bracket = await Bracket.findOne({ regId: bracketId }).session(
       session
     );
-    if (brackets.length === 0) {
-      console.log("No Brackets");
-      return;
-    }
+    if (brackets.length === 0) return;
+
     let updates: {
       updatedTournament: TournamentDoc;
       updatedBrackets: Array<BracketDoc>;
@@ -129,11 +124,9 @@ export const winnerLogic = async (
             );
         });
     }
-    console.log("winner logic transaction done");
   } catch (error) {
-    console.log({ error: error.message });
+    console.log({ msg: "winner logic", error: error.message });
     await session.abortTransaction();
   }
-  console.log("leave winner logic");
   session.endSession();
 };
