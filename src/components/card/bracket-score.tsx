@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { BracketDoc } from "../../../server/models/bracket";
 import { DQ } from "../../../server/utils/enum/dq";
+import { TournamentTime } from "../../../server/utils/enum/tournament-time";
+import Timer from "../timer";
 
 import PlayerScoreCard from "./score-player";
 const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
@@ -12,7 +14,6 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
     const A = {
         profilePic: bracket.teamA.user?.uploadUrl,
         ughId: bracket.teamA.user?.ughId,
-        //isBracketPlayer && 
         hasScore: bracket.teamA.score >= 0,
         score: bracket.teamA.score,
         updateScoreBy: bracket.teamA.uploadBy,
@@ -24,7 +25,6 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
     const B = {
         profilePic: bracket.teamB.user?.uploadUrl,
         ughId: bracket.teamB.user?.ughId,
-        // isBracketPlayer &&
         hasScore: bracket.teamB.score >= 0,
         score: bracket.teamB.score,
         updateScoreBy: bracket.teamB.uploadBy,
@@ -37,6 +37,10 @@ const BracketScoreCard = ({ currentUser, bracket, tournamentId, onError }
     // render
     return <div className="bracket__score">
         <div className="bracket__score__title">round {bracket?.round}</div>
+        {(!A.hasScore && !B.hasScore && B?.ughId)
+            && <div className="bracket__score__title">
+                Round ends in <Timer dateTime={new Date(new Date(A.updateScoreBy).getTime() + TournamentTime.TournamentScoreCheckTime)} canCountdown />
+            </div>}
         <div className="bracket__score__container">
             <PlayerScoreCard
                 tournamentId={tournamentId}

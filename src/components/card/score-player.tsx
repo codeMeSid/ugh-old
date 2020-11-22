@@ -120,77 +120,77 @@ const PlayerScoreCard = ({
         onError: bracket.onError,
         onSuccess: () => event.bracketRankUpdate({ by: player?.ughId, on: opponent?.ughId, tournamentId, type: "dispute" })
     });
-    return <>
-        <div className="bracket__score__player">
-            <div className="bracket__score__image" style={{ backgroundImage: `url(${player.profilePic})` }} />
-            <div className="bracket__score__name">
-                <div>{player.ughId}</div>
-            </div>
-            {team.hasScore && <div className="bracket__score__value">
-                <span className="bracket__score__value--text">score</span>
-                <span className="bracket__score__value--number">{team.score}</span>
-            </div>
-            }
-            {
-                bracket.hasWinner
-                    ? <div className={`bracket__score__winner bracket__score__winner--${team.isWinner ? "winner" : "lost"}`}>
-                        {team.isWinner ? "WON" : "LOST"}
-                    </div>
-                    : <>
-                        {
-                            bracket.wasDisputeRaised && <div style={{
-                                fontSize: "1.6rem",
-                                textAlign: "center",
-                                wordBreak: "break-all",
-                                textTransform: "capitalize",
-                                color: "white",
-                                margin: ".5rem 0"
-                            }}>
-                                <div>{opponent.hasRaisedDispute && "dispute was raised"}</div>
-                            </div>
-                        }
-                        {
-                            team.canUploadProof && <div>
-                                <DialogButton title="Upload Proof" style={{ position: "fixed" }} onAction={addProofHandler} fullButton>
-                                    <FileInput name="proof" placeholder="upload proof" onChange={onChangeHandler} showImage />
-                                </DialogButton>
-                            </div>
-                        }
-                        {team.canUploadScore && <div style={{ margin: "1rem 0" }}>
-                            <DialogButton disabled={!enableScoreUpload} title={enableScoreUpload ? "Update Score" : scoreTimer} style={{ position: "fixed" }} onAction={addScoreHandler} fullButton>
-                                <Input placeholder="score" name="score" value={rank} type="number" onChange={onChangeHandler} />
-                            </DialogButton>
-                        </div>}
-                        {opponent.canRaiseDispute && <>
-                            {enableDisputeRaise && <div className="bracket__score__timer">{disputeTimer} to</div>}
-                            <ProgressButton disabled={!enableDisputeRaise} text="Raise Dispute" type="github" style={{ width: "100%" }} onPress={async (_, next) => {
-                                await raiseDisputeHandler();
-                                next();
-                            }} />
-                        </>}
-                        {
-                            team.hasProof && <>
-                                <div className="bracket__score__proof">
-                                    <a href={team.proof} className="bracket__score__proof--image" target="_blank">
-                                        <img src={team.proof} alt="UGH PROOF" />
-                                    </a>
-                                    <a href={team.proof} className="bracket__score__proof--title">click to view</a>
-                                </div>
-                                {
-                                    opponent.canAcceptProof && <div className="bracket__score__accept">
-                                        <div >
-                                            <ProgressButton text="Accept" type="link" style={{ width: "100%" }} onPress={async (_, next) => {
-                                                await acceptProofHandler();
-                                                next();
-                                            }} />
-                                        </div>
-                                    </div>
-                                }
-                            </>}
-                    </>
-            }
-
+    return <div className={`bracket__score__player ${bracket.hasWinner ? team.isWinner ? "winner" : "lost" : ""}`}>
+        <div className="bracket__score__image" style={{ backgroundImage: `url(${player.profilePic})` }} />
+        <div className="bracket__score__name">
+            <div>{player.ughId}</div>
         </div>
-    </>
+        {team.hasScore && <div className="bracket__score__value">
+            <span className="bracket__score__value--text">score</span>
+            <span className="bracket__score__value--number">{team.score}</span>
+        </div>
+        }
+        {
+            bracket.hasWinner
+                //  bracket__score__winner--${team.isWinner ? "winner" : "lost"}
+                ? <div className="bracket__score__winner">
+                    {team.isWinner ? "WON" : "LOST"}
+                </div>
+                : <>
+                    {
+                        bracket.wasDisputeRaised && <div style={{
+                            fontSize: "1.6rem",
+                            textAlign: "center",
+                            wordBreak: "break-all",
+                            textTransform: "capitalize",
+                            color: "white",
+                            margin: ".5rem 0"
+                        }}>
+                            <div>{opponent.hasRaisedDispute && "dispute was raised"}</div>
+                        </div>
+                    }
+                    {
+                        team.canUploadProof && <div>
+                            <DialogButton title="Upload Proof" style={{ position: "fixed" }} onAction={addProofHandler} fullButton>
+                                <FileInput name="proof" placeholder="upload proof" onChange={onChangeHandler} showImage />
+                            </DialogButton>
+                        </div>
+                    }
+                    {team.canUploadScore && <div style={{ margin: "1rem 0" }}>
+                        <DialogButton disabled={!enableScoreUpload} title={enableScoreUpload ? "Update Score" : scoreTimer} style={{ position: "fixed" }} onAction={addScoreHandler} fullButton>
+                            <Input placeholder="score" name="score" value={rank} type="number" onChange={onChangeHandler} />
+                        </DialogButton>
+                    </div>}
+                    {opponent.canRaiseDispute && <>
+                        {enableDisputeRaise && <div className="bracket__score__timer">{disputeTimer} to</div>}
+                        <ProgressButton disabled={!enableDisputeRaise} text="Raise Dispute" type="github" style={{ width: "100%" }} onPress={async (_, next) => {
+                            await raiseDisputeHandler();
+                            next();
+                        }} />
+                    </>}
+                    {
+                        team.hasProof && <>
+                            <div className="bracket__score__proof">
+                                <a href={team.proof} className="bracket__score__proof--image" target="_blank">
+                                    <img src={team.proof} alt="UGH PROOF" />
+                                </a>
+                                <a href={team.proof} className="bracket__score__proof--title">click to view</a>
+                            </div>
+                            {
+                                opponent.canAcceptProof && <div className="bracket__score__accept">
+                                    <div >
+                                        <ProgressButton text="Accept" type="link" style={{ width: "100%" }} onPress={async (_, next) => {
+                                            await acceptProofHandler();
+                                            next();
+                                        }} />
+                                    </div>
+                                </div>
+                            }
+                        </>}
+                </>
+        }
+
+    </div>
+
 }
 export default PlayerScoreCard;

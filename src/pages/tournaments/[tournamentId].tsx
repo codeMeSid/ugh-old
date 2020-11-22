@@ -64,7 +64,7 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
         else if (currentUser && tournament?.status === "upcoming" && userHasJoined)
             return <Button text="Joined" type="facebook" size="small" />
 
-        else if (currentUser && tournament?.status === "started" && userHasJoined) return <Link href={`/game/${tournament?.regId}`}>
+        else if (currentUser && tournament?.status === "started" && userHasJoined && tournament?.regId) return <Link href={`/game/${tournament?.regId}`}>
             <a>
                 <Button text="Play" type="link" size="small" />
             </a>

@@ -41,82 +41,84 @@ export const scoreLogger = async (
       const emptyBracketIndex = brackets.findIndex(
         (b) => b.round === splBracket.round + 1 && !b.teamB.user
       );
-
-      if (emptyBracketIndex === -1) return;
-
-      const emptyBracket = brackets[emptyBracketIndex];
-      const emptyUserIndex = users.findIndex(
-        (u) => JSON.stringify(emptyBracket.teamA.user) === JSON.stringify(u.id)
-      );
-      brackets[emptyBracketIndex].winner = users[emptyUserIndex]?.ughId;
-      //////////////////////////////////
-      //////////////////////////////////
-      //////////////////////////////////
-      //////////////////////////////////
-      //////////////////////////////////
-      //////////////////////////////////
-
-      if (emptyBracket) {
-        const newNextBracketIndex = brackets.findIndex(
-          (b) => b.round === emptyBracket.round + 1 && !b.teamB.user
+      if (emptyBracketIndex !== -1) {
+        const emptyBracket = brackets[emptyBracketIndex];
+        const emptyUserIndex = users.findIndex(
+          (u) =>
+            JSON.stringify(emptyBracket.teamA.user) === JSON.stringify(u.id)
         );
+        brackets[emptyBracketIndex].winner = users[emptyUserIndex]?.ughId;
+        //////////////////////////////////
+        //////////////////////////////////
+        //////////////////////////////////
+        //////////////////////////////////
+        //////////////////////////////////
+        //////////////////////////////////
 
-        if (newNextBracketIndex !== -1) {
-          console.log("jump to next bracket");
-          const uploadBy = new Date(
-            Date.now() + TournamentTime.TournamentScoreUpdateTime
+        if (emptyBracket) {
+          const newNextBracketIndex = brackets.findIndex(
+            (b) => b.round === emptyBracket.round + 1 && !b.teamB.user
           );
-          brackets[newNextBracketIndex].teamB = {
-            user: emptyBracket.teamA.user,
-            uploadBy,
-            hasRaisedDispute: false,
-            score: -1,
-            updateBy: undefined,
-            uploadUrl: "",
-          };
-          brackets[newNextBracketIndex].teamA.uploadBy = uploadBy;
-          const bracketCheckTimer = new Date(
-            new Date(uploadBy).getTime() +
-              TournamentTime.TournamentScoreCheckTime
-          );
-          timer.schedule(
-            `${brackets[newNextBracketIndex].regId}-check`,
-            bracketCheckTimer,
-            async ({ regId, tournamentId }) => {
-              const bracket = await Bracket.findOne({ regId });
-              if (!bracket) return;
-              const {
-                teamA: { score: sA },
-                teamB: { score: sB },
-                winner,
-              } = bracket;
-              if (winner) return;
-              if (sA !== -1 || sB !== -1) return;
-              winnerLogic(tournamentId, regId, "score check timer");
-            },
-            {
-              regId: brackets[newNextBracketIndex].regId,
-              tournamentId: tournament.regId,
-            }
-          );
-        } else if (canCreateBracket) {
-          console.log("can create and jump to next bracket");
-          const regId = randomBytes(4).toString("hex").substr(0, 5);
-          const newBracket = Bracket.build({
-            gameType: splBracket.gameType,
-            regId,
-            round: splBracket.round + 1,
-            teamA: {
+
+          if (newNextBracketIndex !== -1) {
+            console.log("jump to next bracket");
+            const uploadBy = new Date(
+              Date.now() + TournamentTime.TournamentScoreUpdateTime
+            );
+            brackets[newNextBracketIndex].teamB = {
               user: emptyBracket.teamA.user,
+              uploadBy,
+              hasRaisedDispute: false,
               score: -1,
-            },
-            teamB: {
-              user: undefined,
-              score: -1,
-            },
-          });
-          tournament.brackets.push(newBracket);
-          newBrackets.push(newBracket);
+              updateBy: undefined,
+              uploadUrl: "",
+            };
+            brackets[newNextBracketIndex].teamA.uploadBy = uploadBy;
+            const bracketCheckTimer = new Date(
+              new Date(uploadBy).getTime() +
+                TournamentTime.TournamentScoreCheckTime
+            );
+            timer.schedule(
+              `${brackets[newNextBracketIndex].regId}-check`,
+              bracketCheckTimer,
+              async ({ regId, tournamentId }) => {
+                const bracket = await Bracket.findOne({ regId });
+                if (!bracket) return;
+                const {
+                  teamA: { score: sA },
+                  teamB: { score: sB },
+                  winner,
+                } = bracket;
+                if (winner) return;
+                if (sA !== -1 || sB !== -1) return;
+                winnerLogic(tournamentId, regId, "score check timer");
+              },
+              {
+                regId: brackets[newNextBracketIndex].regId,
+                tournamentId: tournament.regId,
+              }
+            );
+          } else if (canCreateBracket) {
+            console.log("can create and jump to next bracket");
+            const regId = randomBytes(4).toString("hex").substr(0, 5);
+            const newBracket = Bracket.build({
+              gameType: emptyBracket.gameType,
+              regId,
+              round: emptyBracket.round + 1,
+              teamA: {
+                user: emptyBracket.teamA.user,
+                score: -1,
+              },
+              teamB: {
+                user: undefined,
+                score: -1,
+              },
+            });
+            tournament.brackets.push(newBracket);
+            newBrackets.push(newBracket);
+          } else {
+            brackets[emptyBracketIndex].winner = undefined;
+          }
         }
       }
       //////////////////////////////////

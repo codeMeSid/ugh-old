@@ -50,6 +50,7 @@ export const addScoreController = async (req: Request, res: Response) => {
     }
   }
   await bracket.save();
+  timer.cancel(`${bracket.regId}-check`);
   if (isPlayerA) {
     timer.schedule(
       `${bracketId}-A`,
