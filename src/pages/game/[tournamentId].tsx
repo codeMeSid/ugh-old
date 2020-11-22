@@ -93,8 +93,9 @@ BracketList.getInitialProps = async (ctx) => {
             body: {},
             method: "get"
         });
+        return { brackets: data?.brackets || [], userHasUploadedScore: !!data?.playerHasUploadedScore, errors: errors || [], tournamentId }
     }
-    return { brackets: data?.brackets || [], userHasUploadedScore: !!data?.playerHasUploadedScore, errors: errors || [], tournamentId }
+    return {errors:[{message:"Something went wrong, Save yourself!!!"}]};
 }
 
 export default BracketList;

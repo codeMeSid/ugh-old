@@ -120,7 +120,7 @@ const PlayerScoreCard = ({
         onError: bracket.onError,
         onSuccess: () => event.bracketRankUpdate({ by: player?.ughId, on: opponent?.ughId, tournamentId, type: "dispute" })
     });
-    return <div className={`bracket__score__player ${bracket.hasWinner ? team.isWinner ? "winner" : "lost" : ""}`}>
+    return <div className="bracket__score__player">
         <div className="bracket__score__image" style={{ backgroundImage: `url(${player.profilePic})` }} />
         <div className="bracket__score__name">
             <div>{player.ughId}</div>
@@ -132,8 +132,7 @@ const PlayerScoreCard = ({
         }
         {
             bracket.hasWinner
-                //  bracket__score__winner--${team.isWinner ? "winner" : "lost"}
-                ? <div className="bracket__score__winner">
+                ? <div className={`bracket__score__winner bracket__score__winner--${team.isWinner ? "winner" : "lost"}`}>
                     {team.isWinner ? "WON" : "LOST"}
                 </div>
                 : <>
