@@ -13,19 +13,20 @@ class Fire {
     this.signout = this.signout.bind(this);
     this.init = this.init.bind(this);
     this.fireObj = this.init();
+    this.fireObj.analytics();
   }
 
   private init() {
     return Firebase.initializeApp(
       {
-        apiKey: "AIzaSyCxksOeCkOF1QM8UOc-TCMB_il7CUoPt0Y",
-        authDomain: "ultimategamershub-c1992.firebaseapp.com",
-        databaseURL: "https://ultimategamershub-c1992.firebaseio.com",
-        projectId: "ultimategamershub-c1992",
-        storageBucket: "ultimategamershub-c1992.appspot.com",
-        messagingSenderId: "134891589765",
-        appId: "1:134891589765:web:ce9a1c372f91dd9c6c99ec",
-        measurementId: "G-1SQB81XMRW",
+        apiKey: "AIzaSyCSXN_s65RoG7CtnHCexpZ_UQkBvkN8OEA",
+        authDomain: "ultimategamershub.firebaseapp.com",
+        databaseURL: "https://ultimategamershub.firebaseio.com",
+        projectId: "ultimategamershub",
+        storageBucket: "ultimategamershub.appspot.com",
+        messagingSenderId: "286356059040",
+        appId: "1:286356059040:web:ab0ca6afd29f31ff65aac5",
+        measurementId: "G-MB4E67PEG4",
       },
       Math.random().toString()
     );
