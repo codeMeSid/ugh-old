@@ -13,7 +13,6 @@ class Fire {
     this.signout = this.signout.bind(this);
     this.init = this.init.bind(this);
     this.fireObj = this.init();
-    this.fireObj.analytics();
   }
 
   private init() {
