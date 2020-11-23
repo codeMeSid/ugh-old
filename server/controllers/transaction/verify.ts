@@ -5,11 +5,9 @@ import {
   BadRequestError,
   paymentHandler,
   TransactionTypes,
-  infolog,
 } from "@monsid/ugh";
 import { Transaction } from "../../models/transaction";
 import { Coin } from "../../models/coin";
-import { info } from "console";
 
 export const transactionVerifyController = async (
   req: Request,

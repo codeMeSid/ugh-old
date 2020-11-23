@@ -39,7 +39,7 @@ const BracketList = ({ brackets, errors, userHasUploadedScore, currentUser, tour
             const mBy = by === ughId ? "you" : by;
             switch (type) {
                 case "score":
-                    messagesUpdate.push({ message: `${mBy} updated rank`, type: "success" });
+                    messagesUpdate.push({ message: `${mBy} updated ${brackets[0]?.gameType}`, type: "success" });
                     break;
                 case "dispute":
                     messagesUpdate.push({ message: `${mBy} raised dispute on ${mOn}`, type: "success" });

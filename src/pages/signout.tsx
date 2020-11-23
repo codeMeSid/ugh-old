@@ -5,7 +5,7 @@ import { useRequest } from "../hooks/use-request"
 
 const SignoutImg = require("../public/asset/about-bg.jpg");
 
-export default () => {
+const SignoutPage = () => {
 
     const { doRequest } = useRequest({
         url: "/api/ugh/user/signout",
@@ -35,3 +35,5 @@ export default () => {
         </div>
     </MainLayout>
 }
+
+export default SignoutPage

@@ -147,6 +147,12 @@ const AddTournament = ({ games, consoles, errors }:
             </div>
             <div className="row">
                 <ProgressButton size="large" text="Submit" type="whatsapp" onPress={async (_, next) => {
+                    if (games[gameIndex].gameType === "score" && games[gameIndex]?.participants[pIndex] >= 8) {
+                        const _sdt = new Date(startDateTime).valueOf();
+                        const _edt = new Date(endDateTime).valueOf();
+                        const _dt = (_edt - _sdt) / (1000 * 60 * 60)
+                        if (_dt < 2) return setMessages([{ message: "Atleast 2 hours of tournament time is required for this game." }])
+                    }
                     await doRequest();
                     next();
                 }} />

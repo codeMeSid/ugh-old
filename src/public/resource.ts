@@ -17,10 +17,11 @@ export const navlinks = ["tournaments", "shop"];
 export const navlinksAuth = ["login", "signup"];
 export const outerMenuLinks = ["shop", "tournaments", "streams"];
 export const outerMenuLinksAuth = [
+  "add-tournament",
   "profile",
   "withdraw",
-  "my-tournament",
-  "add-tournament",
+  "how-to-play",
+  "gallery",
   "signout",
 ];
 export const outerMenuLinksNonAuth = [

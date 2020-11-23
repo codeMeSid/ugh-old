@@ -188,7 +188,7 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
             {currentUser && userHasJoined
                 ?
                 <div className="tournament__container tournament__container--footer">
-                    <div className="tournament__container--footer__title">Live Players</div>
+                    <div className="tournament__container--footer__title">Meet The Competitors</div>
                     <div className="tournament__container__list">
                         {tournament?.players?.map(player => <PlayerCard key={Math.random()} currentUser={currentUser} player={player} />)}
                     </div>

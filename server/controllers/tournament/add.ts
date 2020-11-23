@@ -41,9 +41,9 @@ export const tournamentAddController = async (req: Request, res: Response) => {
   const cUser = req.currentUser;
   const playersInGroup = group.participants;
 
-  if (sdt <= cdt) throw new BadRequestError("Tournament cannot be in past");
-  // if (sdt - cdt < msIn1Hr)
-  //   throw new BadRequestError("Schedule atleast 1hr ahead");
+  if (sdt <= cdt) throw new BadRequestError("Tournament cannot be in the past");
+  if (sdt - cdt < msIn1Hr)
+    throw new BadRequestError("Schedule atleast 1hr ahead");
   if (edt <= sdt) throw new BadRequestError("Cannot finish before Start");
   if (edt - sdt < msIn15Mins)
     throw new BadRequestError(

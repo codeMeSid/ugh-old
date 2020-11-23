@@ -2,11 +2,12 @@ import Link from "next/link";
 import SocialButton from "./button/social";
 import Button from "./button/main";
 import { FaTwitch } from 'react-icons/fa';
+import { format } from 'date-fns'
 
 const Footer = () => {
     return <footer className="footer">
         <div className="footer__l1">
-            Ultimate Gamers Hub Entertainment Pvt Ltd. © 2019
+            Ultimate Gamers Hub Entertainment Pvt Ltd. © {format(new Date(), "yyyy")}
         </div>
         <div className="footer__l2">
             <div className="footer__l2__item">

@@ -35,10 +35,10 @@ const UserProfile = ({ user, matches, errors }: { user: UserDoc, matches: any, e
                                 <div className="profile__body__top__item__title">email</div>
                                 <div className="profile__body__top__item__value">{user?.email}</div>
                             </div>
-                            <div className="profile__body__top__item">
+                            {/* <div className="profile__body__top__item">
                                 <div className="profile__body__top__item__title">coins</div>
                                 <div className="profile__body__top__item__value">{user?.wallet?.coins}</div>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="profile__body__top__right">
                         </div>
@@ -70,11 +70,11 @@ const UserProfile = ({ user, matches, errors }: { user: UserDoc, matches: any, e
                                 <div className="profile__body__bottom__item__title">total wins</div>
                                 <div className="profile__body__bottom__item__value">{user?.tournaments?.filter(match => match.didWin).length || 0}</div>
                             </div>
-                            {/* <div className="profile__body__bottom__item">
+                            <div className="profile__body__bottom__item">
                                 <div className="profile__body__bottom__item__icon"><FaPiggyBank /></div>
                                 <div className="profile__body__bottom__item__title">total earning</div>
                                 <div className="profile__body__bottom__item__value">{user?.tournaments?.filter(match => match.didWin)?.reduce((acc, match) => acc + match.coins, 0) || 0}</div>
-                            </div> */}
+                            </div>
                             <div className="profile__body__bottom__item">
                                 <div className="profile__body__bottom__item__icon"><ImGift /></div>
                                 <div className="profile__body__bottom__item__title">total tournament</div>

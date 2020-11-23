@@ -29,7 +29,10 @@ const Timer = (
         return () => clearTimeout();
     }, []);
     useEffect(() => {
-        if (canCountdown && !stopTimer) setTimeout(getTimer, step);
+        if (canCountdown && !stopTimer) setTimeout(() => {
+            clearTimeout();
+            getTimer()
+        }, step);
     }, [timer])
 
     const getTimer = () => {

@@ -6,7 +6,7 @@ import { TransactionDoc } from '../../../../server/models/transaction';
 import Link from 'next/link';
 import { format } from 'date-fns'
 import ProgressButton from '../../../components/button/progress';
-import XLSX from 'xlsx'
+import XLSX from 'xlsx';
 
 const AdminTransactionDashboard = () => {
     const [tData, setTData] = useState([]);
@@ -26,7 +26,7 @@ const AdminTransactionDashboard = () => {
                 format(new Date(t.createdAt), "dd/MM/yyyy hh:mm a"),
                 <div style={{ color: t.status === "requested" ? "red" : "black" }}>{t.status.toUpperCase()}</div>
             ])));
-            const filteredData = data.filter(d => d.status !== "requested")
+            const filteredData = data.filter(d => d.status !== "created" && d.status !== "captured");
             const sheetDataMap = filteredData.map(d => [format(new Date(d.createdAt), "dd/MM/yyyy hh:mm a"), d.orderId, d.razorpayId, d.amount, d.status]);
             setSheetData(sheetDataMap);
         },
@@ -50,6 +50,7 @@ const AdminTransactionDashboard = () => {
         <div style={{ margin: "1rem 0" }}>
             <ProgressButton text="Download Excel" type="github" onPress={downloadExcelHandler} />
         </div>
+
         <Table headers={[
             {
                 text: "trans id",

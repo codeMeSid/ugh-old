@@ -137,7 +137,15 @@ const AddTournament = ({ gs, cs, errors }:
                     </div>
                 </div>
                 <div className="row">
-                    <DialogButton fullButton title="Submit" onAction={doRequest} style={{ top: "20%", position: "fixed" }}>
+                    <DialogButton fullButton title="Submit" onAction={() => {
+                        if (games[game].gameType === "score" && games[game]?.participants[participants] >= 8) {
+                            const _sdt = new Date(sdt).valueOf();
+                            const _edt = new Date(edt).valueOf();
+                            const _dt = (_edt - _sdt) / (1000 * 60 * 60)
+                            if (_dt < 2) return setMessages([{ message: "Atleast 2 hours of tournament time is required for this game." }])
+                        }
+                        doRequest()
+                    }} style={{ top: "20%", position: "fixed" }}>
                         <div style={{ margin: "2rem auto", fontSize: "2rem", minWidth: "40rem", maxWidth: "50rem" }}>
                             Creating tournament will cost you {coins * (games[game]?.groups[group]?.participants || 1)} coins from your account
                     </div>

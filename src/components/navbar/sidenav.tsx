@@ -17,7 +17,7 @@ class SideNavbar extends Component {
     componentDidMount() {
         event.recieveMessage(({ to, channel }) => {
             if (channel === SocketChannel.Admin && to === "admin") this.setState((ps: any) => ({ mNC: ps.mNC + 1 }))
-        })
+        });
     }
     render() {
         const { mNC } = this.state
