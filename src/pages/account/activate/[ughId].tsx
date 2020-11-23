@@ -1,23 +1,27 @@
 import { useEffect, useState } from "react";
 import MainLayout from "../../../components/layout/mainlayout";
 import { useRequest } from "../../../hooks/use-request";
+import Router from 'next/router';
 const AL = require("../../../public/asset/activation_loading.gif");
 const AD = require("../../../public/asset/activation_done.gif");
 
 
-const Activate = ({ ughId }) => {
+const Activate = () => {
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState("");
-    const { doRequest } = useRequest({
-        url: `/api/ugh/user/activate/${ughId}`,
-        body: {},
-        method: "put",
-        onError: (errors) => setMessages(errors),
-        onSuccess: (name) => setUsername(name)
-    })
+
 
     useEffect(() => {
-        if (ughId) doRequest();
+        if (Router.query.ughId) {
+            const { doRequest } = useRequest({
+                url: `/api/ugh/user/activate/${Router.query?.ughId}`,
+                body: {},
+                method: "put",
+                onError: (errors) => setMessages(errors),
+                onSuccess: (name) => setUsername(name)
+            })
+            doRequest();
+        }
         else setMessages([{ message: "Invalid Ugh Id" }]);
     }, []);
     return <MainLayout messages={messages}>
@@ -41,8 +45,5 @@ const Activate = ({ ughId }) => {
     </MainLayout >
 }
 
-Activate.getInitialProps = async (ctx) => {
-    return { ughId: ctx.query.ughId }
-}
 
 export default Activate;
