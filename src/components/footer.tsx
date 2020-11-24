@@ -22,9 +22,13 @@ const Footer = () => {
                     <div style={{ marginRight: 5 }}>
                         <Button href="https://twitch.tv/ultimategamershub" target="_blank" size="icon" text={<FaTwitch />} />
                     </div>
-                    <div>
+                    <div style={{ marginRight: 5 }}>
                         <SocialButton href="https://www.youtube.com/channel/UCrRonf3Q69wDBnxnM1BOHog?view_as=subscriber" target="_blank" size="icon" type="youtube" />
                     </div>
+                    <div>
+                        <SocialButton href="https://www.instagram.com/ultimategamershub/" target="_blank" size="icon" type="instagram" />
+                    </div>
+
                 </div>
             </div>
             <div className="footer__l2__item">

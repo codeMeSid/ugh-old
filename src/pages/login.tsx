@@ -9,6 +9,7 @@ import { useRequest } from '../hooks/use-request';
 import { fire } from '../../server/utils/firebase';
 
 const LoginBg = require("../public/asset/login.jpg");
+const GoogleButton = require("../public/asset/google.png");
 
 const SignIn = () => {
     const [user, setUser] = useState(null);
@@ -76,9 +77,11 @@ const SignIn = () => {
                 </div>
                 <div style={{ margin: ".5rem 0", fontSize: 16, fontWeight: 700 }}>Login with</div>
             </div>
-            <SocialButton onPress={() => { onSocialAuthProvider(fire.facebook) }} size="medium" type="facebook">Facebook</SocialButton>
+            <SocialButton onPress={() => onSocialAuthProvider(fire.facebook)} size="medium" type="facebook">Facebook</SocialButton>
             <div style={{ margin: "1rem 0" }} />
-            <SocialButton onPress={() => { onSocialAuthProvider(fire.google) }} size="medium" type="gplus">Google</SocialButton>
+            <button onClick={() => onSocialAuthProvider(fire.google)} style={{ cursor: "pointer" }}>
+                <img width="136px" height="36px" src={GoogleButton} alt="google signup" />
+            </button>
         </section>
     </MainLayout>
 };

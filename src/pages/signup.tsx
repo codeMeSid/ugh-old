@@ -13,7 +13,7 @@ import Option from '../components/input/option';
 import { serverRequest } from '../hooks/server-request';
 
 const SignUpBg = require("../public/asset/signup.jpg");
-
+const GoogleButton = require("../public/asset/google.png");
 
 const SignUp = ({ ughIds, errors }) => {
     const [user, setUser] = useState(null);
@@ -132,8 +132,19 @@ const SignUp = ({ ughIds, errors }) => {
             </div>
             <SocialButton onPress={() => { onSocialAuthProvider(fire.facebook) }} size="medium" type="facebook">Facebook</SocialButton>
             <div style={{ margin: "1rem 0" }} />
-            <SocialButton onPress={() => { onSocialAuthProvider(fire.google) }} size="medium" type="gplus">Google</SocialButton>
-            <div style={{ height: 10 }} />
+            <button onClick={() => onSocialAuthProvider(fire.google)} style={{ cursor: "pointer" }}>
+                <img width="136px" height="36px" src={GoogleButton} alt="google signup" />
+            </button>
+            <div style={{ color: "white", fontSize: 20, textTransform: "capitalize", margin: "10px 0", textAlign: "center" }}>
+                By signing-up you agree to
+                <Link href="/tac">
+                    <a target="_blank" style={{ color: "blue" }}> Terms Of Use </a>
+                </Link>
+                and
+                <Link href="/privacy">
+                    <a target="_blank" style={{ color: "blue" }}> Privacy Policy</a>
+                </Link>
+            </div>
         </section>
     </MainLayout>
 };
