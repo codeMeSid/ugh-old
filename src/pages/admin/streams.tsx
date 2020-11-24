@@ -38,9 +38,7 @@ const AdminStreamDashboard = () => {
                 <div>{stream.name.toUpperCase()}</div>
                 <div>({stream.game.toUpperCase()})</div>
             </>,
-            <a href={stream.href} >
-                <SocialButton type={stream.social} />
-            </a>,
+            <SocialButton type={stream.social} href={stream.href} target="_blank" />,
             SwitchBlade(stream.id, stream.isActive)
             ])));
         },

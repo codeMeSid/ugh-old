@@ -3,13 +3,15 @@ import { fire } from '../../../server/utils/firebase';
 import { RiDeleteBin2Line } from 'react-icons/ri';
 import { AiOutlineFolderAdd } from 'react-icons/ai';
 
-const FileInput = ({ placeholder, onChange = () => { }, name, value = "", showImage }
+const FileInput = ({ placeholder, onChange = () => { }, name, value = "", showImage, isWhite, style = {} }
     : {
         placeholder: string,
         onChange?: (name: string, value: string) => any,
         name: string,
         value?: string,
-        showImage?: boolean
+        showImage?: boolean,
+        isWhite?: boolean,
+        style?: any
     }) => {
     const [progress, setProgress] = useState(value.length > 0 ? 100 : 0);
     const [image, setImage] = useState(value);
@@ -54,13 +56,13 @@ const FileInput = ({ placeholder, onChange = () => { }, name, value = "", showIm
             : progress > 0
                 ? <progress className="form__file__progress" value={progress} max={100} />
                 : <div className="form__group">
-                    <label htmlFor={`${name}`} className="form__file__label">
-                        <span className="form__file__label__icon"><AiOutlineFolderAdd /></span>
-                        <span className="form__file__label__text">upload file</span>
+                    <label htmlFor={`${name}`} className="form__file__label" style={{ borderColor: isWhite ? "white" : "", ...style }} >
+                        <span className="form__file__label__icon"><AiOutlineFolderAdd style={{ color: isWhite ? "white" : "" }} /></span>
+                        <span className="form__file__label__text" style={{ color: isWhite ? "white" : "" }}>upload file</span>
                     </label>
                     <input id={`${name}`} type="file" className="form__file__input" onChange={onChangeHandler} />
                 </div>}
-        <small className="form__file__placeholder">{placeholder}</small>
+        <small className="form__file__placeholder" style={{ color: isWhite ? "white" : "" }}>{placeholder}</small>
     </div>
 }
 

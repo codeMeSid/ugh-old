@@ -12,6 +12,8 @@ import { useRequest } from '../../hooks/use-request';
 import Link from 'next/link';
 import Button from '../../components/button/main';
 
+const bgImage = require("../../public/asset/edit.jpg");
+
 const ProfileEdit = ({ user, errors }: { user: UserDoc, errors: any }) => {
     const [uploadUrl, setUploadUrl] = useState(user?.uploadUrl);
     const [dob, setDob] = useState(user?.dob);
@@ -72,63 +74,63 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc, errors: any }) => {
     });
 
     return <MainLayout messages={messages}>
-        <div style={{ padding: "2rem" }}>
-            <h1 style={{ textAlign: "center" }}>Profile Edit</h1>
+        <div style={{ backgroundImage: `url(${bgImage})`, padding: "2rem" }} className="detail__bg">
+            <h1 style={{ textAlign: "center", color: "white" }}>Profile Edit</h1>
             <div className="row">
                 <div className="col">
-                    <FileInput showImage name="uploadUrl" placeholder="profile image" value={uploadUrl} onChange={onChangeHandler} />
+                    <FileInput style={{width:300}} isWhite showImage name="uploadUrl" placeholder="profile image" value={uploadUrl} onChange={onChangeHandler} />
                 </div>
             </div>
             <div className="row">
                 <div className="col">
-                    <Input placeholder="name" value={user?.name} disabled />
+                    <Input isWhite placeholder="name" value={user?.name} disabled />
                 </div>
                 <div className="col">
-                    <Input placeholder="email" value={user?.email} disabled />
-                </div>
-            </div>
-            <div className="row">
-                <div className="col">
-                    <Input placeholder="ughId" value={user?.ughId} disabled />
-                </div>
-                <div className="col">
-                    <Input placeholder="dob" name="dob" type="date" value={dob} onChange={onChangeHandler} />
+                    <Input isWhite placeholder="email" value={user?.email} disabled />
                 </div>
             </div>
             <div className="row">
                 <div className="col">
-                    <Input placeholder="mobile (+91)" name="mobile" value={mobile} onChange={onChangeHandler} />
+                    <Input isWhite placeholder="ughId" value={user?.ughId} disabled />
                 </div>
                 <div className="col">
-                    <Input placeholder="psn Id" name="psnId" value={psnId} onChange={onChangeHandler} />
-                </div>
-            </div>
-            <div className="row">
-                <div className="col">
-                    <Input placeholder="steam Id" name="streamId" value={streamId} onChange={onChangeHandler} />
-                </div>
-                <div className="col">
-                    <Input placeholder="gamer tag" name="gamerTag" value={gamerTag} onChange={onChangeHandler} />
+                    <Input isWhite placeholder="dob" name="dob" type="date" value={dob} onChange={onChangeHandler} />
                 </div>
             </div>
             <div className="row">
                 <div className="col">
-                    <FileInput showImage value={aadharUrl} name="aadharUrl" placeholder="aadhar proof" onChange={onChangeHandler} />
-                    <Input value={aadharCard} placeholder="aadhar number" name="aadharCard" onChange={onChangeHandler} />
+                    <Input isWhite placeholder="mobile (+91)" name="mobile" value={mobile} onChange={onChangeHandler} />
                 </div>
                 <div className="col">
-                    <FileInput showImage value={panUrl} name="panUrl" placeholder="pancard proof" onChange={onChangeHandler} />
-                    <Input value={panCard} placeholder="pan card no." name="panCard" onChange={onChangeHandler} />
+                    <Input isWhite placeholder="psn Id" name="psnId" value={psnId} onChange={onChangeHandler} />
                 </div>
             </div>
             <div className="row">
                 <div className="col">
-                    <Select name="country" onSelect={onSelectHandler} value={country} placeholder="country" options={Object.keys(locations).map((key) => {
+                    <Input isWhite placeholder="steam Id" name="streamId" value={streamId} onChange={onChangeHandler} />
+                </div>
+                <div className="col">
+                    <Input isWhite placeholder="gamer tag" name="gamerTag" value={gamerTag} onChange={onChangeHandler} />
+                </div>
+            </div>
+            <div className="row">
+                <div className="col">
+                    <FileInput isWhite showImage value={aadharUrl} name="aadharUrl" placeholder="aadhar proof" onChange={onChangeHandler} />
+                    <Input isWhite value={aadharCard} placeholder="aadhar number" name="aadharCard" onChange={onChangeHandler} />
+                </div>
+                <div className="col">
+                    <FileInput isWhite showImage value={panUrl} name="panUrl" placeholder="pancard proof" onChange={onChangeHandler} />
+                    <Input isWhite value={panCard} placeholder="pan card no." name="panCard" onChange={onChangeHandler} />
+                </div>
+            </div>
+            <div className="row">
+                <div className="col">
+                    <Select isWhite name="country" onSelect={onSelectHandler} value={country} placeholder="country" options={Object.keys(locations).map((key) => {
                         return <Option key={key} display={key} value={key} />
                     })} />
                 </div>
                 <div className="col">
-                    <Select name="state" onSelect={onSelectHandler} value={state} placeholder="state" options={locations[country].map(key =>
+                    <Select isWhite name="state" onSelect={onSelectHandler} value={state} placeholder="state" options={locations[country].map(key =>
                         <Option key={key} display={key} value={key} />
                     )} />
                 </div>

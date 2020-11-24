@@ -28,6 +28,7 @@ export const outerMenuLinksNonAuth = [
   "sponsors",
   "about",
   "how-to-play",
+  "gallery",
   "login",
   "signup",
 ];

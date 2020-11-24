@@ -130,11 +130,9 @@ const SignUp = ({ ughIds, errors }) => {
                 </div>
                 <div style={{ margin: ".5rem 0", fontSize: 16, fontWeight: 700 }}> Or Login with</div>
             </div>
-            <SocialButton onPress={() => { onSocialAuthProvider(fire.facebook) }} size="medium" type="facebook">Facebook</SocialButton>
+            <SocialButton onPress={() => { onSocialAuthProvider(fire.facebook) }} size="large" type="facebook">Facebook</SocialButton>
             <div style={{ margin: "1rem 0" }} />
-            <button onClick={() => onSocialAuthProvider(fire.google)} style={{ cursor: "pointer" }}>
-                <img width="136px" height="36px" src={GoogleButton} alt="google signup" />
-            </button>
+            <img onClick={() => onSocialAuthProvider(fire.google)} style={{ cursor: "pointer" }} width="192px" height="50px" src={GoogleButton} alt="google signup" />
             <div style={{ color: "white", fontSize: 20, textTransform: "capitalize", margin: "10px 0", textAlign: "center" }}>
                 By signing-up you agree to
                 <Link href="/tac">

@@ -77,11 +77,9 @@ const SignIn = () => {
                 </div>
                 <div style={{ margin: ".5rem 0", fontSize: 16, fontWeight: 700 }}>Login with</div>
             </div>
-            <SocialButton onPress={() => onSocialAuthProvider(fire.facebook)} size="medium" type="facebook">Facebook</SocialButton>
+            <SocialButton onPress={() => onSocialAuthProvider(fire.facebook)} size="large" type="facebook">Facebook</SocialButton>
             <div style={{ margin: "1rem 0" }} />
-            <button onClick={() => onSocialAuthProvider(fire.google)} style={{ cursor: "pointer" }}>
-                <img width="136px" height="36px" src={GoogleButton} alt="google signup" />
-            </button>
+            <img onClick={() => onSocialAuthProvider(fire.google)} style={{ cursor: "pointer" }} width="192px" height="50px" src={GoogleButton} alt="google signup" />
         </section>
     </MainLayout>
 };
