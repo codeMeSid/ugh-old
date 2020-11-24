@@ -18,6 +18,7 @@ const Shop = ({ currentUser, coins, apiKey, errors }: { currentUser: any, coins:
                     {coins.map(coin => {
                         return <ShopCard
                             onError={(errors) => setMessages(errors)}
+                            onSuccess={() => setMessages([{ message: "Purchase successful", type: "success" }])}
                             key={Math.random()}
                             coin={coin}
                             currentUser={currentUser}
