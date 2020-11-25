@@ -1,18 +1,18 @@
-import { BadRequestError, GameType } from "@monsid/ugh";
+import { BadRequestError, GameType, UserRole } from "@monsid/ugh";
 import { Request, Response } from "express";
 import { Bracket } from "../../models/bracket";
 import { Tournament } from "../../models/tournament";
 
 export const fetchBracketController = async (req: Request, res: Response) => {
   const { tournamentId } = req.params;
-  const { id } = req.currentUser;
+  const { id, role } = req.currentUser;
   const tournament = await Tournament.findOne({ regId: tournamentId });
   if (!tournament) throw new BadRequestError("Invalid tournament");
-  if (
+  const isTournamentPlayer =
     tournament.players.findIndex(
       (playerId) => JSON.stringify(playerId) === JSON.stringify(id)
-    ) === -1
-  )
+    ) !== -1;
+  if (!isTournamentPlayer && role !== UserRole.Admin)
     throw new BadRequestError("Player doesn't belong to tournament");
   const brackets = await Bracket.find({ _id: { $in: tournament.brackets } })
     .populate("teamA.user", "ughId uploadUrl", "Users")

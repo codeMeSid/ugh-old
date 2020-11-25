@@ -29,7 +29,7 @@ const TournamentDetail = ({ tournament, errors }: { tournament: TournamentDoc, e
                 </div>
                 <div className="col">
                     <Select name="status" onSelect={(e) => setStatus(e.currentTarget.value)} placeholder="status" value={status} options={
-                        ['upcoming', 'started', 'completed'].map(st => {
+                        ['upcoming', 'started', 'completed','cancelled'].map(st => {
                             return <Option key={st} display={st.toUpperCase()} value={st} />
                         })
                     } />

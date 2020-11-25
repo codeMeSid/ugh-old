@@ -13,11 +13,11 @@ export const signupController = async (req: Request, res: Response) => {
   const preUser = await User.findOne({ $or: [{ email }, { ughId }] });
   if (preUser) throw new BadRequestError("User already exists");
   const newUser = User.build({
-    email,
+    email: `${email}`.trim(),
     name,
-    ughId,
+    ughId: `${ughId}`.trim(),
     dob,
-    password,
+    password: `${password}`.trim(),
     address: { state, country },
   });
   await newUser.save();

@@ -8,27 +8,16 @@ export const tournamentUpdateStatusController = async (
 ) => {
   const { tournamentId } = req.params;
   const { status } = req.body;
+  if (status === TournamentStatus.Completed)
+    throw new BadRequestError("Cannot complete tournament at this stage.");
   const tournament = await Tournament.findById(tournamentId);
-  if (!tournament) throw new BadRequestError("Tournament doesnt exist");
-  switch (tournament.status) {
-    case TournamentStatus.Upcoming:
-      if (status === TournamentStatus.Completed)
-        throw new BadRequestError(
-          "Tournament can only be started or cancelled at this stage"
-        );
-      break;
-    case TournamentStatus.Started:
-      if (status === TournamentStatus.Upcoming)
-        throw new BadRequestError(
-          "Tournament cannot be scheduled after starting"
-        );
-      break;
-    case TournamentStatus.Completed:
-      throw new BadRequestError("Tournament status cannot be changed");
-    case TournamentStatus.Cancelled:
-      throw new BadRequestError("Tournament status cannot be changed");
-  }
-  tournament.set({ status });
-  await tournament.save();
+  if (!tournament) throw new BadRequestError("Tournament doesnt exist.");
+  if (
+    tournament.status === TournamentStatus.Upcoming &&
+    status === TournamentStatus.Cancelled
+  ) {
+    tournament.set({ status });
+    await tournament.save();
+  } else throw new BadRequestError("Tournament status cannot be changed.");
   res.send(true);
 };

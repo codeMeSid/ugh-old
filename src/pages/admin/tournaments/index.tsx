@@ -37,7 +37,7 @@ const AdminTournamentDashboard = () => {
                     `${t.game.name} (${t.game.console.toUpperCase()})`,
                     <div>{t.players.length}/{t.playerCount}</div>,
                     t.status.toUpperCase(),
-                    t.winners.length > 0 ? null : EvaluateButton(t.regId)
+                    t.winners.length > 0 || t.status === "completed" ? null : EvaluateButton(t.regId)
                 ];
             }));
         },
