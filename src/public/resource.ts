@@ -22,6 +22,7 @@ export const outerMenuLinksAuth = [
   "withdraw",
   "how-to-play",
   "gallery",
+  "about",
   "signout",
 ];
 export const outerMenuLinksNonAuth = [

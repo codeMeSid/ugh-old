@@ -24,22 +24,7 @@ const AddTournament = ({ games, consoles, errors }:
     const [wI, setWI] = useState(0);
     const [messages, setMessages] = useState(errors);
 
-    const { doRequest } = useRequest({
-        url: "/api/ugh/tournament/add",
-        body: {
-            name,
-            coins: coins || 0,
-            winnerCount: games[gameIndex]?.winners[wI] || 1,
-            startDateTime: new Date(startDateTime),
-            endDateTime: new Date(endDateTime),
-            game: games[gameIndex].id,
-            playerCount: games[gameIndex]?.participants[pIndex] || 0,
-            group: games[gameIndex].groups[gIndex]
-        },
-        method: "post",
-        onSuccess: () => Router.replace("/admin/tournaments"),
-        onError: (errors) => setMessages(errors)
-    })
+
     const onChangeHandler = (name: String, val: any) => {
         switch (name) {
             case 'name': return setName(val);
@@ -76,6 +61,34 @@ const AddTournament = ({ games, consoles, errors }:
                 setWI(val);
                 break;
         }
+    }
+
+    const onTouramentCreateHandler = async (_, next) => {
+        if (games[gameIndex].gameType === "score" && games[gameIndex]?.participants[pIndex] >= 8) {
+            const _sdt = new Date(startDateTime).valueOf();
+            const _edt = new Date(endDateTime).valueOf();
+            const _dt = (_edt - _sdt) / (1000 * 60 * 60)
+            if (_dt < 2) return setMessages([{ message: "Atleast 2 hours of tournament time is required for this game." }])
+        }
+        const body = {
+            name,
+            coins: coins || 0,
+            winnerCount: games[gameIndex]?.winners[wI] || 1,
+            startDateTime: new Date(startDateTime),
+            endDateTime: new Date(endDateTime),
+            game: games?.filter(game => game.console === consoles[consoleIndex]?.name)[gameIndex]?.id,
+            playerCount: games[gameIndex]?.participants[pIndex] || 0,
+            group: games[gameIndex].groups[gIndex]
+        };
+        const { doRequest } = useRequest({
+            url: "/api/ugh/tournament/add",
+            body,
+            method: "post",
+            onSuccess: () => Router.replace("/admin/tournaments"),
+            onError: (errors) => setMessages(errors)
+        })
+        await doRequest();
+        next();
     }
     return <SideLayout messages={messages} title="add match">
         <div className="detail">
@@ -146,16 +159,7 @@ const AddTournament = ({ games, consoles, errors }:
                 </div>
             </div>
             <div className="row">
-                <ProgressButton size="large" text="Submit" type="whatsapp" onPress={async (_, next) => {
-                    if (games[gameIndex].gameType === "score" && games[gameIndex]?.participants[pIndex] >= 8) {
-                        const _sdt = new Date(startDateTime).valueOf();
-                        const _edt = new Date(endDateTime).valueOf();
-                        const _dt = (_edt - _sdt) / (1000 * 60 * 60)
-                        if (_dt < 2) return setMessages([{ message: "Atleast 2 hours of tournament time is required for this game." }])
-                    }
-                    await doRequest();
-                    next();
-                }} />
+                <ProgressButton size="large" text="Submit" type="whatsapp" onPress={onTouramentCreateHandler} />
             </div>
         </div>
     </SideLayout>

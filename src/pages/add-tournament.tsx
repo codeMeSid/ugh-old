@@ -28,23 +28,6 @@ const AddTournament = ({ gs, cs, errors }:
     const [sdt, setSdt] = useState("");
     const [edt, setEdt] = useState("");
 
-
-    const { doRequest } = useRequest({
-        url: "/api/ugh/tournament/add",
-        body: {
-            name,
-            coins,
-            winnerCount: games[game]?.winners[wI],
-            startDateTime: new Date(sdt),
-            endDateTime: new Date(edt),
-            game: games[game]?.id,
-            playerCount: games[game]?.participants[participants],
-            group: games[game]?.groups[group]
-        },
-        method: "post",
-        onSuccess: () => Router.replace("/my-tournament"),
-        onError: (errors) => setMessages(errors)
-    });
     const onChangeHandler = (name: String, val: any) => {
         switch (name) {
             case 'name': return setName(val);
@@ -82,6 +65,35 @@ const AddTournament = ({ gs, cs, errors }:
                 break;
         }
     }
+
+
+    const onTouramentCreateHandler = async (_, next) => {
+        if (games[game].gameType === "score" && games[game]?.participants[participants] >= 8) {
+            const _sdt = new Date(sdt).valueOf();
+            const _edt = new Date(edt).valueOf();
+            const _dt = (_edt - _sdt) / (1000 * 60 * 60)
+            if (_dt < 2) return setMessages([{ message: "Atleast 2 hours of tournament time is required for this game." }])
+        }
+        const body = {
+            name,
+            coins: coins || 0,
+            winnerCount: games[game]?.winners[wI] || 1,
+            startDateTime: new Date(sdt),
+            endDateTime: new Date(edt),
+            game: games?.filter(game => game.console === consoles[console]?.name)[game]?.id,
+            playerCount: games[game]?.participants[participants] || 0,
+            group: games[game].groups[group]
+        };
+        const { doRequest } = useRequest({
+            url: "/api/ugh/tournament/add",
+            body,
+            method: "post",
+            onSuccess: () => Router.replace("/my-tournament"),
+            onError: (errors) => setMessages(errors)
+        })
+        await doRequest();
+    }
+
     return <MainLayout messages={messages}>
         <div style={{ backgroundImage: `url(${bgImage})` }} className="detail__bg">
             <div className="detail" style={{ padding: "2rem" }}>
@@ -137,15 +149,7 @@ const AddTournament = ({ gs, cs, errors }:
                     </div>
                 </div>
                 <div className="row">
-                    <DialogButton fullButton title="Submit" onAction={() => {
-                        if (games[game].gameType === "score" && games[game]?.participants[participants] >= 8) {
-                            const _sdt = new Date(sdt).valueOf();
-                            const _edt = new Date(edt).valueOf();
-                            const _dt = (_edt - _sdt) / (1000 * 60 * 60)
-                            if (_dt < 2) return setMessages([{ message: "Atleast 2 hours of tournament time is required for this game." }])
-                        }
-                        doRequest()
-                    }} style={{ top: "20%", position: "fixed" }}>
+                    <DialogButton fullButton title="Submit" onAction={onTouramentCreateHandler} style={{ top: "20%", position: "fixed" }}>
                         <div style={{ margin: "2rem auto", fontSize: "2rem", minWidth: "40rem", maxWidth: "50rem" }}>
                             Creating tournament will cost you {coins * (games[game]?.groups[group]?.participants || 1)} coins from your account
                     </div>
