@@ -61,10 +61,10 @@ const UserDetail = ({ user }: { user: UserDoc }) => {
 
             <div className="row">
                 <div className="col">
-                    <Input placeholder="tournaments played" value={user?.wallet?.tournaments} disabled={true} />
+                    <Input placeholder="tournaments played" value={user?.tournaments.length} disabled={true} />
                 </div>
                 <div className="col">
-                    <Input placeholder="tournaments won" value={user?.wallet?.wins} disabled={true} />
+                    <Input placeholder="tournaments won" value={user?.tournaments.filter(t => t.didWin).length} disabled={true} />
 
                 </div>
             </div>
