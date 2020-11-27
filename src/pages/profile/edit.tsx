@@ -16,7 +16,7 @@ const bgImage = require("../../public/asset/edit.png");
 
 const ProfileEdit = ({ user, errors }: { user: UserDoc, errors: any }) => {
     const [uploadUrl, setUploadUrl] = useState(user?.uploadUrl);
-    const [dob, setDob] = useState(user?.dob);
+    const [dob, setDob] = useState(user?.dob || "");
     const [mobile, setMobile] = useState(user?.mobile);
     const [psnId, setPsnId] = useState(user?.gamerProfile?.psnId);
     const [streamId, setStreamId] = useState(user?.gamerProfile?.steamId);
@@ -78,59 +78,59 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc, errors: any }) => {
             <h1 style={{ textAlign: "center", color: "white" }}>Profile Edit</h1>
             <div className="row">
                 <div className="col">
-                    <FileInput style={{width:300}}  showImage name="uploadUrl" placeholder="profile image" value={uploadUrl} onChange={onChangeHandler} />
+                    <FileInput style={{ width: 300 }} showImage name="uploadUrl" placeholder="profile image" value={uploadUrl} onChange={onChangeHandler} />
                 </div>
             </div>
             <div className="row">
                 <div className="col">
-                    <Input  placeholder="name" value={user?.name} disabled />
+                    <Input placeholder="name" value={user?.name} disabled />
                 </div>
                 <div className="col">
-                    <Input  placeholder="email" value={user?.email} disabled />
-                </div>
-            </div>
-            <div className="row">
-                <div className="col">
-                    <Input  placeholder="ughId" value={user?.ughId} disabled />
-                </div>
-                <div className="col">
-                    <Input  placeholder="dob" name="dob" type="date" value={dob} onChange={onChangeHandler} />
+                    <Input placeholder="email" value={user?.email} disabled />
                 </div>
             </div>
             <div className="row">
                 <div className="col">
-                    <Input  placeholder="mobile (+91)" name="mobile" value={mobile} onChange={onChangeHandler} />
+                    <Input placeholder="ughId" value={user?.ughId} disabled />
                 </div>
                 <div className="col">
-                    <Input  placeholder="psn Id" name="psnId" value={psnId} onChange={onChangeHandler} />
-                </div>
-            </div>
-            <div className="row">
-                <div className="col">
-                    <Input  placeholder="steam Id" name="streamId" value={streamId} onChange={onChangeHandler} />
-                </div>
-                <div className="col">
-                    <Input  placeholder="gamer tag" name="gamerTag" value={gamerTag} onChange={onChangeHandler} />
+                    <Input placeholder="dob" name="dob" type="date" value={dob} onChange={onChangeHandler} />
                 </div>
             </div>
             <div className="row">
                 <div className="col">
-                    <FileInput  showImage value={aadharUrl} name="aadharUrl" placeholder="aadhar proof" onChange={onChangeHandler} />
-                    <Input  value={aadharCard} placeholder="aadhar number" name="aadharCard" onChange={onChangeHandler} />
+                    <Input placeholder="mobile (+91)" name="mobile" value={mobile} onChange={onChangeHandler} />
                 </div>
                 <div className="col">
-                    <FileInput  showImage value={panUrl} name="panUrl" placeholder="pancard proof" onChange={onChangeHandler} />
-                    <Input  value={panCard} placeholder="pan card no." name="panCard" onChange={onChangeHandler} />
+                    <Input placeholder="psn Id" name="psnId" value={psnId} onChange={onChangeHandler} />
                 </div>
             </div>
             <div className="row">
                 <div className="col">
-                    <Select  name="country" onSelect={onSelectHandler} value={country} placeholder="country" options={Object.keys(locations).map((key) => {
+                    <Input placeholder="steam Id" name="streamId" value={streamId} onChange={onChangeHandler} />
+                </div>
+                <div className="col">
+                    <Input placeholder="gamer tag" name="gamerTag" value={gamerTag} onChange={onChangeHandler} />
+                </div>
+            </div>
+            <div className="row">
+                <div className="col">
+                    <FileInput showImage value={aadharUrl} name="aadharUrl" placeholder="aadhar proof" onChange={onChangeHandler} />
+                    <Input value={aadharCard} placeholder="aadhar number" name="aadharCard" onChange={onChangeHandler} />
+                </div>
+                <div className="col">
+                    <FileInput showImage value={panUrl} name="panUrl" placeholder="pancard proof" onChange={onChangeHandler} />
+                    <Input value={panCard} placeholder="pan card no." name="panCard" onChange={onChangeHandler} />
+                </div>
+            </div>
+            <div className="row">
+                <div className="col">
+                    <Select name="country" onSelect={onSelectHandler} value={country} placeholder="country" options={Object.keys(locations).map((key) => {
                         return <Option key={key} display={key} value={key} />
                     })} />
                 </div>
                 <div className="col">
-                    <Select  name="state" onSelect={onSelectHandler} value={state} placeholder="state" options={locations[country].map(key =>
+                    <Select name="state" onSelect={onSelectHandler} value={state} placeholder="state" options={locations[country].map(key =>
                         <Option key={key} display={key} value={key} />
                     )} />
                 </div>
