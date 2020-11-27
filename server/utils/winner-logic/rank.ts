@@ -10,7 +10,6 @@ export const rankLogger = async (
   brackets: BracketDoc[],
   users: UserDoc[]
 ) => {
-  
   const bracketWinnersCount = brackets.filter((b) => b.winner).length;
   const unresolvedDisputeCount = brackets.filter(
     (b) => b.teamB.hasRaisedDispute && !b.winner
@@ -32,8 +31,16 @@ export const rankLogger = async (
     return;
   }
   brackets = brackets.map((b) => {
-    if (!b.winner) b.winner = DQ.ScoreNotUploaded;
-    if (b.teamB.hasRaisedDispute && !b.teamA.uploadUrl)
+    // TODO new condtion
+    // issue player can update rank atlast minute and get away with it
+    // solution auto dispute required
+    if (b.teamA.score >= 1 && !b.teamB.hasRaisedDispute) {
+      const userIndex = users.findIndex(
+        (u) => JSON.stringify(u.id) === JSON.stringify(b.teamA.user)
+      );
+      b.winner = users[userIndex].ughId;
+    } else if (!b.winner) b.winner = DQ.ScoreNotUploaded;
+    else if (b.teamB.hasRaisedDispute && !b.teamA.uploadUrl)
       b.winner = DQ.DisputeLost;
     return b;
   });
@@ -72,7 +79,6 @@ export const rankLogger = async (
   });
   tournament.status = TournamentStatus.Completed;
 
-  
   return {
     updatedTournament: tournament,
     updatedBrackets: brackets,
@@ -93,7 +99,7 @@ export const rankLogger = async (
 //   brackets: BracketDoc[],
 //   users: UserDoc[]
 // ) => {
-//   
+//
 //   const bracketWinnersCount = brackets.filter((b) => b.winner).length;
 //   const unresolvedDisputeCount = brackets.filter(
 //     (b) => b.teamB.hasRaisedDispute && !b.winner
@@ -102,7 +108,7 @@ export const rankLogger = async (
 //   const tournamentEndDateTime = new Date(tournament.endDateTime).getTime();
 //   // check if disputes are yet to be resolved
 //   if (unresolvedDisputeCount >= 1) {
-//     
+//
 //     return;
 //   }
 //   // check if match is over or if all the players have uploaded scores
@@ -116,7 +122,7 @@ export const rankLogger = async (
 //       return b;
 //     });
 //   } else {
-//     
+//
 //     return;
 //   }
 //   // filter out all the winners
@@ -153,7 +159,7 @@ export const rankLogger = async (
 //     };
 //   });
 //   tournament.status = TournamentStatus.Completed;
-//   
+//
 //   return {
 //     updatedTournament: tournament,
 //     updatedBrackets: brackets,

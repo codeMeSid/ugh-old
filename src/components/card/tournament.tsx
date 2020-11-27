@@ -11,9 +11,9 @@ const TournamentCard = ({ match }: { match: TournamentDoc }) => {
         const cdt = Date.now();
         const sdt = new Date(match.startDateTime).getTime();
         const edt = new Date(match.endDateTime).getTime();
-        if (cdt < sdt) return <Timer canCountdown={!!match.startDateTime} dateTime={match.startDateTime} />;
+        if (match.status === "completed") return <div>Completed</div>
+        else if (cdt < sdt) return <Timer canCountdown={!!match.startDateTime} dateTime={match.startDateTime} />;
         else if (cdt < edt) return <Timer canCountdown={!!match.endDateTime} dateTime={match.endDateTime} />;
-        else return <div>Completed</div>
     }
 
     return <Link href={`/tournaments/${match.regId}`}>

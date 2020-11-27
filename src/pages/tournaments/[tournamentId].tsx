@@ -86,9 +86,9 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
         const cdt = Date.now();
         const sdt = new Date(tournament.startDateTime).getTime();
         const edt = new Date(tournament.endDateTime).getTime();
-        if (cdt < sdt) return <Timer canCountdown={!!tournament.startDateTime} dateTime={tournament.startDateTime} placeholder="To Start" />;
+        if (tournament.status === "completed") return <div>Completed</div>
+        else if (cdt < sdt) return <Timer canCountdown={!!tournament.startDateTime} dateTime={tournament.startDateTime} placeholder="To Start" />;
         else if (cdt < edt) return <Timer canCountdown={!!tournament.endDateTime} dateTime={tournament.endDateTime} placeholder="To End" />;
-        else return <div>Completed</div>
     }
 
     return <MainLayout messages={messages} isFullscreen>
