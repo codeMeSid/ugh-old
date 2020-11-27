@@ -130,7 +130,7 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                                                 Prize
                                             </td>
                                         </tr>
-                                        {prizeDistribution(tournament?.winnerCoin, tournament.winnerCount).map((prize, index) => {
+                                        {prizeDistribution(tournament?.winnerCoin || 100, tournament?.winnerCount || 1).map((prize, index) => {
                                             return <tr key={Math.random()} style={{ fontSize: 20 }}>
                                                 <td>{`${index + 1}${numberPostion(index + 1)}`}</td>
                                                 <td>{prize} coins</td>

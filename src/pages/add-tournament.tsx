@@ -68,11 +68,12 @@ const AddTournament = ({ gs, cs, errors }:
 
 
     const onTouramentCreateHandler = async (_, next) => {
-        if (games[game].gameType === "score" && games[game]?.participants[participants] >= 8) {
+        if (games[game].gameType === "score" && games[game]?.participants[participants] >= 4) {
             const _sdt = new Date(sdt).valueOf();
             const _edt = new Date(edt).valueOf();
             const _dt = (_edt - _sdt) / (1000 * 60 * 60)
-            if (_dt < 2) return setMessages([{ message: "Atleast 2 hours of tournament time is required for this game." }])
+            const recommendedTime = Math.ceil(Math.log2(games[game]?.participants[participants]))
+            if (_dt < recommendedTime) return setMessages([{ message: `Atleast ${recommendedTime} hours of tournament time is required for this game.` }])
         }
         const body = {
             name,
@@ -136,7 +137,7 @@ const AddTournament = ({ gs, cs, errors }:
                     </div>
                     <div className="col">
                         <Select onSelect={onSelectHandler} name="participants" placeholder="participants" value={participants} options={
-                            games[game].participants.map(
+                            games[game]?.participants.map(
                                 (p, index) => <Option key={p} display={p} value={index} />)
                         } isWhite />
                     </div>

@@ -31,7 +31,6 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     group,
   } = req.body;
 
-  const msIn15Mins = 1000 * 60 * 15;
   const msIn1Hr = 1000 * 60 * 60;
   const sdt = new Date(startDateTime).valueOf();
   const edt = new Date(endDateTime).valueOf();
@@ -45,10 +44,8 @@ export const tournamentAddController = async (req: Request, res: Response) => {
   if (sdt - cdt < msIn1Hr)
     throw new BadRequestError("Schedule atleast 1hr ahead");
   if (edt <= sdt) throw new BadRequestError("Cannot finish before Start");
-  if (edt - sdt < msIn15Mins)
-    throw new BadRequestError(
-      "Tournament duration should be atleast 15 minutes"
-    );
+  if (edt - sdt < msIn1Hr)
+    throw new BadRequestError("Tournament duration should be atleast 1 hour");
   if (wc >= pc) throw new BadRequestError("Winner cannot be more than players");
   if (playerCount % playersInGroup !== 0)
     throw new BadRequestError("Insufficient player slots");
@@ -116,12 +113,11 @@ export const tournamentAddController = async (req: Request, res: Response) => {
             .populate("game", "gameType cutoff", "Games")
             .session(session);
           if (!tournament) return;
-          if (tournament.status === TournamentStatus.Upcoming) return;
+          if (tournament.status !== TournamentStatus.Upcoming) return;
           const attendance =
             ((tournament.players.length * tournament.group.participants) /
               tournament.playerCount) *
             100;
-
           if (attendance < tournament.game.cutoff) {
             tournament.set({ status: TournamentStatus.Completed });
             const users = await User.find({
@@ -139,6 +135,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
               await user.save({ session });
             });
             await tournament.save({ session });
+            await session.commitTransaction();
             timer.cancel(`${id}-end`);
           } else {
             const users = shuffle(tournament.players);
@@ -220,6 +217,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
             }
             tournament.status = TournamentStatus.Started;
             await tournament.save({ session });
+            await session.commitTransaction();
             users.forEach((user) => {
               if (user.settings.addedTournamentWillStart)
                 mailer.send(
@@ -233,7 +231,6 @@ export const tournamentAddController = async (req: Request, res: Response) => {
                 );
             });
           }
-          await session.commitTransaction();
         } catch (error) {
           console.log({ m: "start", error: error.message });
           await session.abortTransaction();

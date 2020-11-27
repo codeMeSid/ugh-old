@@ -17,23 +17,21 @@ const SignoutPage = () => {
         doRequest();
     }, []);
 
-    return <MainLayout>
-        <div style={{
-            width: "100vw",
-            height: "88vh",
-            backgroundImage: `url(${SignoutImg})`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center"
-        }}>
-            <div style={{ fontSize: 36, color: "white" }}>
-                Let's Play Again Soon
+    return <div style={{
+        width: "100vw",
+        height: "100vh",
+        backgroundImage: `url(${SignoutImg})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    }}>
+        <div style={{ fontSize: 36, color: "white" }}>
+            Let's Play Again Soon
             </div>
-        </div>
-    </MainLayout>
+    </div>
 }
 
 export default SignoutPage
