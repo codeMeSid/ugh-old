@@ -30,7 +30,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     playerCount,
     group,
   } = req.body;
-
+  const { role } = req.currentUser;
   const msIn1Hr = 1000 * 60 * 60;
   const sdt = new Date(startDateTime).valueOf();
   const edt = new Date(endDateTime).valueOf();
@@ -41,7 +41,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
   const playersInGroup = group.participants;
 
   if (sdt <= cdt) throw new BadRequestError("Tournament cannot be in the past");
-  if (sdt - cdt < msIn1Hr)
+  if (sdt - cdt < msIn1Hr && role !== UserRole.Admin)
     throw new BadRequestError("Schedule atleast 1hr ahead");
   if (edt <= sdt) throw new BadRequestError("Cannot finish before Start");
   if (edt - sdt < msIn1Hr)
@@ -112,13 +112,18 @@ export const tournamentAddController = async (req: Request, res: Response) => {
             .populate("players", "email ughId settings", "Users")
             .populate("game", "gameType cutoff", "Games")
             .session(session);
+          console.log(`${tournament.regId} tournament start`);
           if (!tournament) return;
           if (tournament.status !== TournamentStatus.Upcoming) return;
           const attendance =
             ((tournament.players.length * tournament.group.participants) /
               tournament.playerCount) *
             100;
+          console.log(`${tournament.regId} tournament attendance check`);
           if (attendance < tournament.game.cutoff) {
+            console.log(
+              `${tournament.regId} tournament cancel due to insufficient players `
+            );
             tournament.set({ status: TournamentStatus.Completed });
             const users = await User.find({
               _id: {
@@ -138,6 +143,9 @@ export const tournamentAddController = async (req: Request, res: Response) => {
             await session.commitTransaction();
             timer.cancel(`${id}-end`);
           } else {
+            console.log(
+              `${tournament.regId} tournament brackets created`
+            );
             const users = shuffle(tournament.players);
             let i = 0;
             while (i < users.length) {
@@ -235,6 +243,9 @@ export const tournamentAddController = async (req: Request, res: Response) => {
           console.log({ m: "start", error: error.message });
           await session.abortTransaction();
         }
+        console.log(
+          `${tournament.regId} tournament brackets start`
+        );
         session.endSession();
       },
       {
