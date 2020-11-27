@@ -113,7 +113,7 @@ const UserProfile = ({ user, matches, errors, isNewAuth, isSocialAuth }: { user:
 
 UserProfile.getInitialProps = async (ctx) => {
     const { data: tournaments, errors: errorsA }: { data: Array<TournamentDoc>, errors: Array<any> } = await serverRequest(ctx,
-        { url: "/api/ugh/tournament/fetch/all/my", body: {}, method: "get" });
+        { url: "/api/ugh/tournament/fetch/all/active", body: {}, method: "get" });
     const { data: user, errors: errorsB } = await serverRequest(ctx, {
         url: "/api/ugh/user/fetch/profile",
         method: "get",
