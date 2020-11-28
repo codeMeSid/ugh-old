@@ -105,6 +105,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
       tournament.regId,
       new Date(startDateTime),
       async ({ id }: { id: string }) => {
+        const brackets = [];
         const session = await mongoose.startSession();
         session.startTransaction();
         try {
@@ -112,8 +113,8 @@ export const tournamentAddController = async (req: Request, res: Response) => {
             .populate("players", "email ughId settings", "Users")
             .populate("game", "gameType cutoff", "Games")
             .session(session);
-          console.log(`${tournament.regId} tournament start`);
           if (!tournament) return;
+          console.log(`${tournament.regId} tournament start`);
           if (tournament.status !== TournamentStatus.Upcoming) return;
           const attendance =
             ((tournament.players.length * tournament.group.participants) /
@@ -143,9 +144,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
             await session.commitTransaction();
             timer.cancel(`${id}-end`);
           } else {
-            console.log(
-              `${tournament.regId} tournament brackets created`
-            );
+            console.log(`${tournament.regId} tournament brackets created`);
             const users = shuffle(tournament.players);
             let i = 0;
             while (i < users.length) {
@@ -167,7 +166,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
                     Date.now() + TournamentTime.TournamentRankUpdateTime
                   ),
                 });
-                await bracket.save({ session });
+                brackets.push(bracket);
                 tournament.brackets.push(bracket);
                 i += 1;
               } else if (tournament.game.gameType === GameType.Score) {
@@ -218,13 +217,16 @@ export const tournamentAddController = async (req: Request, res: Response) => {
                     { regId: bracket.regId, tournamentId: tournament.regId }
                   );
                 }
-                await bracket.save({ session });
+                brackets.push(bracket);
                 tournament.brackets.push(bracket);
                 i += 2;
               }
             }
             tournament.status = TournamentStatus.Started;
-            await tournament.save({ session });
+            await Promise.all([
+              tournament.save({ session }),
+              brackets.map(async (b) => await b.save({ session })),
+            ]);
             await session.commitTransaction();
             users.forEach((user) => {
               if (user.settings.addedTournamentWillStart)
@@ -243,9 +245,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
           console.log({ m: "start", error: error.message });
           await session.abortTransaction();
         }
-        console.log(
-          `${tournament.regId} tournament brackets start`
-        );
+        console.log(`${tournament.regId} tournament brackets start`);
         session.endSession();
       },
       {

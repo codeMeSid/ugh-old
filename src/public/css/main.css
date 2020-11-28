@@ -1515,8 +1515,8 @@ tr:nth-child(even) {
       .match__footer__list__item__winner {
         position: absolute;
         top: 50%;
-        left: 80%;
-        color: rgba(255, 255, 255, 0.8);
+        left: 50%;
+        color: rgba(255, 215, 0, 0.9);
         z-index: 5;
         font-size: 14rem;
         transform: translate(-50%, -50%);
@@ -1617,7 +1617,7 @@ tr:nth-child(even) {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        color: rgba(255, 255, 255, 0.8);
+        color: gold;
         cursor: pointer; }
         .tournament__card__head__winner__icon {
           font-size: 25rem; }
@@ -1625,6 +1625,8 @@ tr:nth-child(even) {
           text-align: center;
           font-size: 3.6rem;
           text-transform: uppercase; }
+        .tournament__card__head__winner:hover {
+          color: rgba(255, 215, 0, 0.8); }
     .tournament__card__body {
       width: 100%;
       padding: 2rem; }

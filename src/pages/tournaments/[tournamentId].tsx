@@ -28,6 +28,7 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
         if (currentUser?.ughId === user?.ughId) return;
         return ({ to: user?.ughId, channel: 'user', profile: user?.uploadUrl, title: user?.ughId })
     }).filter(chat => chat) : [];
+    const areAllWinners = tournament?.winners?.filter(w => w.position === -1).length === tournament?.players?.length;
     const JoinButton = () => {
         if (!currentUser && tournament?.status === "completed")
             return <Button text="Game Over" type="disabled" size="medium" />
@@ -46,8 +47,9 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                         <td>Prize</td>
                     </tr>
                     {tournament?.winners.map((winner) => {
+                        const position = winner.position === -1 ? "Hournable" : `${winner?.position}${numberPostion(winner?.position)}`
                         return <tr key={Math.random()} style={{ fontSize: 20 }}>
-                            <td>{`${winner?.position}${numberPostion(winner?.position)}`}</td>
+                            <td>{position}</td>
                             <td>{winner.ughId}</td>
                             <td>{winner.coins} coins</td>
                         </tr>
@@ -103,10 +105,10 @@ const TournamentDetail = ({ tournament, currentUser, errors }: { tournament: Tou
                         {
                             tournament?.winners?.length > 0 && <div className="tournament__card__head__winner">
                                 <IoIosTrophy className="tournament__card__head__winner__icon" />
-                                <div className="tournament__card__head__winner__name">
+                                {areAllWinners ? null : <div className="tournament__card__head__winner__name">
                                     <div>{tournament.winners[0].ughId}</div>
                                     <div>{tournament.winners[0].coins} coins</div>
-                                </div>
+                                </div>}
                             </div>
                         }
                     </div>
