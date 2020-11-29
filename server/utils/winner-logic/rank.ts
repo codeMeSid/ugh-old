@@ -34,14 +34,16 @@ export const rankLogger = async (
     // TODO new condtion
     // issue player can update rank atlast minute and get away with it
     // solution auto dispute required
-    if (b.teamA.score >= 1 && !b.teamB.hasRaisedDispute) {
+    if (b.teamA.score >= 1 && !b.winner) {
       const userIndex = users.findIndex(
         (u) => JSON.stringify(u.id) === JSON.stringify(b.teamA.user)
       );
       b.winner = users[userIndex].ughId;
-    } else if (!b.winner) b.winner = DQ.ScoreNotUploaded;
-    else if (b.teamB.hasRaisedDispute && !b.teamA.uploadUrl)
+    }
+    if (!b.winner) b.winner = DQ.ScoreNotUploaded;
+    if (b.teamB.hasRaisedDispute && !b.teamA.uploadUrl)
       b.winner = DQ.DisputeLost;
+
     return b;
   });
   // filter out all the winners

@@ -70,6 +70,7 @@ export const tournamentUpdateStatusController = async (
           const teamA = users.slice(i, i + 1);
           if (!teamA) break;
           if (tournament.game.gameType === GameType.Rank) {
+            const uploadBy = (new Date(tournament.endDateTime).valueOf() - Date.now()) / 2;
             const bracket = Bracket.build({
               teamA: {
                 user: teamA[0],
@@ -80,9 +81,7 @@ export const tournamentUpdateStatusController = async (
               gameType: tournament.game.gameType,
               regId,
               round: 1,
-              uploadBy: new Date(
-                Date.now() + TournamentTime.TournamentRankUpdateTime
-              ),
+              uploadBy: new Date(Date.now() + uploadBy),
             });
             brackets.push(bracket);
             tournament.brackets.push(bracket);
@@ -115,7 +114,7 @@ export const tournamentUpdateStatusController = async (
             } else {
               const bracketCheckTimer = new Date(
                 new Date(bracket.teamA.uploadBy).getTime() +
-                  TournamentTime.TournamentScoreCheckTime
+                TournamentTime.TournamentScoreCheckTime
               );
               timer.schedule(
                 `${bracket.regId}-check`,
