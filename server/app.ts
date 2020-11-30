@@ -11,7 +11,7 @@ import next from "next";
 import { config } from "dotenv";
 
 const app = express();
-const isDevMode = process.env.NODE_ENV !== NodeEnv.Production;
+const isDevMode = process.env.NODE_ENV?.trim() !== NodeEnv.Production;
 const nextApp = next({ dev: isDevMode });
 const handle = nextApp.getRequestHandler();
 
