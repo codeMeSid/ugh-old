@@ -131,16 +131,20 @@ export const tournamentAddController = async (req: Request, res: Response) => {
                 $in: tournament.players.map((playerId) => playerId),
               },
             }).session(session);
-            users.map(async (user) => {
-              user.set({
-                "wallet.coins": user.wallet.coins + tournament.coins,
-                tournaments: user.tournaments.filter(
-                  (tId) => JSON.stringify(tId) === JSON.stringify(tournament.id)
-                ),
-              });
-              await user.save({ session });
-            });
-            await tournament.save({ session });
+            await Promise.all([
+              users.map(async (user) => {
+                user.wallet.coins = user.wallet.coins + tournament.coins;
+                user.tournaments = user.tournaments.map(t => {
+                  if (JSON.stringify(t) === JSON.stringify(tournament.id)) {
+                    t.didWin = true;
+                    t.coins = 0;
+                  }
+                  return t;
+                });
+                return user.save({ session })
+              }),
+              tournament.save({ session })
+            ]);
             await session.commitTransaction();
             timer.cancel(`${id}-end`);
           } else {

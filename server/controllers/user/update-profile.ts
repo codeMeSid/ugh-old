@@ -12,7 +12,8 @@ export const updateUserProfileController = async (
   if (!user) throw new BadRequestError("Invalid account");
   if (user.activity === UserActivity.Inactive)
     throw new BadRequestError("User account inactive");
-  user.set({ "wallet.coins": coins, role });
+  user.wallet.coins = coins;
+  user.role = role;
   await user.save();
   res.send(user);
 };
