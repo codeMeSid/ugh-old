@@ -206,7 +206,7 @@ const AddTournament = ({
                 placeholder={`game (${
                   games?.filter(
                     (game) => game.console === consoles[console]?.name
-                  )[game].gameType
+                  )[game]?.gameType
                 })`}
                 value={game}
                 options={games
@@ -267,7 +267,7 @@ const AddTournament = ({
                   maxWidth: "50rem",
                 }}
               >
-                Creating tournament will cost you{" "}
+                Creating tournament will cost you
                 {coins * (games[game]?.groups[group]?.participants || 1)} coins
                 from your account
               </div>

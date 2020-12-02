@@ -42,7 +42,7 @@ const BracketList = ({ brackets, errors, userHasUploadedScore, currentUser, tour
                     messagesUpdate.push({ message: `${mBy} updated ${brackets[0]?.gameType}`, type: "success" });
                     break;
                 case "dispute":
-                    messagesUpdate.push({ message: `${mBy} raised dispute on ${mOn}`, type: "success" });
+                    messagesUpdate.push({ message: `${mBy} raised dispute`, type: "success" });
                     break;
                 case "proof":
                     messagesUpdate.push({ message: `${mBy} uploaded proof`, type: "success" });

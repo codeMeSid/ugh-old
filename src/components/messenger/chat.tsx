@@ -108,7 +108,7 @@ class MessengerChat extends Component<Props> {
                 }) : <>
                         <div className="messenger__message ugh">
                             <div className="messenger__message__head">{from}</div>
-                            <div className="messenger__message__text ugh">Select chat to message</div>
+                            <div className="messenger__message__text ugh">Select the contact to initiate chat</div>
                             <div className="messenger__message__date">{format(new Date(), "hh:mm a")}</div>
                         </div>
 
