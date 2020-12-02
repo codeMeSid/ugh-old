@@ -134,13 +134,9 @@ export const tournamentAddController = async (req: Request, res: Response) => {
             await Promise.all([
               users.map(async (user) => {
                 user.wallet.coins = user.wallet.coins + tournament.coins;
-                user.tournaments = user.tournaments.map(t => {
-                  if (JSON.stringify(t) === JSON.stringify(tournament.id)) {
-                    t.didWin = true;
-                    t.coins = 0;
-                  }
-                  return t;
-                });
+                user.tournaments = user.tournaments.filter(t =>
+                  JSON.stringify(t) !== JSON.stringify(tournament.id)
+                );
                 return user.save({ session })
               }),
               tournament.save({ session })
