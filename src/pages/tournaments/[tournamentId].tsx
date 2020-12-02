@@ -130,7 +130,7 @@ const TournamentDetail = ({
       return (
         <Link href={`/game/${tournament?.regId}`}>
           <a>
-            <Button text="Play" type="link" size="small" />
+            <Button text="View Brackets" type="link" size="medium" />
           </a>
         </Link>
       );

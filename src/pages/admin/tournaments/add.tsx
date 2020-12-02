@@ -94,14 +94,22 @@ const AddTournament = ({
     const body = {
       name,
       coins: coins || 0,
-      winnerCount: games[gameIndex]?.winners[wI] || 1,
+      winnerCount:
+        games?.filter((game) => game.console === consoles[consoleIndex]?.name)[
+          gameIndex
+        ]?.winners[wI] || 1,
       startDateTime: new Date(startDateTime),
       endDateTime: new Date(endDateTime),
       game: games?.filter(
         (game) => game.console === consoles[consoleIndex]?.name
       )[gameIndex]?.id,
-      playerCount: games[gameIndex]?.participants[pIndex] || 0,
-      group: games[gameIndex].groups[gIndex],
+      playerCount:
+        games?.filter((game) => game.console === consoles[consoleIndex]?.name)[
+          gameIndex
+        ]?.participants[pIndex] || 0,
+      group: games?.filter(
+        (game) => game.console === consoles[consoleIndex]?.name
+      )[gameIndex].groups[gIndex],
     };
     const { doRequest } = useRequest({
       url: "/api/ugh/tournament/add",

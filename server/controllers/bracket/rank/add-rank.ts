@@ -8,6 +8,7 @@ export const addRankController = async (req: Request, res: Response) => {
   const { id } = req.currentUser;
   const { bracketId } = req.params;
   const { rank, tournamentId } = req.body;
+  if (rank === 0) throw new BadRequestError("Cannot update 0 rank");
   const bracket = await Bracket.findOne({ regId: bracketId });
   if (!bracket) throw new BadRequestError("Invalid match");
   if (JSON.stringify(id) !== JSON.stringify(bracket.teamA.user))

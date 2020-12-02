@@ -40,8 +40,7 @@ const AddTournament = ({
       case "name":
         return setName(val);
       case "coins":
-        if (val > 0) return setCoins(parseInt(val));
-        else return;
+        return setCoins(val);
       case "startDateTime":
         return setSdt(val);
       case "endDateTime":
@@ -98,14 +97,20 @@ const AddTournament = ({
     const body = {
       name,
       coins: coins || 0,
-      winnerCount: games[game]?.winners[wI] || 1,
+      winnerCount:
+        games?.filter((game) => game.console === consoles[console]?.name)[game]
+          ?.winners[wI] || 1,
       startDateTime: new Date(sdt),
       endDateTime: new Date(edt),
       game: games?.filter((game) => game.console === consoles[console]?.name)[
         game
       ]?.id,
-      playerCount: games[game]?.participants[participants] || 0,
-      group: games[game].groups[group],
+      playerCount:
+        games?.filter((game) => game.console === consoles[console]?.name)[game]
+          ?.participants[participants] || 0,
+      group: games?.filter((game) => game.console === consoles[console]?.name)[
+        game
+      ].groups[group],
     };
     const { doRequest } = useRequest({
       url: "/api/ugh/tournament/add",
