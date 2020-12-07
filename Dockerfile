@@ -4,7 +4,7 @@ FROM node:12.15.0-alpine3.10
 WORKDIR /app
 
 # Installing dependencies
-COPY package*.json ./
+COPY package*.json .
 RUN npm install --silent
 
 # Copying source files

@@ -15,7 +15,7 @@ export const messageFetchController = async (req: Request, res: Response) => {
       break;
     case SocketChannel.User:
       filter = {
-        $and: [{ users: { $in: [to] } }, { users: { $in: [to] } }],
+        $and: [{ users: { $in: [to] } }, { users: { $in: [from] } }],
         channel,
       };
       break;
