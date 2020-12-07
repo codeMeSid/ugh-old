@@ -5,13 +5,44 @@ import SponsorSlider from "../components/sponsor-slider";
 import Footer from "../components/footer";
 import "../public/css/main.css";
 import "react-awesome-button/dist/styles.css";
-import Title from "../components/title";
 
 const AppComponent = ({ Component, pageProps, router, currentUser }) => {
+  const getTitle = {
+    "/": "Home",
+    "/about": "About",
+    "/add-tournament": "Add New Tournament",
+    "/gallery": "Gallery",
+    "/how-to-play": "How To Play",
+    "/my-tournament": "My Tournament",
+    "/privacy": "Privacy Policy",
+    "/settings": "Profile Settings",
+    "/shop": "Coins Shop",
+    "/signout": "See You Soon",
+    "/signup": "Player Registration",
+    "/streams": "Gaming & Live Streams",
+    "/tac": "Terms & Conditions",
+    "/login": "Login Player",
+    "/withdraw": "Withdraw Coins",
+    "/account/activate/[ughId]": "Account Activated",
+    "/account/activate": "Account Activation Mail Sent",
+    "/account/forgot-password": "Forgot Password",
+    "/account/reset-password/[recoveryToken]": "Reset Password",
+    "/game/[tournamentId]": "Tournament Brackets",
+    "/news/[newsId]": "News Story",
+    "/profile/[ughId]": `${router.query?.ughId}\'s Profile`,
+    "/profile/edit": "Edit Profile",
+    "/profile": "My Profile",
+    "/sponsors": "UGH Sponsors",
+    "/sponsors/[sponsorId]": "Sponsors Confirmation Form",
+    "/tournaments/[tournamentId]": "Tournament Detail",
+    "/tournaments": "UGH Tournaments",
+  };
   return (
     <>
       <Head>
-        <Title route={router.route} query={router.query} />
+        <title>{`${
+          getTitle[router.route]
+        } - Ultimate Gamers Hub | Play Tournaments`}</title>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
