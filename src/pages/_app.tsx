@@ -44,6 +44,16 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
           getTitle[router.route]
         } - Ultimate Gamers Hub | Play Tournaments`}</title>
         <meta
+          name="description"
+          content={`Ultimate Gamers Hub: The Ultimate e-sports Hub in India.
+                    Ultimate gamers hub is the best e-sports website in India for all pro & casual gamers,
+                    where you can find all categories of gaming tournaments and you can also create the tournament of our own.`}
+        />
+        <meta
+          name="keywords"
+          content="Ultimate Gamers Hub, Game, Tournament, Fifa, Pes, PS4, PS5"
+        />
+        <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
@@ -68,17 +78,6 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="msapplication-TileColor" content="#ffc40d" />
         <meta name="theme-color" content="#ffffff" />
-        <meta
-          name="description"
-          content={`Ultimate Gamers Hub: The Ultimate e-sports Hub in India.
-                    Ultimate gamers hub is the best e-sports website in India for all pro & casual gamers,
-                    where you can find all categories of gaming tournaments and you can also create the tournament of our own.`}
-        />
-        <meta
-          name="keywords"
-          content="Ultimate Gamers Hub, Game, Tournament, Fifa, Pes, PS4, PS5"
-        />
-        <meta httpEquiv="refresh" content="30" />
       </Head>
       {!router.route.match("/admin") && !router.route.match("/signout") && (
         <TopNavbar currentUser={currentUser} />

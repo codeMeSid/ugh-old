@@ -21,7 +21,7 @@ export const apiHandlers: Array<ApiSign> = [
   {
     url: "/test",
     controller: (req: any, res: any) => {
-      res.send("HI");
+      res.send(true);
     },
     middlewares: [],
   },
