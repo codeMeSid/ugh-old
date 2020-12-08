@@ -22,7 +22,7 @@ class Messenger {
       });
     });
   }
-  
+
   async saveMessage(data: SocketMessage) {
     const { channel, createdAt, from, text, to } = data;
     let convo: ConversationDoc;
@@ -46,8 +46,7 @@ class Messenger {
         break;
       case SocketChannel.User:
         convo = await Conversation.findOne({
-          $and: [{ users: { $in: [to] } }, { users: { $in: [from] } }],
-          channel,
+          $and: [{ users: { $in: [to] } }, { users: { $in: [from] } }, { channel }],
         });
         break;
     }
