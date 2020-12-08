@@ -75,7 +75,7 @@ const AddTournament = ({
     }
   };
 
-  const onTouramentCreateHandler = async (_, next) => {
+  const onTouramentCreateHandler = async () => {
     const iGame = games?.filter(
       (game) => game.console === consoles[console]?.name
     )[game];

@@ -2,7 +2,7 @@ import SocketIo from "socket.io-client";
 import { SocketChannel } from "../../server/utils/enum/socket-channel";
 import { SocketEvent } from "../../server/utils/enum/socket-event";
 import { SocketMessage } from "../../server/utils/interface/socket-message";
-const socket = SocketIo({ transports: ['websocket']})
+const socket = SocketIo.connect()
 
 export const event = {
   joinChannel: (name: SocketChannel) =>
