@@ -137,6 +137,45 @@ const TournamentDetail = ({
     else return <Button text="Game Over" type="disabled" size="medium" />;
   };
 
+  const statusText = () => {
+    let text = "",
+      color = "white";
+
+    const status = tournament?.status;
+    const winners = tournament?.winners?.length;
+    const endDateTime = new Date(tournament?.endDateTime).valueOf();
+    const players = tournament?.players?.length;
+    const participants = tournament?.group?.participants || 0;
+    const playerCount = tournament?.playerCount || 0;
+    const cutoff = tournament?.game?.cutoff || 50;
+
+    console.log({ players, participants, playerCount, cutoff });
+
+    if (status === "completed" && winners === 0) {
+      text = "No Winners";
+      color = "red";
+    }
+    // if(status === "completed" && players <)
+    if (status === "started" && Date.now() > endDateTime) {
+      text = "Under Review, Tournament In Progress";
+      color = "yellow";
+    }
+
+    return text ? (
+      <div
+        style={{
+          textAlign: "center",
+          margin: "10px 0",
+          color,
+          fontSize: 36,
+          textTransform: "uppercase",
+        }}
+      >
+        {text}
+      </div>
+    ) : null;
+  };
+
   const { doRequest } = useRequest({
     url: `/api/ugh/tournament/join/${tournament?.id}`,
     body: {},
@@ -182,6 +221,8 @@ const TournamentDetail = ({
                 {tournament?.name}
               </div>
               <div className="tournament__card__head__time">{getTimer()}</div>
+              <div className="tournament__card__head__time">{getTimer()}</div>
+
               {tournament?.winners?.length > 0 && (
                 <div className="tournament__card__head__winner">
                   <IoIosTrophy className="tournament__card__head__winner__icon" />
@@ -195,6 +236,7 @@ const TournamentDetail = ({
               )}
             </div>
             <div className="tournament__card__body">
+              {statusText()}
               <div className="tournament__card__body__upper">
                 <div className="tournament__card__body__upper__left">
                   <img
