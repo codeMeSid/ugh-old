@@ -23,6 +23,7 @@ export const transactionCreateController = async (
       orderId: payment.receipt,
       status: TransactionTypes.Created,
       user: id,
+      userDetail: user
     });
     await transaction.save({ session });
     await session.commitTransaction();

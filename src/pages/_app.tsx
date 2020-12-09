@@ -23,7 +23,7 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
     "/tac": "Terms & Conditions",
     "/login": "Login Player",
     "/withdraw": "Withdraw Coins",
-    "/account/activate/[ughId]": "Account Activated",
+    "/account/activate/[ughId]": `${router.query?.ughId}\'s Player Activation`,
     "/account/activate": "Account Activation Mail Sent",
     "/account/forgot-password": "Forgot Password",
     "/account/reset-password/[recoveryToken]": "Reset Password",
