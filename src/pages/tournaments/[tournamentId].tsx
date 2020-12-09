@@ -147,7 +147,7 @@ const TournamentDetail = ({
     const players = tournament?.players?.length;
     const participants = tournament?.group?.participants || 0;
     const playerCount = tournament?.playerCount || 0;
-    const cutoff = tournament?.game?.cutoff || 50;
+    const cutoff = tournament?.game?.cutoff || 10;
 
     console.log({ players, participants, playerCount, cutoff });
 

@@ -51,12 +51,14 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
         />
         <meta
           name="keywords"
-          content="Ultimate Gamers Hub, Game, Tournament, Fifa, Pes, PS4, PS5"
+          content="Ultimate Gamers Hub, Game,Gamer,Match,Players Tournament, Fifa, Pes, PS4, PS5"
         />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
+        <meta name="msapplication-TileColor" content="#ffc40d" />
+        <meta name="theme-color" content="#ffffff" />
         <link rel="icon" href="/favicon.ico" />
         <link
           rel="apple-touch-icon"
@@ -76,8 +78,6 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
           href="/favicon-16x16.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
-        <meta name="msapplication-TileColor" content="#ffc40d" />
-        <meta name="theme-color" content="#ffffff" />
       </Head>
       {!router.route.match("/admin") && !router.route.match("/signout") && (
         <TopNavbar currentUser={currentUser} />
