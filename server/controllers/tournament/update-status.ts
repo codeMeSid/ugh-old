@@ -15,6 +15,9 @@ import { TournamentTime } from "../../utils/enum/tournament-time";
 import { winnerLogic } from "../../utils/winner-logic";
 import { mailer } from "../../utils/mailer";
 import { MailerTemplate } from "../../utils/enum/mailer-template";
+import { Passbook, PassbookDoc } from "../../models/passbook";
+import { TransactionEnv } from "../../utils/enum/transaction-env";
+import { TransactionType } from "../../utils/enum/transaction-type";
 
 export const tournamentUpdateStatusController = async (
   req: Request,
@@ -39,6 +42,7 @@ export const tournamentUpdateStatusController = async (
         users = await User.find({
           _id: { $in: tournament.players },
         }).session(session);
+        const passbooks: Array<PassbookDoc> = [];
         tournament.status = TournamentStatus.Completed;
         tournament.winners = users.map((u) => ({
           ughId: u.ughId,
@@ -53,9 +57,16 @@ export const tournamentUpdateStatusController = async (
           users[i].tournaments[tIndex].didWin = true;
           users[i].tournaments[tIndex].coins = 0;
           users[i].wallet.coins = users[i].wallet.coins + tournament.coins + 10;
+          passbooks.push(Passbook.build({
+            coins: tournament.coins + 10,
+            transactionEnv: TransactionEnv.TounamentCancel,
+            transactionType: TransactionType.Credit,
+            ughId: users[i].ughId
+          }));
         }
         await Promise.all([
-          users.map(async (u) => await u.save({ session })),
+          users.map(async (u) => u.save({ session })),
+          passbooks.map(async p => p.save({ session })),
           tournament.save({ session }),
         ]);
         await session.commitTransaction();
@@ -144,7 +155,7 @@ export const tournamentUpdateStatusController = async (
 
         await Promise.all([
           tournament.save({ session }),
-          brackets.map(async (b) => await b.save({ session })),
+          brackets.map(async (b) => b.save({ session })),
         ]);
         await session.commitTransaction();
         timer.cancel(tournament.regId);

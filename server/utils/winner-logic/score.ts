@@ -2,10 +2,13 @@ import { timer, TournamentStatus } from "@monsid/ugh";
 import { randomBytes } from "crypto";
 import { winnerLogic } from ".";
 import { Bracket, BracketDoc } from "../../models/bracket";
+import { Passbook, PassbookDoc } from "../../models/passbook";
 import { TournamentDoc } from "../../models/tournament";
 import { UserDoc } from "../../models/user";
 import { DQ } from "../enum/dq";
 import { TournamentTime } from "../enum/tournament-time";
+import { TransactionEnv } from "../enum/transaction-env";
+import { TransactionType } from "../enum/transaction-type";
 import { prizeDistribution } from "../prize-distribution";
 
 export const scoreLogger = async (
@@ -14,13 +17,14 @@ export const scoreLogger = async (
   splBracket: BracketDoc,
   users: UserDoc[]
 ) => {
-  
+
   const newBrackets: Array<any> = [];
+  const passbooks: Array<PassbookDoc> = []
   const requiredBracketCount = tournament.players.length - 1;
   const canCreateBracket = requiredBracketCount > brackets.length;
 
   if (splBracket && splBracket.winner !== DQ.ScoreNotUploaded) {
-    
+
     const nextBracketIndex = brackets.findIndex(
       (b) => b.round === splBracket.round + 1 && !b.teamB.user
     );
@@ -37,7 +41,7 @@ export const scoreLogger = async (
       splBracket.teamB.score === -1 &&
       !splBracket.winner
     ) {
-      
+
       const bracketIndex = brackets.findIndex(
         (b) => b.regId === splBracket.regId
       );
@@ -65,7 +69,7 @@ export const scoreLogger = async (
           );
 
           if (newNextBracketIndex !== -1) {
-            
+
             const uploadBy = new Date(
               Date.now() + TournamentTime.TournamentScoreUpdateTime
             );
@@ -80,7 +84,7 @@ export const scoreLogger = async (
             brackets[newNextBracketIndex].teamA.uploadBy = uploadBy;
             const bracketCheckTimer = new Date(
               new Date(uploadBy).getTime() +
-                TournamentTime.TournamentScoreCheckTime
+              TournamentTime.TournamentScoreCheckTime
             );
             timer.schedule(
               `${brackets[newNextBracketIndex].regId}-check`,
@@ -103,7 +107,7 @@ export const scoreLogger = async (
               }
             );
           } else if (canCreateBracket) {
-            
+
             const regId = randomBytes(4).toString("hex").substr(0, 5);
             const newBracket = Bracket.build({
               gameType: emptyBracket.gameType,
@@ -133,7 +137,7 @@ export const scoreLogger = async (
       //////////////////////////////////
       //////////////////////////////////
     } else if (nextBracketIndex !== -1) {
-      
+
       const uploadBy = new Date(
         Date.now() + TournamentTime.TournamentScoreUpdateTime
       );
@@ -170,7 +174,7 @@ export const scoreLogger = async (
         }
       );
     } else if (canCreateBracket) {
-      
+
       const regId = randomBytes(4).toString("hex").substr(0, 5);
       const newBracket = Bracket.build({
         gameType: splBracket.gameType,
@@ -188,7 +192,6 @@ export const scoreLogger = async (
       tournament.brackets.push(newBracket);
       newBrackets.push(newBracket);
     } else {
-      
       const sortedBrackets = brackets.sort((a, b) => b.round - a.round);
       const winnerBracket = sortedBrackets[0];
       const winnerCoins = prizeDistribution(
@@ -244,9 +247,15 @@ export const scoreLogger = async (
         users[winner2Index].wallet.coins += winnerCoins[1];
       }
       tournament.status = TournamentStatus.Completed;
+      tournament.winners.forEach(w => passbooks.push(Passbook.build({
+        coins: w.coins,
+        transactionEnv: TransactionEnv.TournamentWin,
+        transactionType: TransactionType.Credit,
+        ughId: w.ughId,
+      })));
     }
   } else if (!splBracket) {
-    
+
     const unresolvedDispute = brackets.filter(
       (b) => (b.teamA.hasRaisedDispute || b.teamB.hasRaisedDispute) && !b.winner
     );
@@ -282,7 +291,7 @@ export const scoreLogger = async (
       else if (dB && !uuA) bWinner = users[userBIndex].ughId;
 
       brackets[bIndex].winner = bWinner;
-      
+
       let {
         updateUsers,
         updatedBrackets,
@@ -293,14 +302,15 @@ export const scoreLogger = async (
       brackets = updatedBrackets;
       tournament = updatedTournament;
       if (nBs.length >= 1) newBrackets.push(...nBs);
-      
+
     }
   }
-  
+
   return {
     updatedTournament: tournament,
     updatedBrackets: brackets,
     updateUsers: users,
     newBrackets,
+    passbooks
   };
 };

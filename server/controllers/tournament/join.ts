@@ -1,8 +1,11 @@
 import { BadRequestError, TournamentStatus } from "@monsid/ugh";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
+import { Passbook } from "../../models/passbook";
 import { Tournament } from "../../models/tournament";
 import { User } from "../../models/user";
+import { TransactionEnv } from "../../utils/enum/transaction-env";
+import { TransactionType } from "../../utils/enum/transaction-type";
 
 export const tournamentJoinController = async (req: Request, res: Response) => {
   const { tournamentId } = req.params;
@@ -12,8 +15,15 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
   try {
     const tournament = await Tournament.findById(tournamentId).session(session);
     const user = await User.findById(id).session(session);
+
     if (!tournament) throw new Error("Invalid Tournament");
     if (!user) throw new Error("Invalid user");
+    const passbook = Passbook.build({
+      coins: tournament.coins,
+      transactionEnv: TransactionEnv.TournamentJoin,
+      transactionType: TransactionType.Debit,
+      ughId: user.ughId
+    });
     const status = tournament.status;
     if (status !== TournamentStatus.Upcoming)
       throw new Error("Cannot join tournament at this stage");
@@ -39,6 +49,7 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
     tournament.players.push(user);
     await tournament.save({ session });
     await user.save({ session });
+    await passbook.save({ session });
     await session.commitTransaction();
   } catch (error) {
     await session.abortTransaction();

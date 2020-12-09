@@ -7,6 +7,7 @@ import {
 } from "@monsid/ugh";
 import mongoose from "mongoose";
 import { Bracket, BracketDoc } from "../../models/bracket";
+import { PassbookDoc } from "../../models/passbook";
 import { Tournament, TournamentDoc } from "../../models/tournament";
 import { User, UserDoc } from "../../models/user";
 import { MailerTemplate } from "../enum/mailer-template";
@@ -53,6 +54,7 @@ export const winnerLogic = async (
       updatedBrackets: Array<BracketDoc>;
       updateUsers: Array<UserDoc>;
       newBrackets?: Array<BracketDoc>;
+      passbooks?: Array<PassbookDoc>;
     };
     switch (tournament.game.gameType) {
       case GameType.Rank:
@@ -65,10 +67,11 @@ export const winnerLogic = async (
 
     if (updates) {
       await Promise.all([
-        updates.updateUsers.map(async (u) => await u.save({ session })),
-        updates.updatedBrackets.map(async (b) => await b.save({ session })),
+        updates.updateUsers.map(async (u) => u.save({ session })),
+        updates.updatedBrackets.map(async (b) => b.save({ session })),
         updates.updatedTournament.save({ session }),
-        updates?.newBrackets?.map(async (b) => await b.save({ session })),
+        updates?.newBrackets.map(async (b) => b.save({ session })),
+        updates?.passbooks.map(async p => p.save({ session }))
       ]);
     }
 

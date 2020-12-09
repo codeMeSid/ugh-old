@@ -8,6 +8,9 @@ import {
 } from "@monsid/ugh";
 import { Transaction } from "../../models/transaction";
 import { Coin } from "../../models/coin";
+import { Passbook } from "../../models/passbook";
+import { TransactionEnv } from "../../utils/enum/transaction-env";
+import { TransactionType } from "../../utils/enum/transaction-type";
 
 export const transactionVerifyController = async (
   req: Request,
@@ -30,6 +33,13 @@ export const transactionVerifyController = async (
     const user = await User.findById(id).session(session);
     const coins = await Coin.findById(coinId).session(session);
     user.set({ "wallet.coins": user.wallet.coins + coins.value });
+    const passbook = Passbook.build({
+      coins: coins.value,
+      transactionEnv: TransactionEnv.Purchase,
+      transactionType: TransactionType.Credit,
+      ughId: user.ughId
+    });
+    await passbook.save({ session });
     await transaction.save({ session });
     await user.save({ session });
     await session.commitTransaction();
