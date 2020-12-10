@@ -38,13 +38,17 @@ class Mailer {
           html: htmlTemplate,
         },
         (err, info) => {
-          console.log({
-            type,
-            to,
-            err: err.message,
-            info,
-            on: format(Date.now(), "dd/MM/yyyy hh:mm a"),
-          });
+
+          if (err) {
+            console.log({
+              type,
+              to,
+              err: err.message,
+              info,
+              on: format(Date.now(), "dd/MM/yyyy hh:mm a"),
+            });
+            this.transporter.close()
+          }
           resolve();
         }
       );
