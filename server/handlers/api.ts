@@ -16,6 +16,7 @@ import { adminHandler } from "./admin";
 import { settingHandler } from "./settings";
 import { bracketHandler } from "./bracket";
 import { messageHandler } from "./message";
+import { passbookHandler } from "./passbook";
 
 export const apiHandlers: Array<ApiSign> = [
   {
@@ -179,6 +180,16 @@ export const apiHandlers: Array<ApiSign> = [
     ({ url, controller, middlewares, method }): ApiSign => {
       return {
         url: `/message${url}`,
+        controller,
+        method,
+        middlewares: [...middlewares],
+      };
+    }
+  ),
+  ...Array.from(passbookHandler).map(
+    ({ url, controller, middlewares, method }): ApiSign => {
+      return {
+        url: `/passbook${url}`,
         controller,
         method,
         middlewares: [...middlewares],

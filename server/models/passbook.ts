@@ -14,7 +14,7 @@ export interface PassbookDoc extends mongoose.Document {
     transactionType: TransactionType;
     transactionEnv: TransactionEnv;
     coins: number;
-    createdAt: Date;
+    date: Date;
 }
 
 interface PassbookModel extends mongoose.Model<PassbookDoc> {
