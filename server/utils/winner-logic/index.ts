@@ -67,14 +67,13 @@ export const winnerLogic = async (
 
     if (updates) {
       await Promise.all([
-        updates.updateUsers.map(async (u) => u.save({ session })),
-        updates.updatedBrackets.map(async (b) => b.save({ session })),
-        updates.updatedTournament.save({ session }),
-        updates?.newBrackets.map(async (b) => b.save({ session })),
-        updates?.passbooks.map(async p => p.save({ session }))
+        updates?.updateUsers?.map(async (u) => await u.save({ session })),
+        updates?.updatedBrackets?.map(async (b) => await b.save({ session })),
+        updates?.newBrackets?.map(async (b) => await b.save({ session })),
+        updates?.passbooks?.map(async p => await p.save({ session })),
+        await updates?.updatedTournament?.save({ session }),
       ]);
     }
-
     await session.commitTransaction();
     if (updates) {
       messenger.io

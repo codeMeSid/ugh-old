@@ -209,7 +209,7 @@ export const scoreLogger = async (
           ughId: users[winner1Index].ughId,
         },
       ];
-      users[winner1Index].tournaments = users[userIndex].tournaments.map(
+      users[winner1Index].tournaments = users[userIndex].tournaments?.map(
         (t) => {
           if (JSON.stringify(t.id) === JSON.stringify(tournament.id)) {
             t.didWin = true;
@@ -235,7 +235,7 @@ export const scoreLogger = async (
             ughId: users[winner2Index].ughId,
           },
         ];
-        users[winner2Index].tournaments = users[userIndex].tournaments.map(
+        users[winner2Index].tournaments = users[userIndex].tournaments?.map(
           (t) => {
             if (JSON.stringify(t.id) === JSON.stringify(tournament.id)) {
               t.didWin = true;

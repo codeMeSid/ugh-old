@@ -34,7 +34,7 @@ export const rankLogger = async (
   } else if (!isTournamentComplete && brackets.length !== bracketWinnersCount) {
     return;
   }
-  brackets = brackets.map((b) => {
+  brackets = brackets?.map((b) => {
     // TODO new condtion
     // issue player can update rank atlast minute and get away with it
     // solution auto dispute required
@@ -65,11 +65,11 @@ export const rankLogger = async (
     bracketWinners.length
   );
 
-  tournament.winners = bracketWinners.map((bw, index) => {
+  tournament.winners = bracketWinners?.map((bw, index) => {
     const userIndex = users.findIndex(
       (u) => JSON.stringify(u.id) === JSON.stringify(bw.teamA.user)
     );
-    users[userIndex].tournaments = users[userIndex].tournaments.map((t) => {
+    users[userIndex].tournaments = users[userIndex].tournaments?.map((t) => {
       if (JSON.stringify(t.id) === JSON.stringify(tournament.id)) {
         t.didWin = true;
         t.coins = winnerCoins[index];
