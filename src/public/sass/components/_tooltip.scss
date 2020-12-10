@@ -1,6 +1,6 @@
 .tooltip {
   position: relative;
-  &:hover  &__title {
+  &:hover &__title {
     visibility: visible;
   }
   &__title {
@@ -15,6 +15,7 @@
     text-transform: uppercase;
     font-size: 1.2rem;
     z-index: 2;
+    width: fit-content;
     cursor: pointer;
     visibility: hidden;
   }
