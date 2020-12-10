@@ -1,56 +1,73 @@
 import { useState, useEffect } from "react";
-import { useRequest } from "../hooks/use-request";
 import Button from "./button/main";
 
-const WallpaperSlider = () => {
-    const [progress, setProgress] = useState(0);
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [wallpapers, setWallpapers] = useState([]);
+const WallpaperSlider = ({ wallpapers }) => {
+  const [progress, setProgress] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-    const { doRequest } = useRequest({ url: "/api/ugh/settings/fetch/wallpapers", body: {}, method: "get", onSuccess: (data) => setWallpapers(data || []) })
+  useEffect(() => {
+    return () => clearTimeout();
+  }, []);
 
-    useEffect(() => {
-        doRequest();
-        return () => clearTimeout();
-    }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      if (progress === 100) {
+        if (
+          wallpapers.length > 0 &&
+          activeIndex >= 0 &&
+          activeIndex < wallpapers.length - 1
+        )
+          setActiveIndex(activeIndex + 1);
+        else setActiveIndex(0);
+        setProgress(0);
+      } else setProgress(progress + 1);
+    }, 50);
+  }, [progress]);
 
-    useEffect(() => {
-        setTimeout(() => {
-            if (progress === 100) {
-                if (wallpapers.length > 0 && activeIndex >= 0 && activeIndex < wallpapers.length - 1) setActiveIndex(activeIndex + 1);
-                else setActiveIndex(0);
-                setProgress(0);
-            }
-            else setProgress(progress + 1);
-        }, 50)
-    }, [progress])
-
-    return <div className="wallpaper">
-        <div className="wallpaper__container">
-            {
-                wallpapers.map((paper, index) => {
-                    return index === activeIndex
-                        ? <div key={paper?.uploadUrl} style={{ backgroundImage: `url(${paper.uploadUrl})` }} className="wallpaper__item" >
-                            <div className="wallpaper__item__title">
-                                {paper.title && <div className="wallpaper__item__title__text">{paper.title}</div>}
-                                {paper.href && <a href={paper.href} className="wallpaper__item__href">
-                                    <Button text="CLICK HERE" />
-                                </a>}
-                            </div>
-                        </div>
-                        : null
-                })
-            }
-        </div>
-        <div className="wallpaper__progress" style={{ width: `${progress}%` }} />
-        <div className="wallpaper__dock">
-            {
-                wallpapers.map((paper, index) => {
-                    return <img key={paper?.uploadUrl} onClick={() => setActiveIndex(index)} src={paper.uploadUrl} alt={`ugh-${index + 1}`} className={`wallpaper__dock__item ${index === activeIndex ? "active" : ""}`} />
-                })
-            }
-        </div>
+  return (
+    <div className="wallpaper">
+      <div className="wallpaper__container">
+        {wallpapers.map((paper, index) => {
+          return index === activeIndex ? (
+            <div
+              key={paper?.uploadUrl}
+              style={{ backgroundImage: `url(${paper.uploadUrl})` }}
+              className="wallpaper__item"
+            >
+              <div className="wallpaper__item__title">
+                {paper.title && (
+                  <div className="wallpaper__item__title__text">
+                    {paper.title}
+                  </div>
+                )}
+                {paper.href && (
+                  <a href={paper.href} className="wallpaper__item__href">
+                    <Button text="CLICK HERE" />
+                  </a>
+                )}
+              </div>
+            </div>
+          ) : null;
+        })}
+      </div>
+      <div className="wallpaper__progress" style={{ width: `${progress}%` }} />
+      <div className="wallpaper__dock">
+        {wallpapers.map((paper, index) => {
+          return (
+            <img
+              key={paper?.uploadUrl}
+              onClick={() => setActiveIndex(index)}
+              src={paper.uploadUrl}
+              alt={`ugh-${index + 1}`}
+              className={`wallpaper__dock__item ${
+                index === activeIndex ? "active" : ""
+              }`}
+            />
+          );
+        })}
+      </div>
     </div>
-}
+  );
+};
 
 export default WallpaperSlider;
