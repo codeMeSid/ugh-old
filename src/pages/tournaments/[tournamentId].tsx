@@ -144,18 +144,21 @@ const TournamentDetail = ({
     const status = tournament?.status;
     const winners = tournament?.winners?.length;
     const endDateTime = new Date(tournament?.endDateTime).valueOf();
-    const players = tournament?.players?.length;
+    const players = tournament?.players?.length || 0;
     const participants = tournament?.group?.participants || 0;
-    const playerCount = tournament?.playerCount || 0;
+    const playerCount = tournament?.playerCount || 1;
     const cutoff = tournament?.game?.cutoff || 10;
 
-    console.log({ players, participants, playerCount, cutoff });
+    const attendance = ((players * participants) / playerCount) * 100;
 
     if (status === "completed" && winners === 0) {
       text = "No Winners";
       color = "red";
     }
-    // if(status === "completed" && players <)
+    if (status === "completed" && attendance < cutoff) {
+      text = "Tournament Cancelled";
+      color = "red";
+    }
     if (status === "started" && Date.now() > endDateTime) {
       text = "Under Review, Tournament In Progress";
       color = "yellow";
@@ -279,24 +282,35 @@ const TournamentDetail = ({
                   </IconDialogButton>
                   <div style={{ marginRight: 10 }}>{JoinButton()}</div>
                   <div>
-                    {/* <Button text="View Rules"  size="medium" /> */}
-                    <DialogButton
-                      title="View Rules"
-                      type="github"
-                      size="medium"
-                      style={{
-                        position: "fixed",
-                        width: "38rem",
-                        height: "50rem",
-                        overflowY: "scroll",
-                      }}
-                      fullButton
-                    >
-                      <h2>RULES OF THE GAME</h2>
-                      <div style={{ width: "30rem", margin: "0 auto" }}>
-                        <RichText content={tournament?.game?.rules} />
-                      </div>
-                    </DialogButton>
+                    {tournament?.status === "completed" && userHasJoined ? (
+                      <Link href={`/game/${tournament?.regId}`}>
+                        <a>
+                          <Button
+                            text="View Brackets"
+                            size="medium"
+                            type="secondary"
+                          />
+                        </a>
+                      </Link>
+                    ) : (
+                      <DialogButton
+                        title="View Rules"
+                        type="github"
+                        size="medium"
+                        style={{
+                          position: "fixed",
+                          width: "38rem",
+                          height: "50rem",
+                          overflowY: "scroll",
+                        }}
+                        fullButton
+                      >
+                        <h2>RULES OF THE GAME</h2>
+                        <div style={{ width: "30rem", margin: "0 auto" }}>
+                          <RichText content={tournament?.game?.rules} />
+                        </div>
+                      </DialogButton>
+                    )}
                   </div>
                 </div>
               </div>
@@ -355,7 +369,7 @@ const TournamentDetail = ({
             </div>
           </div>
         </div>
-        {currentUser && userHasJoined ? (
+        {currentUser && userHasJoined && tournament?.brackets.length > 0 ? (
           <div className="tournament__container tournament__container--footer">
             <div className="tournament__container--footer__title">
               Meet The Competitors
