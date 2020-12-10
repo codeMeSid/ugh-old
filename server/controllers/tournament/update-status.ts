@@ -60,6 +60,7 @@ export const tournamentUpdateStatusController = async (
           passbooks.push(Passbook.build({
             coins: tournament.coins + 10,
             transactionEnv: TransactionEnv.TounamentCancel,
+            event: tournament?.name,
             transactionType: TransactionType.Credit,
             ughId: users[i].ughId
           }));

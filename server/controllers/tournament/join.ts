@@ -21,6 +21,7 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
     const passbook = Passbook.build({
       coins: tournament.coins,
       transactionEnv: TransactionEnv.TournamentJoin,
+      event: tournament?.name,
       transactionType: TransactionType.Debit,
       ughId: user.ughId
     });

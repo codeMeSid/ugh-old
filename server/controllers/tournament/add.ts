@@ -143,6 +143,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
                 const passbook = Passbook.build({
                   coins: tournament.coins,
                   transactionEnv: TransactionEnv.TounamentCancel,
+                  event: Tournament?.name,
                   transactionType: TransactionType.Credit,
                   ughId: user.ughId
                 })

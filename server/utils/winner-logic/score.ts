@@ -249,6 +249,7 @@ export const scoreLogger = async (
       tournament.status = TournamentStatus.Completed;
       tournament.winners.forEach(w => passbooks.push(Passbook.build({
         coins: w.coins,
+        event: tournament?.name,
         transactionEnv: TransactionEnv.TournamentWin,
         transactionType: TransactionType.Credit,
         ughId: w.ughId,

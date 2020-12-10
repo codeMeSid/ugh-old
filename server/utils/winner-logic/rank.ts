@@ -87,6 +87,7 @@ export const rankLogger = async (
   tournament.winners.forEach(w => passbooks.push(Passbook.build({
     coins: w.coins,
     transactionEnv: TransactionEnv.TournamentWin,
+    event: tournament?.name,
     transactionType: TransactionType.Credit,
     ughId: w.ughId,
   })))

@@ -7,6 +7,7 @@ interface PassbookAttrs {
     transactionType: TransactionType;
     transactionEnv: TransactionEnv;
     coins: number;
+    event?: string;
 }
 
 export interface PassbookDoc extends mongoose.Document {
@@ -15,6 +16,7 @@ export interface PassbookDoc extends mongoose.Document {
     transactionEnv: TransactionEnv;
     coins: number;
     date: Date;
+    event: string;
 }
 
 interface PassbookModel extends mongoose.Model<PassbookDoc> {
@@ -24,6 +26,7 @@ interface PassbookModel extends mongoose.Model<PassbookDoc> {
 const passbookSchema = new mongoose.Schema(
     {
         ughId: String,
+        event: String,
         transactionType: {
             type: String,
             enum: Object.values(TransactionType)
