@@ -6,11 +6,10 @@ import DialogButton from "../button/dialog";
 import ProgressButton from "../button/progress";
 import FileInput from "../input/file";
 import Input from "../input/input";
-import Router from 'next/router';
 import { DQ } from "../../../server/utils/enum/dq";
 import { event } from "../../socket";
 
-const PlayerImg = require("../../public/asset/player.jpg");
+const PlayerImg = require("../../public/asset/logo-icon.png");
 
 
 const BracketRankCard = ({ userHasUploadedScore, currentUser, bracket, onError, tournamentId }: { userHasUploadedScore: boolean, currentUser: any, bracket: BracketDoc, onError: any, tournamentId: string }) => {
