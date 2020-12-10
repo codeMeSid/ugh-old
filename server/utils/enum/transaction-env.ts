@@ -3,6 +3,6 @@ export enum TransactionEnv {
     TounamentCancel = "tournament cancel",
     TournamentWin = "tournament win",
     Purchase = "purchase",
-    AdminAward = "admin award",
+    AdminAward = "admin reward",
     Refund = "refund"
 }
