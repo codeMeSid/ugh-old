@@ -272,7 +272,7 @@ const AddTournament = ({
                   maxWidth: "50rem",
                 }}
               >
-                Creating tournament will cost you
+                Creating tournament will cost you{" "}
                 {coins * (games[game]?.groups[group]?.participants || 1)} coins
                 from your account
               </div>

@@ -7,47 +7,48 @@ import "../public/css/main.css";
 import "react-awesome-button/dist/styles.css";
 
 const AppComponent = ({ Component, pageProps, router, currentUser }) => {
-  const getTitle = {
-    "/": "Home",
-    "/about": "About",
-    "/add-tournament": "Add New Tournament",
-    "/gallery": "Gallery",
-    "/how-to-play": "How To Play",
-    "/my-tournament": "My Tournament",
-    "/privacy": "Privacy Policy",
-    "/settings": "Profile Settings",
-    "/shop": "Coins Shop",
-    "/signout": "See You Soon",
-    "/signup": "Player Registration",
-    "/streams": "Gaming & Live Streams",
-    "/tac": "Terms & Conditions",
-    "/login": "Login Player",
-    "/withdraw": "Withdraw Coins",
-    "/account/activate/[ughId]": `${router.query?.ughId}\'s Player Activation`,
-    "/account/activate": "Account Activation Mail Sent",
-    "/account/forgot-password": "Forgot Password",
-    "/account/reset-password/[recoveryToken]": "Reset Password",
-    "/game/[tournamentId]": "Tournament Brackets",
-    "/news/[newsId]": "News Story",
-    "/profile/[ughId]": `${router.query?.ughId}\'s Profile`,
-    "/profile/edit": "Edit Profile",
-    "/profile": "My Profile",
-    "/sponsors": "UGH Sponsors",
-    "/sponsors/[sponsorId]": "Sponsors Confirmation Form",
-    "/tournaments/[tournamentId]": "Tournament Detail",
-    "/tournaments": "UGH Tournaments",
+  const getTitle = (route) => {
+    if (router.route.match("/admin")) return "Admin Panel";
+    return {
+      "/": "Home",
+      "/about": "About",
+      "/add-tournament": "Add New Tournament",
+      "/gallery": "Gallery",
+      "/how-to-play": "How To Play",
+      "/my-tournament": "My Tournament",
+      "/privacy": "Privacy Policy",
+      "/settings": "Profile Settings",
+      "/shop": "Coins Shop",
+      "/signout": "See You Soon",
+      "/signup": "Player Registration",
+      "/streams": "Gaming & Live Streams",
+      "/tac": "Terms & Conditions",
+      "/login": "Login Player",
+      "/withdraw": "Withdraw Coins",
+      "/account/activate/[ughId]": `${router.query?.ughId}\'s Player Activation`,
+      "/account/activate": "Account Activation Mail Sent",
+      "/account/forgot-password": "Forgot Password",
+      "/account/reset-password/[recoveryToken]": "Reset Password",
+      "/game/[tournamentId]": "Tournament Brackets",
+      "/news/[newsId]": "News Story",
+      "/profile/[ughId]": `${router.query?.ughId}\'s Profile`,
+      "/profile/edit": "Edit Profile",
+      "/profile": "My Profile",
+      "/sponsors": "UGH Sponsors",
+      "/sponsors/[sponsorId]": "Sponsors Confirmation Form",
+      "/tournaments/[tournamentId]": "Tournament Detail",
+      "/tournaments": "UGH Tournaments",
+    }[route];
   };
   return (
     <>
       <Head>
-        <title>{`${
-          getTitle[router.route]
-        } - Ultimate Gamers Hub | Play Tournaments`}</title>
+        <title>{`${getTitle(
+          router.route
+        )} - Ultimate Gamers Hub | Play Tournaments`}</title>
         <meta
           name="description"
-          content={`Ultimate Gamers Hub: The Ultimate e-sports Hub in India.
-                    Ultimate gamers hub is the best e-sports website in India for all pro & casual gamers,
-                    where you can find all categories of gaming tournaments and you can also create the tournament of our own.`}
+          content={`Ultimate Gamers Hub: The Ultimate e-sports Hub in India. Ultimate gamers hub is the best e-sports website in India for all pro & casual gamers, where you can find all categories of gaming tournaments and you can also create the tournament of our own.`}
         />
         <meta
           name="keywords"
