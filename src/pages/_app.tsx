@@ -5,6 +5,8 @@ import SponsorSlider from "../components/sponsor-slider";
 import Footer from "../components/footer";
 import "../public/css/main.css";
 import "react-awesome-button/dist/styles.css";
+import { useEffect } from "react";
+import { fire } from "../../server/utils/firebase";
 
 const AppComponent = ({ Component, pageProps, router, currentUser }) => {
   const getTitle = (route) => {
@@ -41,6 +43,12 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
       "/tournaments": "UGH Tournaments",
     }[route];
   };
+
+  useEffect(() => {
+    const getToken = async () => await fire.initMessaging();
+    getToken();
+  }, []);
+
   return (
     <>
       <Head>

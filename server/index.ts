@@ -21,6 +21,7 @@ import {
 import { siteRouter } from "./routes/site-routes";
 import { mailer } from "./utils/mailer";
 import { messenger } from "./utils/socket";
+import { Request, Response } from "express";
 
 const Agendash = require("agendash");
 const start = async () => {
@@ -38,9 +39,27 @@ const start = async () => {
         successlog("Database is connected");
       }
     );
-    await timer.connect(MONGO_URI);
     paymentHandler.init(RAZORPAY_ID, RAZORPAY_SECRET);
     mailer.init(PASSWORD, EMAIL);
+    await timer.connect(MONGO_URI);
+    app.get("/servive-worker.js", (req: Request, res: Response) => {
+      nextApp.serveStatic(req, res, "./.next/server-worker.js")
+    })
+    const serviceWorkers = [
+      {
+        filename: 'service-worker.js',
+        path: './.next/service-worker.js',
+      },
+      {
+        filename: 'firebase-messaging-sw.js',
+        path: './public/firebase-messaging-sw.js',
+      },
+    ];
+    serviceWorkers.forEach(({ filename, path }) => {
+      app.get(`/${filename}`, (req: Request, res: Response) => {
+        nextApp.serveStatic(req, res, path)
+      })
+    })
     app.use("/jobs", currentUser, authAdminRoute, Agendash(timer._agenda));
     app.use("/api/ugh", apiRouter);
     app.use(errorHandler);
