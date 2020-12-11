@@ -234,7 +234,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
             tournament.status = TournamentStatus.Started;
             await Promise.all([
               tournament.save({ session }),
-              brackets.map(async (b) => b.save({ session })),
+              brackets?.map(async (b) => b.save({ session })),
             ]);
             await session.commitTransaction();
             users.forEach((user) => {

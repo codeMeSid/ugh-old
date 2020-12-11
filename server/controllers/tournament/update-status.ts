@@ -66,8 +66,8 @@ export const tournamentUpdateStatusController = async (
           }));
         }
         await Promise.all([
-          users.map(async (u) => u.save({ session })),
-          passbooks.map(async p => p.save({ session })),
+          users?.map(async (u) => u.save({ session })),
+          passbooks?.map(async p => p.save({ session })),
           tournament.save({ session }),
         ]);
         await session.commitTransaction();
@@ -156,7 +156,7 @@ export const tournamentUpdateStatusController = async (
 
         await Promise.all([
           tournament.save({ session }),
-          brackets.map(async (b) => b.save({ session })),
+          brackets?.map(async (b) => b.save({ session })),
         ]);
         await session.commitTransaction();
         timer.cancel(tournament.regId);
