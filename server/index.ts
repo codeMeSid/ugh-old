@@ -42,24 +42,6 @@ const start = async () => {
     paymentHandler.init(RAZORPAY_ID, RAZORPAY_SECRET);
     mailer.init(PASSWORD, EMAIL);
     await timer.connect(MONGO_URI);
-    app.get("/servive-worker.js", (req: Request, res: Response) => {
-      nextApp.serveStatic(req, res, "./.next/server-worker.js")
-    })
-    const serviceWorkers = [
-      {
-        filename: 'service-worker.js',
-        path: './.next/service-worker.js',
-      },
-      {
-        filename: 'firebase-messaging-sw.js',
-        path: './public/firebase-messaging-sw.js',
-      },
-    ];
-    serviceWorkers.forEach(({ filename, path }) => {
-      app.get(`/${filename}`, (req: Request, res: Response) => {
-        nextApp.serveStatic(req, res, path)
-      })
-    })
     app.use("/jobs", currentUser, authAdminRoute, Agendash(timer._agenda));
     app.use("/api/ugh", apiRouter);
     app.use(errorHandler);

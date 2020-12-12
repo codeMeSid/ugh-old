@@ -10,7 +10,7 @@ class Messenger {
   socket: Socket;
   init(server: Server) {
     this.io = SocketIo(server);
-    this.io.on("connect", (socket) => {
+    this.io.on("connection", (socket) => {
       this.socket = socket;
       this.socket.join(["admin", "match", "user", "bracket-rank"]);
       this.socket.on(SocketEvent.EventSend, (data) => {

@@ -5,8 +5,6 @@ import SponsorSlider from "../components/sponsor-slider";
 import Footer from "../components/footer";
 import "../public/css/main.css";
 import "react-awesome-button/dist/styles.css";
-import { useEffect } from "react";
-import { fire } from "../../server/utils/firebase";
 
 const AppComponent = ({ Component, pageProps, router, currentUser }) => {
   const getTitle = (route) => {
@@ -43,11 +41,6 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
       "/tournaments": "UGH Tournaments",
     }[route];
   };
-
-  useEffect(() => {
-    const getToken = async () => await fire.initMessaging();
-    getToken();
-  }, []);
 
   return (
     <>
@@ -88,6 +81,7 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
           href="/favicon-16x16.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
+        <link rel="manifest" href="/manifest.json" />
       </Head>
       {!router.route.match("/admin") && !router.route.match("/signout") && (
         <TopNavbar currentUser={currentUser} />

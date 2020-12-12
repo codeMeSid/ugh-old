@@ -7,14 +7,12 @@ import localforage from 'localforage';
 
 class Fire {
   private fireObj!: Firebase.app.App;
-  private messenger!: Firebase.messaging.Messaging;
 
   constructor() {
     this.google = this.google.bind(this);
     this.facebook = this.facebook.bind(this);
     this.storage = this.storage.bind(this);
     this.signout = this.signout.bind(this);
-    this.initMessaging = this.initMessaging.bind(this);
     this.init = this.init.bind(this);
     this.fireObj = this.init();
 
@@ -34,33 +32,6 @@ class Fire {
       },
       Math.random().toString()
     );
-  }
-
-  async initMessaging(): Promise<unknown> {
-    try {
-      if (!window) return;
-      const messenger = this.fireObj.messaging();
-      let token = await localforage.getItem("fm_token");
-      if (!token) {
-        const status = await Notification.requestPermission();
-        if (status && status === "granted") {
-          token = await messenger.getToken();
-          console.log({ messengerToken: token })
-          if (token) {
-            console.log("token is being set")
-            localforage.setItem("fm_token", token);
-          }
-        }
-      }
-      if (token)
-        messenger.onMessage(function (payload) {
-          console.log({ messenger: payload });
-        });
-      return token;
-    } catch (error) {
-      console.log({ messengerError: error })
-      return null;
-    }
   }
 
   async storage(
@@ -125,9 +96,3 @@ class Fire {
 }
 
 export const fire = new Fire();
-
-
-
-// serverkey : AAAAH2gqUIU:APA91bHv-S_mabLVJq6NlJPuq8PTeNoyuWMHeGDGrQ6w-IElDn2S034boB9EvTm_WHI2NFIEHpnCmSHYGZ90CJ_DXCi12-9yvrdwsts_79RjmKVc8aHazU0Ial1tI33GDtR5U8xUDVvC
-// sender id : 134891589765
-// key pair : BOkObZx8NB2OgJYPcavusgDHFa1d0jk5XJMLCf_6dXws6EeQ3xR6H4hBGMf1LwiSzUBliSHMpJygxdJ2OV9YkDk
