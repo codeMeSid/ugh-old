@@ -14,23 +14,24 @@ const ProfilePassbookPage = ({
   errors: any;
 }) => (
   <MainLayout messages={errors}>
-    <div
-      style={{ backgroundImage: `url(${bgImage})`, padding: "2rem" }}
-      className="detail__bg"
-    >
-      <h1 style={{ textAlign: "center", fontWeight: "bold" }}>PASSBOOK</h1>
-      <div
-        style={{
-          textAlign: "center",
-          textTransform: "capitalize",
-          fontWeight: "bold",
-          fontSize: 24,
-        }}
-      >
-        details of all transactions credits & debits
-      </div>
-      <div className="row" style={{ marginTop: 50 }}>
-        <div style={{ maxWidth: 1000 }}>
+    <div className="detail__bg">
+      <div className="withdraw" style={{ backgroundColor: "#01071a" }}>
+        <h1 style={{ textAlign: "center", fontWeight: "bold", color: "white" }}>
+          PASSBOOK
+        </h1>
+        <div
+          style={{
+            textAlign: "center",
+            textTransform: "capitalize",
+            fontWeight: "bold",
+            fontSize: 24,
+            color: "white",
+            marginTop: 10,
+          }}
+        >
+          details of all transactions credits & debits
+        </div>
+        <div className="withdraw__body">
           <Table
             headers={[
               { text: "date", isResponsive: false },
@@ -39,7 +40,7 @@ const ProfilePassbookPage = ({
               { text: "event", isResponsive: false },
             ]}
             data={passbooks.map((p) => [
-              format(new Date(p.date), "dd/MM/yyyy hh:mm a"),
+              format(new Date(p.date), "dd/MM/yy,HH:mm a"),
               <div
                 style={{
                   color: p.transactionType === "credit" ? "green" : "red",

@@ -102,7 +102,7 @@ const Withdraw = ({
             <Table
               headers={[
                 {
-                  text: "refId",
+                  text: "ref Id",
                   isResponsive: false,
                 },
                 {

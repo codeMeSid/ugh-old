@@ -130,8 +130,6 @@
     &__container {
       max-width: 90vw;
     }
-    &__image {
-    }
     &__head {
       &__left {
         width: 100%;
@@ -149,17 +147,11 @@
           margin: 0 auto;
           margin-top: 2rem;
         }
-        &__item {
-        }
       }
       &__bottom {
-        &__left {
-        }
         &__right {
           width: 100%;
           margin-bottom: 1rem;
-        }
-        &__item {
         }
       }
     }
