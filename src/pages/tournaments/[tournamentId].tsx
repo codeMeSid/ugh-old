@@ -369,7 +369,7 @@ const TournamentDetail = ({
             </div>
           </div>
         </div>
-        {currentUser && userHasJoined && tournament?.brackets.length > 0 ? (
+        {currentUser && userHasJoined && tournament?.players?.length > 0 ? (
           <div className="tournament__container tournament__container--footer">
             <div className="tournament__container--footer__title">
               Meet The Competitors

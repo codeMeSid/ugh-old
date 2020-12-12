@@ -20,6 +20,7 @@ const SignUp = ({ ughIds, errors }) => {
   const [ughId, setUghId] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("+91");
   const [dob, setDob] = useState(new Date().toString());
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -45,6 +46,8 @@ const SignUp = ({ ughIds, errors }) => {
         return setPassword(value);
       case "password2":
         return setPassword2(value);
+      case "mobile":
+        return setMobile(value);
     }
   };
   const { doRequest: doSocialRequest } = useRequest({
@@ -119,6 +122,14 @@ const SignUp = ({ ughIds, errors }) => {
             isWhite
           />
           <Input
+            placeholder="mobile (+91)*"
+            type="text"
+            name="mobile"
+            onChange={onChangeHandler}
+            value={mobile}
+            isWhite
+          />
+          <Input
             placeholder="date of birth*"
             type="date"
             name="dob"
@@ -158,6 +169,12 @@ const SignUp = ({ ughIds, errors }) => {
             size="large"
             type="link"
             onPress={async (_, next) => {
+              const mobRegex = new RegExp("[+]91[1-9]{1}[0-9]{9}");
+              if (!mobRegex.test(mobile)) {
+                setMessages([{ message: "Invalid Mobile Number Format" }]);
+                next();
+                return;
+              }
               if (password !== password2 || password.length === 0) {
                 setMessages([{ message: "passwords do not match" }]);
                 next();
@@ -178,6 +195,7 @@ const SignUp = ({ ughIds, errors }) => {
                   ughId,
                   name,
                   email,
+                  mobile,
                   dob: new Date(dob),
                   password,
                   country: "India",

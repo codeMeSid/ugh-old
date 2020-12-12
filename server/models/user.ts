@@ -19,6 +19,7 @@ interface UserAttrs {
   password?: string;
   uploadUrl?: string;
   address?: UserAddress;
+  mobile?: string;
 }
 
 export interface UserDoc extends mongoose.Document {
@@ -40,6 +41,7 @@ export interface UserDoc extends mongoose.Document {
   settings: UserSettings;
   recovery: UserRecovery;
   tournaments: Array<UserTournament>;
+  phone: string;
 }
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;

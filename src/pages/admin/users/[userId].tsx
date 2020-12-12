@@ -16,7 +16,7 @@ const UserDetail = ({ user }: { user: any }) => {
   const [messages, setMessages] = useState([]);
 
   const { doRequest } = useRequest({
-    url: `/api/ugh/user/update/profile/${user?.id}`,
+    url: `/api/ugh/user/update/profile/${user?.ughId}`,
     body: { coins, role },
     method: "put",
     onSuccess: Router.reload,
@@ -188,7 +188,7 @@ const UserDetail = ({ user }: { user: any }) => {
               { text: "type", isResponsive: false },
               { text: "coins", isResponsive: false },
             ]}
-            data={user.passbook.map((p) => [
+            data={user?.passbook?.map((p) => [
               format(new Date(p.date).valueOf(), "do MMMM yyy hh:mm a"),
               `${p.transactionEnv}`.toUpperCase(),
               <div

@@ -6,17 +6,18 @@ import { MailerTemplate } from "../../utils/enum/mailer-template";
 import { filter } from "../../utils/profanity-filter";
 
 export const signupController = async (req: Request, res: Response) => {
-  const { ughId, name, email, dob, password, state, country } = req.body;
+  const { ughId, name, email, dob, password, state, country, mobile } = req.body;
   filter.isUnfit({ email });
   filter.isUnfit({ name });
   filter.isUnfit({ ughId });
-  const preUser = await User.findOne({ $or: [{ email }, { ughId }] });
+  const preUser = await User.findOne({ $or: [{ email }, { ughId }, { mobile }] });
   if (preUser) throw new BadRequestError("User already exists");
   const newUser = User.build({
     email: `${email}`.trim(),
     name,
     ughId: `${ughId}`.trim(),
     dob,
+    mobile,
     password: `${password}`.trim(),
     address: { state, country },
   });

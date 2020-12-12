@@ -7,6 +7,8 @@ import localforage from 'localforage';
 
 class Fire {
   private fireObj!: Firebase.app.App;
+  private confirmation!: Firebase.auth.ConfirmationResult;
+  private rcv!: Firebase.auth.RecaptchaVerifier;
 
   constructor() {
     this.google = this.google.bind(this);
@@ -14,6 +16,7 @@ class Fire {
     this.storage = this.storage.bind(this);
     this.signout = this.signout.bind(this);
     this.init = this.init.bind(this);
+    this.getRecaptcha = this.getRecaptcha.bind(this);
     this.fireObj = this.init();
 
   }
@@ -68,14 +71,47 @@ class Fire {
     );
     return url;
   }
+
+  getRecaptcha(container: string, onVerify: (response: any) => any) {
+    if (!this.fireObj) return false;
+    this.rcv = new Firebase.auth.RecaptchaVerifier(container, {
+      callback: onVerify
+    }, this.fireObj);
+    return this.rcv;
+  }
+
+  async phoneAuth(phone: string) {
+    if (!this.fireObj) return;
+    try {
+      this.confirmation = await this.fireObj.auth().signInWithPhoneNumber(phone, this.rcv);
+    } catch (error) {
+      console.log({ error })
+    }
+    return !!this.confirmation;
+  }
+
+  async verifyPhoneAuth(verificiationCode: string) {
+    let status: boolean, message: any;
+    try {
+      if (!this.fireObj && !this.confirmation) return;
+      const result = await this.confirmation.confirm(verificiationCode);
+      message = result.user;
+      status = !!result.user;
+    } catch (error) {
+      status = false;
+      message = "Invalid or Expired OTP";
+    }
+    return { status, message }
+  }
+
+
   async google(): Promise<Firebase.User> {
     if (!this.fireObj) return;
     const fireObj = this.fireObj;
     const auth = fireObj.auth();
     const provider = new Firebase.auth.GoogleAuthProvider();
     const result = await auth.signInWithPopup(provider);
-    const user = result.user;
-    return user;
+    return result.user;
   }
 
   async facebook(): Promise<Firebase.User> {
@@ -84,12 +120,11 @@ class Fire {
     const auth = fireObj.auth();
     const provider = new Firebase.auth.FacebookAuthProvider();
     const result = await auth.signInWithPopup(provider);
-    const user = result.user;
-    return user;
+    return result.user
   }
 
   async signout() {
-    if (!this.fireObj) return;
+    if (!this.fireObj) return
     const fireObj = this.fireObj;
     await fireObj.auth().signOut();
   }

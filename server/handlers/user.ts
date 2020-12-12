@@ -27,6 +27,7 @@ import { userFetchDetailController } from "../controllers/user/fetch-detail";
 import { updateUserProfileController } from "../controllers/user/update-profile";
 import { userFetchProfileContoller } from "../controllers/user/fetch-profile";
 import { userFetchUghIdController } from "../controllers/user/fetch-ughId";
+import { userFetchMobileController } from "../controllers/user/fetch-detail-mobile";
 
 export const userHandlers: Array<ApiSign> = [
   {
@@ -58,6 +59,12 @@ export const userHandlers: Array<ApiSign> = [
     method: HttpMethod.Get,
     controller: userFetchDetailController,
     middlewares: [currentUser, requireAuth],
+  },
+  {
+    url: "/fetch/detail/:ughId",
+    method: HttpMethod.Get,
+    controller: userFetchMobileController,
+    middlewares: [],
   },
   {
     url: "/signout",
@@ -120,7 +127,7 @@ export const userHandlers: Array<ApiSign> = [
     middlewares: [currentUser, requireAuth],
   },
   {
-    url: "/update/profile/:userId",
+    url: "/update/profile/:ughId",
     method: HttpMethod.Put,
     controller: updateUserProfileController,
     middlewares: [currentUser, requireAdminAuth],
