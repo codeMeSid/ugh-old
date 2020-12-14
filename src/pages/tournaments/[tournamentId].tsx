@@ -288,7 +288,7 @@ const TournamentDetail = ({
                           <Button
                             text="View Brackets"
                             size="medium"
-                            type="secondary"
+                            type="github"
                           />
                         </a>
                       </Link>

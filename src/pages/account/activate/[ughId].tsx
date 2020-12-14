@@ -52,7 +52,7 @@ const Activate = ({ ughId }) => {
   const sendOtp = async (userData: any) => {
     const result = await fire.phoneAuth(userData.mobile);
     if (result) setRcv(true);
-    else setMessages([{ message: "Refressh the page and try again." }]);
+    else setMessages([{ message: "Refresh the page and try again." }]);
   };
 
   return (
@@ -70,12 +70,12 @@ const Activate = ({ ughId }) => {
           Hi {user?.ughId ? user.ughId : "(Wait For It)"},
         </h1>
         {rcv ? (
-          <div style={{ margin: "10px 0", fontSize: 20 }}>
+          <div style={{ margin: "10px 0", fontSize: 20, textAlign: "center" }}>
             An OTP has been sent to {user?.mobile || ""}
           </div>
         ) : (
-          <div style={{ margin: "10px 0", fontSize: 20 }}>
-            Please Click on the captch below to proceed
+          <div style={{ margin: "10px 0", fontSize: 20, textAlign: "center" }}>
+            Please Click on the Captcha below to proceed
           </div>
         )}
         <div
@@ -128,10 +128,24 @@ const Activate = ({ ughId }) => {
                     }}
                   />
                 </div>
-                <div style={{ color: "red", marginTop: 10, fontSize: 20 }}>
+                <div
+                  style={{
+                    color: "red",
+                    marginTop: 10,
+                    fontSize: 20,
+                    textAlign: "center",
+                  }}
+                >
                   In case you do not recieve an OTP in 10 mins,
                 </div>
-                <div style={{ color: "red", marginTop: 2, fontSize: 20 }}>
+                <div
+                  style={{
+                    color: "red",
+                    marginTop: 2,
+                    fontSize: 20,
+                    textAlign: "center",
+                  }}
+                >
                   Kindly try again in sometime.
                 </div>
               </div>

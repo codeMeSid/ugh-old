@@ -114,6 +114,7 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc; errors: any }) => {
               placeholder="mobile (+91)"
               name="mobile"
               value={mobile}
+              disabled
               onChange={onChangeHandler}
             />
           </div>
