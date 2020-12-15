@@ -125,8 +125,8 @@ const AddTournament = ({
   return (
     <MainLayout messages={messages}>
       <div
-        style={{ backgroundImage: `url(${bgImage})` }}
-        className="detail__bg"
+        // style={{ backgroundImage: `url(${bgImage})` }}
+        className="detail__bg profile"
       >
         <div className="detail" style={{ padding: "2rem" }}>
           <h1 style={{ color: "white" }}>Add Tournament</h1>

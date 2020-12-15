@@ -106,7 +106,7 @@ const TournamentDetail = ({
           size="medium"
           title="Join"
           fullButton
-          onAction={doRequest}
+          onAction={(onSuccess, onError) => doRequest(onSuccess, onError)}
         >
           <div style={{ fontSize: 20, marginBottom: 20, textAlign: "center" }}>
             <p>
