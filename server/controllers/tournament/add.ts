@@ -32,6 +32,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     game: gameId,
     playerCount,
     group,
+    isFree
   } = req.body;
   const { role } = req.currentUser;
   const msIn1Hr = 1000 * 60 * 60;
@@ -63,7 +64,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     if (!user) throw new BadRequestError("Invalid user");
     const totalWinnings = parseInt(playerCount) * parseInt(coins);
     const earning = Math.round((settings.tournamentFees / 100) * totalWinnings);
-    const winnerCoin = totalWinnings - earning;
+    const winnerCoin = totalWinnings - (isFree ? 0 : earning);
     const tournament = Tournament.build({
       addedBy: cUser,
       coins: parseInt(coins),
@@ -75,6 +76,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
       playerCount: parseInt(playerCount),
       winnerCoin,
       startDateTime: new Date(startDateTime),
+      isFree,
       winnerCount: parseInt(winnerCount),
     });
     tournament.coins *= tournament.group.participants;
