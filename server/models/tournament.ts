@@ -11,6 +11,7 @@ interface TournamentAttrs {
   playerCount: number;
   group?: GameGroups;
   winnerCount: number;
+  isFree: boolean;
   regId: string;
   game: GameDoc;
   addedBy: UserPayload;
@@ -25,6 +26,7 @@ export interface TournamentDoc extends mongoose.Document {
   group: GameGroups;
   winnerCount: number;
   winnerCoin: number;
+  isFree: boolean;
   regId: string;
   players: Array<UserDoc>;
   game: GameDoc;
@@ -49,6 +51,10 @@ const tournamentSchema = new mongoose.Schema(
     name: String,
     coins: Number,
     playerCount: Number,
+    isFree: {
+      type: Boolean,
+      default: false
+    },
     group: {
       name: String,
       participants: Number,

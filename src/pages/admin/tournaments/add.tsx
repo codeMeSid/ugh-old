@@ -74,7 +74,7 @@ const AddTournament = ({
     }
   };
 
-  const onTouramentCreateHandler = async (_, next) => {
+  const onTouramentCreateHandler = async (next, isFree) => {
     const iGame = games?.filter(
       (game) => game.console === consoles[consoleIndex]?.name
     )[gameIndex];
@@ -94,6 +94,7 @@ const AddTournament = ({
     const body = {
       name,
       coins: coins || 0,
+      isFree,
       winnerCount:
         games?.filter((game) => game.console === consoles[consoleIndex]?.name)[
           gameIndex
@@ -259,9 +260,15 @@ const AddTournament = ({
         <div className="row">
           <ProgressButton
             size="large"
-            text="Submit"
+            text="Paid"
             type="whatsapp"
-            onPress={onTouramentCreateHandler}
+            onPress={(_, next) => onTouramentCreateHandler(next, false)}
+          />
+          <ProgressButton
+            size="large"
+            text="Free"
+            type="github"
+            onPress={(_, next) => onTouramentCreateHandler(next, true)}
           />
         </div>
       </div>

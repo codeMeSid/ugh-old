@@ -114,7 +114,8 @@ const TournamentDetail = ({
               vary for every tournament.
             </p>
             <p style={{ marginTop: 10 }}>
-              You will be charged {tournament?.coins || 10} coins to join.
+              You will be charged{" "}
+              {tournament?.isFree ? 0 : tournament?.coins || 10} coins to join.
             </p>
           </div>
         </DialogButton>
@@ -319,8 +320,12 @@ const TournamentDetail = ({
                   <div className="tournament__card__body__lower__left__item">
                     <div style={{ marginBottom: 10 }}>Entry Coins</div>
                     <div>
-                      {tournament?.coins / tournament?.group?.participants || 0}{" "}
-                      coins
+                      {tournament?.isFree
+                        ? "FREE"
+                        : `${
+                            tournament?.coins /
+                              tournament?.group?.participants || 0
+                          } coins`}
                     </div>
                   </div>
                   <div className="tournament__card__body__lower__left__item">
