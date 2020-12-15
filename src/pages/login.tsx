@@ -16,6 +16,7 @@ const SignIn = () => {
   const [ughId, setUghId] = useState("");
   const [password, setPassword] = useState("");
   const [messages, setMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onChangeHandler = (name: string, value: string) => {
     switch (name) {
@@ -31,9 +32,13 @@ const SignIn = () => {
     method: "post",
     onSuccess: (data) =>
       Router.push(data ? "/profile?newauth=true" : "/profile"),
-    onError: (errors) => setMessages(errors),
+    onError: (errors) => {
+      setMessages(errors);
+      setIsLoading(false);
+    },
   });
-  const onSocialAuthProvider = async (authFunc) => {
+  const onSocialAuthProvider = async (authFunc: any) => {
+    setIsLoading(true);
     try {
       const newUser = await authFunc();
       const socialUser = {
@@ -43,7 +48,8 @@ const SignIn = () => {
       };
       setUser(socialUser);
     } catch (error) {
-      setMessages([{ message: "Social auth failed" }]);
+      setIsLoading(false);
+      setMessages([{ message: error.message }]);
     }
   };
 
@@ -52,6 +58,25 @@ const SignIn = () => {
   }, [user]);
   return (
     <MainLayout messages={messages}>
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          minHeight: "100%",
+          width: "100vw",
+          backgroundColor: "rgba(0,0,0,0.8)",
+          zIndex: 20,
+          display: isLoading ? "flex" : "none",
+          justifyContent: "center",
+          alignItems: "center",
+          color: "white",
+          fontSize: 40,
+          fontWeight: "lighter",
+        }}
+      >
+        LOADING...
+      </div>
       <section
         className="signin"
         style={{ backgroundImage: `url(${LoginBg})` }}
