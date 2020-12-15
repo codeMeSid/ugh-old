@@ -26,9 +26,24 @@ export const transactionUpdateRequestController = async (
     const user = await User.findById(transaction.user).session(session);
     let passbook: PassbookDoc;
     if (accepted) {
-      if (user.wallet.coins - transaction.amount < 0)
+      if (user?.tournaments
+        .filter((t) => t.didWin)
+        .reduce((acc, t) => acc + t.coins, 0) - transaction.amount < 0)
         throw new BadRequestError("Insufficient Balance to process");
-      user.set({ "wallet.coins": user.wallet.coins - transaction.amount });
+      let amount = transaction.amount;
+      user.tournaments = user.tournaments.map(t => {
+        if (!t.didWin) return t;
+        if (amount > 0) {
+          if (amount > t.coins) {
+            amount -= t.coins
+            t.coins = 0;
+          } else {
+            t.coins -= amount;
+            amount = 0
+          }
+        }
+        return t;
+      })
       passbook = Passbook.build({
         coins: transaction.amount,
         transactionEnv: TransactionEnv.Refund,

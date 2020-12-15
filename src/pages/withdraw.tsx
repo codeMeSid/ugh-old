@@ -25,7 +25,7 @@ const Withdraw = ({
   withdrawRequestMade: boolean;
   errors: Array<any>;
 }) => {
-  const [requestCoin, setRequestCoin] = useState(coins || 0);
+  const [requestCoin, setRequestCoin] = useState(coins);
   const [paymentMode, setPaymentMode] = useState("google pay");
   const [phone, setPhone] = useState("");
   const [messages, setMessages] = useState(errors);
@@ -33,8 +33,8 @@ const Withdraw = ({
   return (
     <MainLayout messages={messages}>
       <div
-        style={{ backgroundImage: `url(${bgImage})` }}
-        className="detail__bg"
+        // style={{ backgroundImage: `url(${bgImage})` }}
+        className="detail__bg profile"
       >
         <div className="withdraw">
           <div className="withdraw__head">
@@ -159,7 +159,10 @@ Withdraw.getInitialProps = async (ctx) => {
 
   return {
     transactions: transactions || [],
-    coins: user?.wallet?.coins || 0,
+    coins:
+      user?.tournaments
+        .filter((t) => t.didWin)
+        .reduce((acc, t) => acc + t.coins, 0) || 0,
     errors,
   };
 };

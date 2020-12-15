@@ -39,7 +39,7 @@ const TransactionDetail = ({ transaction, errors }: { transaction: TransactionDo
                 <Input placeholder="order Id" value={transaction?.orderId} disabled />
             </div>
             <div className="col">
-                <Input placeholder="transactions id" onChange={(_, val) => setTId(val)} value={transaction?.razorpayId} disabled={transaction.status !== "requested"} />
+                <Input placeholder="transactions id" onChange={(_, val) => setTId(val)} value={transaction?.razorpayId} disabled={transaction?.status !== "requested"} />
             </div>
         </div>
         <div className="row">
