@@ -20,6 +20,8 @@ interface BracketAttrs {
   regId: string;
   round: number;
   gameType: GameType;
+  gameName: string;
+  tournamentName: string;
   uploadBy?: Date;
 }
 
@@ -40,6 +42,8 @@ export interface BracketDoc extends mongoose.Document {
     updateBy: Date;
     uploadBy: Date;
   };
+  gameName: string;
+  tournamentName: string;
   winner: string;
   regId: string;
   round: number;
@@ -90,6 +94,8 @@ const BracketSchema = new mongoose.Schema(
     round: Number,
     regId: String,
     winner: String,
+    gameName: String,
+    tournamentName: String,
     updateBy: mongoose.SchemaTypes.Date,
     uploadBy: mongoose.SchemaTypes.Date,
     gameType: {

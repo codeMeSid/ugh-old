@@ -29,7 +29,7 @@ export const winnerLogic = async (
     const tournament = await Tournament.findOne({
       regId: tournamentId,
     })
-      .populate("game", "gameType", "Games")
+      .populate("game", "gameType name", "Games")
       .session(session);
     if (!tournament) {
       errorlog("tournament failed");
@@ -120,7 +120,7 @@ export const winnerLogic = async (
           else
             mailer.send(
               MailerTemplate.Winner,
-              { ughId, tournamentName: name, opponentUghId: winners[0].ughId },
+              { ughId, tournamentName: name, opponentUghId: winners[0]?.ughId },
               user.email,
               "UGH Tournament Better Luck Next Time !!!"
             );

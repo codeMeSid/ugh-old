@@ -121,6 +121,8 @@ export const scoreLogger = async (
                 user: undefined,
                 score: -1,
               },
+              gameName: tournament.game.name,
+              tournamentName: tournament.name
             });
             tournament.brackets.push(newBracket);
             newBrackets.push(newBracket);
@@ -188,6 +190,8 @@ export const scoreLogger = async (
           user: undefined,
           score: -1,
         },
+        gameName: tournament.game.name,
+        tournamentName: tournament.name
       });
       tournament.brackets.push(newBracket);
       newBrackets.push(newBracket);
@@ -206,7 +210,7 @@ export const scoreLogger = async (
         {
           coins: winnerCoins[0],
           position: 1,
-          ughId: users[winner1Index].ughId,
+          ughId: users[winner1Index]?.ughId,
         },
       ];
       users[winner1Index].tournaments = users[userIndex].tournaments?.map(
@@ -232,7 +236,7 @@ export const scoreLogger = async (
           {
             coins: winnerCoins[1],
             position: 2,
-            ughId: users[winner2Index].ughId,
+            ughId: users[winner2Index]?.ughId,
           },
         ];
         users[winner2Index].tournaments = users[userIndex].tournaments?.map(
@@ -252,7 +256,7 @@ export const scoreLogger = async (
         event: tournament?.name,
         transactionEnv: TransactionEnv.TournamentWin,
         transactionType: TransactionType.Credit,
-        ughId: w.ughId,
+        ughId: w?.ughId,
       })));
     }
   } else if (!splBracket) {
@@ -282,14 +286,14 @@ export const scoreLogger = async (
       const userBIndex = users.findIndex((u) => JSON.stringify(u.id) === jB);
       let bWinner: string;
 
-      if (userBIndex === -1) bWinner = users[userAIndex].ughId;
+      if (userBIndex === -1) bWinner = users[userAIndex]?.ughId;
       else if (sA === -1 && sB === -1) {
         brackets[bIndex].winner = DQ.ScoreNotUploaded;
         continue;
-      } else if (sB === -1) bWinner = users[userAIndex].ughId;
-      else if (dA && !uuB) bWinner = users[userAIndex].ughId;
-      else if (sA === -1) bWinner = users[userBIndex].ughId;
-      else if (dB && !uuA) bWinner = users[userBIndex].ughId;
+      } else if (sB === -1) bWinner = users[userAIndex]?.ughId;
+      else if (dA && !uuB) bWinner = users[userAIndex]?.ughId;
+      else if (sA === -1) bWinner = users[userBIndex]?.ughId;
+      else if (dB && !uuA) bWinner = users[userBIndex]?.ughId;
 
       brackets[bIndex].winner = bWinner;
 

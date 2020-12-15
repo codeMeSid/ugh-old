@@ -31,7 +31,7 @@ export const tournamentUpdateStatusController = async (
   try {
     const tournament = await Tournament.findById(tournamentId)
       .populate("players", "email ughId settings", "Users")
-      .populate("game", "gameType cutoff", "Games")
+      .populate("game", "gameType name cutoff", "Games")
       .session(session);
     if (!tournament) throw new BadRequestError("Tournament doesnt exist.");
     if (tournament.status !== TournamentStatus.Upcoming)
@@ -94,6 +94,8 @@ export const tournamentUpdateStatusController = async (
               regId,
               round: 1,
               uploadBy: new Date(Date.now() + uploadBy),
+              gameName: tournament.game.name,
+              tournamentName: tournament.name
             });
             brackets.push(bracket);
             tournament.brackets.push(bracket);
@@ -118,6 +120,8 @@ export const tournamentUpdateStatusController = async (
               round: 1,
               regId,
               gameType: tournament.game.gameType,
+              gameName: tournament.game.name,
+              tournamentName: tournament.name
             });
             if (teamB.length === 0) {
               bracket.round = 2;

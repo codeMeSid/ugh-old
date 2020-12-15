@@ -10,6 +10,8 @@ interface Dispute {
   gameType: string;
   proof: string;
   wasResolved: string;
+  gameName: string;
+  tournamentName: string
 }
 
 export const bracketFetchDisputes = async (req: Request, res: Response) => {
@@ -48,6 +50,8 @@ export const bracketFetchDisputes = async (req: Request, res: Response) => {
         proof: uploadB,
         wasResolved: winner,
         ughId: { by: uA, on: uB },
+        gameName: bracket.gameName,
+        tournamentName: bracket.tournamentName
       });
     if (disputeB)
       disputes.push({
@@ -56,6 +60,8 @@ export const bracketFetchDisputes = async (req: Request, res: Response) => {
         proof: uploadA,
         wasResolved: winner,
         ughId: { by: uB, on: uA },
+        gameName: bracket.gameName,
+        tournamentName: bracket.tournamentName
       });
   });
   res.send(disputes);

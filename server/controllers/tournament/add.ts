@@ -114,7 +114,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
         try {
           const tournament = await Tournament.findById(id)
             .populate("players", "email ughId settings", "Users")
-            .populate("game", "gameType cutoff", "Games")
+            .populate("game", "gameType name cutoff", "Games")
             .session(session);
           if (!tournament) return;
           console.log(`${tournament.regId} tournament start`);
@@ -174,6 +174,8 @@ export const tournamentAddController = async (req: Request, res: Response) => {
                   regId,
                   round: 1,
                   uploadBy: new Date(Date.now() + uploadBy),
+                  gameName: tournament.game.name,
+                  tournamentName: tournament.name
                 });
                 brackets.push(bracket);
                 tournament.brackets.push(bracket);
@@ -198,6 +200,8 @@ export const tournamentAddController = async (req: Request, res: Response) => {
                   round: 1,
                   regId,
                   gameType: tournament.game.gameType,
+                  gameName: tournament.game.name,
+                  tournamentName: tournament.name
                 });
                 if (teamB.length === 0) {
                   bracket.round = 2;
