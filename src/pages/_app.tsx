@@ -49,6 +49,36 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
           router.route
         )} - Ultimate Gamers Hub | Play Tournaments`}</title>
         <meta
+          property="og:title"
+          content={`${getTitle(
+            router.route
+          )} - Ultimate Gamers Hub | Play Tournaments`}
+          key="ogtitle"
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:description"
+          key="ogdesc"
+          content={`Ultimate Gamers Hub: The Ultimate e-sports Hub in India. Ultimate gamers hub is the best e-sports website in India for all pro & casual gamers, where you can find all categories of gaming tournaments and you can also create the tournament of our own.`}
+        />
+        <meta property="og:locale" content="en_IN" />
+        <meta property="og:determiner" content="the" />
+        <meta
+          property="og:url"
+          key="ogurl"
+          content="https://www.ultimategamershub.com"
+        />
+        <meta
+          property="og:image"
+          content={"/favicon-32x32.png"}
+          key="ogimage"
+        />
+        <meta
+          property="og:site_name"
+          content={"UltimateGamersHub"}
+          key="ogsitename"
+        />
+        <meta
           name="description"
           content={`Ultimate Gamers Hub: The Ultimate e-sports Hub in India. Ultimate gamers hub is the best e-sports website in India for all pro & casual gamers, where you can find all categories of gaming tournaments and you can also create the tournament of our own.`}
         />
@@ -81,7 +111,6 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
           href="/favicon-16x16.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
-        <link rel="manifest" href="/manifest.json" />
       </Head>
       {!router.route.match("/admin") && !router.route.match("/signout") && (
         <TopNavbar currentUser={currentUser} />
