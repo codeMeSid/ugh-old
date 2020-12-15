@@ -6,8 +6,6 @@ import Input from "../../../components/input/input";
 import ProgressButton from "../../../components/button/progress";
 import Router from "next/router";
 import Timer from "../../../components/timer";
-const AL = require("../../../public/asset/activation_loading.gif");
-const AD = require("../../../public/asset/activation_done.gif");
 
 const Activate = ({ ughId }) => {
   const [messages, setMessages] = useState([]);
