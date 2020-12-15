@@ -27,7 +27,6 @@ export const locations = {
     "Rajasthan",
     "Tamil Nadu",
     "Tripura",
-    "Uttaranchal",
     "Uttar Pradesh",
     "West Bengal",
   ],
