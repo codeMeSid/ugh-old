@@ -138,12 +138,12 @@ export const tournamentAddController = async (req: Request, res: Response) => {
             }).session(session);
             await Promise.all([
               users.map(async (user) => {
-                user.wallet.coins = user.wallet.coins + tournament.coins;
+                user.wallet.coins = user.wallet.coins + (tournament?.isFree ? 0 : tournament?.coins);
                 user.tournaments = user.tournaments.filter(t =>
                   JSON.stringify(t) !== JSON.stringify(tournament.id)
                 );
                 const passbook = Passbook.build({
-                  coins: tournament.coins,
+                  coins: tournament?.isFree ? 0 : tournament?.coins,
                   transactionEnv: TransactionEnv.TounamentCancel,
                   event: Tournament?.name,
                   transactionType: TransactionType.Credit,

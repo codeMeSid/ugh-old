@@ -19,7 +19,7 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
     if (!tournament) throw new Error("Invalid Tournament");
     if (!user) throw new Error("Invalid user");
     const passbook = Passbook.build({
-      coins: tournament.coins,
+      coins: tournament?.isFree ? 0 : tournament.coins,
       transactionEnv: TransactionEnv.TournamentJoin,
       event: tournament?.name,
       transactionType: TransactionType.Debit,

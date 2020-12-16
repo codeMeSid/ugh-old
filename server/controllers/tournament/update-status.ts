@@ -46,7 +46,7 @@ export const tournamentUpdateStatusController = async (
         tournament.status = TournamentStatus.Completed;
         tournament.winners = users.map((u) => ({
           ughId: u.ughId,
-          coins: tournament.coins + 10,
+          coins: tournament?.isFree ? 0 : tournament.coins + 10,
           position: -1,
         }));
         for (let i = 0; i < users.length; i++) {
@@ -56,9 +56,9 @@ export const tournamentUpdateStatusController = async (
           if (tIndex === -1) continue;
           users[i].tournaments[tIndex].didWin = true;
           users[i].tournaments[tIndex].coins = 0;
-          users[i].wallet.coins = users[i].wallet.coins + tournament.coins + 10;
+          users[i].wallet.coins = users[i].wallet.coins + (tournament?.isFree ? 0 : tournament.coins + 10);
           passbooks.push(Passbook.build({
-            coins: tournament.coins + 10,
+            coins: tournament?.isFree ? 0 : tournament.coins + 10,
             transactionEnv: TransactionEnv.TounamentCancel,
             event: tournament?.name,
             transactionType: TransactionType.Credit,
