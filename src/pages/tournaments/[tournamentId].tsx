@@ -283,7 +283,9 @@ const TournamentDetail = ({
                   </IconDialogButton>
                   <div style={{ marginRight: 10 }}>{JoinButton()}</div>
                   <div>
-                    {tournament?.status === "completed" && userHasJoined ? (
+                    {tournament?.status === "completed" &&
+                    userHasJoined &&
+                    tournament?.brackets?.length > 0 ? (
                       <Link href={`/game/${tournament?.regId}`}>
                         <a>
                           <Button
