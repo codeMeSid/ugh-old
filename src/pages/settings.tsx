@@ -31,7 +31,16 @@ const Settings = ({ user, errors }: { user: UserDoc; errors: any }) => {
   return (
     <MainLayout messages={messages}>
       <div className="settings">
-        <div style={{ fontSize: 45, textAlign: "center" }}>SETTINGS</div>
+        <div
+          style={{
+            fontSize: 45,
+            textAlign: "center",
+            color: "black",
+            fontWeight: 900,
+          }}
+        >
+          SETTINGS
+        </div>
         <div className="settings__body">
           <CheckInput
             value={newTournamentWasAdded}

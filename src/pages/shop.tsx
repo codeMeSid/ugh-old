@@ -25,7 +25,16 @@ const Shop = ({
       </Head>
       <MainLayout messages={messages}>
         <section className="shop">
-          <div style={{ textAlign: "center", fontSize: 45 }}>SHOP COINS</div>
+          <div
+            style={{
+              textAlign: "center",
+              fontSize: 45,
+              color: "black",
+              fontWeight: 900,
+            }}
+          >
+            SHOP COINS
+          </div>
           <div className="shop__container">
             {coins.map((coin) => {
               return (
