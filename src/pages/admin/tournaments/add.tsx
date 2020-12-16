@@ -155,7 +155,7 @@ const AddTournament = ({
                 ?.filter(
                   (game) => game.console === consoles[consoleIndex]?.name
                 )
-                [gameIndex].winners?.map((w: number, index: number) => {
+                [gameIndex]?.winners?.map((w: number, index: number) => {
                   return <Option key={w} display={w} value={index} />;
                 })}
             />
