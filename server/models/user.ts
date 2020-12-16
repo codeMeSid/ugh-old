@@ -42,6 +42,7 @@ export interface UserDoc extends mongoose.Document {
   recovery: UserRecovery;
   tournaments: Array<UserTournament>;
   phone: string;
+  isSuperAdmin: string;
 }
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
@@ -69,6 +70,7 @@ const userSchema = new mongoose.Schema(
     password: String,
     uploadUrl: String,
     mobile: String,
+    isSuperAdmin: String,
     bio: String,
     gamerProfile: {
       psnId: String,
@@ -178,5 +180,9 @@ userSchema.pre("save", async function (done) {
 userSchema.statics.build = (attrs: UserAttrs): UserDoc => {
   return new User(attrs);
 };
+
+userSchema.statics.isSuperUser = function () {
+  console.log(this);
+}
 
 export const User = mongoose.model<UserDoc, UserModel>("Users", userSchema);
