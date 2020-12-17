@@ -290,7 +290,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
       },
       { id: tournament.id }
     );
-    sendTournamentAddedMail(tournament);
+    // sendTournamentAddedMail(tournament);
   } catch (error) {
     await session.abortTransaction();
     throw new BadRequestError(error.message);
