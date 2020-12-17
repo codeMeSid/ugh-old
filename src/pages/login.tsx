@@ -30,8 +30,11 @@ const SignIn = () => {
     url: "/api/ugh/user/social-auth",
     body: user,
     method: "post",
-    onSuccess: (data) =>
-      Router.push(data ? "/profile?newauth=true" : "/profile"),
+    onSuccess: (data) => {
+      data.activity === "inactive"
+        ? Router.push(`/account/social/${data.ughId}`)
+        : Router.replace("/profile");
+    },
     onError: (errors) => {
       setMessages(errors);
       setIsLoading(false);

@@ -59,8 +59,11 @@ const SignUp = ({ ughIds, errors }) => {
       setMessages(errors);
       setIsLoading(false);
     },
-    onSuccess: (data) =>
-      Router.push(data ? "/profile?newauth=true" : "/profile"),
+    onSuccess: (data) => {
+      data.activity === "inactive"
+        ? Router.push(`/account/social/${data.ughId}`)
+        : Router.replace("/profile");
+    },
   });
 
   const onSocialAuthProvider = async (authFunc) => {
@@ -197,12 +200,12 @@ const SignUp = ({ ughIds, errors }) => {
               const mobRegex = new RegExp("[+]91[1-9]{1}[0-9]{9}");
               if (!mobRegex.test(mobile)) {
                 setMessages([{ message: "Invalid Mobile Number Format" }]);
-                next();
+                next(false, "Failed");
                 return;
               }
               if (password !== password2 || password.length === 0) {
                 setMessages([{ message: "passwords do not match" }]);
-                next();
+                next(false, "Failed");
                 return;
               }
               if (
@@ -211,7 +214,7 @@ const SignUp = ({ ughIds, errors }) => {
                 }).length > 0
               ) {
                 setMessages([{ message: "UGH ID is already taken" }]);
-                next();
+                next(false, "Failed");
                 return;
               }
               const { doRequest } = useRequest({

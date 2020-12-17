@@ -28,6 +28,7 @@ import { updateUserProfileController } from "../controllers/user/update-profile"
 import { userFetchProfileContoller } from "../controllers/user/fetch-profile";
 import { userFetchUghIdController } from "../controllers/user/fetch-ughId";
 import { userFetchMobileController } from "../controllers/user/fetch-detail-mobile";
+import { userSocialActivateController } from "../controllers/user/social-active";
 
 export const userHandlers: Array<ApiSign> = [
   {
@@ -94,6 +95,12 @@ export const userHandlers: Array<ApiSign> = [
     url: "/social-auth",
     method: HttpMethod.Post,
     controller: userSocialAuthController,
+    middlewares: [],
+  },
+  {
+    url: "/social-auth/activate/:ughId",
+    method: HttpMethod.Post,
+    controller: userSocialActivateController,
     middlewares: [],
   },
   {

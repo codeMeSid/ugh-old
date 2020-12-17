@@ -104,6 +104,7 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc; errors: any }) => {
               name="dob"
               type="date"
               value={dob}
+              disabled
               onChange={onChangeHandler}
             />
           </div>

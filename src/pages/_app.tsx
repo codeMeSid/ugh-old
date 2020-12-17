@@ -28,6 +28,7 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
       "/account/activate/[ughId]": `${router.query?.ughId}\'s Player Activation`,
       "/account/activate": "Account Activation Mail Sent",
       "/account/forgot-password": "Forgot Password",
+      "/account/social/[ughId]": "Social Account Activation",
       "/account/reset-password/[recoveryToken]": "Reset Password",
       "/game/[tournamentId]": "Tournament Brackets",
       "/news/[newsId]": "News Story",

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../../models/user";
-import { BadRequestError, UserActivity, isValidDob } from "@monsid/ugh";
+import { BadRequestError, isValidDob } from "@monsid/ugh";
 import { filter } from "../../utils/profanity-filter";
 
 // TODO check for valid aadhar card
@@ -46,15 +46,6 @@ export const updateUserController = async (req: Request, res: Response) => {
   user.bio = bio;
   user.address.country = country;
   user.address.state = state;
-
-  if (user.isSocial && user.activity === UserActivity.Inactive) {
-    if (dob) {
-      isValidDob(dob);
-      isSocialActive = true;
-      user.activity = UserActivity.Active;
-      user.wallet.coins = 250;
-    }
-  }
   await user.save();
   res.send(isSocialActive);
 };
