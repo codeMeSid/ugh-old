@@ -74,22 +74,27 @@ const AddTournament = ({
     }
   };
 
-  const onTouramentCreateHandler = async (next, isFree) => {
+  const onTouramentCreateHandler = async (next: any, isFree: boolean) => {
     const iGame = games?.filter(
       (game) => game.console === consoles[consoleIndex]?.name
     )[gameIndex];
     const iGameParticipants = iGame?.participants[pIndex];
-    if (iGame.gameType === "score" && iGameParticipants >= 8) {
+    if (iGame.gameType === "score" && iGameParticipants >= 4) {
       const _sdt = new Date(startDateTime).valueOf();
       const _edt = new Date(endDateTime).valueOf();
       const _dt = (_edt - _sdt) / (1000 * 60 * 60);
-      if (_dt < 2)
+      const recommendedTime = Math.ceil(
+        Math.log2(games[gameIndex]?.participants[pIndex])
+      );
+      if (_dt < recommendedTime) {
+        next(false, "Failed");
         return setMessages([
           {
             message:
               "Atleast 2 hours of tournament time is required for this game.",
           },
         ]);
+      }
     }
     const body = {
       name,
