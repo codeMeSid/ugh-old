@@ -40,7 +40,13 @@ export interface UserDoc extends mongoose.Document {
   role: UserRole;
   settings: UserSettings;
   recovery: UserRecovery;
-  tournaments: Array<UserTournament>;
+  tournaments: Array<{
+    id: string,
+    didWin: boolean,
+    coins: number,
+    name: string,
+    startDateTime: Date
+  }>;
   phone: string;
   isSuperAdmin: string;
 }
@@ -113,6 +119,8 @@ const userSchema = new mongoose.Schema(
           default: false,
         },
         coins: Number,
+        name: String,
+        startDateTime: Date
       },
     ],
     dob: mongoose.Schema.Types.Date,

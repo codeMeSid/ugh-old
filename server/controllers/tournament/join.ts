@@ -46,6 +46,8 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
       didWin: false,
       id: tournament.id,
       coins: tournament.winnerCoin,
+      name: tournament.name,
+      startDateTime: tournament.startDateTime
     });
     tournament.players.push(user);
     await tournament.save({ session });

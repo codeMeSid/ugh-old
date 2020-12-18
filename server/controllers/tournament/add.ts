@@ -91,6 +91,8 @@ export const tournamentAddController = async (req: Request, res: Response) => {
         id: tournament.id,
         didWin: false,
         coins: winnerCoin,
+        name: tournament.name,
+        startDateTime: tournament.startDateTime
       });
       tournament.players.push(user);
     }

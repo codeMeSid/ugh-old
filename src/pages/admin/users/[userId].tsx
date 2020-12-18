@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import SideLayout from "../../../components/layout/sidelayout";
 import { serverRequest } from "../../../hooks/server-request";
 import Input from "../../../components/input/input";
@@ -9,6 +9,8 @@ import ProgressButton from "../../../components/button/progress";
 import { useRequest } from "../../../hooks/use-request";
 import Router from "next/router";
 import Table from "../../../components/table";
+import Link from "next/link";
+import Button from "../../../components/button/main";
 
 const UserDetail = ({ user }: { user: any }) => {
   const [coins, setCoins] = useState(user?.wallet?.coins || 0);
@@ -78,7 +80,7 @@ const UserDetail = ({ user }: { user: any }) => {
           <div className="col">
             <Input
               placeholder="phone"
-              value={`+91 ${user?.mobile || ""}`}
+              value={`${user?.mobile || ""}`}
               disabled={true}
             />
           </div>
@@ -170,7 +172,7 @@ const UserDetail = ({ user }: { user: any }) => {
         </div>
 
         <ProgressButton
-          size="large"
+          size="medium"
           type="link"
           text="UPDATE"
           onPress={async (_, next) => {
@@ -178,29 +180,16 @@ const UserDetail = ({ user }: { user: any }) => {
             next();
           }}
         />
-        <div className="row">
-          <h2>PASSBOOK</h2>
-        </div>
-        <div className="row">
-          <Table
-            headers={[
-              { text: "date", isResponsive: false },
-              { text: "type", isResponsive: false },
-              { text: "coins", isResponsive: false },
-            ]}
-            data={user?.passbook?.map((p) => [
-              format(new Date(p.date).valueOf(), "do MMMM yyy hh:mm a"),
-              `${p.transactionEnv}`.toUpperCase(),
-              <div
-                style={{
-                  color: p.transactionType === "credit" ? "green" : "red",
-                }}
-              >
-                {`${p.transactionType === "credit" ? "+" : "-"} ${p.coins}`}
-              </div>,
-            ])}
-          />
-        </div>
+        <Link href={`/admin/users/passbook/${user?.ughId}`}>
+          <a style={{ marginLeft: 10 }}>
+            <Button size="medium" text="Passbook" type="github" />
+          </a>
+        </Link>
+        <Link href={`/admin/users/tournament/${user?.ughId}`}>
+          <a style={{ marginLeft: 10 }}>
+            <Button size="medium" text="Tournaments" type="facebook" />
+          </a>
+        </Link>
       </div>
     </SideLayout>
   );

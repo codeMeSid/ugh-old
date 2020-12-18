@@ -29,6 +29,7 @@ import { userFetchProfileContoller } from "../controllers/user/fetch-profile";
 import { userFetchUghIdController } from "../controllers/user/fetch-ughId";
 import { userFetchMobileController } from "../controllers/user/fetch-detail-mobile";
 import { userSocialActivateController } from "../controllers/user/social-active";
+import { userUpdateTournamentController } from "../controllers/user/update-tournament";
 
 export const userHandlers: Array<ApiSign> = [
   {
@@ -114,6 +115,12 @@ export const userHandlers: Array<ApiSign> = [
     method: HttpMethod.Post,
     controller: signinController,
     middlewares: [signinValidator, validateRequest],
+  },
+  {
+    url: "/update/tournament",
+    method: HttpMethod.Put,
+    controller: userUpdateTournamentController,
+    middlewares: [currentUser, requireAdminAuth],
   },
   {
     url: "/update/setting",
