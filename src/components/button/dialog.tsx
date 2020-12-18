@@ -73,12 +73,11 @@ const DialogButton = ({
                 onPress={(_, next) => {
                   onAction(
                     (data: any) => {
-                      console.log({ data });
                       next();
                       setOpenDialog(false);
                     },
                     () => {
-                      next(false, "Request Failed");
+                      next(false, "Failed");
                     }
                   );
                 }}
