@@ -206,23 +206,26 @@ export const scoreLogger = async (
         (u) => u.ughId === winnerBracket.winner
       );
 
-      tournament.winners = [
-        {
-          coins: winnerCoins[0],
-          position: 1,
-          ughId: users[winner1Index]?.ughId,
-        },
-      ];
-      users[winner1Index].tournaments = users[userIndex].tournaments?.map(
-        (t) => {
-          if (JSON.stringify(t.id) === JSON.stringify(tournament.id)) {
-            t.didWin = true;
-            t.coins = winnerCoins[0];
+
+      if (users[winner1Index]) {
+        tournament.winners = [
+          {
+            coins: winnerCoins[0],
+            position: 1,
+            ughId: users[winner1Index]?.ughId,
+          },
+        ];
+        users[winner1Index].tournaments = users[winner1Index].tournaments?.map(
+          (t) => {
+            if (JSON.stringify(t.id) === JSON.stringify(tournament.id)) {
+              t.didWin = true;
+              t.coins = winnerCoins[0];
+            }
+            return t;
           }
-          return t;
-        }
-      );
-      users[winner1Index].wallet.coins += winnerCoins[0];
+        );
+        users[winner1Index].wallet.coins += winnerCoins[0];
+      }
       if (tournament.winnerCount === 2) {
         const jA = JSON.stringify(winnerBracket.teamA.user);
         const jB = JSON.stringify(winnerBracket.teamB.user);
@@ -231,24 +234,27 @@ export const scoreLogger = async (
         const winner2Index = users.findIndex(
           (u) => JSON.stringify(u.id) === winner2
         );
-        tournament.winners = [
-          ...tournament.winners,
-          {
-            coins: winnerCoins[1],
-            position: 2,
-            ughId: users[winner2Index]?.ughId,
-          },
-        ];
-        users[winner2Index].tournaments = users[userIndex].tournaments?.map(
-          (t) => {
-            if (JSON.stringify(t.id) === JSON.stringify(tournament.id)) {
-              t.didWin = true;
-              t.coins = winnerCoins[1];
+
+        if (users[winner2Index]) {
+          tournament.winners = [
+            ...tournament.winners,
+            {
+              coins: winnerCoins[1],
+              position: 2,
+              ughId: users[winner2Index]?.ughId,
+            },
+          ];
+          users[winner2Index].tournaments = users[winner2Index]?.tournaments?.map(
+            (t) => {
+              if (JSON.stringify(t.id) === JSON.stringify(tournament.id)) {
+                t.didWin = true;
+                t.coins = winnerCoins[1];
+              }
+              return t;
             }
-            return t;
-          }
-        );
-        users[winner2Index].wallet.coins += winnerCoins[1];
+          );
+          users[winner2Index].wallet.coins += winnerCoins[1];
+        }
       }
       tournament.status = TournamentStatus.Completed;
       tournament.winners.forEach(w => passbooks.push(Passbook.build({
