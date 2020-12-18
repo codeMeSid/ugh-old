@@ -166,10 +166,18 @@ const UserProfile = ({
                     <ImGift />
                   </div>
                   <div className="profile__body__bottom__item__title">
-                    total tournament
+                    <Link href={`/profile/tournament/${user?.ughId}`}>
+                      <a>
+                        <Tooltip title="tournament history">
+                          total tournament
+                        </Tooltip>
+                      </a>
+                    </Link>
                   </div>
                   <div className="profile__body__bottom__item__value">
-                    {user?.tournaments?.length || 0}
+                    <Link href={`/profile/tournament/${user?.ughId}`}>
+                      <a>{user?.tournaments?.length || 0}</a>
+                    </Link>
                   </div>
                 </div>
                 <div className="profile__body__bottom__item">

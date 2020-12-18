@@ -28,7 +28,7 @@ export const tournamentHandler: Array<ApiSign> = [
     url: "/user/fetch/:ughId",
     method: HttpMethod.Get,
     controller: tournamentFetchUghIdController,
-    middlewares: [],
+    middlewares: [currentUser, requireAuth],
   },
   {
     url: "/fetch/all/active",
