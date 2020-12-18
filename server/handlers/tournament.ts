@@ -16,6 +16,7 @@ import { tournamentJoinController } from "../controllers/tournament/join";
 import { tournamentAddValidator } from "../utils/validator/tournament/add";
 import { TournamentEvaluateController } from "../controllers/tournament/evaluate";
 import { tournamentFetchUghIdController } from "../controllers/tournament/fetch-ughId";
+import { tournamentLeaveHandler } from "../controllers/tournament/leave";
 
 export const tournamentHandler: Array<ApiSign> = [
   {
@@ -60,7 +61,12 @@ export const tournamentHandler: Array<ApiSign> = [
     controller: tournamentJoinController,
     middlewares: [currentUser, requireAuth],
   },
-
+  {
+    url: "/leave/:tournamentId",
+    method: HttpMethod.Get,
+    controller: tournamentLeaveHandler,
+    middlewares: [currentUser, requireAuth],
+  },
   {
     url: "/add",
     method: HttpMethod.Post,

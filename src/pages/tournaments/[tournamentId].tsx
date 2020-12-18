@@ -17,6 +17,7 @@ import IconDialogButton from "../../components/button/icon-dialog";
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import { prizeDistribution } from "../../../server/utils/prize-distribution";
 import { numberPostion } from "../../public/number-postion";
+import ProgressButton from "../../components/button/progress";
 
 const Logo = require("../../public/asset/logo-icon.png");
 
@@ -53,6 +54,10 @@ const TournamentDetail = ({
     tournament?.winners?.filter((w) => w.position === -1).length ===
     tournament?.players?.length;
   const JoinButton = () => {
+    const msIn30min = 1000 * 60 * 30;
+    const canLeave =
+      new Date(tournament?.startDateTime).valueOf() - Date.now() >= msIn30min;
+
     if (!currentUser && tournament?.status === "completed")
       return <Button text="Game Over" type="disabled" size="medium" />;
     if (!currentUser)
@@ -120,6 +125,20 @@ const TournamentDetail = ({
           </div>
         </DialogButton>
       );
+    else if (
+      currentUser &&
+      tournament?.status === "upcoming" &&
+      userHasJoined &&
+      canLeave
+    )
+      return (
+        <ProgressButton
+          text="Leave"
+          type="youtube"
+          size="small"
+          onPress={leaveRequest}
+        />
+      );
     else if (currentUser && tournament?.status === "upcoming" && userHasJoined)
       return <Button text="Joined" type="facebook" size="small" />;
     else if (
@@ -182,6 +201,14 @@ const TournamentDetail = ({
 
   const { doRequest } = useRequest({
     url: `/api/ugh/tournament/join/${tournament?.id}`,
+    body: {},
+    method: "get",
+    onSuccess: Router.reload,
+    onError: (errors) => setMessages(errors),
+  });
+
+  const { doRequest: leaveRequest } = useRequest({
+    url: `/api/ugh/tournament/leave/${tournament?.id}`,
     body: {},
     method: "get",
     onSuccess: Router.reload,

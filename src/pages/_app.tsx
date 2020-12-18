@@ -35,6 +35,7 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
       "/profile/[ughId]": `${router.query?.ughId}\'s Profile`,
       "/profile/edit": "Edit Profile",
       "/profile/passbook": "Passbook",
+      "/profile/tournament/[ughId]": "Tournament History",
       "/profile": "My Profile",
       "/sponsors": "UGH Sponsors",
       "/sponsors/[sponsorId]": "Sponsors Confirmation Form",
