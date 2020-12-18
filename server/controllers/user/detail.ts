@@ -7,7 +7,5 @@ export const userDetailController = async (req: Request, res: Response) => {
   const { userId } = req.params;
   const user = await User.findById(userId);
   if (!user) throw new BadRequestError("Player account invalid");
-  const passbook = await Passbook.find({ ughId: user.ughId });
-  const userObj = { ...user.toObject(), passbook }
-  res.send(userObj);
+  res.send(user);
 };

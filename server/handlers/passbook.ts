@@ -1,6 +1,7 @@
 import { ApiSign, currentUser, HttpMethod, requireAdminAuth, requireAuth } from "@monsid/ugh";
 import { passbookFetchController } from "../controllers/passbook/fetch";
 import { passbookFetchAllController } from "../controllers/passbook/fetch-all";
+import { passbookUserController } from "../controllers/passbook/fetch-ughId";
 export const passbookHandler: Array<ApiSign> = [
     {
         url: "/fetch",
@@ -12,6 +13,12 @@ export const passbookHandler: Array<ApiSign> = [
         url: "/fetch/all",
         method: HttpMethod.Get,
         controller: passbookFetchAllController,
+        middlewares: [currentUser, requireAdminAuth]
+    },
+    {
+        url: "/fetch/:ughId",
+        method: HttpMethod.Get,
+        controller: passbookUserController,
         middlewares: [currentUser, requireAdminAuth]
     }
 ];
