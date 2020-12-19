@@ -19,7 +19,6 @@ export const addScoreController = async (req: Request, res: Response) => {
     if (bracket.teamA.score >= 0)
       throw new BadRequestError("Score already updated");
     bracket.teamA.score = score;
-    bracket.teamA.uploadBy = undefined;
     bracket.teamA.updateBy = new Date(
       Date.now() + TournamentTime.TournamentScoreDisputeTime
     );
@@ -36,7 +35,6 @@ export const addScoreController = async (req: Request, res: Response) => {
     if (bracket.teamB.score >= 0)
       throw new BadRequestError("Score already updated");
     bracket.teamB.score = score;
-    bracket.teamB.uploadBy = undefined;
     bracket.teamB.updateBy = new Date(
       Date.now() + TournamentTime.TournamentScoreDisputeTime
     );
@@ -50,19 +48,15 @@ export const addScoreController = async (req: Request, res: Response) => {
     }
   }
   await bracket.save();
-  timer.cancel(`${bracket.regId}-check`);
   if (isPlayerA) {
     timer.schedule(
       `${bracketId}-A`,
       bracket.teamA.updateBy,
       async ({ regId, tournamentId }) => {
-        const session = await mongoose.startSession();
-        session.startTransaction();
         try {
           const bracket = await Bracket.findOne({ regId })
             .populate("teamA.user", "ughId email", "Users")
             .populate("teamB.user", "ughId email", "Users")
-            .session(session);
           if (!bracket) throw new Error("Invalid Bracket");
           if (bracket.winner) return;
           if (bracket.teamA.hasRaisedDispute || bracket.teamB.hasRaisedDispute)
@@ -70,13 +64,10 @@ export const addScoreController = async (req: Request, res: Response) => {
           if (bracket.teamA.score > bracket.teamB.score)
             bracket.winner = bracket.teamA.user.ughId;
           else bracket.winner = bracket.teamB.user.ughId;
-          await bracket.save({ session });
-          await session.commitTransaction();
+          await bracket.save();
         } catch (error) {
-          console.log({ msg: "add score player A", error: error.message });
-          await session.abortTransaction();
+          return
         }
-        session.endSession();
         winnerLogic(tournamentId, regId, "score teamA added");
       },
       { regId: bracketId, tournamentId }
@@ -87,13 +78,11 @@ export const addScoreController = async (req: Request, res: Response) => {
       `${bracketId}-B`,
       bracket.teamB.updateBy,
       async ({ regId, tournamentId }) => {
-        const session = await mongoose.startSession();
-        session.startTransaction();
+
         try {
           const bracket = await Bracket.findOne({ regId })
             .populate("teamA.user", "ughId email", "Users")
             .populate("teamB.user", "ughId email", "Users")
-            .session(session);
           if (!bracket) throw new Error("Invalid Bracket");
           if (bracket.winner) return;
           if (bracket.teamA.hasRaisedDispute || bracket.teamB.hasRaisedDispute)
@@ -101,13 +90,10 @@ export const addScoreController = async (req: Request, res: Response) => {
           if (bracket.teamA.score > bracket.teamB.score)
             bracket.winner = bracket.teamA.user.ughId;
           else bracket.winner = bracket.teamB.user.ughId;
-          await bracket.save({ session });
-          await session.commitTransaction();
+          await bracket.save()
         } catch (error) {
-          console.log({ msg: "add score player B", error: error.message });
-          await session.abortTransaction();
+          return;
         }
-        session.endSession();
         winnerLogic(tournamentId, regId, "score teamB added");
       },
       { regId: bracketId, tournamentId }

@@ -247,9 +247,9 @@ const PlayerScoreCard = ({
                   onChange={onChangeHandler}
                 />
                 {opponent.hasScore && opponent.score === rank && (
-                  <div style={{ fontSize: 16, color: "red" }}>
+                  <p style={{ fontSize: 16, color: "red" }}>
                     *If both teams have same score, dispute will be raised.
-                  </div>
+                  </p>
                 )}
               </DialogButton>
             </div>

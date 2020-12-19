@@ -18,6 +18,7 @@ import { MailerTemplate } from "../../utils/enum/mailer-template";
 import { Passbook, PassbookDoc } from "../../models/passbook";
 import { TransactionEnv } from "../../utils/enum/transaction-env";
 import { TransactionType } from "../../utils/enum/transaction-type";
+import { bracketCheckTimer } from "../../utils/bracket-check-timer";
 
 export const tournamentUpdateStatusController = async (
   req: Request,
@@ -128,27 +129,12 @@ export const tournamentUpdateStatusController = async (
               bracket.teamA.uploadBy = undefined;
               bracket.teamB.uploadBy = undefined;
             } else {
-              const bracketCheckTimer = new Date(
+              const bracketCheckTime = new Date(
                 new Date(bracket.teamA.uploadBy).getTime() +
                 TournamentTime.TournamentScoreCheckTime
               );
-              timer.schedule(
-                `${bracket.regId}-check`,
-                bracketCheckTimer,
-                async ({ regId, tournamentId }) => {
-                  const bracket = await Bracket.findOne({ regId });
-                  if (!bracket) return;
-                  const {
-                    teamA: { score: sA },
-                    teamB: { score: sB },
-                    winner,
-                  } = bracket;
-                  if (winner) return;
-                  if (sA !== -1 || sB !== -1) return;
-                  winnerLogic(tournamentId, regId, "score check timer");
-                },
-                { regId: bracket.regId, tournamentId: tournament.regId }
-              );
+              bracketCheckTimer(bracket.regId, bracketCheckTime, tournament.regId);
+
             }
             brackets.push(bracket);
             tournament.brackets.push(bracket);
@@ -179,7 +165,7 @@ export const tournamentUpdateStatusController = async (
         });
         timer.schedule(
           `${tournament.regId}-end`,
-          new Date(tournament.endDateTime),
+          new Date(new Date(tournament.endDateTime).valueOf() + (tournament.game.gameType === GameType.Rank ? 0 : 1000 * 60 * 30)),
           async ({ id }: { id: string }) => {
             try {
               const tournament = await Tournament.findById(id);
