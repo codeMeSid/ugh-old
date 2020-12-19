@@ -16,7 +16,7 @@ export const raiseDisputeController = async (req: Request, res: Response) => {
     const bracketA = await Bracket.findOne({ regId: bracketId })
       .populate("teamA.user", "email UghId", "Users")
       .session(session);
-    const user = await User.findById(id);
+    const user = await User.findById(id).session(session);
     if (!user) throw new BadRequestError("Invalid Request");
     if (bracketA.teamA.score === 0)
       throw new BadRequestError("Player has not updated rank yet");

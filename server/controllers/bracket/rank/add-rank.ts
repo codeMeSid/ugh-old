@@ -41,5 +41,5 @@ export const addRankController = async (req: Request, res: Response) => {
     },
     { id: bracket.id, tournamentId }
   );
-  res.send(true);
+  res.send({ rank });
 };

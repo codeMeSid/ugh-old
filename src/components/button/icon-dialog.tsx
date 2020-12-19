@@ -45,7 +45,6 @@ const IconDialogButton = ({
                 onPress={async (_, next) => {
                   onAction(
                     (data: any) => {
-                      console.log({ data });
                       next();
                       setOpenDialog(false);
                     },

@@ -209,7 +209,7 @@ const AddTournament = ({
               placeholder={`game (${
                 games?.filter(
                   (game) => game.console === consoles[consoleIndex]?.name
-                )[gameIndex].gameType
+                )[gameIndex]?.gameType
               })`}
               value={gameIndex}
               options={games
