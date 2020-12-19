@@ -45,7 +45,9 @@ export interface UserDoc extends mongoose.Document {
     didWin: boolean,
     coins: number,
     name: string,
-    startDateTime: Date
+    startDateTime: Date,
+    endDateTime: Date,
+    game: string
   }>;
   phone: string;
   isSuperAdmin: string;
@@ -120,7 +122,9 @@ const userSchema = new mongoose.Schema(
         },
         coins: Number,
         name: String,
-        startDateTime: Date
+        startDateTime: Date,
+        endDateTime: Date,
+        game: String
       },
     ],
     dob: mongoose.Schema.Types.Date,

@@ -31,15 +31,16 @@ const UserTournamentPage = ({ tournaments, errors }) => {
               headers={[
                 { text: "date", isResponsive: true },
                 { text: "tournament", isResponsive: false },
+                { text: "game", isResponsive: true },
                 { text: "status", isResponsive: false },
               ]}
               data={tournaments.map((t: any) => {
-                const msIn5hr = 1000 * 60 * 60 * 5;
                 const canStatusChange =
-                  Date.now() < new Date(t.startDateTime).valueOf() + msIn5hr;
+                  Date.now() < new Date(t?.endDateTime || Date.now()).valueOf();
                 return [
                   format(new Date(t.startDateTime), "dd/MM/yyy hh:mm a"),
                   t.name,
+                  t?.game,
                   <span style={{ fontWeight: 700 }}>
                     {t.didWin ? (
                       <div style={{ color: "green" }}>WON</div>

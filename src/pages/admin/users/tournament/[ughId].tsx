@@ -9,6 +9,7 @@ import Table from "../../../../components/table";
 import { serverRequest } from "../../../../hooks/server-request";
 import { useRequest } from "../../../../hooks/use-request";
 import Router from "next/router";
+import { TiTick } from "react-icons/ti";
 
 const AdminTournamentPage = ({ tournaments, errors, ughId }) => {
   let winning = 0;
@@ -31,17 +32,18 @@ const AdminTournamentPage = ({ tournaments, errors, ughId }) => {
         headers={[
           { text: "date", isResponsive: true },
           { text: "tournament", isResponsive: false },
+          { text: "game", isResponsive: true },
           { text: "status", isResponsive: false },
         ]}
         data={tournaments.map((t: any) => {
-          const msIn5hr = 1000 * 60 * 60 * 5;
           const canStatusChange =
-            Date.now() < new Date(t.startDateTime).valueOf() + msIn5hr;
+            Date.now() < new Date(t?.endDateTime || Date.now()).valueOf();
           return [
             format(new Date(t.startDateTime), "dd/MM/yyy hh:mm a"),
             t.name,
+            t?.game,
             t.didWin ? (
-              <GrCheckmark style={{ color: "green", fontSize: 30 }} />
+              <TiTick style={{ color: "green", fontSize: 30 }} />
             ) : canStatusChange ? (
               <div style={{ color: "blue", fontWeight: 900, fontSize: 20 }}>
                 TBD

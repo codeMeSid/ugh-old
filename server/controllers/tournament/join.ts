@@ -13,7 +13,7 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    const tournament = await Tournament.findById(tournamentId).session(session);
+    const tournament = await Tournament.findById(tournamentId).populate("game", "name", "Games").session(session);
     const user = await User.findById(id).session(session);
 
     if (!tournament) throw new Error("Invalid Tournament");
@@ -47,7 +47,9 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
       id: tournament.id,
       coins: tournament.winnerCoin,
       name: tournament.name,
-      startDateTime: tournament.startDateTime
+      startDateTime: tournament.startDateTime,
+      endDateTime: tournament.endDateTime,
+      game: tournament?.game?.name
     });
     tournament.players.push(user);
     await tournament.save({ session });

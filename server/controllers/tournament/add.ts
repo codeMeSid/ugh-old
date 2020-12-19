@@ -92,7 +92,9 @@ export const tournamentAddController = async (req: Request, res: Response) => {
         didWin: false,
         coins: winnerCoin,
         name: tournament.name,
-        startDateTime: tournament.startDateTime
+        startDateTime: tournament.startDateTime,
+        endDateTime: tournament.endDateTime,
+        game: game.name
       });
       tournament.players.push(user);
     }
