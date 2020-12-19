@@ -132,12 +132,22 @@ const TournamentDetail = ({
       canLeave
     )
       return (
-        <ProgressButton
-          text="Leave"
-          type="youtube"
+        <DialogButton
+          title="Dropout"
+          onAction={leaveRequest}
+          fullButton
           size="small"
-          onPress={leaveRequest}
-        />
+          type="youtube"
+        >
+          <div style={{ fontSize: 20, marginBottom: 20, textAlign: "center" }}>
+            <p>
+              {tournament?.isFree ? null : (
+                <div>You will be charged 50% of entry coins as penalty.</div>
+              )}
+            </p>
+            <p style={{ marginTop: 10 }}>Are you sure?</p>
+          </div>
+        </DialogButton>
       );
     else if (currentUser && tournament?.status === "upcoming" && userHasJoined)
       return <Button text="Joined" type="facebook" size="small" />;

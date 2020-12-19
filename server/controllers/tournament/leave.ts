@@ -23,12 +23,13 @@ export const tournamentLeaveHandler = async (req: Request, res: Response) => {
 
         tournament.players = tournament.players.filter(pId => JSON.stringify(pId) !== JSON.stringify(user.id));
         user.tournaments = user.tournaments.filter(t => JSON.stringify(t.id) !== JSON.stringify(tournament.id));
-        user.wallet.coins += tournament.isFree ? 0 : tournament.coins;
+        const penaltyCoins = Math.floor(tournament.coins / 2);
+        user.wallet.coins += tournament.isFree ? 0 : tournament.coins - penaltyCoins;
 
         const passbook = Passbook.build({
-            coins: tournament.coins,
+            coins: penaltyCoins,
             transactionEnv: TransactionEnv.TournamentLeave,
-            transactionType: TransactionType.Credit,
+            transactionType: TransactionType.Debit,
             ughId: user.ughId,
             event: tournament.name
         })
