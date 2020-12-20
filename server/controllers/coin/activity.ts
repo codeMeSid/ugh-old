@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Coin } from "../../models/coin";
-import { BadRequestError } from "@monsid/ugh";
+import { BadRequestError } from "@monsid/ugh-og"
 
 export const coinUpdateActivityController = async (
   req: Request,

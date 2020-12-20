@@ -1,4 +1,4 @@
-import { TournamentStatus } from "@monsid/ugh";
+import { TournamentStatus } from "@monsid/ugh-og"
 import { randomBytes } from "crypto";
 import { Bracket, BracketDoc } from "../../../../models/bracket";
 import { Passbook, PassbookDoc } from "../../../../models/passbook";

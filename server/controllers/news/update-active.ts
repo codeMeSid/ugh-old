@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { News } from "../../models/news";
-import { BadRequestError } from "@monsid/ugh";
+import { BadRequestError } from "@monsid/ugh-og"
 
 export const newsUpdateActiveController = async (
   req: Request,

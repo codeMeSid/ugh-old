@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Stream } from "../../models/stream";
-import { BadRequestError } from "@monsid/ugh";
+import { BadRequestError } from "@monsid/ugh-og"
 
 export const streamUpdateActivityController = async (
   req: Request,

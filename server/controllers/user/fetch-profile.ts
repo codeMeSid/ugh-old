@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../../models/user";
-import { BadRequestError, UserActivity } from "@monsid/ugh";
+import { BadRequestError, UserActivity } from "@monsid/ugh-og"
 
 export const userFetchProfileContoller = async (
   req: Request,

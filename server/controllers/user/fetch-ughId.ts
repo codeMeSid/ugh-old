@@ -1,4 +1,4 @@
-import { UserActivity } from "@monsid/ugh";
+import { UserActivity } from "@monsid/ugh-og"
 import { Request, Response } from "express";
 import { User } from "../../models/user";
 

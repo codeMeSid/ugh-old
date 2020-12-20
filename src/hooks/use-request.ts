@@ -1,4 +1,4 @@
-import { RequestUtil } from "@monsid/ugh";
+import { RequestUtil } from "@monsid/ugh-og"
 import Axios, { AxiosResponse, AxiosError } from "axios";
 
 export const useRequest = (attrs: RequestUtil) => {

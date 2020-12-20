@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import { Password, UserRecovery, UserTournament } from "@monsid/ugh";
+import { Password, UserRecovery, UserTournament } from "@monsid/ugh-og"
 import {
   UserActivity,
   UserRole,
@@ -9,7 +9,7 @@ import {
   UserIdProof,
   UserWallet,
   UserSettings,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 
 interface UserAttrs {
   ughId: string;

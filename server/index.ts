@@ -8,7 +8,7 @@ import {
   DatabaseConnectionError,
   currentUser,
   authAdminRoute,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 import { app, nextApp } from "./app";
 import { apiRouter } from "./routes/api-routes";
 import {
@@ -21,7 +21,6 @@ import {
 import { siteRouter } from "./routes/site-routes";
 import { mailer } from "./utils/mailer";
 import { messenger } from "./utils/socket";
-import { Request, Response } from "express";
 
 const Agendash = require("agendash");
 const start = async () => {

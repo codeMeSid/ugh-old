@@ -1,4 +1,4 @@
-import { GameType, timer, TournamentStatus } from "@monsid/ugh";
+import { GameType, timer, TournamentStatus } from "@monsid/ugh-og"
 import mongoose from 'mongoose';
 import { Tournament } from "../../../models/tournament";
 import { User } from "../../../models/user";

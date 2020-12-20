@@ -1,4 +1,4 @@
-import { BadRequestError, GameType, UserRole } from "@monsid/ugh";
+import { BadRequestError, GameType, UserRole } from "@monsid/ugh-og"
 import { Request, Response } from "express";
 import { Bracket } from "../../models/bracket";
 import { Tournament } from "../../models/tournament";

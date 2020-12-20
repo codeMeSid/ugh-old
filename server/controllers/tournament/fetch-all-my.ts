@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Tournament } from "../../models/tournament";
-import { TournamentStatus } from "@monsid/ugh";
+import { TournamentStatus } from "@monsid/ugh-og"
 import { User } from "../../models/user";
 import { startOfWeek, endOfWeek } from 'date-fns';
 

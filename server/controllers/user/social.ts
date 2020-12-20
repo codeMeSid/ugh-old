@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../../models/user";
-import { generateToken, UserActivity } from "@monsid/ugh";
+import { generateToken, UserActivity } from "@monsid/ugh-og"
 import { randomBytes } from "crypto";
 import { JWT_KEY } from "../../utils/env-check";
 

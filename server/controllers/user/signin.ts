@@ -5,7 +5,7 @@ import {
   UserActivity,
   Password,
   generateToken,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 import { JWT_KEY } from "../../utils/env-check";
 
 export const signinController = async (req: Request, res: Response) => {

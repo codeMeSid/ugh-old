@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { SponsorPack } from "@monsid/ugh";
+import { SponsorPack } from "@monsid/ugh-og"
 
 interface SponsorshipAttrs {
   name: string;

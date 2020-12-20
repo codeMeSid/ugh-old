@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { TransactionTypes, BadRequestError } from "@monsid/ugh";
+import { TransactionTypes, BadRequestError } from "@monsid/ugh-og"
 import { Transaction } from "../../models/transaction";
 import mongoose from "mongoose";
 import { User } from "../../models/user";

@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { Sponsor } from "../../models/sponsor";
-import { BadRequestError } from "@monsid/ugh";
+import { BadRequestError } from "@monsid/ugh-og"
 
 export const sponsorAddController = async (req: Request, res: Response) => {
   const { email, phone, duration, price, name, color, message } = req.body;

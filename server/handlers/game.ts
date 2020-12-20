@@ -4,7 +4,7 @@ import {
   currentUser,
   requireAdminAuth,
   validateRequest,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 import { gameAddController } from "../controllers/game/add";
 import { gameFetchController } from "../controllers/game/fetch";
 import { gameFetchActiveController } from "../controllers/game/fetch-active";

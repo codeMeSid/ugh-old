@@ -1,4 +1,4 @@
-import { BadRequestError } from "@monsid/ugh";
+import { BadRequestError } from "@monsid/ugh-og"
 import ObscFilter from "bad-words";
 
 class Filter {

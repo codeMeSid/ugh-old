@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Transaction } from "../../models/transaction";
-import { BadRequestError } from "@monsid/ugh";
+import { BadRequestError } from "@monsid/ugh-og"
 
 export const transactionDetailController = async (
   req: Request,

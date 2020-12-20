@@ -5,7 +5,7 @@ import helmet from "helmet";
 import cors from "cors";
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
-import { NodeEnv } from "@monsid/ugh";
+import { NodeEnv } from "@monsid/ugh-og"
 
 import next from "next";
 import { config } from "dotenv";

@@ -4,7 +4,7 @@ import {
   requireAdminAuth,
   currentUser,
   validateRequest,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 
 import { coinFetchController } from "../controllers/coin/fetch";
 import { coinFetchActiveController } from "../controllers/coin/fetch-active";

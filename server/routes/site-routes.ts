@@ -5,7 +5,7 @@ import {
   authAdminRoute,
   authRoute,
   nonAuthRoute,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 
 const router = Router();
 

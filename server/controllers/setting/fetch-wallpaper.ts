@@ -1,4 +1,4 @@
-import { BadRequestError } from "@monsid/ugh";
+import { BadRequestError } from "@monsid/ugh-og"
 import { Request, Response } from "express";
 import { Settings } from "../../models/settings";
 

@@ -1,4 +1,4 @@
-import { timer } from "@monsid/ugh";
+import { timer } from "@monsid/ugh-og"
 import mongoose from "mongoose";
 import { Bracket } from "../models/bracket";
 import { DQ } from "./enum/dq";

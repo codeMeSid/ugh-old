@@ -4,7 +4,7 @@ import {
   requireAdminAuth,
   currentUser,
   validateRequest,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 
 import { consoleAddController } from "../controllers/console/add";
 import { consoleAllController } from "../controllers/console/all";

@@ -5,7 +5,7 @@ import {
   requireAuth,
   requireAdminAuth,
   validateRequest,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 import { tournamentAddController } from "../controllers/tournament/add";
 import { tournamentFetchAllController } from "../controllers/tournament/fetch-all";
 import { tournamentFetchDetailController } from "../controllers/tournament/fetch-detail";

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { User } from "../../models/user";
 import { randomBytes } from "crypto";
-import { BadRequestError, UserActivity, UserRecovery } from "@monsid/ugh";
+import { BadRequestError, UserActivity, UserRecovery } from "@monsid/ugh-og"
 import { mailer } from "../../utils/mailer";
 import { MailerTemplate } from "../../utils/enum/mailer-template";
 import { BASE_URL } from "../../utils/env-check";

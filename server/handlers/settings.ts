@@ -4,7 +4,7 @@ import {
   currentUser,
   requireAdminAuth,
   requireAuth,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 import { settingFetchController } from "../controllers/setting/fetch-all";
 import { settingUpdateController } from "../controllers/setting/update";
 import { settingTypeFetchController } from "../controllers/setting/fetch-wallpaper";

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Transaction } from "../../models/transaction";
-import { BadRequestError, TransactionTypes } from "@monsid/ugh";
+import { BadRequestError, TransactionTypes } from "@monsid/ugh-og"
 import { randomBytes } from "crypto";
 import { User } from "../../models/user";
 

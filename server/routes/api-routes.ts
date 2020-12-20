@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { apiHandlers } from "../handlers/api";
-import { HttpMethod } from "@monsid/ugh";
+import { HttpMethod } from "@monsid/ugh-og"
 
 const router = Router();
 

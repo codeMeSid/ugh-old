@@ -1,4 +1,4 @@
-import { GameType } from "@monsid/ugh";
+import { GameType } from "@monsid/ugh-og"
 import mongoose from "mongoose";
 import { UserDoc } from "./user";
 

@@ -4,7 +4,7 @@ import {
   currentUser,
   requireAuth,
   requireAdminAuth,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 
 import { transactionCreateController } from "../controllers/transaction/create";
 import { transactionVerifyController } from "../controllers/transaction/verify";

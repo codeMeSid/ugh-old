@@ -1,4 +1,4 @@
-import { BadRequestError, NotAuthorizedError, timer } from "@monsid/ugh";
+import { BadRequestError, NotAuthorizedError, timer } from "@monsid/ugh-og"
 import { Request, Response } from "express";
 import { Bracket } from "../../../models/bracket";
 import { mailer } from "../../../utils/mailer";

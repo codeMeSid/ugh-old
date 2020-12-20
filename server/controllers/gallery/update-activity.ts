@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Gallery } from "../../models/gallery";
-import { BadRequestError } from "@monsid/ugh";
+import { BadRequestError } from "@monsid/ugh-og"
 
 export const galleryUpdateActivityController = async (
   req: Request,

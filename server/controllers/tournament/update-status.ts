@@ -3,7 +3,7 @@ import {
   GameType,
   timer,
   TournamentStatus,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 import { Request, Response } from "express";
 import { Tournament } from "../../models/tournament";
 import mongoose from "mongoose";

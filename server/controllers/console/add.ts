@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { Console } from "../../models/console";
-import { BadRequestError } from "@monsid/ugh";
+import { BadRequestError } from "@monsid/ugh-og"
 
 export const consoleAddController = async (req: Request, res: Response) => {
   const { name } = req.body;

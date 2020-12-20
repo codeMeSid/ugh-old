@@ -4,7 +4,7 @@ import {
   currentUser,
   requireAdminAuth,
   validateRequest,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 import { sponsorAddController } from "../controllers/sponsor/add";
 import { sponsorFetchActiveController } from "../controllers/sponsor/fetch-active";
 import { sponsorFetchController } from "../controllers/sponsor/fetch";

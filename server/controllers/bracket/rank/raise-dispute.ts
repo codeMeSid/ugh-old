@@ -1,4 +1,4 @@
-import { BadRequestError, GameType, timer } from "@monsid/ugh";
+import { BadRequestError, GameType, timer } from "@monsid/ugh-og"
 import { Request, Response } from "express";
 import { Bracket } from "../../../models/bracket";
 import { User } from "../../../models/user";

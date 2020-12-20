@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../../models/user";
-import { BadRequestError } from "@monsid/ugh";
+import { BadRequestError } from "@monsid/ugh-og"
 
 export const userUpdateSettingController = async (
   req: Request,

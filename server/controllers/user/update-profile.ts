@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../../models/user";
-import { BadRequestError, UserActivity } from "@monsid/ugh";
+import { BadRequestError, UserActivity } from "@monsid/ugh-og"
 import { Passbook } from "../../models/passbook";
 import { TransactionEnv } from "../../utils/enum/transaction-env";
 import { TransactionType } from "../../utils/enum/transaction-type";

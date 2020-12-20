@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import { User } from "../../models/user";
-import { BadRequestError, paymentHandler, TransactionTypes } from "@monsid/ugh";
+import { BadRequestError, paymentHandler, TransactionTypes } from "@monsid/ugh-og"
 import { Transaction } from "../../models/transaction";
 
 export const transactionCreateController = async (

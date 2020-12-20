@@ -1,4 +1,4 @@
-import { ApiSign, requireAdminAuth, currentUser } from "@monsid/ugh";
+import { ApiSign, requireAdminAuth, currentUser } from "@monsid/ugh-og"
 
 import { userHandlers } from "./user";
 import { featureHandlers } from "./feature";

@@ -1,4 +1,4 @@
-import { TournamentStatus } from "@monsid/ugh";
+import { TournamentStatus } from "@monsid/ugh-og"
 import { BracketDoc } from "../../models/bracket";
 import { Passbook, PassbookDoc } from "../../models/passbook";
 import { TournamentDoc } from "../../models/tournament";
@@ -35,9 +35,7 @@ export const rankLogger = async (
     return;
   }
   brackets = brackets?.map((b) => {
-    // TODO new condtion
-    // issue player can update rank atlast minute and get away with it
-    // solution auto dispute required
+
     if (b.teamA.score >= 1 && !b.winner) {
       const userIndex = users.findIndex(
         (u) => JSON.stringify(u.id) === JSON.stringify(b.teamA.user)
@@ -55,7 +53,7 @@ export const rankLogger = async (
   // take top winners as required in tournament
   const bracketWinners = brackets
     .filter(
-      (b) => b.winner !== DQ.DisputeLost && b.winner !== DQ.ScoreNotUploaded
+      (b) => b.winner !== DQ.DisputeLost && b.winner !== DQ.ScoreNotUploaded && b.winner !== DQ.AdminDQ
     )
     .sort((bA, bB) => bA.teamA.score - bB.teamA.score)
     .slice(0, tournament.winnerCount);

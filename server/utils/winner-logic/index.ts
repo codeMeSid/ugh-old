@@ -4,7 +4,7 @@ import {
   infolog,
   timer,
   TournamentStatus,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 import mongoose from "mongoose";
 import { Bracket, BracketDoc } from "../../models/bracket";
 import { PassbookDoc } from "../../models/passbook";

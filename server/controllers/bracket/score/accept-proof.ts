@@ -1,4 +1,4 @@
-import { BadRequestError, NotAuthorizedError, UserRole } from "@monsid/ugh";
+import { BadRequestError, NotAuthorizedError, UserRole } from "@monsid/ugh-og"
 import { Request, Response } from "express";
 import { Bracket } from "../../../models/bracket";
 import { winnerLogic } from "../../../utils/winner-logic";

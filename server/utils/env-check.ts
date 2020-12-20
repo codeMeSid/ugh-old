@@ -1,4 +1,4 @@
-import { errorlog } from "@monsid/ugh";
+import { errorlog } from "@monsid/ugh-og"
 
 const {
   PORT,

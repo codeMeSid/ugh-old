@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { GameGroups, GameType } from "@monsid/ugh";
+import { GameGroups, GameType } from "@monsid/ugh-og"
 
 interface GameAttrs {
   name: string;

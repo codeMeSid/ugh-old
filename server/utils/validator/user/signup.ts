@@ -1,5 +1,5 @@
 import { body } from "express-validator";
-import { isValidDob } from "@monsid/ugh";
+import { isValidDob } from "@monsid/ugh-og"
 
 // ughId, name, email, dob, password
 

@@ -5,7 +5,7 @@ import {
   BadRequestError,
   paymentHandler,
   TransactionTypes,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 import { Transaction } from "../../models/transaction";
 import { Coin } from "../../models/coin";
 import { Passbook } from "../../models/passbook";

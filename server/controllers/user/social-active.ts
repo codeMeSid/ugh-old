@@ -1,4 +1,4 @@
-import { BadRequestError, generateToken, isValidDob, UserActivity } from "@monsid/ugh";
+import { BadRequestError, generateToken, isValidDob, UserActivity } from "@monsid/ugh-og"
 import { Request, Response } from "express";
 import { User } from "../../models/user";
 import { JWT_KEY } from "../../utils/env-check";

@@ -1,4 +1,4 @@
-import { ApiSign, currentUser, HttpMethod, requireAdminAuth, requireAuth } from "@monsid/ugh";
+import { ApiSign, currentUser, HttpMethod, requireAdminAuth, requireAuth } from "@monsid/ugh-og"
 import { passbookFetchController } from "../controllers/passbook/fetch";
 import { passbookFetchAllController } from "../controllers/passbook/fetch-all";
 import { passbookUserController } from "../controllers/passbook/fetch-ughId";

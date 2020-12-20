@@ -4,7 +4,7 @@ import {
   currentUser,
   requireAdminAuth,
   validateRequest,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 import { newsAddController } from "../controllers/news/add";
 import { newsFetchController } from "../controllers/news/fetch-all";
 import { newsFetchActiveController } from "../controllers/news/fetch-active";

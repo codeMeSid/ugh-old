@@ -1,4 +1,4 @@
-import { BadRequestError, TournamentStatus } from "@monsid/ugh";
+import { BadRequestError, TournamentStatus } from "@monsid/ugh-og"
 import { Request, Response } from "express";
 import mongoose from 'mongoose';
 import { Passbook } from "../../models/passbook";

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { BadRequestError } from "@monsid/ugh";
+import { BadRequestError } from "@monsid/ugh-og"
 import { User } from "../../models/user";
 import { mailer } from "../../utils/mailer";
 import { MailerTemplate } from "../../utils/enum/mailer-template";

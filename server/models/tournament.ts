@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { UserPayload, TournamentStatus, GameGroups } from "@monsid/ugh";
+import { UserPayload, TournamentStatus, GameGroups } from "@monsid/ugh-og"
 import { UserDoc } from "./user";
 import { BracketDoc } from "./bracket";
 import { GameDoc } from "./game";

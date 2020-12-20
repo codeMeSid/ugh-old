@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Sponsor } from "../../models/sponsor";
-import { BadRequestError } from "@monsid/ugh";
+import { BadRequestError } from "@monsid/ugh-og"
 
 export const sponsorUpdateActivityController = async (
   req: Request,

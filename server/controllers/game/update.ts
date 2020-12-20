@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Game } from "../../models/game";
-import { BadRequestError } from "@monsid/ugh";
+import { BadRequestError } from "@monsid/ugh-og"
 
 export const gameUpdateController = async (req: Request, res: Response) => {
   const { gameId } = req.params;

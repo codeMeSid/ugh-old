@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../../models/user";
-import { BadRequestError, isValidDob } from "@monsid/ugh";
+import { BadRequestError, isValidDob } from "@monsid/ugh-og"
 import { filter } from "../../utils/profanity-filter";
 
 // TODO check for valid aadhar card

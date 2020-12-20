@@ -4,7 +4,7 @@ import {
   currentUser,
   requireAdminAuth,
   validateRequest,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 import { streamAddController } from "../controllers/stream/add";
 import { streamFetchActiveController } from "../controllers/stream/fetch-active";
 import { streamFetchAllController } from "../controllers/stream/fetch-all";

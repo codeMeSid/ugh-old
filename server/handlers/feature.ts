@@ -1,4 +1,4 @@
-import { ApiSign, HttpMethod } from "@monsid/ugh";
+import { ApiSign, HttpMethod } from "@monsid/ugh-og"
 import { Request, Response } from "express";
 import { mailer } from "../utils/mailer";
 import { MailerTemplate } from "../utils/enum/mailer-template";

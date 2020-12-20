@@ -1,4 +1,4 @@
-import { timer, TournamentStatus } from "@monsid/ugh"
+import { timer, TournamentStatus } from "@monsid/ugh-og"
 import { Tournament } from "../../../models/tournament";
 import { winnerLogic } from "../../../utils/winner-logic";
 

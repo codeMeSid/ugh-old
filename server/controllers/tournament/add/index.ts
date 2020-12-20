@@ -4,7 +4,7 @@ import {
   BadRequestError,
   GameType,
   UserRole,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 import { Game } from "../../../models/game";
 import mongoose from "mongoose";
 import { Settings } from "../../../models/settings";

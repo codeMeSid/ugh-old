@@ -1,4 +1,4 @@
-import { TournamentStatus, TransactionTypes } from "@monsid/ugh";
+import { TournamentStatus, TransactionTypes } from "@monsid/ugh-og"
 import { Request, Response } from "express";
 import { Transaction } from "../../models/transaction";
 

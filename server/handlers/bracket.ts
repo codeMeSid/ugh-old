@@ -4,7 +4,7 @@ import {
   HttpMethod,
   requireAdminAuth,
   requireAuth,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 import { bracketFetchDisputes } from "../controllers/bracket/fetch-all-disputes";
 import { fetchBracketController } from "../controllers/bracket/fetch-bracket";
 import { bracketFetchDisputeDetail } from "../controllers/bracket/fetch-dispute-detail";

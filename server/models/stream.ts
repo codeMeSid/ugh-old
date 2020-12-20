@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { SocialTypes } from "@monsid/ugh";
+import { SocialTypes } from "@monsid/ugh-og"
 
 interface StreamAttrs {
   imageUrl: string;

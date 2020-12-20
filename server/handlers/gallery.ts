@@ -4,7 +4,7 @@ import {
   requireAdminAuth,
   currentUser,
   validateRequest,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 import { galleryFetchController } from "../controllers/gallery/fetch";
 import { galleryFetchActiveController } from "../controllers/gallery/fetch-active";
 import { galleryAddController } from "../controllers/gallery/add";

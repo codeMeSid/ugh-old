@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { TransactionTypes } from "@monsid/ugh";
+import { TransactionTypes } from "@monsid/ugh-og"
 import { UserDoc } from "./user";
 
 interface TransactionAttrs {

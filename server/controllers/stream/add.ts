@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { Stream } from "../../models/stream";
-import { BadRequestError, SocialTypes } from "@monsid/ugh";
+import { BadRequestError, SocialTypes } from "@monsid/ugh-og"
 
 export const streamAddController = async (req: Request, res: Response) => {
   const { name, game, href, imageUrl, social } = req.body;

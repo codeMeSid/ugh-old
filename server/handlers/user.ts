@@ -5,7 +5,7 @@ import {
   requireAuth,
   requireAdminAuth,
   validateRequest,
-} from "@monsid/ugh";
+} from "@monsid/ugh-og"
 
 import { signupController } from "../controllers/user/signup";
 import { signinController } from "../controllers/user/signin";
