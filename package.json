@@ -20,7 +20,7 @@
     "deploy": "docker build -t gcr.io/ultimategamershub/ugh-og . && docker push gcr.io/ultimategamershub/ugh-og"
   },
   "dependencies": {
-    "@monsid/ugh-og": "0.0.0",
+    "@monsid/ugh-og": "0.0.4",
     "@tinymce/tinymce-react": "^3.7.0",
     "agendash": "^1.0.0",
     "axios": "^0.19.2",

@@ -35,10 +35,10 @@ const BracketRankCard = ({
       : "Accepted";
   const hasWinner = !!bracket?.winner;
   const hasScore = bracket?.teamA?.score > 0;
-  const canUpdateRank = isUserBracket && bracket.teamA.score === 0;
+  const canUpdateRank = isUserBracket && !hasScore;
   const canRaiseDispute =
     userHasUploadedScore &&
-    bracket.teamA.score !== 0 &&
+    hasScore &&
     !bracket.teamB.hasRaisedDispute &&
     !isUserBracket;
   const disputeHasBeenRaised =
@@ -150,6 +150,15 @@ const BracketRankCard = ({
             <div className="bracket__rank__reason__value">dispute lost</div>
           </div>
         );
+      case DQ.AdminDQ:
+        return (
+          <div className="bracket__rank__reason">
+            <div className="bracket__rank__reason__title">reason</div>
+            <div className="bracket__rank__reason__value">
+              admin disqualification
+            </div>
+          </div>
+        );
       default:
         return null;
     }
@@ -253,7 +262,7 @@ const BracketRankCard = ({
                   onChange={onChangeHandler}
                 />
                 <p style={{ fontSize: 16, color: "red" }}>
-                  *If any other player has same score, dispute will be raised.
+                  *If any other player has same rank, dispute will be raised.
                 </p>
               </DialogButton>
             </div>
