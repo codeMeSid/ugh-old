@@ -130,4 +130,5 @@ export const winnerLogic = async (
     await session.abortTransaction();
   }
   session.endSession();
+  return;
 };

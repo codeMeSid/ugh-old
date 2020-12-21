@@ -12,7 +12,7 @@ import { TransactionType } from "../../../enum/transaction-type";
 import { prizeDistribution } from "../../../prize-distribution";
 
 export const splBracketProcess = (brackets: Array<BracketDoc>, splBracket: BracketDoc, users: Array<UserDoc>, tournament: TournamentDoc) => {
-
+    console.log("enter score spl bracket")
     const newBrackets: Array<BracketDoc> = [];
     const passbooks: Array<PassbookDoc> = [];
     const canCreateBracket = canCreateBracketCheck(brackets, tournament);
@@ -24,7 +24,7 @@ export const splBracketProcess = (brackets: Array<BracketDoc>, splBracket: Brack
     //      - or by moving to next available bracket
     //      - by create new bracket
     if (splBracket.winner === DQ.ScoreNotUploaded) {
-       
+        console.log("enter score spl bracket no score")
         if (nextEmptyBracketIndex !== -1) {
 
             const emptyBracketUserIndex = getUserIndex(users, brackets[nextEmptyBracketIndex].teamA.user);
@@ -32,6 +32,8 @@ export const splBracketProcess = (brackets: Array<BracketDoc>, splBracket: Brack
                 brackets[nextEmptyBracketIndex].winner = users[emptyBracketUserIndex].ughId;
                 const nextPlayEmptyBracketIndex = getNextEmptyBracketIndex(brackets, brackets[nextEmptyBracketIndex]);
                 if (nextPlayEmptyBracketIndex !== -1) {
+                    console.log("enter score spl bracket no score shift other player existing bracket")
+
                     const uploadBy = new Date(
                         Date.now() + TournamentTime.TournamentScoreUpdateTime
                     )
@@ -51,6 +53,7 @@ export const splBracketProcess = (brackets: Array<BracketDoc>, splBracket: Brack
                     bracketCheckTimer(brackets[nextPlayEmptyBracketIndex].regId, bracketCheckTime, tournament.regId);
                 }
                 else if (canCreateBracket) {
+                    console.log("enter score spl bracket no score shift other player new bracket")
 
                     const newBracket = createNewBracket(users[emptyBracketUserIndex], brackets[nextEmptyBracketIndex]);
                     newBrackets.push(newBracket);
@@ -58,12 +61,12 @@ export const splBracketProcess = (brackets: Array<BracketDoc>, splBracket: Brack
                 }
             }
         }
-
     }
     // check if next round empty bracket is available
     //  - then shift the player to that bracket 
     //      - start check timer
     else if (nextEmptyBracketIndex !== -1) {
+        console.log("enter score spl bracket shift to existing bracket");
         if (splBracketWinnerIndex !== -1) {
             const uploadBy = new Date(
                 Date.now() + TournamentTime.TournamentScoreUpdateTime
@@ -87,6 +90,7 @@ export const splBracketProcess = (brackets: Array<BracketDoc>, splBracket: Brack
     // check if no empty bracket exists 
     //  - create new bracket
     else if (canCreateBracket) {
+        console.log("enter score spl bracket shift to new bracket");
 
         const splBracketWinnerIndex = getUserUghIndex(users, splBracket.winner);
         const newBracket = createNewBracket(users[splBracketWinnerIndex], splBracket);
@@ -96,6 +100,8 @@ export const splBracketProcess = (brackets: Array<BracketDoc>, splBracket: Brack
     // check if next bracket doesnt exists and new bracket cannot be created
     //  - process all brackets to declare winner
     else {
+        console.log("enter score spl bracket winner declaration");
+
         const sortedBrackets = brackets.sort((a, b) => b.round - a.round);
         const winnerBracket = sortedBrackets[0];
         const winnerCoins = prizeDistribution(

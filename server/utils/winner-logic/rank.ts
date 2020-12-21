@@ -35,17 +35,20 @@ export const rankLogger = async (
     return;
   }
   brackets = brackets?.map((b) => {
+    const {
+      teamA: { score, uploadUrl },
+      teamB: { hasRaisedDispute },
+      winner
+    } = b;
 
-    if (b.teamA.score >= 1 && !b.winner) {
+    if (score >= 1 && !winner) {
       const userIndex = users.findIndex(
         (u) => JSON.stringify(u.id) === JSON.stringify(b.teamA.user)
       );
       b.winner = users[userIndex].ughId;
     }
-    if (!b.winner) b.winner = DQ.ScoreNotUploaded;
-    if (b.teamB.hasRaisedDispute && !b.teamA.uploadUrl)
-      b.winner = DQ.DisputeLost;
-
+    if (!winner) b.winner = DQ.ScoreNotUploaded;
+    if (hasRaisedDispute && !uploadUrl && !b.winner) b.winner = DQ.DisputeLost;
     return b;
   });
   // filter out all the winners
@@ -89,7 +92,7 @@ export const rankLogger = async (
     transactionType: TransactionType.Credit,
     ughId: w.ughId,
   })))
-
+  console.log("leave rank")
   return {
     updatedTournament: tournament,
     updatedBrackets: brackets,
