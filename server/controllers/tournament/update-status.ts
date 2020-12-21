@@ -166,17 +166,20 @@ export const tournamentUpdateStatusController = async (
         timer.schedule(
           `${tournament.regId}-end`,
           new Date(new Date(tournament.endDateTime).valueOf() + (tournament.game.gameType === GameType.Rank ? 0 : 1000 * 60 * 30)),
-          async ({ id }: { id: string }) => {
+          async ({ id }: { id: string }, done) => {
             try {
               const tournament = await Tournament.findById(id);
-              if (!tournament) return;
+              if (!tournament) throw new Error("Invalid Tournament - manual start")
               if (tournament.status === TournamentStatus.Started) {
                 tournament.set({ status: TournamentStatus.Completed });
                 await tournament.save();
-              }
-              winnerLogic(tournament.regId, null, "end");
+                done();
+                winnerLogic(tournament.regId, null, "end");
+              } else throw new Error("Tournament Status - manual start");
+
             } catch (error) {
-              console.log({ m: "end", error: error.message });
+              console.log(error.message);
+              done();
             }
           },
           { id: tournament.id }

@@ -9,16 +9,14 @@ import { shuffle } from '../../../utils/shuffle';
 import { randomBytes } from "crypto";
 import { Bracket, BracketDoc } from "../../../models/bracket";
 import { TournamentTime } from '../../../utils/enum/tournament-time';
-import { winnerLogic } from '../../../utils/winner-logic'
 import { mailer } from "../../../utils/mailer";
 import { MailerTemplate } from "../../../utils/enum/mailer-template";
-import { DQ } from "../../../utils/enum/dq";
 import { bracketCheckTimer } from "../../../utils/bracket-check-timer";
 
 export const tournamentStartTimer = (regId: string, id: string, startDateTime: Date) => timer.schedule(
     regId,
     new Date(startDateTime),
-    async ({ id }: { id: string }) => {
+    async ({ id }: { id: string }, done) => {
 
         const brackets = [];
         const session = await mongoose.startSession();
@@ -168,6 +166,7 @@ export const tournamentStartTimer = (regId: string, id: string, startDateTime: D
             await session.abortTransaction();
         }
         session.endSession();
+        done();
     },
     { id }
 );

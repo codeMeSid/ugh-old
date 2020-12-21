@@ -8,21 +8,21 @@ import { winnerLogic } from "./winner-logic";
 export const bracketCheckTimer = (regId: string, startDateTime: Date, tournamentRegId: string) => timer.schedule(
     `${regId}-check`,
     startDateTime,
-    async ({ regId, tournamentRegId }) => {
+    async ({ regId, tournamentRegId }, done) => {
 
         try {
             const bracket = await Bracket.findOne({ regId })
                 .populate("teamA.user", "ughId", "Users")
                 .populate("teamB.user", "ughId", "Users");
 
-            if (!bracket) return;
+            if (!bracket) throw new Error("Invalid Bracket - bracket check timer")
             const {
                 teamA: { score: sA, user: { ughId: uA }, hasRaisedDispute: dA, uploadUrl: pA },
                 teamB: { score: sB, user: { ughId: uB }, hasRaisedDispute: dB, uploadUrl: pB },
                 winner,
             } = bracket;
 
-            if (winner) return;
+            if (winner) throw new Error("Bracket completed - bracket check timer")
             // checks
             // if teamA & teamB didnot update score
             // if teamA added score & teamB did not 
@@ -38,11 +38,11 @@ export const bracketCheckTimer = (regId: string, startDateTime: Date, tournament
             else if (dB && !pA) bracket.winner = uB;
             else if ((!dA && !dB) && sA > sB) bracket.winner = uA;
             else if ((!dA && !dB) && sB > sA) bracket.winner = uB;
-
             await bracket.save();
+            done();
             winnerLogic(tournamentRegId, regId, "score check timer");
         } catch (error) {
-            return;
+            done();
         }
     },
     { regId, tournamentRegId }

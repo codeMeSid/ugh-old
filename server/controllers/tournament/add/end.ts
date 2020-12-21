@@ -5,17 +5,20 @@ import { winnerLogic } from "../../../utils/winner-logic";
 export const tournamentEndTimer = (regId: string, id: string, endDateTime: Date) => timer.schedule(
     `${regId}-end`,
     new Date(endDateTime),
-    async ({ id }: { id: string }) => {
+    async ({ id }: { id: string }, done) => {
         try {
             const tournament = await Tournament.findById(id);
-            if (!tournament) return;
+            if (!tournament) throw new Error("Invalid Tournament - manual start")
             if (tournament.status === TournamentStatus.Started) {
-                tournament.status = TournamentStatus.Completed;
+                tournament.set({ status: TournamentStatus.Completed });
                 await tournament.save();
+                done();
                 winnerLogic(tournament.regId, null, "end");
-            }
+            } else throw new Error("Tournament Status - auto start");
+
         } catch (error) {
-            console.log({ m: "end", error: error.message });
+            console.log(error.message);
+            done();
         }
     },
     { id }
