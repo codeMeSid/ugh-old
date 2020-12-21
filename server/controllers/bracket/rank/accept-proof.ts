@@ -1,7 +1,7 @@
-import { BadRequestError, UserRole } from "@monsid/ugh";
+import { BadRequestError, UserRole } from "@monsid/ugh-og"
 import { Request, Response } from "express";
 import mongoose from "mongoose";
-import { Bracket } from "../../../models/bracket";
+import { Bracket, BracketDoc } from "../../../models/bracket";
 import { winnerLogic } from "../../../utils/winner-logic";
 import { DQ } from "../../../utils/enum/dq";
 import { Tournament } from "../../../models/tournament";
@@ -15,7 +15,7 @@ export const acceptProofController = async (req: Request, res: Response) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    const bracket = await Bracket.findOne({
+    const bracketA = await Bracket.findOne({
       regId: bracketId,
       ...(role === UserRole.Admin
         ? {}
@@ -23,54 +23,49 @@ export const acceptProofController = async (req: Request, res: Response) => {
     })
       .populate("teamA.user", "ughId", "Users")
       .session(session);
+    if (!bracketA) throw new BadRequestError("Invalid Request");
 
     const tournament = await Tournament.findOne({
       regId: tournamentId,
     }).session(session);
-    if (!bracket) throw new BadRequestError("Invalid Request");
+    if (!tournament) throw new BadRequestError("Invalid Request");
     const bracketB = await Bracket.findOne({
       _id: { $in: tournament.brackets },
-      "teamA.user": bracket.teamB.user,
+      "teamA.user": bracketA.teamB.user,
     })
       .populate("teamA.user", "ughId", "Users")
       .session(session);
-    const {
-      teamA: {
-        score,
-        uploadUrl,
-        user: { ughId },
-      },
-      teamB: { hasRaisedDispute },
-      winner,
-    } = bracket;
-    if (score === 0) throw new BadRequestError("Score not uploaded");
-    if (winner) throw new BadRequestError("Bracket is complete");
-    if (!hasRaisedDispute) throw new BadRequestError("No issue was raised");
+    if (!bracketB) throw new BadRequestError("Invalid Request");
+    let brackets: Array<BracketDoc>;
+    const { teamA: { score: sA, user: { ughId: uA }, uploadUrl }, winner: wA } = bracketA;
+    const { teamA: { score: sB, user: { ughId: uB } }, teamB: { hasRaisedDispute: dC }, winner: wB } = bracketB;
+    if (wA) throw new BadRequestError("Bracket is complete & cannot be challenged.");
     if (accept && !uploadUrl)
       throw new BadRequestError("No proof was uploaded");
-    if (accept) {
-      bracket.winner = ughId;
-      if (bracketB) bracketB.winner = DQ.DisputeLost;
-    } else {
-      bracket.winner = DQ.DisputeLost;
-      if (
-        bracketB &&
-        bracketB.winner !== DQ.DisputeLost &&
-        bracketB.winner !== DQ.ScoreNotUploaded
-      ) {
-        bracketB.winner = bracketB.teamA.user?.ughId;
-      }
+    switch (accept) {
+      case true:
+        if (wA !== DQ.AdminDQ && wA !== DQ.DisputeLost)
+          bracketA.winner = uA;
+        if (sA !== sB && !dC && wB !== DQ.AdminDQ && wB !== DQ.DisputeLost) bracketB.winner = DQ.DisputeLost;
+        brackets = await Bracket.find({ _id: { $in: tournament.brackets }, "teamA.score": sA });
+        brackets = brackets.map(b => {
+          if (b.winner !== DQ.AdminDQ && JSON.stringify(b.teamA.user) !== JSON.stringify(bracketA.teamA.user.id)) b.winner = DQ.DisputeLost;
+          return b;
+        })
+        break;
+      case false:
+        if (wA !== DQ.AdminDQ)
+          bracketA.winner = DQ.DisputeLost;
+        if (!dC && wB !== DQ.AdminDQ && wB !== DQ.DisputeLost) bracketB.winner = uB;
+        break;
     }
-    bracket.updateBy = undefined;
-    bracket.uploadBy = undefined;
-    await bracket.save({ session });
-    if (bracketB) await bracketB.save({ session });
+    await Promise.all([bracketA.save({ session }), bracketB.save({ session }), brackets.map((b) => b.save({ session }))]);
     await session.commitTransaction();
   } catch (error) {
     console.log({ msg: "rank accept proof", error: error.message });
     await session.abortTransaction();
   }
   session.endSession();
-  winnerLogic(tournamentId, bracketId, "dispute accepted");
+  winnerLogic(tournamentId, null, "dispute accepted");
   res.send(true);
 };
