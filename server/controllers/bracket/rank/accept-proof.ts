@@ -36,13 +36,13 @@ export const acceptProofController = async (req: Request, res: Response) => {
       .populate("teamA.user", "ughId", "Users")
       .session(session);
     if (!bracketB) throw new BadRequestError("Invalid Request");
-    let brackets: Array<BracketDoc>;
+    let brackets: Array<BracketDoc> = [];
     const { teamA: { score: sA, user: { ughId: uA }, uploadUrl }, winner: wA } = bracketA;
     const { teamA: { score: sB, user: { ughId: uB } }, teamB: { hasRaisedDispute: dC }, winner: wB } = bracketB;
     if (wA) throw new BadRequestError("Bracket is complete & cannot be challenged.");
     if (accept && !uploadUrl)
       throw new BadRequestError("No proof was uploaded");
-    switch (accept) {
+    switch (!!accept) {
       case true:
         if (wA !== DQ.AdminDQ && wA !== DQ.DisputeLost)
           bracketA.winner = uA;
@@ -64,6 +64,7 @@ export const acceptProofController = async (req: Request, res: Response) => {
   } catch (error) {
     console.log({ msg: "rank accept proof", error: error.message });
     await session.abortTransaction();
+    throw new BadRequestError(error.message);
   }
   session.endSession();
   winnerLogic(tournamentId, null, "dispute accepted");

@@ -17,14 +17,12 @@ const BracketRankCard = ({
   bracket,
   onError,
   tournamentId,
-  raiseDisputeHandler,
 }: {
   userHasUploadedScore: boolean;
   currentUser: any;
   bracket: BracketDoc;
   onError: any;
   tournamentId: string;
-  raiseDisputeHandler: (rank: number) => any;
 }) => {
   const isUserBracket =
     JSON.stringify(bracket.teamA.user.id) === JSON.stringify(currentUser.id);
@@ -165,16 +163,26 @@ const BracketRankCard = ({
   };
   // requests
   const { doRequest: updateScoreHandler } = useRequest({
-    url: `/api/ugh/bracket/rank/add/${bracket.regId}`,
+    url: `/api/ugh/bracket/rank/add/${bracket?.regId}`,
     body: { rank, tournamentId },
     method: "post",
-    onSuccess: ({ rank }: { rank: number }) => {
+    onSuccess: (bracketId) => {
       event.bracketRankUpdate({
         by: currentUser?.ughId,
         type: "score",
         tournamentId,
       });
-      raiseDisputeHandler(rank);
+      if (bracketId) {
+        const { doRequest: disputeHandler } = useRequest({
+          url: `/api/ugh/bracket/rank/dispute/${bracketId}`,
+          body: {},
+          method: "get",
+          onSuccess: ({ disputeBy: by, disputeOn: on }) =>
+            event.bracketRankUpdate({ by, on, type: "dispute", tournamentId }),
+          onError,
+        });
+        disputeHandler();
+      }
     },
     onError,
   });
@@ -275,19 +283,30 @@ const BracketRankCard = ({
                 {ptimer} to
               </div>
               <div
-                style={{ textAlign: "center", display: "flex", marginTop: 10 }}
+                style={{
+                  textAlign: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: 15,
+                }}
               >
-                <ProgressButton
-                  disabled={!raiseDispute}
-                  type="youtube"
+                <DialogButton
+                  title="Raise Dispute"
                   size="large"
-                  text="Raise Dispute"
-                  style={{ display: "block" }}
-                  onPress={async (_, next) => {
-                    await disputeHandler();
-                    next();
-                  }}
-                />
+                  type="youtube"
+                  disabled={!raiseDispute}
+                  onAction={disputeHandler}
+                  buttonStyle={{ display: "block" }}
+                  style={{ minWidth: 400, maxWidth: 600, fontSize: 24 }}
+                  fullButton
+                >
+                  <p style={{ color: "red" }}>
+                    Are you sure want to raise Dispute?
+                  </p>
+                  <p style={{ color: "red" }}>
+                    If you raise a wrong dispute your account may get banned.
+                  </p>
+                </DialogButton>
               </div>
             </>
           )}

@@ -45,7 +45,6 @@ const BracketList = ({
       if (eTId !== tournamentId) return;
       await doRequest();
       const messagesUpdate = [...messages];
-      const mOn = on === ughId ? "you" : on;
       const mBy = by === ughId ? "you" : by;
       switch (type) {
         case "score":
@@ -86,23 +85,6 @@ const BracketList = ({
     });
   }, []);
 
-  const autoDispute = (rank: number) => {
-    const bracketIndex = matches.findIndex((b) => {
-      return b.teamA.score === rank && !b.teamB.hasRaisedDispute;
-    });
-    if (bracketIndex !== -1) {
-      const { doRequest: disputeHandler } = useRequest({
-        url: `/api/ugh/bracket/rank/dispute/${matches[bracketIndex].regId}`,
-        body: {},
-        method: "get",
-        onSuccess: ({ disputeBy: by, disputeOn: on }) =>
-          event.bracketRankUpdate({ by, on, type: "dispute", tournamentId }),
-        onError: (errors) => setMessages(errors),
-      });
-      disputeHandler();
-    }
-  };
-
   return (
     <MainLayout messages={messages}>
       <div className="bracket__title">brackets</div>
@@ -122,7 +104,6 @@ const BracketList = ({
             return (
               <BracketRankCard
                 bracket={bracket}
-                raiseDisputeHandler={autoDispute}
                 tournamentId={tournamentId}
                 onError={(errors: any) => setMessages(errors)}
                 userHasUploadedScore={uploadedScore}
