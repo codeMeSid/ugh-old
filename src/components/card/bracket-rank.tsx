@@ -298,13 +298,13 @@ const BracketRankCard = ({
                   disabled={!raiseDispute}
                   onAction={disputeHandler}
                   buttonStyle={{ display: "block" }}
-                  style={{ minWidth: 400, maxWidth: 600, fontSize: 24 }}
+                  style={{ minWidth: 400, maxWidth: 600, fontSize: 20 }}
                   fullButton
                 >
                   <p style={{ color: "red" }}>
                     Are you sure want to raise Dispute?
                   </p>
-                  <p style={{ color: "red" }}>
+                  <p style={{ color: "red", marginBottom: 10 }}>
                     If you raise a wrong dispute your account may get banned.
                   </p>
                 </DialogButton>

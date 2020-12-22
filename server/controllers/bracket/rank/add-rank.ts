@@ -7,9 +7,7 @@ import mongoose from 'mongoose';
 import { Tournament } from "../../../models/tournament";
 import { DQ } from "../../../utils/enum/dq";
 
-// TODO read back book 15
 export const addRankController = async (req: Request, res: Response) => {
-  // const { id } = req.currentUser;
   const { bracketId } = req.params;
   const { rank: uploadRank, tournamentId } = req.body;
   const rank = parseInt(uploadRank);
@@ -24,6 +22,7 @@ export const addRankController = async (req: Request, res: Response) => {
     if (!tournament) throw new BadRequestError("Invalid Request")
     const disputeBrackets = await Bracket.find({ _id: { $in: tournament.brackets } }).session(session);
     if (disputeBrackets.length === 0) throw new BadRequestError("Invalid Request");
+    // find bracket that won dispute of same rank
     const isBracketDisqualified = disputeBrackets
       .findIndex(b => {
         return b.regId !== bracketId &&
@@ -34,7 +33,21 @@ export const addRankController = async (req: Request, res: Response) => {
           && b.winner !== DQ.DisputeLost
       }) > -1;
 
+    const isSelfDisputeIndex = disputeBrackets
+      .findIndex(b => {
+        return b.regId !== bracketId &&
+          b.teamA.score === rank
+          && !b.teamB.hasRaisedDispute
+          && b.winner
+          && b.winner !== DQ.AdminDQ
+          && b.winner !== DQ.DisputeLost
+      });
+
     if (isBracketDisqualified) bracket.winner = DQ.DisputeLost;
+    else if (isSelfDisputeIndex > -1) {
+      bracket.teamB.user = disputeBrackets[isSelfDisputeIndex].teamA.user;
+      bracket.teamB.hasRaisedDispute = true;
+    }
     else {
       disputeBracketId = disputeBrackets[
         disputeBrackets.findIndex(b => {
