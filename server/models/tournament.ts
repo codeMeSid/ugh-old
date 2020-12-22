@@ -29,6 +29,7 @@ export interface TournamentDoc extends mongoose.Document {
   isFree: boolean;
   regId: string;
   players: Array<UserDoc>;
+  dqPlayers: Array<UserDoc>;
   game: GameDoc;
   addedBy: UserPayload;
   startDateTime: Date;
@@ -69,6 +70,12 @@ const tournamentSchema = new mongoose.Schema(
       },
     ],
     players: [
+      {
+        refs: "Users",
+        type: mongoose.Schema.Types.ObjectId,
+      },
+    ],
+    dqPlayers: [
       {
         refs: "Users",
         type: mongoose.Schema.Types.ObjectId,

@@ -17,6 +17,7 @@ import { tournamentAddValidator } from "../utils/validator/tournament/add";
 import { TournamentEvaluateController } from "../controllers/tournament/evaluate";
 import { tournamentFetchUghIdController } from "../controllers/tournament/fetch-ughId";
 import { tournamentLeaveHandler } from "../controllers/tournament/leave";
+import { tournamentDisqualifyController } from "../controllers/tournament/disqualify";
 
 export const tournamentHandler: Array<ApiSign> = [
   {
@@ -77,6 +78,12 @@ export const tournamentHandler: Array<ApiSign> = [
       currentUser,
       requireAuth,
     ],
+  },
+  {
+    url: "/disqualify/:tournamentId",
+    method: HttpMethod.Put,
+    controller: tournamentDisqualifyController,
+    middlewares: [currentUser, requireAdminAuth],
   },
   {
     url: "/update/status/:tournamentId",

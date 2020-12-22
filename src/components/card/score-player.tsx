@@ -259,16 +259,22 @@ const PlayerScoreCard = ({
               {enableDisputeRaise && (
                 <div className="bracket__score__timer">{disputeTimer} to</div>
               )}
-              <ProgressButton
+              <DialogButton
+                title="Raise Dispute"
+                size="large"
+                type="youtube"
                 disabled={!enableDisputeRaise}
-                text="Raise Dispute"
-                type="github"
-                style={{ width: "100%" }}
-                onPress={async (_, next) => {
-                  await raiseDisputeHandler();
-                  next();
-                }}
-              />
+                onAction={raiseDisputeHandler}
+                fullButton
+                style={{ minWidth: 400, maxWidth: 600, fontSize: 24 }}
+              >
+                <p style={{ color: "red" }}>
+                  Are you sure want to raise Dispute?
+                </p>
+                <p style={{ color: "red" }}>
+                  If you raise a wrong dispute your account may get banned.
+                </p>
+              </DialogButton>
             </>
           )}
           {team.hasProof && (

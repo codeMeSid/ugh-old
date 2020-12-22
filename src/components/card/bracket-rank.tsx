@@ -28,7 +28,8 @@ const BracketRankCard = ({
     JSON.stringify(bracket.teamA.user.id) === JSON.stringify(currentUser.id);
   const result =
     bracket?.winner === DQ.DisputeLost ||
-    bracket?.winner === DQ.ScoreNotUploaded
+    bracket?.winner === DQ.ScoreNotUploaded ||
+    bracket?.winner === DQ.AdminDQ
       ? "Disqualified"
       : "Accepted";
   const hasWinner = !!bracket?.winner;

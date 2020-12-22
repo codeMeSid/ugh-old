@@ -7,6 +7,6 @@ export const tournamentFetchAllController = async (
 ) => {
   const tournaments = await Tournament.find()
     .populate("game", "name console imageUrl thumbnailUrl", "Games")
-    .sort({ startDateTime: 1 });
+    .sort({ startDateTime: -1 });
   res.send(tournaments);
 };
