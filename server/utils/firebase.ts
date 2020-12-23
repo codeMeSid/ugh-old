@@ -4,6 +4,8 @@ import "firebase/storage";
 import "firebase/messaging";
 import { randomBytes } from "crypto";
 import localforage from 'localforage';
+import { User } from "../models/user";
+import axios from 'axios';
 
 class Fire {
   private fireObj!: Firebase.app.App;
@@ -127,6 +129,57 @@ class Fire {
     if (!this.fireObj) return
     const fireObj = this.fireObj;
     await fireObj.auth().signOut();
+  }
+
+  async getFCMToken(status: string, sw: any, currentUser: any, onMessage: (payload: any) => any) {
+    try {
+      const messaging = this.fireObj.messaging();
+      const fcmToken: any = await localforage.getItem("FCM_TOKEN");
+      if (fcmToken) {
+        messaging.onMessage(onMessage);
+        return { fcmToken, isNew: false }
+      }
+      if (status && status === "granted") {
+        const newFcmToken = await messaging
+          .getToken({
+            vapidKey: "BAEfSb0Bqar1LispPKrxu3wARzIQ6KEXkd5W6mui3bXZRdejQh6PTx4vHE5iU55MRe0t4NobD93LkWwztqc_hQ4",
+            serviceWorkerRegistration: sw
+          });
+        if (newFcmToken) {
+          await localforage.setItem("FCM_TOKEN", newFcmToken);
+          messaging.onMessage(onMessage);
+          return { fcmToken: newFcmToken, isNew: true }
+        }
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+    return null
+  }
+
+  async removeFcmToken() {
+    const messaging = this.fireObj.messaging();
+    await messaging.deleteToken();
+    await localforage.removeItem("FCM_TOKEN")
+  }
+
+  sendNotification(to: string, body: string, action: string) {
+
+    if (to)
+      axios.post("https://fcm.googleapis.com/fcm/send", {
+        to,
+        notification: {
+          title: "UltimateGamersHub Notification",
+          body,
+          click_action: `https://ultimategamershub.com${action}`,
+          icon: ""
+        }
+      }, {
+        headers: {
+          Authorization: "key=AAAAQqwms6A:APA91bHPqEs8fAo93-RRp11ilWDakBl1zq7UOAGeEOB6ttCfZznTRjRZNkp92fvwkJAOq4PIWF3hpbNmdJYJpW_LMQ3LPaxQYQW75crNzXIuf3ebqkSmHOzWwlBix4ILBcYc_sRZG2oU"
+        }
+      }).catch(err => console.log(err))
+
   }
 }
 
