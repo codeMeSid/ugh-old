@@ -45,10 +45,11 @@ export const rankLogger = async (
       const userIndex = users.findIndex(
         (u) => JSON.stringify(u.id) === JSON.stringify(b.teamA.user)
       );
-      b.winner = users[userIndex].ughId;
+      if (userIndex > -1)
+        b.winner = users[userIndex]?.ughId;
     }
-    if (!winner) b.winner = DQ.ScoreNotUploaded;
-    if (hasRaisedDispute && !uploadUrl && !b.winner) b.winner = DQ.DisputeLost;
+    if (!winner && (score <= 0 || !score)) b.winner = DQ.ScoreNotUploaded;
+    if (hasRaisedDispute && !uploadUrl && !winner) b.winner = DQ.DisputeLost;
     return b;
   });
   // filter out all the winners

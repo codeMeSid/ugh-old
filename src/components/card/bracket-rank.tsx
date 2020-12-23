@@ -139,7 +139,7 @@ const BracketRankCard = ({
         return (
           <div className="bracket__rank__reason">
             <div className="bracket__rank__title">reason</div>
-            <div className="bracket__rank__value">Score not uploaded</div>
+            <div className="bracket__rank__value">Rank not uploaded</div>
           </div>
         );
       case DQ.DisputeLost:
