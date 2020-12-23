@@ -17,7 +17,6 @@ import IconDialogButton from "../../components/button/icon-dialog";
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import { prizeDistribution } from "../../../server/utils/prize-distribution";
 import { numberPostion } from "../../public/number-postion";
-import ProgressButton from "../../components/button/progress";
 
 const Logo = require("../../public/asset/logo-icon.png");
 
@@ -57,10 +56,20 @@ const TournamentDetail = ({
     const msIn30min = 1000 * 60 * 30;
     const canLeave =
       new Date(tournament?.startDateTime).valueOf() - Date.now() >= msIn30min;
+    const isTournamentCompleted = tournament?.status === "completed";
+    const isTournamentStarted = tournament?.status === "started";
+    const isTournamentUpcoming = tournament?.status === "upcoming";
+    const tournamentHasWinners = tournament?.winners.length > 0;
+    const areSlotsAvailable =
+      tournament?.players?.length * tournament?.group?.participants !==
+      tournament?.playerCount;
+    const wasPlayerDisqualified =
+      tournament?.dqPlayers?.filter(
+        (player) =>
+          JSON.stringify(player?.id) === JSON.stringify(currentUser?.id)
+      )?.length > 0;
 
-    if (!currentUser && tournament?.status === "completed")
-      return <Button text="Game Over" type="disabled" size="medium" />;
-    if (!currentUser)
+    if (!currentUser && isTournamentUpcoming)
       return (
         <Link href="/login">
           <a>
@@ -68,7 +77,35 @@ const TournamentDetail = ({
           </a>
         </Link>
       );
-    else if (tournament?.winners?.length > 0)
+    else if (!currentUser && (isTournamentCompleted || isTournamentStarted))
+      return <Button text="Game Over" type="disabled" size="medium" />;
+    else if (
+      currentUser &&
+      areSlotsAvailable &&
+      !userHasJoined &&
+      tournament?.regId
+    )
+      return (
+        <DialogButton
+          style={{ position: "fixed", minWidth: 360, maxWidth: 500 }}
+          size="medium"
+          title="Join"
+          fullButton
+          onAction={(onSuccess, onError) => doRequest(onSuccess, onError)}
+        >
+          <div style={{ fontSize: 20, marginBottom: 20, textAlign: "center" }}>
+            <p>
+              Please read the rules of the tournament before joining, as they
+              vary for every tournament.
+            </p>
+            <p style={{ marginTop: 10 }}>
+              You will be charged{" "}
+              {tournament?.isFree ? 0 : tournament?.coins || 10} coins to join.
+            </p>
+          </div>
+        </DialogButton>
+      );
+    else if (tournamentHasWinners)
       return (
         <DialogButton
           style={{ position: "fixed", minWidth: 400 }}
@@ -98,39 +135,11 @@ const TournamentDetail = ({
           </table>
         </DialogButton>
       );
-    else if (
-      tournament?.players?.length * tournament?.group?.participants ===
-        tournament?.playerCount &&
-      !userHasJoined
-    )
+    else if (currentUser && wasPlayerDisqualified)
+      return <Button text="Disqualified" type="youtube" />;
+    else if (currentUser && !areSlotsAvailable && !userHasJoined)
       return <Button text="Slots Full" type="disabled" />;
-    else if (currentUser && tournament?.status === "upcoming" && !userHasJoined)
-      return (
-        <DialogButton
-          style={{ position: "fixed", minWidth: 360, maxWidth: 500 }}
-          size="medium"
-          title="Join"
-          fullButton
-          onAction={(onSuccess, onError) => doRequest(onSuccess, onError)}
-        >
-          <div style={{ fontSize: 20, marginBottom: 20, textAlign: "center" }}>
-            <p>
-              Please read the rules of the tournament before joining, as they
-              vary for every tournament.
-            </p>
-            <p style={{ marginTop: 10 }}>
-              You will be charged{" "}
-              {tournament?.isFree ? 0 : tournament?.coins || 10} coins to join.
-            </p>
-          </div>
-        </DialogButton>
-      );
-    else if (
-      currentUser &&
-      tournament?.status === "upcoming" &&
-      userHasJoined &&
-      canLeave
-    )
+    else if (currentUser && userHasJoined && canLeave && isTournamentUpcoming)
       return (
         <DialogButton
           title="Dropout"
@@ -149,14 +158,9 @@ const TournamentDetail = ({
           </div>
         </DialogButton>
       );
-    else if (currentUser && tournament?.status === "upcoming" && userHasJoined)
+    else if (currentUser && userHasJoined && isTournamentUpcoming)
       return <Button text="Joined" type="facebook" size="small" />;
-    else if (
-      currentUser &&
-      tournament?.status === "started" &&
-      userHasJoined &&
-      tournament?.regId
-    )
+    else if (currentUser && userHasJoined && isTournamentStarted)
       return (
         <Link href={`/game/${tournament?.regId}`}>
           <a>

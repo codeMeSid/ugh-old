@@ -266,14 +266,25 @@ const PlayerScoreCard = ({
                 disabled={!enableDisputeRaise}
                 onAction={raiseDisputeHandler}
                 fullButton
-                style={{ minWidth: 400, maxWidth: 600, fontSize: 24 }}
+                style={{
+                  minWidth: 400,
+                  maxWidth: 600,
+                }}
               >
-                <p style={{ color: "red" }}>
-                  Are you sure want to raise Dispute?
-                </p>
-                <p style={{ color: "red" }}>
-                  If you raise a wrong dispute your account may get banned.
-                </p>
+                <div
+                  style={{
+                    fontSize: 20,
+                    wordBreak: "break-word",
+                    textAlign: "center",
+                  }}
+                >
+                  <p style={{ color: "red" }}>
+                    Are you sure want to raise Dispute?
+                  </p>
+                  <p style={{ color: "red", margin: "10px 0" }}>
+                    If you raise a wrong dispute, your account may get banned.
+                  </p>
+                </div>
               </DialogButton>
             </>
           )}
