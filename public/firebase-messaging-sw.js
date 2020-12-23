@@ -18,6 +18,10 @@ if (!firebase.apps.length) {
     const {
       notification: { title, body },
     } = payload;
-    self.registration.showNotification(title, { body, icon: "/favicon.ico" });
+    self.registration.showNotification(title, {
+      body,
+      icon:
+        "https://firebasestorage.googleapis.com/v0/b/ultimategamershub.appspot.com/o/ugh%2Flogo%20(1).png?alt=media&token=17fd9c6b-cb71-4466-83ab-1825493c5b0a",
+    });
   });
 }

@@ -3,4 +3,5 @@ export enum SocketChannel {
   User = "user",
   Match = "match",
   BracketRank = "bracket-rank",
+  Notification = "notification"
 }

@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import { Tournament } from "../../../models/tournament";
+import { Tournament, TournamentDoc } from "../../../models/tournament";
 import {
   BadRequestError,
   GameType,
+  UserActivity,
   UserRole,
 } from "@monsid/ugh-og"
 import { Game } from "../../../models/game";
@@ -12,6 +13,9 @@ import { User } from "../../../models/user";
 import { randomBytes } from "crypto";
 import { tournamentStartTimer } from "./start";
 import { tournamentEndTimer } from "./end";
+import { messenger } from "../../../utils/socket";
+import { SocketEvent } from "../../../utils/enum/socket-event";
+import { SocketChannel } from "../../../utils/enum/socket-channel";
 
 export const tournamentAddController = async (req: Request, res: Response) => {
   const {
@@ -25,7 +29,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     group,
     isFree
   } = req.body;
-  const { role } = req.currentUser;
+  const { role, ughId } = req.currentUser;
   const msIn1Hr = 1000 * 60 * 60;
   const sdt = new Date(startDateTime).valueOf();
   const edt = new Date(endDateTime).valueOf();
@@ -98,6 +102,8 @@ export const tournamentAddController = async (req: Request, res: Response) => {
 
     tournamentEndTimer(tournament.regId, tournament.id, newEndDateTime);
 
+    sendTournamentAddedMail(tournament, ughId)
+
   } catch (error) {
     await session.abortTransaction();
     throw new BadRequestError(error.message);
@@ -106,20 +112,34 @@ export const tournamentAddController = async (req: Request, res: Response) => {
   res.send(true);
 };
 
-  // const sendTournamentAddedMail = async (tournament: TournamentDoc) => {
-  //   const users = await User.find({
-  //     "settings.newTournamentWasAdded": true,
-  //   });
-  //   users.forEach((user) => {
-  //     mailer.send(
-  //       MailerTemplate.New,
-  //       {
-  //         ughId: user.ughId,
-  //         tournamentName: tournament.name,
-  //         tournamentUrl: `${process.env.BASE_URL}/tournaments/${tournament.regId}`,
-  //       },
-  //       user.email,
-  //       "New UGH Tournament"
-  //     );
-  //   });
-  // };
+const sendTournamentAddedMail = async (tournament: TournamentDoc, ughId: string) => {
+  const users = await User.find({
+    "settings.newTournamentWasAdded": true,
+    activity: UserActivity.Active
+  });
+  users.forEach((user) => {
+    if (user.fcmToken) {
+      console.log({ u: user.ughId, fcm: user.fcmToken })
+      messenger
+        .io
+        .to(SocketChannel.Notification)
+        .emit(SocketEvent.EventRecieve, {
+          from: ughId,
+          to: user.fcmToken,
+          body: "New Tournament Added",
+          action: `/tournaments/${tournament.regId}`,
+          channel: SocketChannel.Notification
+        })
+    }
+    // mailer.send(
+    //   MailerTemplate.New,
+    //   {
+    //     ughId: user.ughId,
+    //     tournamentName: tournament.name,
+    //     tournamentUrl: `${process.env.BASE_URL}/tournaments/${tournament.regId}`,
+    //   },
+    //   user.email,
+    //   "New UGH Tournament"
+    // );
+  });
+};

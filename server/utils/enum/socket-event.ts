@@ -3,4 +3,5 @@ export enum SocketEvent {
   EventSend = "socket:send",
   EventRecieve = "socket:recieve",
   EventUpdate = "socket:update",
+  EventNotify = "socket:notification"
 }

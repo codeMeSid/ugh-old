@@ -12,7 +12,7 @@ class Messenger {
     this.io = SocketIo(server);
     this.io.on("connection", (socket) => {
       this.socket = socket;
-      this.socket.join(["admin", "match", "user", "bracket-rank"]);
+      this.socket.join(["admin", "match", "user", "bracket-rank", "notification"]);
       this.socket.on(SocketEvent.EventSend, (data) => {
         socket.to(data.channel).emit(SocketEvent.EventRecieve, data);
         this.saveMessage(data);

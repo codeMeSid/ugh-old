@@ -171,8 +171,7 @@ class Fire {
         notification: {
           title: "UltimateGamersHub Notification",
           body,
-          click_action: `https://ultimategamershub.com${action}`,
-          icon: ""
+          click_action: `https://ultimategamershub.com${action}`
         }
       }, {
         headers: {

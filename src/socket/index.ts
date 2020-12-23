@@ -1,6 +1,7 @@
 import SocketIo from "socket.io-client";
 import { SocketChannel } from "../../server/utils/enum/socket-channel";
 import { SocketEvent } from "../../server/utils/enum/socket-event";
+import { fire } from "../../server/utils/firebase";
 import { SocketMessage } from "../../server/utils/interface/socket-message";
 const socket = SocketIo.connect()
 

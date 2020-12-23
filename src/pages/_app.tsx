@@ -8,6 +8,7 @@ import "react-awesome-button/dist/styles.css";
 import { useEffect } from "react";
 import { fire } from "../../server/utils/firebase";
 import { useRequest } from "../hooks/use-request";
+import { event } from "../socket";
 
 const AppComponent = ({ Component, pageProps, router, currentUser }) => {
   const getTitle = (route: string) => {
@@ -48,7 +49,13 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
   };
 
   useEffect(() => {
-    if (currentUser) getServiceWorker();
+    if (currentUser) {
+      event.recieveMessage((data) => {
+        const { from, to, body, action } = data;
+        if (currentUser.ughId === from) fire.sendNotification(to, body, action);
+      });
+      getServiceWorker();
+    }
   }, []);
 
   const getServiceWorker = () => {
