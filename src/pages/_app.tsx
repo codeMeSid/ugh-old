@@ -5,9 +5,12 @@ import SponsorSlider from "../components/sponsor-slider";
 import Footer from "../components/footer";
 import "../public/css/main.css";
 import "react-awesome-button/dist/styles.css";
+import { useEffect } from "react";
+import { fire } from "../../server/utils/firebase";
+import { useRequest } from "../hooks/use-request";
 
 const AppComponent = ({ Component, pageProps, router, currentUser }) => {
-  const getTitle = (route) => {
+  const getTitle = (route: string) => {
     if (router.route.match("/admin")) return "Admin Panel";
     return {
       "/": "Home",
@@ -42,6 +45,54 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
       "/tournaments/[tournamentId]": "Tournament Detail",
       "/tournaments": "UGH Tournaments",
     }[route];
+  };
+
+  useEffect(() => {
+    if (currentUser) getServiceWorker();
+  }, []);
+
+  const getServiceWorker = () => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/firebase-messaging-sw.js")
+        .then((swr) => {
+          getNotificationRequest(swr);
+        })
+        .catch((err) =>
+          console.error("Service worker registration failed", err)
+        );
+    } else {
+      console.log("Service worker not supported");
+    }
+  };
+
+  const getNotificationRequest = (sw: any) =>
+    Notification.requestPermission().then((status) => {
+      fire
+        .getFCMToken(status, sw, currentUser, (payload) =>
+          onMessage(payload, sw)
+        )
+        .then((tok) => {
+          if (tok.isNew) {
+            const { doRequest } = useRequest({
+              url: "/api/ugh/user/update/fcm",
+              body: { fcmToken: tok.fcmToken },
+              method: "put",
+            });
+            doRequest();
+          }
+        })
+        .catch((err) => console.log(err.message));
+    });
+
+  const onMessage = (payload: any, sw: ServiceWorkerRegistration) => {
+    const {
+      notification: { title, body },
+    } = payload;
+    sw.showNotification(title, {
+      icon: "/favicon.ico",
+      body,
+    });
   };
 
   return (

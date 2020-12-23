@@ -51,6 +51,7 @@ export interface UserDoc extends mongoose.Document {
   }>;
   phone: string;
   isSuperAdmin: string;
+  fcmToken: string;
 }
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
@@ -80,6 +81,7 @@ const userSchema = new mongoose.Schema(
     mobile: String,
     isSuperAdmin: String,
     bio: String,
+    fcmToken: String,
     gamerProfile: {
       psnId: String,
       gamerTag: String,
