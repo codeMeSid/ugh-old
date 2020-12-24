@@ -78,7 +78,7 @@ export const rankLogger = async (
       }
       return t;
     });
-    users[userIndex].wallet.coins += winnerCoins[index];
+    // users[userIndex].wallet.coins += winnerCoins[index];
     return {
       coins: winnerCoins[index],
       position: index + 1,

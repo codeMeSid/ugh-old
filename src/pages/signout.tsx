@@ -12,7 +12,7 @@ const SignoutPage = () => {
     method: "get",
     body: {},
     onSuccess: async () => {
-      await fire.removeFcmToken();
+      fire.removeFcmToken();
       Router.replace("/");
     },
   });

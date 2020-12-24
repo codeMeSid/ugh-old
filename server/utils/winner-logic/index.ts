@@ -89,6 +89,13 @@ export const winnerLogic = async (
       updates.updatedTournament.status === TournamentStatus.Completed
     ) {
       timer.cancel(`${tournament.regId}-end`);
+      updates.updatedBrackets.forEach(bracket => {
+        const bracketId = bracket.regId;
+        timer.cancel(`${bracketId}`);
+        timer.cancel(`${bracketId}-A`);
+        timer.cancel(`${bracketId}-B`);
+        timer.cancel(`${bracketId}-check`);
+      });
       messenger.io
         .to(SocketChannel.BracketRank)
         .emit(SocketEvent.EventRecieve, {

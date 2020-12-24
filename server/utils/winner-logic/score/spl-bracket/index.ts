@@ -124,7 +124,7 @@ export const splBracketProcess = (brackets: Array<BracketDoc>, splBracket: Brack
                     }
                     return t;
                 });
-            users[winner1UserIndex].wallet.coins += winnerCoins[0];
+            // users[winner1UserIndex].wallet.coins += winnerCoins[0];
         }
         if (tournament.winnerCount === 2) {
             const winner2User = JSON.stringify(users[winner1UserIndex].id) === JSON.stringify(splBracket.teamA.user) ? splBracket.teamB.user : splBracket.teamA.user;
@@ -144,7 +144,7 @@ export const splBracketProcess = (brackets: Array<BracketDoc>, splBracket: Brack
                         }
                         return t;
                     });
-                users[winner2UserIndex].wallet.coins += winnerCoins[1];
+                // users[winner2UserIndex].wallet.coins += winnerCoins[1];
             }
         }
 

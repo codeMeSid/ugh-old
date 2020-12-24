@@ -54,8 +54,7 @@ class Messenger {
         });
         if (convo) {
           const tournament = await Tournament.findOne({ regId: to }).populate("players", "ughId fcmToken", "Users");
-          if (tournament)
-            users = tournament.players;
+          users = tournament?.players || [];
         }
         break;
       case SocketChannel.User:
@@ -107,7 +106,7 @@ class Messenger {
     });
     if (users)
       users.forEach(u => {
-        if (u.ughId !== from) {
+        if (u.ughId !== from && `admin-${u.ughId}` !== from) {
           messenger.io.to(SocketChannel.Notification).emit(SocketEvent.EventRecieve, {
             from: from,
             to: u.fcmToken,

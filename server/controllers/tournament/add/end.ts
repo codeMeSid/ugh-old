@@ -7,12 +7,19 @@ export const tournamentEndTimer = (regId: string, id: string, endDateTime: Date)
     new Date(endDateTime),
     async ({ id }: { id: string }, done) => {
         try {
-            const tournament = await Tournament.findById(id);
+            const tournament = await Tournament.findById(id).populate("brackets", "regId", "Brackets");
             if (!tournament) throw new Error("Invalid Tournament - manual start")
             if (tournament.status === TournamentStatus.Started) {
                 tournament.set({ status: TournamentStatus.Completed });
                 await tournament.save();
                 done();
+                tournament.brackets.forEach(bracket => {
+                    const bracketId = bracket.regId;
+                    timer.cancel(`${bracketId}`);
+                    timer.cancel(`${bracketId}-A`);
+                    timer.cancel(`${bracketId}-B`);
+                    timer.cancel(`${bracketId}-check`);
+                });
                 winnerLogic(tournament.regId, null, "end");
             } else throw new Error("Tournament Status - auto start");
 

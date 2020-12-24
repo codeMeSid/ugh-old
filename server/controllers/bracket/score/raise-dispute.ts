@@ -3,6 +3,9 @@ import { Request, Response } from "express";
 import { Bracket } from "../../../models/bracket";
 import { mailer } from "../../../utils/mailer";
 import { MailerTemplate } from "../../../utils/enum/mailer-template";
+import { messenger } from "../../../utils/socket";
+import { SocketChannel } from "../../../utils/enum/socket-channel";
+import { SocketEvent } from "../../../utils/enum/socket-event";
 
 export const raiseScoreDisputeController = async (
   req: Request,
@@ -12,8 +15,8 @@ export const raiseScoreDisputeController = async (
   const { bracketId } = req.params;
 
   const bracket = await Bracket.findOne({ regId: bracketId })
-    .populate("teamA.user", "ughId email", "Users")
-    .populate("teamB.user", "ughId email", "Users");
+    .populate("teamA.user", "ughId email fcmToken", "Users")
+    .populate("teamB.user", "ughId email fcmToken", "Users");
   if (!bracket) throw new BadRequestError("Failed to raise dispute");
   if (bracket.winner) throw new BadRequestError("Dispute cannot be raised");
   const isPlayerA =
@@ -27,14 +30,14 @@ export const raiseScoreDisputeController = async (
       score: scoreA,
       updateBy: updateA,
       uploadUrl: proofA,
-      user: { ughId: uA, email: eA },
+      user: { ughId: uA, email: eA, fcmToken: fA },
     },
     teamB: {
       hasRaisedDispute: disputeB,
       score: scoreB,
       updateBy: updateB,
       uploadUrl: proofB,
-      user: { ughId: uB, email: eB },
+      user: { ughId: uB, email: eB, fcmToken: fB },
     },
   } = bracket;
 
@@ -57,6 +60,7 @@ export const raiseScoreDisputeController = async (
     );
   }
   await bracket.save();
+  let from: string, to: string;
   if (isPlayerA) {
     mailer.send(
       MailerTemplate.Dispute,
@@ -64,6 +68,8 @@ export const raiseScoreDisputeController = async (
       eB,
       "UGH Tournament Dispute"
     );
+    from = uA;
+    to = fB;
   }
   if (isPlayerB) {
     mailer.send(
@@ -72,6 +78,19 @@ export const raiseScoreDisputeController = async (
       eA,
       "UGH Tournament Dispute"
     );
+    from = uB;
+    to = fA;
   }
+  if (from && to)
+    messenger
+      .io
+      .to(SocketChannel.Notification)
+      .emit(SocketEvent.EventRecieve, {
+        from,
+        to,
+        body: `${from} raised Scoring dispute.`,
+        // action: `/tournaments/${tournament.regId}`,
+        channel: SocketChannel.Notification
+      });
   res.send(true);
 };

@@ -170,12 +170,22 @@ class Fire {
         notification: {
           title: "UltimateGamersHub Notification",
           body,
-          click_action: `https://ultimategamershub.com${action}`
-        }
+          click_action: `https://ultimategamershub.com${action}`,
+          icon: "https://firebasestorage.googleapis.com/v0/b/ultimategamershub.appspot.com/o/ugh%2Flogo%20(1).png?alt=media&token=17fd9c6b-cb71-4466-83ab-1825493c5b0a",
+        },
+        android: {
+          ttl: 1800 * 1000, // 30mins in milliseconds
+          priority: 'normal',
+          notification: {
+            title: "UltimateGamersHub Notification",
+            body,
+            icon: "https://firebasestorage.googleapis.com/v0/b/ultimategamershub.appspot.com/o/ugh%2Flogo%20(1).png?alt=media&token=17fd9c6b-cb71-4466-83ab-1825493c5b0a",
+            color: '#f45342'
+          }
+        },
       }, {
         headers: {
           Authorization: "key=AAAAQqwms6A:APA91bHPqEs8fAo93-RRp11ilWDakBl1zq7UOAGeEOB6ttCfZznTRjRZNkp92fvwkJAOq4PIWF3hpbNmdJYJpW_LMQ3LPaxQYQW75crNzXIuf3ebqkSmHOzWwlBix4ILBcYc_sRZG2oU",
-          "Content-Type": "application/json",
         }
       }).catch(err => console.log(err))
 

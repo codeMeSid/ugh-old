@@ -28,7 +28,7 @@ export const userUpdateTournamentController = async (req: Request, res: Response
             }
             return t;
         });
-        user.wallet.coins += parseInt(winning);
+        // user.wallet.coins += parseInt(winning);
         await user.save({ session });
         if (passbook) await passbook.save({ session })
         await session.commitTransaction();
