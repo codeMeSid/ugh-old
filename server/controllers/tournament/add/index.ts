@@ -118,8 +118,7 @@ const sendTournamentAddedMail = async (tournament: TournamentDoc, ughId: string)
     activity: UserActivity.Active
   });
   users.forEach((user) => {
-    if (user.fcmToken) {
-      console.log({ u: user.ughId, fcm: user.fcmToken })
+    if (user.fcmToken && user.ughId !== ughId) {
       messenger
         .io
         .to(SocketChannel.Notification)
