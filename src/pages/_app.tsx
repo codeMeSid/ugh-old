@@ -50,47 +50,48 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
 
   useEffect(() => {
     if (currentUser) {
+      getServiceWorker();
       event.recieveMessage((data) => {
         const { from, to, body, action } = data;
-        if (currentUser.ughId === from) fire.sendNotification(to, body, action);
+        if (currentUser.ughId === from || from === "admin")
+          fire.sendNotification(to, body, action);
       });
-      getServiceWorker();
     }
   }, []);
 
-  const getServiceWorker = () => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/firebase-messaging-sw.js")
-        .then((swr) => {
-          getNotificationRequest(swr);
-        })
-        .catch((err) =>
-          console.error("Service worker registration failed", err)
+  const getServiceWorker = async () => {
+    try {
+      if ("serviceWorker" in navigator) {
+        const swr = await navigator.serviceWorker.register(
+          "/firebase-messaging-sw.js"
         );
-    } else {
-      console.log("Service worker not supported");
+        await getNotificationRequest(swr);
+      }
+    } catch (error) {
+      console.log("Service Worker not supported");
     }
   };
 
-  const getNotificationRequest = (sw: any) =>
-    Notification.requestPermission().then((status) => {
-      fire
-        .getFCMToken(status, sw, currentUser, (payload) =>
-          onMessage(payload, sw)
-        )
-        .then((tok) => {
-          if (tok.isNew) {
-            const { doRequest } = useRequest({
-              url: "/api/ugh/user/update/fcm",
-              body: { fcmToken: tok.fcmToken },
-              method: "put",
-            });
-            doRequest();
-          }
-        })
-        .catch((err) => console.log(err.message));
-    });
+  const getNotificationRequest = async (sw: any) => {
+    const status = await Notification.requestPermission();
+    const token = await fire.getFCMToken(
+      status,
+      sw,
+      currentUser,
+      function (payload) {
+        onMessage(payload, sw);
+      }
+    );
+    if (token && token.isNew) {
+      const { doRequest } = useRequest({
+        url: "/api/ugh/user/update/fcm",
+        body: { fcmToken: token.fcmToken },
+        method: "put",
+        onError: (errs) => console.log(errs),
+      });
+      doRequest();
+    }
+  };
 
   const onMessage = (payload: any, sw: ServiceWorkerRegistration) => {
     const {
