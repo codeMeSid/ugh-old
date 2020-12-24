@@ -146,7 +146,7 @@ class Fire {
             serviceWorkerRegistration: sw
           });
         if (newFcmToken) {
-          await localforage.setItem("FCM_TOKEN", newFcmToken);
+          localforage.setItem("FCM_TOKEN", newFcmToken);
           messaging.onMessage(onMessage);
           return { fcmToken: newFcmToken, isNew: true }
         }
@@ -164,7 +164,6 @@ class Fire {
   }
 
   sendNotification(to: string, body: string, action: string) {
-
     if (to)
       axios.post("https://fcm.googleapis.com/fcm/send", {
         to,
@@ -175,7 +174,8 @@ class Fire {
         }
       }, {
         headers: {
-          Authorization: "key=AAAAQqwms6A:APA91bHPqEs8fAo93-RRp11ilWDakBl1zq7UOAGeEOB6ttCfZznTRjRZNkp92fvwkJAOq4PIWF3hpbNmdJYJpW_LMQ3LPaxQYQW75crNzXIuf3ebqkSmHOzWwlBix4ILBcYc_sRZG2oU"
+          Authorization: "key=AAAAQqwms6A:APA91bHPqEs8fAo93-RRp11ilWDakBl1zq7UOAGeEOB6ttCfZznTRjRZNkp92fvwkJAOq4PIWF3hpbNmdJYJpW_LMQ3LPaxQYQW75crNzXIuf3ebqkSmHOzWwlBix4ILBcYc_sRZG2oU",
+          "Content-Type": "application/json",
         }
       }).catch(err => console.log(err))
 
