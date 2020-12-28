@@ -27,7 +27,7 @@ const Tournaments = ({ tournaments, errors }) => {
     setMatches(newMatches.filter((t) => t));
   }, [game, type]);
   return (
-    <MainLayout messages={errors} isFullscreen>
+    <MainLayout messages={errors}>
       <div className="match">
         <div className="match__head">
           <div className="match__head__container">

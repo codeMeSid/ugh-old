@@ -10,7 +10,7 @@ const Logo = require("../public/asset/logo-icon.png");
 
 const LandingPage = ({ matches, errors, currentUser, wallpapers }) => {
   return (
-    <MainLayout messages={errors} isFullscreen>
+    <MainLayout messages={errors}>
       <div
         className="landingpage"
         style={{ minHeight: "100vh", backgroundColor: "black" }}

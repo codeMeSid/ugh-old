@@ -37,7 +37,7 @@ const UserProfile = ({
       );
   }, []);
   return (
-    <MainLayout messages={errors} isFullscreen>
+    <MainLayout messages={errors}>
       <div className="profile">
         <div className="profile__container">
           <div className="profile__head">

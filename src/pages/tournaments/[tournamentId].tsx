@@ -83,7 +83,8 @@ const TournamentDetail = ({
       currentUser &&
       areSlotsAvailable &&
       !userHasJoined &&
-      tournament?.regId
+      tournament?.regId &&
+      !(isTournamentCompleted || isTournamentStarted)
     )
       return (
         <DialogButton
@@ -115,7 +116,7 @@ const TournamentDetail = ({
         >
           <table>
             <tr>
-              <td>position</td>
+              <td>Position</td>
               <td>UghId</td>
               <td>Prize</td>
             </tr>
@@ -137,7 +138,12 @@ const TournamentDetail = ({
       );
     else if (currentUser && wasPlayerDisqualified)
       return <Button text="Disqualified" type="youtube" />;
-    else if (currentUser && !areSlotsAvailable && !userHasJoined)
+    else if (
+      currentUser &&
+      !areSlotsAvailable &&
+      !userHasJoined &&
+      isTournamentUpcoming
+    )
       return <Button text="Slots Full" type="disabled" />;
     else if (currentUser && userHasJoined && canLeave && isTournamentUpcoming)
       return (
@@ -254,7 +260,7 @@ const TournamentDetail = ({
   };
 
   return (
-    <MainLayout messages={messages} isFullscreen>
+    <MainLayout messages={messages}>
       <div className="tournament">
         <div className="tournament__container">
           <div className="tournament__card">

@@ -5,6 +5,7 @@ import { TournamentTime } from "../../../server/utils/enum/tournament-time";
 import Timer from "../timer";
 
 import PlayerScoreCard from "./score-player";
+
 const BracketScoreCard = ({
   currentUser,
   bracket,

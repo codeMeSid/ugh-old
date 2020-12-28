@@ -6,6 +6,8 @@ import Input from "../input/input";
 import { useRequest } from "../../hooks/use-request";
 import { event } from "../../socket";
 
+const PlayerImg = require("../../public/asset/logo-icon.png");
+
 const PlayerScoreCard = ({
   player,
   team,
@@ -167,7 +169,7 @@ const PlayerScoreCard = ({
     <div className="bracket__score__player">
       <div
         className="bracket__score__image"
-        style={{ backgroundImage: `url(${player.profilePic})` }}
+        style={{ backgroundImage: `url(${player.profilePic || PlayerImg})` }}
       />
       <div className="bracket__score__name">
         <div>{player.ughId}</div>
