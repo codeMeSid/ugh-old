@@ -60,8 +60,8 @@ const Activate = ({ ughId }) => {
           minHeight: "88vh",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
           alignItems: "center",
+          paddingTop: 100,
         }}
       >
         <h1 style={{ fontWeight: "bold" }}>

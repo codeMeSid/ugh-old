@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useRequest } from "../hooks/use-request";
 import { fire } from "../../server/utils/firebase";
 
-const LoginBg = require("../public/asset/login.jpg");
+const LoginBg = require("../public/asset/login.webp");
 const GoogleButton = require("../public/asset/google.png");
 
 const SignIn = () => {
@@ -85,7 +85,7 @@ const SignIn = () => {
         style={{ backgroundImage: `url(${LoginBg})` }}
       >
         <div className="signin__container">
-          <h1 style={{ marginBottom: 10 }}>Sign In</h1>
+          <div style={{ marginBottom: 10, fontSize: 38 }}>Sign In</div>
           <Input
             placeholder="ugh id*"
             name="ughId"

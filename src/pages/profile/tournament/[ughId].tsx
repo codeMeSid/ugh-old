@@ -9,11 +9,16 @@ const UserTournamentPage = ({ tournaments, errors }) => {
     <MainLayout messages={errors}>
       <div className="detail__bg">
         <div className="withdraw" style={{ backgroundColor: "#01071a" }}>
-          <h1
-            style={{ textAlign: "center", fontWeight: "bold", color: "white" }}
+          <div
+            style={{
+              fontSize: 38,
+              textAlign: "center",
+              fontWeight: "bold",
+              color: "white",
+            }}
           >
             Tournament History
-          </h1>
+          </div>
           <div
             style={{
               textAlign: "center",
@@ -34,15 +39,18 @@ const UserTournamentPage = ({ tournaments, errors }) => {
                 { text: "game", isResponsive: true },
                 { text: "status", isResponsive: false },
               ]}
-              data={tournaments.map((t: any) => {
+              data={tournaments?.map((t: any) => {
                 const canStatusChange =
                   Date.now() < new Date(t?.endDateTime || Date.now()).valueOf();
                 return [
-                  format(new Date(t.startDateTime), "dd/MM/yyy hh:mm a"),
-                  t.name,
+                  format(
+                    new Date(t?.startDateTime || Date.now()),
+                    "dd/MM/yyy hh:mm a"
+                  ),
+                  t?.name,
                   t?.game,
                   <span style={{ fontWeight: 700 }}>
-                    {t.didWin ? (
+                    {t?.didWin ? (
                       <div style={{ color: "green" }}>WON</div>
                     ) : canStatusChange ? (
                       <div style={{ color: "blue" }}>TBD</div>
@@ -67,7 +75,7 @@ UserTournamentPage.getInitialProps = async (ctx: any) => {
     body: {},
     method: "get",
   });
-  return { tournaments: data || [], errors: errors || [], ughId };
+  return { tournaments: data || [], errors: errors || [] };
 };
 
 export default UserTournamentPage;

@@ -1,7 +1,7 @@
 .shop {
   min-height: 90vh;
   padding: 2rem;
-  background-image: url("../asset/shop-bg.jpg");
+  background-image: url("../asset/shop-bg.webp");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -25,12 +25,12 @@
       width: 16rem;
     }
     &__value {
-      font-size: 2.5rem;
+      font-size: 2.4rem;
       font-weight: 900;
       margin-bottom: 0.8rem;
     }
     &__cost {
-      font-size: 2.5rem;
+      font-size: 2.4rem;
       font-weight: 900;
       margin: 0.8rem 0;
     }

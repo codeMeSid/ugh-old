@@ -28,9 +28,9 @@ const Shop = ({
           <div
             style={{
               textAlign: "center",
-              fontSize: 45,
+              fontSize: 38,
               color: "black",
-              fontWeight: 900,
+              fontWeight: "bold",
             }}
           >
             SHOP COINS

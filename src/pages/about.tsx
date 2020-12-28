@@ -10,7 +10,7 @@ const AboutPage = ({ aboutUs, errors }) => (
                 about us
             </div>
             <div>
-                <RichText className="about__content" content={aboutUs} />
+                <RichText className="bout__content about__content--about" content={aboutUs} />
             </div>
         </div>
     </MainLayout>

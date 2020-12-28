@@ -129,7 +129,7 @@ const AddTournament = ({
         className="detail__bg profile"
       >
         <div className="detail" style={{ padding: "2rem" }}>
-          <h1 style={{ color: "white" }}>Add Tournament</h1>
+          <div style={{ color: "white", fontSize: 38 }}>Add Tournament</div>
           <div className="row">
             <div className="col">
               <Input

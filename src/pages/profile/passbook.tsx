@@ -4,8 +4,6 @@ import Table from "../../components/table";
 import { serverRequest } from "../../hooks/server-request";
 import { format } from "date-fns";
 
-const bgImage = require("../../public/asset/edit.png");
-
 const ProfilePassbookPage = ({
   passbooks,
   errors,
@@ -16,9 +14,16 @@ const ProfilePassbookPage = ({
   <MainLayout messages={errors}>
     <div className="detail__bg">
       <div className="withdraw" style={{ backgroundColor: "#01071a" }}>
-        <h1 style={{ textAlign: "center", fontWeight: "bold", color: "white" }}>
+        <div
+          style={{
+            textAlign: "center",
+            fontWeight: "bold",
+            color: "white",
+            fontSize: 38,
+          }}
+        >
           PASSBOOK
-        </h1>
+        </div>
         <div
           style={{
             textAlign: "center",

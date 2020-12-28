@@ -17,7 +17,7 @@ export const tournamentStartTimer = (regId: string, id: string, startDateTime: D
     regId,
     new Date(startDateTime),
     async ({ id }: { id: string }, done) => {
-
+        done();
         const brackets = [];
         const session = await mongoose.startSession();
         session.startTransaction();
@@ -38,7 +38,6 @@ export const tournamentStartTimer = (regId: string, id: string, startDateTime: D
             // tournament status => completed
             // return all players entry coins - if paid
             if (attendance < tournament.game.cutoff) {
-
                 tournament.set({ status: TournamentStatus.Completed });
                 const users = await User.find({
                     _id: {
@@ -166,7 +165,7 @@ export const tournamentStartTimer = (regId: string, id: string, startDateTime: D
             await session.abortTransaction();
         }
         session.endSession();
-        done();
+        // done();
     },
     { id }
 );

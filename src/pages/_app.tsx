@@ -106,9 +106,9 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
   return (
     <>
       <Head>
-        <title>{`${getTitle(
-          router.route
-        )} - Ultimate Gamers Hub | Play Tournaments`}</title>
+        <title>{`${
+          getTitle(router.route) || "Take A Better Path"
+        } - Ultimate Gamers Hub | Play Tournaments`}</title>
         <meta
           property="og:title"
           content={`${getTitle(
@@ -145,11 +145,11 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
         />
         <meta
           name="keywords"
-          content="Ultimate Gamers Hub, Game,Gamer,Match,Players Tournament, Fifa, Pes, PS4, PS5"
+          content="Ultimate Gamers Hub, Game,Gamer,Match,Players Tournament, Fifa, Ludo, PS4, PS5"
         />
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1"
+          content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
         />
         <meta name="msapplication-TileColor" content="#ffc40d" />
         <meta name="theme-color" content="#ffffff" />

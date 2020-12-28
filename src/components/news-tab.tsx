@@ -16,7 +16,7 @@ const NewsTab = () => {
     }, [])
     return <div className="news">
         <div className="news__title">
-            news & advertisments
+            news & advertisements
         </div>
         <div className="news__list">
             {news.map((newsItem: NewsDoc) => {

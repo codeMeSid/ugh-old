@@ -1,8 +1,5 @@
-// @import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@1,700&display=swap");
-@import url('https://rsms.me/inter/inter.css');
-@supports (font-variation-settings: normal) {
-  html { font-family: 'Inter var', sans-serif; }
-}
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&display=swap");
+
 *,
 *::after,
 *::before {
@@ -13,8 +10,8 @@
 
 html {
   font-size: 62.5%;
-  // font-family: Arial, Helvetica, sans-serif;
-  font-family: 'Inter', sans-serif;
+  font-family: "Oswald", Georgia, "Times New Roman", Times, serif, sans-serif;
+  font-weight: 600;
   overflow-x: hidden;
   overflow: -moz-scrollbars-none;
   scrollbar-color: transparent transparent;
@@ -35,7 +32,6 @@ a {
   text-decoration: none;
   color: inherit;
 }
-
 
 option {
   background-color: black;

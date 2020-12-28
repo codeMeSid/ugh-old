@@ -104,7 +104,7 @@ const Tournaments = ({ tournaments, errors }) => {
                   textTransform: "capitalize",
                 }}
               >
-                Currently,No tournaments available
+                Currently, No tournaments available
               </div>
             )}
           </div>

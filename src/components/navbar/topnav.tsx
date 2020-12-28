@@ -2,7 +2,7 @@ import Link from "next/link";
 import CollapseMenu from "./collapse-menu";
 import ResponsiveMenu from "./responsive-menu";
 
-const Logo = require("../../public/asset/logo.png");
+const Logo = require("../../public/asset/logo.webp");
 
 const TopNavbar = ({ currentUser }: { currentUser: any}) => {
     return <nav className="navbar navbar--top">

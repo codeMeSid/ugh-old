@@ -4,7 +4,7 @@ import { fire } from "../../server/utils/firebase";
 import MainLayout from "../components/layout/mainlayout";
 import { useRequest } from "../hooks/use-request";
 
-const SignoutImg = require("../public/asset/about-bg.jpg");
+const SignoutImg = require("../public/asset/about-bg.webp");
 
 const SignoutPage = () => {
   const { doRequest } = useRequest({

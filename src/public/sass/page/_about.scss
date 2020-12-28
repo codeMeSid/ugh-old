@@ -1,12 +1,12 @@
 .about {
   padding: 2rem;
   min-height: 88vh;
-  background-image: url("../asset/about-bg.jpg");
+  background-image: url("../asset/about-bg.webp");
   background-size: cover;
   background-position: center;
   &__title {
     text-align: center;
-    font-size: 3.6rem;
+    font-size: 3.8rem;
     text-transform: uppercase;
     color: white;
     font-weight: 900;
@@ -24,6 +24,10 @@
     height: 50rem;
     overflow-y: scroll;
     overflow-x: hidden;
+    &--about {
+      overflow-x: hidden;
+      overflow-y: hidden;
+    }
     &::-webkit-scrollbar {
       width: 0.4rem;
     }

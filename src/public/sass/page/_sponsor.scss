@@ -2,13 +2,13 @@
   min-height: 88vh;
   &__head {
     padding: 2rem 0;
-    background-image: url("../asset/streams.jpg");
+    background-image: url("../asset/streams.webp");
     background-size: cover;
   }
   &__title {
     text-align: center;
     text-transform: capitalize;
-    font-size: 3.2rem;
+    font-size: 3.8rem;
     font-weight: 900;
     color: white;
   }
@@ -22,7 +22,7 @@
   }
   &__body {
     padding: 2rem;
-    background-color: darken(navy,20%);
+    background-color: darken(navy, 20%);
     &__container {
       max-width: 100rem;
       margin: 0rem auto;
@@ -33,7 +33,7 @@
       margin-bottom: 2rem;
     }
     &__title {
-      font-size: 3rem;
+      font-size: 3.8rem;
       text-transform: uppercase;
       font-weight: bold;
       margin-bottom: 1rem;

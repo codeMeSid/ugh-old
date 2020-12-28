@@ -22,6 +22,7 @@
   "dependencies": {
     "@monsid/ugh-og": "0.0.4",
     "@tinymce/tinymce-react": "^3.7.0",
+    "@zeit/next-source-maps": "0.0.3",
     "agendash": "^1.0.0",
     "axios": "^0.19.2",
     "bad-words": "^3.0.3",

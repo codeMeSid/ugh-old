@@ -33,7 +33,7 @@ const Settings = ({ user, errors }: { user: UserDoc; errors: any }) => {
       <div className="settings">
         <div
           style={{
-            fontSize: 45,
+            fontSize: 38,
             textAlign: "center",
             color: "black",
             fontWeight: 900,
@@ -42,25 +42,25 @@ const Settings = ({ user, errors }: { user: UserDoc; errors: any }) => {
           SETTINGS
         </div>
         <div className="settings__body">
-          <CheckInput
+          {/* <CheckInput
             value={newTournamentWasAdded}
             onChange={(val) => setNewTournamentWasAdded(val)}
             label="Notify via email when Someone Added a Tournament"
-          />
+          /> */}
           <CheckInput
             value={addedTournamentWasWon}
             onChange={(val) => setAddedTournamentWasWon(val)}
-            label="Notify via email when Someone Wins a Tournament (Joined Only)"
+            label="Notify via email when Someone Wins a Tournament (Joined Only)."
           />
           <CheckInput
             value={addedTournamentWillStart}
             onChange={(val) => setAddedTournamentWillStart(val)}
-            label="Notify via email before your match starts (15mins before)"
+            label="Notify via email when your match starts."
           />
           <CheckInput
             value={addedTournamentProofDenied}
             onChange={(val) => setAddedTournamentProofDenied(val)}
-            label="Notify via email when Opponent raises dispute against your score"
+            label="Notify via email when Opponent raises dispute against your score."
           />
           <CheckInput
             value={activityInCreatedTournament}

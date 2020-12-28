@@ -111,7 +111,7 @@ const SignUp = ({ ughIds, errors }) => {
         style={{ backgroundImage: `url(${SignUpBg})` }}
       >
         <div className="signin__container">
-          <h1 style={{ marginBottom: 10 }}>Register</h1>
+          <div style={{ marginBottom: 10, fontSize: 38 }}>Register</div>
           <Input
             placeholder="ugh id*"
             name="ughId"
@@ -280,23 +280,21 @@ const SignUp = ({ ughIds, errors }) => {
         <div
           style={{
             color: "white",
-            fontSize: 20,
+            fontSize: 16,
             textTransform: "capitalize",
             margin: "10px 0",
             textAlign: "center",
           }}
         >
-          By signing-up you agree to
+          By signing-up you agree to{" "}
           <Link href="/tac">
-            <a target="_blank" style={{ color: "blue" }}>
-              {" "}
-              Terms Of Use{" "}
+            <a target="_blank" style={{ textDecoration: "underline" }}>
+              Terms Of Use
             </a>
-          </Link>
-          and
+          </Link>{" "}
+          and{" "}
           <Link href="/privacy">
-            <a target="_blank" style={{ color: "blue" }}>
-              {" "}
+            <a target="_blank" style={{ textDecoration: "underline" }}>
               Privacy Policy
             </a>
           </Link>

@@ -74,7 +74,7 @@
   }
   &__item {
     &--link {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       text-transform: capitalize;
       margin-right: 5rem;
       padding-bottom: 1rem;
@@ -103,7 +103,7 @@
       position: relative;
       margin-right: 5rem;
       cursor: pointer;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       &__title {
         transition: color 300ms linear;
         &:hover {
@@ -114,14 +114,14 @@
         position: absolute;
         top: 100%;
         right: 0%;
-        width: 15rem;
+        width: max-content;
         display: none;
         flex-direction: column;
         &__item {
-          background-color: blue;
+          background-color: #117ec0;
           padding: 1rem;
           &:hover {
-            background-color: rgba(blue, 0.8);
+            background-color: darken(#117ec0, 20%);
           }
           &:not(:last-child) {
             margin-bottom: 0.5rem;

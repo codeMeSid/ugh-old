@@ -12,8 +12,6 @@ import { useRequest } from "../../hooks/use-request";
 import Link from "next/link";
 import Button from "../../components/button/main";
 
-const bgImage = require("../../public/asset/edit.png");
-
 const ProfileEdit = ({ user, errors }: { user: UserDoc; errors: any }) => {
   const [uploadUrl, setUploadUrl] = useState(user?.uploadUrl);
   const [dob, setDob] = useState(user?.dob || "");
@@ -69,11 +67,10 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc; errors: any }) => {
 
   return (
     <MainLayout messages={messages}>
-      <div
-        style={{ backgroundImage: `url(${bgImage})`, padding: "2rem" }}
-        className="detail__bg"
-      >
-        <h1 style={{ textAlign: "center", color: "white" }}>Profile Edit</h1>
+      <div className="detail__bg profile">
+        <div style={{ textAlign: "center", color: "white", fontSize: 38 }}>
+          Profile Edit
+        </div>
         <div className="row">
           <div className="col">
             <FileInput
@@ -83,20 +80,21 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc; errors: any }) => {
               placeholder="profile image"
               value={uploadUrl}
               onChange={onChangeHandler}
+              isWhite
             />
           </div>
         </div>
         <div className="row">
           <div className="col">
-            <Input placeholder="name" value={user?.name} disabled />
+            <Input placeholder="name" value={user?.name} disabled isWhite />
           </div>
           <div className="col">
-            <Input placeholder="email" value={user?.email} disabled />
+            <Input placeholder="email" value={user?.email} disabled isWhite />
           </div>
         </div>
         <div className="row">
           <div className="col">
-            <Input placeholder="ughId" value={user?.ughId} disabled />
+            <Input placeholder="ughId" value={user?.ughId} disabled isWhite />
           </div>
           <div className="col">
             <Input
@@ -106,6 +104,7 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc; errors: any }) => {
               value={dob}
               disabled
               onChange={onChangeHandler}
+              isWhite
             />
           </div>
         </div>
@@ -117,6 +116,7 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc; errors: any }) => {
               value={mobile}
               disabled
               onChange={onChangeHandler}
+              isWhite
             />
           </div>
           <div className="col">
@@ -125,6 +125,7 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc; errors: any }) => {
               name="psnId"
               value={psnId}
               onChange={onChangeHandler}
+              isWhite
             />
           </div>
         </div>
@@ -135,6 +136,7 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc; errors: any }) => {
               name="streamId"
               value={streamId}
               onChange={onChangeHandler}
+              isWhite
             />
           </div>
           <div className="col">
@@ -143,6 +145,7 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc; errors: any }) => {
               name="gamerTag"
               value={gamerTag}
               onChange={onChangeHandler}
+              isWhite
             />
           </div>
         </div>
@@ -154,12 +157,14 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc; errors: any }) => {
               name="aadharUrl"
               placeholder="aadhar proof"
               onChange={onChangeHandler}
+              isWhite
             />
             <Input
               value={aadharCard}
               placeholder="aadhar number"
               name="aadharCard"
               onChange={onChangeHandler}
+              isWhite
             />
           </div>
           <div className="col">
@@ -169,12 +174,14 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc; errors: any }) => {
               name="panUrl"
               placeholder="pancard proof"
               onChange={onChangeHandler}
+              isWhite
             />
             <Input
               value={panCard}
               placeholder="pan card no."
               name="panCard"
               onChange={onChangeHandler}
+              isWhite
             />
           </div>
         </div>
@@ -185,6 +192,7 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc; errors: any }) => {
               onSelect={onSelectHandler}
               value={country}
               placeholder="country"
+              isWhite
               options={Object.keys(locations).map((key) => {
                 return <Option key={key} display={key} value={key} />;
               })}
@@ -196,6 +204,7 @@ const ProfileEdit = ({ user, errors }: { user: UserDoc; errors: any }) => {
               onSelect={onSelectHandler}
               value={state}
               placeholder="state"
+              isWhite
               options={locations[country].map((key) => (
                 <Option key={key} display={key} value={key} />
               ))}

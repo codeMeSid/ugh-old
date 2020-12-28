@@ -103,13 +103,14 @@ const SocialActivatePage = ({ ughId }) => {
           marginTop: 50,
         }}
       >
-        <div style={{ fontSize: 40, fontWeight: 900 }}>Account Activation</div>
+        <div style={{ fontSize: 38, fontWeight: 900 }}>Account Activation</div>
         <div
           style={{
             fontSize: 24,
             textAlign: "center",
             maxWidth: 600,
             color: "red",
+            margin: "20px 0",
           }}
         >
           Kindly update your Date of Birth and mobile number for OTP
