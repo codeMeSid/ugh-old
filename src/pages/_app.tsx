@@ -9,9 +9,42 @@ import { useEffect } from "react";
 import { fire } from "../../server/utils/firebase";
 import { useRequest } from "../hooks/use-request";
 import { event } from "../socket";
+import React from "react";
 
-const AppComponent = ({ Component, pageProps, router, currentUser }) => {
-  const getTitle = (route: string) => {
+interface Props {
+  Component: any;
+  pageProps: any;
+  router: any;
+  currentUser?: any;
+}
+
+class AppComponent extends React.Component<Props> {
+  static async getInitialProps(appContext: any) {
+    let pageProps = {};
+    const { data } = await serverRequest(appContext.ctx, {
+      url: "/api/ugh/user/current",
+      method: "get",
+      body: {},
+    });
+    if (appContext.Component.getInitialProps) {
+      pageProps = await appContext.Component.getInitialProps(appContext.ctx);
+    }
+    return {
+      pageProps,
+      currentUser: appContext?.ctx?.req?.currentUser || data?.currentUser,
+    };
+  }
+
+  constructor(props: any) {
+    super(props);
+    this.getTitle = this.getTitle.bind(this);
+    this.getServiceWorker = this.getServiceWorker.bind(this);
+    this.getNotificationRequest = this.getNotificationRequest.bind(this);
+    this.onMessage = this.onMessage.bind(this);
+  }
+
+  getTitle(route: string) {
+    const { router } = this.props;
     if (router.route.match("/admin")) return "Admin Panel";
     return {
       "/": "Home",
@@ -46,40 +79,40 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
       "/tournaments/[tournamentId]": "Tournament Detail",
       "/tournaments": "UGH Tournaments",
     }[route];
-  };
+  }
 
-  useEffect(() => {
-    if (currentUser) {
-      getServiceWorker();
+  async componentDidMount() {
+    if (this.props.currentUser) {
+      this.getServiceWorker();
       event.recieveMessage((data) => {
         const { from, to, body, action } = data;
-        if (currentUser.ughId === from || from === "admin")
+        if (this.props.currentUser.ughId === from || from === "admin")
           fire.sendNotification(to, body, action);
       });
     }
-  }, []);
+  }
 
-  const getServiceWorker = async () => {
+  async getServiceWorker() {
     try {
       if ("serviceWorker" in navigator) {
         const swr = await navigator.serviceWorker.register(
           "/firebase-messaging-sw.js"
         );
-        await getNotificationRequest(swr);
+        this.getNotificationRequest(swr);
       }
     } catch (error) {
       console.log("Service Worker not supported");
     }
-  };
+  }
 
-  const getNotificationRequest = async (sw: any) => {
+  async getNotificationRequest(sw: any) {
     const status = await Notification.requestPermission();
     const token = await fire.getFCMToken(
       status,
       sw,
-      currentUser,
+      this.props.currentUser,
       function (payload) {
-        onMessage(payload, sw);
+        this.onMessage(payload, sw);
       }
     );
     if (token && token.isNew) {
@@ -91,9 +124,9 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
       });
       doRequest();
     }
-  };
+  }
 
-  const onMessage = (payload: any, sw: ServiceWorkerRegistration) => {
+  onMessage(payload: any, sw: ServiceWorkerRegistration) {
     const {
       notification: { title, body },
     } = payload;
@@ -101,102 +134,101 @@ const AppComponent = ({ Component, pageProps, router, currentUser }) => {
       icon: "/favicon.ico",
       body,
     });
-  };
-
-  return (
-    <>
-      <Head>
-        <title>{`${
-          getTitle(router.route) || "Take A Better Path"
-        } - Ultimate Gamers Hub | Play Tournaments`}</title>
-        <meta
-          property="og:title"
-          content={`${getTitle(
-            router.route
-          )} - Ultimate Gamers Hub | Play Tournaments`}
-          key="ogtitle"
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:description"
-          key="ogdesc"
-          content={`Ultimate Gamers Hub: The Ultimate e-sports Hub in India. Ultimate gamers hub is the best e-sports website in India for all pro & casual gamers, where you can find all categories of gaming tournaments and you can also create the tournament of our own.`}
-        />
-        <meta property="og:locale" content="en_IN" />
-        <meta property="og:determiner" content="the" />
-        <meta
-          property="og:url"
-          key="ogurl"
-          content="https://www.ultimategamershub.com"
-        />
-        <meta
-          property="og:image"
-          content={"/favicon-32x32.png"}
-          key="ogimage"
-        />
-        <meta
-          property="og:site_name"
-          content={"UltimateGamersHub"}
-          key="ogsitename"
-        />
-        <meta
-          name="description"
-          content={`Ultimate Gamers Hub: The Ultimate e-sports Hub in India. Ultimate gamers hub is the best e-sports website in India for all pro & casual gamers, where you can find all categories of gaming tournaments and you can also create the tournament of our own.`}
-        />
-        <meta
-          name="keywords"
-          content="Ultimate Gamers Hub, Game,Gamer,Match,Players Tournament, Fifa, Ludo, PS4, PS5"
-        />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
-        />
-        <meta name="msapplication-TileColor" content="#ffc40d" />
-        <meta name="theme-color" content="#ffffff" />
-        <link rel="icon" href="/favicon.ico" />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/site.webmanifest" />
-      </Head>
-      {!router.route.match("/admin") && !router.route.match("/signout") && (
-        <TopNavbar currentUser={currentUser} />
-      )}
-      <Component {...pageProps} key={router.route} currentUser={currentUser} />
-      {!router.route.match("/admin") && <SponsorSlider />}
-      {!router.route.match("/admin") && <Footer />}
-    </>
-  );
-};
-
-AppComponent.getInitialProps = async (appContext) => {
-  let pageProps = {};
-  const { data } = await serverRequest(appContext.ctx, {
-    url: "/api/ugh/user/current",
-    method: "get",
-    body: {},
-  });
-  if (appContext.Component.getInitialProps) {
-    pageProps = await appContext.Component.getInitialProps(appContext.ctx);
   }
-  return {
-    pageProps,
-    currentUser: appContext?.ctx?.req?.currentUser || data?.currentUser,
-  };
-};
+
+  render() {
+    const { Component, pageProps, router, currentUser } = this.props;
+    const tabTitle = `${
+      this.getTitle(router.route) || "Take A Better Path"
+    } - Ultimate Gamers Hub | Play Tournaments`;
+    return (
+      <>
+        <Head>
+          <title>{tabTitle}</title>
+          <meta property="og:title" content={tabTitle} key="ogtitle" />
+          <meta property="og:type" content="website" />
+          <meta
+            property="og:description"
+            key="ogdesc"
+            content={`Ultimate Gamers Hub: The Ultimate e-sports Hub in India. Ultimate gamers hub is the best e-sports website in India for all pro & casual gamers, where you can find all categories of gaming tournaments and you can also create the tournament of our own.`}
+          />
+          <meta property="og:locale" content="en_IN" />
+          <meta property="og:determiner" content="the" />
+          <meta
+            property="og:url"
+            key="ogurl"
+            content="https://www.ultimategamershub.com"
+          />
+          <meta
+            property="og:image"
+            content={"/favicon-32x32.png"}
+            key="ogimage"
+          />
+          <meta
+            property="og:site_name"
+            content={"UltimateGamersHub"}
+            key="ogsitename"
+          />
+          <meta
+            name="description"
+            content={`Ultimate Gamers Hub: The Ultimate e-sports Hub in India. Ultimate gamers hub is the best e-sports website in India for all pro & casual gamers, where you can find all categories of gaming tournaments and you can also create the tournament of our own.`}
+          />
+          <meta
+            name="keywords"
+            content="Ultimate Gamers Hub, Game,Gamer,Match,Players Tournament, Fifa, Ludo, PS4, PS5"
+          />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
+          />
+          <meta name="msapplication-TileColor" content="#ffc40d" />
+          <meta name="theme-color" content="#ffffff" />
+          <link rel="icon" href="/favicon.ico" />
+          <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
+          />
+          <link rel="manifest" href="/site.webmanifest" />
+        </Head>
+        {!router.route.match("/admin") && !router.route.match("/signout") && (
+          <TopNavbar currentUser={currentUser} />
+        )}
+        <Component
+          {...pageProps}
+          key={router.route}
+          currentUser={currentUser}
+        />
+        {!router.route.match("/admin") && <SponsorSlider />}
+        {!router.route.match("/admin") && <Footer />}
+      </>
+    );
+  }
+}
 
 export default AppComponent;
+
+//   return (
+//     <>
+
+//     </>
+//   );
+// };
+
+// AppComponent.getInitialProps = async (appContext) => {
+
+// };
+
+// export default AppComponent;
