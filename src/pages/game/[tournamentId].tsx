@@ -8,7 +8,7 @@ import { serverRequest } from "../../hooks/server-request";
 import { useRequest } from "../../hooks/use-request";
 import { event } from "../../socket";
 
-const Logo = require("../../public/asset/logo-icon.png");
+const Logo = require("../../public/asset/logo_icon.webp");
 
 const BracketList = ({
   brackets,

@@ -9,7 +9,7 @@ import Input from "../input/input";
 import { DQ } from "../../../server/utils/enum/dq";
 import { event } from "../../socket";
 
-const PlayerImg = require("../../public/asset/logo-icon.png");
+const PlayerImg = require("../../public/asset/logo_icon.webp");
 
 const BracketRankCard = ({
   userHasUploadedScore,

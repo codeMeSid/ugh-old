@@ -16,9 +16,9 @@ export const useRequest = (attrs: RequestUtil) => {
     } catch (err) {
       const error: AxiosError = err;
       if (attrs.onError)
-        attrs.onError(error.response.data.errors);
+        attrs.onError(error.response?.data.errors || [{ message: err?.message || "Something went wrong" }]);
       if (onError)
-        onError(error.response.data.errors)
+        onError(error.response?.data.errors || [{ message: err?.message || "Something went wrong" }])
     }
   };
   return { doRequest };

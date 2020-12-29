@@ -18,7 +18,7 @@ import { BsFillInfoCircleFill } from "react-icons/bs";
 import { prizeDistribution } from "../../../server/utils/prize-distribution";
 import { numberPostion } from "../../public/number-postion";
 
-const Logo = require("../../public/asset/logo-icon.png");
+const Logo = require("../../public/asset/logo_icon.webp");
 
 const TournamentDetail = ({
   tournament,
@@ -84,7 +84,8 @@ const TournamentDetail = ({
       areSlotsAvailable &&
       !userHasJoined &&
       tournament?.regId &&
-      !(isTournamentCompleted || isTournamentStarted)
+      !(isTournamentCompleted || isTournamentStarted) &&
+      new Date(tournament?.startDateTime).valueOf() > Date.now()
     )
       return (
         <DialogButton
@@ -153,6 +154,7 @@ const TournamentDetail = ({
           fullButton
           size="small"
           type="youtube"
+          style={{ position: "fixed", minWidth: 360, maxWidth: 500 }}
         >
           <div style={{ fontSize: 20, marginBottom: 20, textAlign: "center" }}>
             <p>

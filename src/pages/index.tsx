@@ -6,7 +6,7 @@ import NewsTab from "../components/news-tab";
 import WallpaperSlider from "../components/wallpaper-slider";
 import MessengerList from "../components/messenger";
 
-const Logo = require("../public/asset/logo-icon.png");
+const Logo = require("../public/asset/logo_icon.webp");
 
 const LandingPage = ({ matches, errors, currentUser, wallpapers }) => {
   return (

@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { UserDoc } from "../../../server/models/user";
 import Button from "../button/main";
-const PlayerImg = require("../../public/asset/logo-icon.png");
+const PlayerImg = require("../../public/asset/logo_icon.webp");
 
 const PlayerCard = ({
   player,
