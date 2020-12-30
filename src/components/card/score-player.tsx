@@ -168,7 +168,7 @@ const PlayerScoreCard = ({
   return (
     <div className="bracket__score__player">
       <div
-        className="bracket__score__image"
+        className={`bracket__score__image ${player.profilePic ? "" : "none"}`}
         style={{ backgroundImage: `url(${player.profilePic || PlayerImg})` }}
       />
       <div className="bracket__score__name">

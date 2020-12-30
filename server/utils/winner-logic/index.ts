@@ -119,7 +119,7 @@ const sendEmail = (tournament: any, users: any) => {
     if (winners.length > 0)
       users.forEach((user: any) => {
         const { ughId } = user;
-        const userIndex = winners.findIndex((w) => w?.ughId === ughId);
+        const userIndex = winners.findIndex((w: any) => w?.ughId === ughId);
         if (userIndex >= 0)
           mailer.send(
             MailerTemplate.Win,
