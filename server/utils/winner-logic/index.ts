@@ -75,21 +75,24 @@ export const winnerLogic = async (
 
     await session.commitTransaction();
     if (updates) {
-      messenger.io
-        .to(SocketChannel.BracketRank)
-        .emit(SocketEvent.EventRecieve, {
-          by: "UGH",
-          tournamentId: tournament.regId,
-          type: "update",
-          channel: SocketChannel.BracketRank,
-        });
+      sendNotification(updates.updatedTournament, updates.updatedBrackets);
+      sendEmail(updates.updatedTournament, updates.updateUsers);
+      sendUpdates(updates.updatedTournament.regId);
     }
-    if (
-      updates &&
-      updates.updatedTournament.status === TournamentStatus.Completed
-    ) {
+  } catch (error) {
+    console.log({ msg: "winner logic", error: error.message });
+    await session.abortTransaction();
+  }
+  session.endSession();
+  return;
+};
+
+
+const sendNotification = (tournament: any, brackets: any) => {
+  try {
+    if (tournament.status === TournamentStatus.Completed) {
       timer.cancel(`${tournament.regId}-end`);
-      updates.updatedBrackets.forEach(bracket => {
+      brackets.forEach((bracket: any) => {
         const bracketId = bracket.regId;
         timer.cancel(`${bracketId}`);
         timer.cancel(`${bracketId}-A`);
@@ -105,37 +108,56 @@ export const winnerLogic = async (
           channel: SocketChannel.BracketRank,
         });
     }
-    if (updates) {
-      const { updateUsers, updatedTournament } = updates;
-      const { name, winners } = updatedTournament;
-      if (winners.length > 0)
-        updateUsers.forEach((user) => {
-          const { ughId } = user;
-          const userIndex = winners.findIndex((w) => w?.ughId === ughId);
-          if (userIndex >= 0)
-            mailer.send(
-              MailerTemplate.Win,
-              {
-                ughId,
-                tournamentName: name,
-                prize: winners[userIndex].coins,
-              },
-              user.email,
-              "UGH TOURNAMENT WINNER"
-            );
-          else
-            mailer.send(
-              MailerTemplate.Winner,
-              { ughId, tournamentName: name, opponentUghId: winners[0]?.ughId },
-              user.email,
-              "UGH Tournament Better Luck Next Time !!!"
-            );
-        });
-    }
   } catch (error) {
-    console.log({ msg: "winner logic", error: error.message });
-    await session.abortTransaction();
+    console.error(error?.message)
   }
-  session.endSession();
   return;
 };
+const sendEmail = (tournament: any, users: any) => {
+  try {
+    const { name, winners } = tournament;
+    if (winners.length > 0)
+      users.forEach((user: any) => {
+        const { ughId } = user;
+        const userIndex = winners.findIndex((w) => w?.ughId === ughId);
+        if (userIndex >= 0)
+          mailer.send(
+            MailerTemplate.Win,
+            {
+              ughId,
+              tournamentName: name,
+              prize: winners[userIndex].coins,
+            },
+            user.email,
+            "UGH TOURNAMENT WINNER"
+          );
+        else
+          mailer.send(
+            MailerTemplate.Winner,
+            { ughId, tournamentName: name, opponentUghId: winners[0]?.ughId },
+            user.email,
+            "UGH Tournament Better Luck Next Time !!!"
+          );
+      });
+
+  } catch (error) {
+    console.error(error?.message)
+  }
+  return;
+};
+const sendUpdates = (regId: string) => {
+  try {
+    messenger.io
+      .to(SocketChannel.BracketRank)
+      .emit(SocketEvent.EventRecieve, {
+        by: "UGH",
+        tournamentId: regId,
+        type: "update",
+        channel: SocketChannel.BracketRank,
+      });
+
+  } catch (error) {
+    console.error(error?.message)
+  }
+  return;
+}

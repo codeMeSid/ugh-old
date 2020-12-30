@@ -40,19 +40,19 @@ const AdminTournamentDashboard = () => {
       setTData(
         data.map((t) => {
           return [
-            TableLink(t.name, t.regId),
-            `${t.coins} coins`,
-            format(new Date(t.startDateTime), "dd/MM/yyyy hh:mm a"),
-            `${t.game.name} (${t.game.console.toUpperCase()})`,
+            TableLink(t?.name, t?.regId),
+            `${t?.coins} coins`,
+            format(new Date(t?.startDateTime), "dd/MM/yyyy hh:mm a"),
+            `${t?.game?.name} (${t?.game?.console.toUpperCase()})`,
             <div>
-              {t.players.length}/{t.playerCount}
+              {t?.players?.length}/{t?.playerCount}
             </div>,
-            t.status.toUpperCase(),
-            !(Date.now() > new Date(t.endDateTime).valueOf())
+            t?.status?.toUpperCase(),
+            !(Date.now() > new Date(t?.endDateTime).valueOf())
               ? "SOON"
-              : t.winners.length > 0
+              : t?.winners?.length > 0
               ? null
-              : EvaluateButton(t.regId),
+              : EvaluateButton(t?.regId),
           ];
         })
       );
