@@ -9,6 +9,7 @@ import { messenger } from "../../../utils/socket";
 import { SocketChannel } from "../../../utils/enum/socket-channel";
 import { SocketEvent } from "../../../utils/enum/socket-event";
 import { Tournament } from "../../../models/tournament";
+import { fire } from "../../../utils/firebase";
 
 export const raiseDisputeController = async (req: Request, res: Response) => {
   const { id } = req.currentUser;
@@ -40,16 +41,9 @@ export const raiseDisputeController = async (req: Request, res: Response) => {
     await session.commitTransaction();
     disputeBy = user.ughId;
     disputeOn = bracketA.teamA.user.ughId;
-    // messenger
-    //   .io
-    //   .to(SocketChannel.Notification)
-    //   .emit(SocketEvent.EventRecieve, {
-    //     from: user.ughId,
-    //     to: bracketA.teamA.user.fcmToken,
-    //     body: `${user.ughId} raised Ranking dispute.`,
-    //     action: `/tournaments/${tournament.regId}`,
-    //     channel: SocketChannel.Notification
-    //   });
+    fire.sendNotification(bracketA.teamA.user.fcmToken
+      , `${user.ughId} raised Ranking dispute.`
+      , `/game/${tournament.regId}`);
     mailer.send(
       MailerTemplate.Dispute,
       { ughId: bracketA.teamA.user.ughId, opponentUghId: user.ughId },

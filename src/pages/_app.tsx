@@ -39,8 +39,8 @@ class AppComponent extends React.Component<Props> {
     super(props);
     this.getTitle = this.getTitle.bind(this);
     // this.getServiceWorker = this.getServiceWorker.bind(this);
-    // this.getNotificationRequest = this.getNotificationRequest.bind(this);
-    // this.onMessage = this.onMessage.bind(this);
+    this.getNotificationRequest = this.getNotificationRequest.bind(this);
+    this.onMessage = this.onMessage.bind(this);
   }
 
   getTitle(route: string) {
@@ -82,14 +82,10 @@ class AppComponent extends React.Component<Props> {
   }
 
   async componentDidMount() {
-    // if (this.props.currentUser) {
-    //   this.getServiceWorker();
-    //   event.recieveMessage((data) => {
-    //     const { from, to, body, action } = data;
-    //     if (this.props.currentUser.ughId === from || from === "admin")
-    //       fire.sendNotification(to, body, action);
-    //   });
-    // }
+    if (this.props.currentUser) {
+      this.getNotificationRequest();
+      // this.getServiceWorker();
+    }
   }
 
   // async getServiceWorker() {
@@ -105,40 +101,39 @@ class AppComponent extends React.Component<Props> {
   //   }
   // }
 
-  // async getNotificationRequest(sw: any) {
-  //   const status = await Notification.requestPermission();
-  //   const token = await fire.getFCMToken(
-  //     status,
-  //     sw,
-  //     this.props.currentUser,
-  //     function (payload) {
-  //       this.onMessage(payload, sw);
-  //     }
-  //   );
-  //   if (token && token.isNew) {
-  //     const { doRequest } = useRequest({
-  //       url: "/api/ugh/user/update/fcm",
-  //       body: { fcmToken: token.fcmToken },
-  //       method: "put",
-  //       onError: (errs) => console.log(errs),
-  //     });
-  //     doRequest();
-  //   }
-  // }
+  async getNotificationRequest() {
+    const status = Notification.permission;
+    let token: any;
+    if (status === "granted") {
+      token = await fire.getFCMToken(this.onMessage);
+    } else if (status !== "denied") {
+      Notification.requestPermission().then(async (resp) => {
+        if (resp === "granted") token = await fire.getFCMToken(this.onMessage);
+      });
+    }
+    if (token && token.isNew) {
+      const { doRequest } = useRequest({
+        url: "/api/ugh/user/update/fcm",
+        body: { fcmToken: token.fcmToken },
+        method: "put",
+        onError: (errs) => console.log(errs),
+      });
+      doRequest();
+    }
+  }
 
-  // onMessage(payload: any, sw: ServiceWorkerRegistration) {
-  //   const {
-  //     notification: { title, body },
-  //   } = payload;
-  //   const notification = new Notification(title, {
-  //     body,
-  //     icon: "/android-chrome-192x192.png",
-  //   });
-  //   // sw.showNotification(title, {
-  //   //   icon: "/favicon.ico",
-  //   //   body,
-  //   // });
-  // }
+  onMessage(payload: any) {
+    const {
+      notification: { title, body, click_action },
+    } = payload;
+    const notification = new Notification(title, {
+      body,
+      icon: "/android-chrome-192x192.png",
+    });
+    notification.onclick = (e) => {
+      window.location.href = click_action;
+    };
+  }
 
   render() {
     const { Component, pageProps, router, currentUser } = this.props;

@@ -7,6 +7,7 @@ import { Conversation, ConversationDoc } from "../../models/message";
 import { User, UserDoc } from "../../models/user";
 import { UserActivity, UserRole } from "@monsid/ugh-og";
 import { Tournament } from "../../models/tournament";
+import { fire } from "../firebase";
 
 class Messenger {
   io: IoServer;
@@ -30,6 +31,7 @@ class Messenger {
     const { channel, createdAt, from, text, to } = data;
     let convo: ConversationDoc;
     let users: Array<UserDoc>;
+    let action: string = "/";
     let user: UserDoc;
     switch (channel) {
       case SocketChannel.Admin:
@@ -46,6 +48,7 @@ class Messenger {
             channel,
           });
           users = await User.find({ role: UserRole.Admin, activity: UserActivity.Active })
+          action = "/admin/messages";
         }
         break;
       case SocketChannel.Match:
@@ -55,6 +58,7 @@ class Messenger {
         if (convo) {
           const tournament = await Tournament.findOne({ regId: to }).populate("players", "ughId fcmToken", "Users");
           users = tournament?.players || [];
+          action = `/tournaments/${tournament?.regId || ""}`
         }
         break;
       case SocketChannel.User:
@@ -98,24 +102,8 @@ class Messenger {
       }
     }
     await convo.save();
-    // if (user) messenger.io.to(SocketChannel.Notification).emit(SocketEvent.EventRecieve, {
-    //   from: from,
-    //   to: user.fcmToken,
-    //   body: `New Message from ${from}`,
-    //   channel: SocketChannel.Notification
-    // });
-    // if (users)
-    //   users.forEach(u => {
-    //     if (u.ughId !== from && `admin-${u.ughId}` !== from) {
-    //       messenger.io.to(SocketChannel.Notification).emit(SocketEvent.EventRecieve, {
-    //         from: from,
-    //         to: u.fcmToken,
-    //         body: `New Message from ${from}`,
-    //         channel: SocketChannel.Notification
-    //       });
-    //     }
-    //   })
-
+    if (user) fire.sendNotification(user.fcmToken, `New Message from ${from}`, action);
+    if (users) users.forEach(u => fire.sendNotification(u.fcmToken, `New Message from ${from}`, action))
     return;
   }
 }

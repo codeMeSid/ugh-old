@@ -53,6 +53,8 @@ const TournamentDetail = ({
     tournament?.winners?.filter((w) => w.position === -1).length ===
     tournament?.players?.length;
   const JoinButton = () => {
+    if (!tournament)
+      return <Button text="Game Over" type="disabled" size="medium" />;
     const msIn30min = 1000 * 60 * 30;
     const canLeave =
       new Date(tournament?.startDateTime).valueOf() - Date.now() >= msIn30min;
@@ -461,14 +463,11 @@ const TournamentDetail = ({
 
 TournamentDetail.getInitialProps = async (ctx) => {
   const { tournamentId } = ctx.query;
-  const { data: tournament, errors: errorsA } = await serverRequest(ctx, {
+  const { data: tournament, errors } = await serverRequest(ctx, {
     url: `/api/ugh/tournament/fetch/detail/${tournamentId}`,
     method: "get",
     body: {},
   });
-
-  const errors = [];
-  if (errorsA) errors.push(...errorsA);
 
   return {
     tournament,

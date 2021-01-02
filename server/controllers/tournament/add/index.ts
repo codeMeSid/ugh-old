@@ -16,6 +16,7 @@ import { tournamentEndTimer } from "./end";
 import { messenger } from "../../../utils/socket";
 import { SocketEvent } from "../../../utils/enum/socket-event";
 import { SocketChannel } from "../../../utils/enum/socket-channel";
+import { fire } from "../../../utils/firebase";
 
 export const tournamentAddController = async (req: Request, res: Response) => {
   const {
@@ -113,23 +114,14 @@ export const tournamentAddController = async (req: Request, res: Response) => {
 };
 
 const sendTournamentAddedMail = async (tournament: TournamentDoc, ughId: string) => {
-  // const users = await User.find({
-  //   "settings.newTournamentWasAdded": true,
-  //   activity: UserActivity.Active
-  // });
-  // users.forEach((user) => {
-    // if (user.fcmToken && user.ughId !== ughId) {
-    //   // messenger
-    //   //   .io
-    //   //   .to(SocketChannel.Notification)
-    //   //   .emit(SocketEvent.EventRecieve, {
-    //   //     from: ughId,
-    //   //     to: user.fcmToken,
-    //   //     body: "New Tournament Added",
-    //   //     action: `/tournaments/${tournament.regId}`,
-    //   //     channel: SocketChannel.Notification
-    //   //   })
-    // }
+  const users = await User.find({
+    "settings.newTournamentWasAdded": true,
+    activity: UserActivity.Active
+  });
+  users.forEach((user) => {
+    if (user.fcmToken && user.ughId !== ughId) {
+      fire.sendNotification(user.fcmToken, "New Tournament Added", `/tournaments/${tournament.regId}`)
+    }
     // mailer.send(
     //   MailerTemplate.New,
     //   {
@@ -140,5 +132,5 @@ const sendTournamentAddedMail = async (tournament: TournamentDoc, ughId: string)
     //   user.email,
     //   "New UGH Tournament"
     // );
-  // });
+  });
 };

@@ -17,32 +17,12 @@ import { settingHandler } from "./settings";
 import { bracketHandler } from "./bracket";
 import { messageHandler } from "./message";
 import { passbookHandler } from "./passbook";
-import { fire } from "../utils/firebase";
-import Axios from "axios";
-import e from "express";
 
 export const apiHandlers: Array<ApiSign> = [
   {
     url: "/test",
     controller: async (req: any, res: any) => {
-      // const resp = await fire.sendNotification("", "hello", "/");
-      let data: any, errors: any;
-      try {
-        const resp = await Axios
-          .post("https://fcm.googleapis.com/fcm/send", {
-            to: "eKqwUcXtET73zjFHUXSMmD:APA91bG3jAJdi5DDVciZNvDfHkJ9oQVjpAWY88Nn33h5odm6AyWDM5kJnH_I3KEMMcp-QejrcMLtnUCnsJa-eDESqX_TUbGnGWcXZ260HF_RsMH_qSWJx9JQhnJlCwFvBXXurpm0Tc5V",
-            notification: {
-              title: "UltimateGamersHub Notification",
-              body: "hello",
-              click_action: `https://ultimategamershub.com/`,
-              icon: "https://firebasestorage.googleapis.com/v0/b/ultimategamershub.appspot.com/o/ugh%2Flogo%20(1).png?alt=media&token=17fd9c6b-cb71-4466-83ab-1825493c5b0a",
-            },
-          });
-        data = resp.data
-      } catch (error) {
-        errors = error;
-      }
-      res.send({ data, errors });
+      res.send(true)
     },
     middlewares: [],
   },

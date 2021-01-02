@@ -12,7 +12,6 @@ const SignoutPage = () => {
     method: "get",
     body: {},
     onSuccess: async () => {
-      fire.removeFcmToken();
       Router.replace("/");
     },
   });

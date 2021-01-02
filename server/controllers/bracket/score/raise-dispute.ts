@@ -6,6 +6,8 @@ import { MailerTemplate } from "../../../utils/enum/mailer-template";
 import { messenger } from "../../../utils/socket";
 import { SocketChannel } from "../../../utils/enum/socket-channel";
 import { SocketEvent } from "../../../utils/enum/socket-event";
+import { fire } from "../../../utils/firebase";
+import { Tournament } from "../../../models/tournament";
 
 export const raiseScoreDisputeController = async (
   req: Request,
@@ -13,10 +15,11 @@ export const raiseScoreDisputeController = async (
 ) => {
   const { id } = req.currentUser;
   const { bracketId } = req.params;
-
   const bracket = await Bracket.findOne({ regId: bracketId })
     .populate("teamA.user", "ughId email fcmToken", "Users")
     .populate("teamB.user", "ughId email fcmToken", "Users");
+  const tournament = await Tournament
+    .findOne({ brackets: { $in: [bracket] } })
   if (!bracket) throw new BadRequestError("Failed to raise dispute");
   if (bracket.winner) throw new BadRequestError("Dispute cannot be raised");
   const isPlayerA =
@@ -81,16 +84,7 @@ export const raiseScoreDisputeController = async (
     from = uB;
     to = fA;
   }
-  // if (from && to)
-  // messenger
-  //   .io
-  //   .to(SocketChannel.Notification)
-  //   .emit(SocketEvent.EventRecieve, {
-  //     from,
-  //     to,
-  //     body: `${from} raised Scoring dispute.`,
-  //     // action: `/tournaments/${tournament.regId}`,
-  //     channel: SocketChannel.Notification
-  //   });
+  if (from && to)
+    fire.sendNotification(to, `${from} raised Scoring dispute.`, `/game/${tournament?.regId}`)
   res.send(true);
 };

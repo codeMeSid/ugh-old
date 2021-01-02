@@ -4,7 +4,6 @@ import "firebase/storage";
 import "firebase/messaging";
 import { randomBytes } from "crypto";
 import localforage from 'localforage';
-import { User } from "../models/user";
 import axios from 'axios';
 
 class Fire {
@@ -131,7 +130,7 @@ class Fire {
     await fireObj.auth().signOut();
   }
 
-  async getFCMToken(status: string, sw: any, currentUser: any, onMessage: (payload: any) => any) {
+  async getFCMToken(onMessage: (payload: any) => any) {
     try {
       const messaging = this.fireObj.messaging();
       const fcmToken: any = await localforage.getItem("FCM_TOKEN");
@@ -139,17 +138,14 @@ class Fire {
         messaging.onMessage(onMessage);
         return { fcmToken, isNew: false }
       }
-      if (status && status === "granted") {
-        const newFcmToken = await messaging
-          .getToken({
-            vapidKey: "BAEfSb0Bqar1LispPKrxu3wARzIQ6KEXkd5W6mui3bXZRdejQh6PTx4vHE5iU55MRe0t4NobD93LkWwztqc_hQ4",
-            serviceWorkerRegistration: sw
-          });
-        if (newFcmToken) {
-          localforage.setItem("FCM_TOKEN", newFcmToken);
-          messaging.onMessage(onMessage);
-          return { fcmToken: newFcmToken, isNew: true }
-        }
+      const newFcmToken = await messaging
+        .getToken({
+          vapidKey: "BAEfSb0Bqar1LispPKrxu3wARzIQ6KEXkd5W6mui3bXZRdejQh6PTx4vHE5iU55MRe0t4NobD93LkWwztqc_hQ4"
+        });
+      if (newFcmToken) {
+        localforage.setItem("FCM_TOKEN", newFcmToken);
+        messaging.onMessage(onMessage);
+        return { fcmToken: newFcmToken, isNew: true }
       }
     } catch (error) {
       console.log(error.message);
@@ -163,31 +159,20 @@ class Fire {
     await localforage.removeItem("FCM_TOKEN")
   }
 
-  async sendNotification(to: string, body: string, action: string) {
-    return axios.post("https://fcm.googleapis.com/fcm/send", {
+  sendNotification(to: string, body: string, action: string) {
+    axios.post("https://fcm.googleapis.com/fcm/send", {
       to,
       notification: {
         title: "UltimateGamersHub Notification",
-        body,
+        body: body,
         click_action: `https://ultimategamershub.com${action}`,
         icon: "https://firebasestorage.googleapis.com/v0/b/ultimategamershub.appspot.com/o/ugh%2Flogo%20(1).png?alt=media&token=17fd9c6b-cb71-4466-83ab-1825493c5b0a",
-      },
-      // android: {
-      //   ttl: 1800 * 1000, // 30mins in milliseconds
-      //   priority: 'normal',
-      //   notification: {
-      //     title: "UltimateGamersHub Notification",
-      //     body,
-      //     icon: "https://firebasestorage.googleapis.com/v0/b/ultimategamershub.appspot.com/o/ugh%2Flogo%20(1).png?alt=media&token=17fd9c6b-cb71-4466-83ab-1825493c5b0a",
-      //     color: '#f45342'
-      //   }
-      // },
+      }
     }, {
       headers: {
         Authorization: "key=AAAAQqwms6A:APA91bHPqEs8fAo93-RRp11ilWDakBl1zq7UOAGeEOB6ttCfZznTRjRZNkp92fvwkJAOq4PIWF3hpbNmdJYJpW_LMQ3LPaxQYQW75crNzXIuf3ebqkSmHOzWwlBix4ILBcYc_sRZG2oU",
       }
-    });
-
+    }).catch((error) => console.error(error.message));
   }
 }
 
