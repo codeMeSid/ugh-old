@@ -36,9 +36,15 @@ export const tournamentDisqualifyController = async (req: Request, res: Response
                     bracket.winner = DQ.AdminDQ;
                     break;
                 case GameType.Score:
-                    // bracket = await Bracket
-                    //     .findOne({ _id: { $in: tournament.brackets }, $or: [{ "teamA.user": user }, { "teamB.user": user }] })
-                    //     .session(session);
+                    const brackets = await Bracket
+                        .find({ _id: { $in: tournament.brackets }, $or: [{ "teamA.user": user }, { "teamB.user": user }] })
+                        .populate("teamA.user", "ughId", "Users")
+                        .populate("teamB.user", "ughId", "Users")
+                        .session(session);
+                    if (!brackets.length) break;
+                    bracket = brackets.sort((a, b) => b.round - a.round)[0];
+                    if (bracket.teamA.user.ughId === user.ughId) bracket.winner = bracket.teamB.user.ughId
+                    else bracket.winner = bracket.teamA.user.ughId
                     break;
             }
         }

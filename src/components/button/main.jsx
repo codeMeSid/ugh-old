@@ -1,6 +1,6 @@
 import { AwesomeButton } from "react-awesome-button";
 const Button = ({ text, ...props }) => (
-  <AwesomeButton {...props} >
+  <AwesomeButton {...props} name="UlitmateGamersHub Button">
     {text}
   </AwesomeButton>
 );

@@ -39,7 +39,10 @@ const AdminTournamentPage = ({ tournaments, errors, ughId }) => {
           const canStatusChange =
             Date.now() < new Date(t?.endDateTime || Date.now()).valueOf();
           return [
-            format(new Date(t.startDateTime), "dd/MM/yyy hh:mm a"),
+            format(
+              new Date(t?.startDateTime || Date.now()),
+              "dd/MM/yyy hh:mm a"
+            ),
             t.name,
             t?.game,
             t.didWin ? (

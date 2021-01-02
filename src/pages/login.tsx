@@ -128,7 +128,9 @@ const SignIn = () => {
             >
               forgot password ?&nbsp;
               <Link href="/account/forgot-password">
-                <a style={{ textDecoration: "none" }}>Reset it</a>
+                <a>
+                  <u>Reset it</u>
+                </a>
               </Link>
             </div>
             <div
@@ -146,7 +148,9 @@ const SignIn = () => {
             >
               need new account ?&nbsp;
               <Link href="/signup">
-                <a style={{ textDecoration: "none" }}>Sign up</a>
+                <a>
+                  <u>Sign up</u>
+                </a>
               </Link>
             </div>
           </div>

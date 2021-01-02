@@ -118,12 +118,12 @@ class MessengerChat extends Component<Props> {
           "(https|http)(://)(ww[a-z0-9]?[.])([a-zA-z0-9]*)([.][a-z]*)+",
           "(ww[a-z0-9]?[.])([a-zA-z0-9]*)([.][a-z]*)+",
           "(https|http)(://)([a-zA-z0-9]*)([.][a-z]*)+",
-          "([a-zA-z0-9]*)([.][a-z]*)+",
+          // "([a-zA-z0-9]*)([.][a-z]*)+",
         ];
-        urlRegexs.forEach((reg, index) => {
-          const regex = new RegExp(reg);
+        for (let i = 0; i < urlRegexs.length; i++) {
+          const regex = new RegExp(urlRegexs[i]);
           if (regex.test(t)) {
-            switch (index) {
+            switch (i) {
               case 0:
                 t = `<a style="color:blue;" href="${t}">${t}</a>`;
                 break;
@@ -136,17 +136,14 @@ class MessengerChat extends Component<Props> {
                 const tFin = tEmp.join("//");
                 t = `<a style="color:blue;" href="${tFin}">${t}</a>`;
                 break;
-              case 3:
-                t = `<a style="color:blue;" href="http://www.${t}">${t}</a>`;
-                break;
+              // case 3:
+              //   t = `<a style="color:blue;" href="http://www.${t}">${t}</a>`;
+              //   break;
             }
+            break;
           }
-        });
-        // if (urlSecRegex.test(t)) {
-        //   t = ;
-        // } else if (urlPrimRegex.test(t)) {
-        //   t = `<a style="color:blue;" href="http://${t}">${t}</a>`;
-        // }
+        }
+        console.log(t);
         return t;
       })
       .join(" ");

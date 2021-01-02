@@ -72,8 +72,8 @@ export const tournamentUpdateStatusController = async (
           tournament.save({ session }),
         ]);
         await session.commitTransaction();
+        timer.cancel(`${tournament.regId}-end`)
         break;
-
       case TournamentStatus.Started:
         const brackets = [];
         users = shuffle(tournament.players);

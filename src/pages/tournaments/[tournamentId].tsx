@@ -162,7 +162,9 @@ const TournamentDetail = ({
                 <div>You will be charged 50% of entry coins as penalty.</div>
               )}
             </p>
-            <p style={{ marginTop: 10 }}>Are you sure?</p>
+            <p style={{ marginTop: tournament?.isFree ? 0 : 10 }}>
+              Are you sure?
+            </p>
           </div>
         </DialogButton>
       );

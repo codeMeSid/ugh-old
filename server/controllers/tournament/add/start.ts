@@ -64,6 +64,7 @@ export const tournamentStartTimer = (regId: string, id: string, startDateTime: D
                     tournament.save({ session })
                 ]);
                 await session.commitTransaction();
+                timer.cancel(`${tournament.regId}-end`)
             } else {
                 // randomize players
                 const users = shuffle(tournament.players);
