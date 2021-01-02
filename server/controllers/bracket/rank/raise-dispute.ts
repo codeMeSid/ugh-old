@@ -40,16 +40,16 @@ export const raiseDisputeController = async (req: Request, res: Response) => {
     await session.commitTransaction();
     disputeBy = user.ughId;
     disputeOn = bracketA.teamA.user.ughId;
-    messenger
-      .io
-      .to(SocketChannel.Notification)
-      .emit(SocketEvent.EventRecieve, {
-        from: user.ughId,
-        to: bracketA.teamA.user.fcmToken,
-        body: `${user.ughId} raised Ranking dispute.`,
-        action: `/tournaments/${tournament.regId}`,
-        channel: SocketChannel.Notification
-      });
+    // messenger
+    //   .io
+    //   .to(SocketChannel.Notification)
+    //   .emit(SocketEvent.EventRecieve, {
+    //     from: user.ughId,
+    //     to: bracketA.teamA.user.fcmToken,
+    //     body: `${user.ughId} raised Ranking dispute.`,
+    //     action: `/tournaments/${tournament.regId}`,
+    //     channel: SocketChannel.Notification
+    //   });
     mailer.send(
       MailerTemplate.Dispute,
       { ughId: bracketA.teamA.user.ughId, opponentUghId: user.ughId },

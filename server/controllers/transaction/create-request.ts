@@ -38,18 +38,18 @@ export const transactionCreateRequestController = async (
     userDetail: user,
   });
   await transaction.save();
-  const admins = await User.find({ role: UserRole.Admin, activity: UserActivity.Active });
-  if (admins) admins.forEach(admin => {
-    messenger
-      .io
-      .to(SocketChannel.Notification)
-      .emit(SocketEvent.EventRecieve, {
-        from: user.ughId,
-        to: admin.fcmToken,
-        body: "New Withdraw Request",
-        action: `/admin/transactions`,
-        channel: SocketChannel.Notification
-      });
-  })
+  // const admins = await User.find({ role: UserRole.Admin, activity: UserActivity.Active });
+  // if (admins) admins.forEach(admin => {
+  //   messenger
+  //     .io
+  //     .to(SocketChannel.Notification)
+  //     .emit(SocketEvent.EventRecieve, {
+  //       from: user.ughId,
+  //       to: admin.fcmToken,
+  //       body: "New Withdraw Request",
+  //       action: `/admin/transactions`,
+  //       channel: SocketChannel.Notification
+  //     });
+  // })
   res.send(true);
 };

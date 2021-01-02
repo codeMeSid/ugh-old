@@ -98,23 +98,23 @@ class Messenger {
       }
     }
     await convo.save();
-    if (user) messenger.io.to(SocketChannel.Notification).emit(SocketEvent.EventRecieve, {
-      from: from,
-      to: user.fcmToken,
-      body: `New Message from ${from}`,
-      channel: SocketChannel.Notification
-    });
-    if (users)
-      users.forEach(u => {
-        if (u.ughId !== from && `admin-${u.ughId}` !== from) {
-          messenger.io.to(SocketChannel.Notification).emit(SocketEvent.EventRecieve, {
-            from: from,
-            to: u.fcmToken,
-            body: `New Message from ${from}`,
-            channel: SocketChannel.Notification
-          });
-        }
-      })
+    // if (user) messenger.io.to(SocketChannel.Notification).emit(SocketEvent.EventRecieve, {
+    //   from: from,
+    //   to: user.fcmToken,
+    //   body: `New Message from ${from}`,
+    //   channel: SocketChannel.Notification
+    // });
+    // if (users)
+    //   users.forEach(u => {
+    //     if (u.ughId !== from && `admin-${u.ughId}` !== from) {
+    //       messenger.io.to(SocketChannel.Notification).emit(SocketEvent.EventRecieve, {
+    //         from: from,
+    //         to: u.fcmToken,
+    //         body: `New Message from ${from}`,
+    //         channel: SocketChannel.Notification
+    //       });
+    //     }
+    //   })
 
     return;
   }

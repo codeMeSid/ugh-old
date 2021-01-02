@@ -81,16 +81,16 @@ export const raiseScoreDisputeController = async (
     from = uB;
     to = fA;
   }
-  if (from && to)
-    messenger
-      .io
-      .to(SocketChannel.Notification)
-      .emit(SocketEvent.EventRecieve, {
-        from,
-        to,
-        body: `${from} raised Scoring dispute.`,
-        // action: `/tournaments/${tournament.regId}`,
-        channel: SocketChannel.Notification
-      });
+  // if (from && to)
+  // messenger
+  //   .io
+  //   .to(SocketChannel.Notification)
+  //   .emit(SocketEvent.EventRecieve, {
+  //     from,
+  //     to,
+  //     body: `${from} raised Scoring dispute.`,
+  //     // action: `/tournaments/${tournament.regId}`,
+  //     channel: SocketChannel.Notification
+  //   });
   res.send(true);
 };
