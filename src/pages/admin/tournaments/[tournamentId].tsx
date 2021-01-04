@@ -199,7 +199,7 @@ TournamentDetail.getInitialProps = async (ctx) => {
     body: {},
     method: "get",
   });
-  return { tournament: data, errors: errors || [] };
+  return { tournament: data?.tournament, errors: errors || [] };
 };
 
 export default TournamentDetail;

@@ -87,6 +87,7 @@ export const tournamentUpdateStatusController = async (
             const bracket = Bracket.build({
               teamA: {
                 user: teamA[0],
+                teamMates: (tournament?.teamMates[teamA[0].id] || [])
               },
               teamB: {
                 user: undefined,
@@ -107,6 +108,7 @@ export const tournamentUpdateStatusController = async (
               teamA: {
                 user: teamA[0],
                 score: -1,
+                teamMates: (tournament?.teamMates[teamA[0].id] || []),
                 uploadBy: new Date(
                   Date.now() + TournamentTime.TournamentScoreUpdateTime
                 ),
@@ -114,6 +116,7 @@ export const tournamentUpdateStatusController = async (
               teamB: {
                 user: teamB[0],
                 score: -1,
+                teamMates: (tournament?.teamMates[teamB[0].id] || []),
                 uploadBy: new Date(
                   Date.now() + TournamentTime.TournamentScoreUpdateTime
                 ),

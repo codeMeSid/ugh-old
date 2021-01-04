@@ -9,6 +9,7 @@ interface BracketAttrs {
     score?: number;
     updateBy?: Date;
     uploadBy?: Date;
+    teamMates?: any
   };
   teamB: {
     user: UserDoc;
@@ -16,6 +17,7 @@ interface BracketAttrs {
     score?: number;
     updateBy?: Date;
     uploadBy?: Date;
+    teamMates?: any
   };
   regId: string;
   round: number;
@@ -33,6 +35,7 @@ export interface BracketDoc extends mongoose.Document {
     uploadUrl: string;
     updateBy: Date;
     uploadBy: Date;
+    teamMates?: any
   };
   teamB: {
     user: UserDoc;
@@ -41,6 +44,7 @@ export interface BracketDoc extends mongoose.Document {
     uploadUrl: string;
     updateBy: Date;
     uploadBy: Date;
+    teamMates?: any
   };
   gameName: string;
   tournamentName: string;
@@ -73,6 +77,7 @@ const BracketSchema = new mongoose.Schema(
       uploadUrl: String,
       updateBy: mongoose.SchemaTypes.Date,
       uploadBy: mongoose.SchemaTypes.Date,
+      teamMates: [{ name: String, email: String }]
     },
     teamB: {
       user: {
@@ -90,6 +95,7 @@ const BracketSchema = new mongoose.Schema(
       uploadUrl: String,
       updateBy: mongoose.SchemaTypes.Date,
       uploadBy: mongoose.SchemaTypes.Date,
+      teamMates: [{ name: String, email: String }]
     },
     round: Number,
     regId: String,

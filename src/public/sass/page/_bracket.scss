@@ -27,6 +27,11 @@
   padding-bottom: 0.2rem;
   word-wrap: break-word;
   word-break: break-all;
+  &__team {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
   &__title {
     text-align: center;
     color: white;
@@ -54,6 +59,7 @@
   &__player {
     width: 15rem;
     position: relative;
+
     &:first-child {
       margin-left: 0.5rem;
     }
@@ -161,6 +167,11 @@
   padding-top: 1rem;
   position: relative;
   cursor: pointer;
+  &__team {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
   &__reason {
     text-align: center;
     color: white;

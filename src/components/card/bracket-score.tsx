@@ -34,6 +34,7 @@ const BracketScoreCard = ({
     isWinner:
       bracket.teamA.user?.ughId === bracket.winner &&
       bracket.winner !== DQ.ScoreNotUploaded,
+    teamMates: bracket.teamA.teamMates,
   };
   const B = {
     profilePic: bracket.teamB.user?.uploadUrl,
@@ -47,6 +48,7 @@ const BracketScoreCard = ({
     isWinner:
       bracket.teamB.user?.ughId === bracket.winner &&
       bracket.winner !== DQ.ScoreNotUploaded,
+    teamMates: bracket.teamB.teamMates,
   };
 
   // render
@@ -86,6 +88,7 @@ const BracketScoreCard = ({
             isWinner: A.isWinner,
             hasProof: isBracketPlayer && !!A.proof,
             proof: A.proof,
+            teamMates: A.teamMates,
           }}
           bracket={{
             onError,
@@ -128,6 +131,7 @@ const BracketScoreCard = ({
             isWinner: B.isWinner,
             hasProof: isBracketPlayer && !!B.proof,
             proof: B.proof,
+            teamMates: B.teamMates,
           }}
           bracket={{
             onError,

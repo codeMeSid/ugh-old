@@ -32,6 +32,16 @@ option {
   background-color: black;
   color: white; }
 
+.none {
+  background-size: contain !important; }
+
+.scrollbar--white::-webkit-scrollbar {
+  width: 0.2rem; }
+
+.scrollbar--white::-webkit-scrollbar-thumb {
+  background-color: white;
+  border-left: 1px solid black; }
+
 .loading-indicator {
   position: absolute;
   top: 50%;
@@ -1849,6 +1859,10 @@ tr:nth-child(even) {
   padding-bottom: 0.2rem;
   word-wrap: break-word;
   word-break: break-all; }
+  .bracket__score__team {
+    position: absolute;
+    top: 0;
+    right: 0; }
   .bracket__score__title {
     text-align: center;
     color: white;
@@ -1956,6 +1970,10 @@ tr:nth-child(even) {
   padding-top: 1rem;
   position: relative;
   cursor: pointer; }
+  .bracket__rank__team {
+    position: absolute;
+    top: 5px;
+    right: 5px; }
   .bracket__rank__reason {
     text-align: center;
     color: white;

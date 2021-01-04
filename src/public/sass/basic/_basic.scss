@@ -39,5 +39,15 @@ option {
 }
 
 .none {
-  background-size: contain;
+  background-size: contain !important;
+}
+
+.scrollbar {
+  &--white::-webkit-scrollbar {
+    width: 0.2rem;
+  }
+  &--white::-webkit-scrollbar-thumb {
+    background-color: white;
+    border-left: 1px solid black;
+  }
 }

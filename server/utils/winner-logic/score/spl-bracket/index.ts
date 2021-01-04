@@ -55,7 +55,7 @@ export const splBracketProcess = (brackets: Array<BracketDoc>, splBracket: Brack
                 else if (canCreateBracket) {
                     console.log("enter score spl bracket no score shift other player new bracket")
 
-                    const newBracket = createNewBracket(users[emptyBracketUserIndex], brackets[nextEmptyBracketIndex]);
+                    const newBracket = createNewBracket(users[emptyBracketUserIndex], brackets[nextEmptyBracketIndex], tournament);
                     newBrackets.push(newBracket);
                     tournament.brackets.push(newBracket);
                 }
@@ -93,7 +93,7 @@ export const splBracketProcess = (brackets: Array<BracketDoc>, splBracket: Brack
         console.log("enter score spl bracket shift to new bracket");
 
         const splBracketWinnerIndex = getUserUghIndex(users, splBracket.winner);
-        const newBracket = createNewBracket(users[splBracketWinnerIndex], splBracket);
+        const newBracket = createNewBracket(users[splBracketWinnerIndex], splBracket, tournament);
         newBrackets.push(newBracket);
         tournament.brackets.push(newBracket);
     }
@@ -176,7 +176,7 @@ const getUserIndex = (users: Array<UserDoc>, userId: any) => users.findIndex(u =
 const getUserUghIndex = (users: Array<UserDoc>, ughId: string) => users.findIndex(u => u.ughId === ughId);
 
 
-const createNewBracket = (user: UserDoc, splBracket: BracketDoc) => {
+const createNewBracket = (user: UserDoc, splBracket: BracketDoc, tournament: TournamentDoc) => {
     const regId = randomBytes(4).toString("hex").substr(0, 5);
     return Bracket.build({
         regId,
@@ -187,6 +187,7 @@ const createNewBracket = (user: UserDoc, splBracket: BracketDoc) => {
         teamA: {
             user,
             score: -1,
+            teamMates: (tournament?.teamMates[user.id] || [])
         },
         teamB: {
             user: undefined,

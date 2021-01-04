@@ -1,5 +1,6 @@
 import { BadRequestError, TournamentStatus } from "@monsid/ugh-og"
 import { Request, Response } from "express";
+import { body } from "express-validator";
 import mongoose from "mongoose";
 import { Passbook } from "../../models/passbook";
 import { Tournament } from "../../models/tournament";
@@ -10,6 +11,7 @@ import { TransactionType } from "../../utils/enum/transaction-type";
 export const tournamentJoinController = async (req: Request, res: Response) => {
   const { tournamentId } = req.params;
   const { id } = req.currentUser;
+  const { teamPlayers }: { teamPlayers: any } = req.body;
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
@@ -73,6 +75,10 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
       game: tournament?.game?.name
     });
     tournament.players.push(user);
+    if (teamPlayers) {
+      const team = { ...(tournament.teamMates || {}), [user.id]: teamPlayers }
+      tournament.teamMates = team;
+    }
     await tournament.save({ session });
     await user.save({ session });
     await passbook.save({ session });

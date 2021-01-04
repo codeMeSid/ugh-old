@@ -83,6 +83,7 @@ export const tournamentStartTimer = (regId: string, id: string, startDateTime: D
                             bracket = Bracket.build({
                                 teamA: {
                                     user: teamA,
+                                    teamMates: (tournament?.teamMates[teamA.id] || [])
                                 },
                                 teamB: {
                                     user: undefined,
@@ -103,6 +104,7 @@ export const tournamentStartTimer = (regId: string, id: string, startDateTime: D
                                 teamA: {
                                     user: teamA,
                                     score: -1,
+                                    teamMates: (tournament?.teamMates[teamA.id] || []),
                                     uploadBy: new Date(
                                         Date.now() + TournamentTime.TournamentScoreUpdateTime
                                     ),
@@ -110,6 +112,7 @@ export const tournamentStartTimer = (regId: string, id: string, startDateTime: D
                                 teamB: {
                                     user: teamB,
                                     score: -1,
+                                    teamMates: (tournament?.teamMates[teamB.id] || []),
                                     uploadBy: new Date(
                                         Date.now() + TournamentTime.TournamentScoreUpdateTime
                                     ),

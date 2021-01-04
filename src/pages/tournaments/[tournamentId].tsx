@@ -5,7 +5,7 @@ import { serverRequest } from "../../hooks/server-request";
 import { format } from "date-fns";
 import { useRequest } from "../../hooks/use-request";
 import Button from "../../components/button/main";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Router from "next/router";
 import DialogButton from "../../components/button/dialog";
 import PlayerCard from "../../components/card/player";
@@ -17,6 +17,9 @@ import IconDialogButton from "../../components/button/icon-dialog";
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import { prizeDistribution } from "../../../server/utils/prize-distribution";
 import { numberPostion } from "../../public/number-postion";
+import { IoMdCloseCircle } from "react-icons/io";
+import ProgressButton from "../../components/button/progress";
+import Input from "../../components/input/input";
 
 const Logo = require("../../public/asset/logo_icon.webp");
 
@@ -35,6 +38,8 @@ const TournamentDetail = ({
   errors: any;
 }) => {
   const [messages, setMessages] = useState(errors);
+  const [canAddTM, setCanAddTM] = useState(false);
+  const formRef = useRef(null);
   const userHasJoined =
     tournament?.players?.filter(
       (player) => JSON.stringify(player?.id) === JSON.stringify(currentUser?.id)
@@ -138,9 +143,12 @@ const TournamentDetail = ({
           }
           fullButton
           onAction={(onSuccess, onError) => {
-            if (userHasWalletBalance || userHasEarning)
-              doRequest(onSuccess, onError);
-            else Router.push("/shop");
+            if (userHasWalletBalance || userHasEarning) {
+              if (tournament?.group?.participants >= 2) {
+                onSuccess("");
+                setCanAddTM(true);
+              } else doRequest(onSuccess, onError);
+            } else Router.push("/shop");
           }}
         >
           <div style={{ fontSize: 20, marginBottom: 20, textAlign: "center" }}>
@@ -267,7 +275,7 @@ const TournamentDetail = ({
   const { doRequest } = useRequest({
     url: `/api/ugh/tournament/join/${tournament?.id}`,
     body: {},
-    method: "get",
+    method: "post",
     onSuccess: Router.reload,
     onError: (errors) => setMessages(errors),
   });
@@ -306,6 +314,145 @@ const TournamentDetail = ({
 
   return (
     <MainLayout messages={messages}>
+      {canAddTM && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            zIndex: 100,
+            backgroundColor: "rgba(0,0,0,0.9)",
+          }}
+        >
+          <div
+            style={{
+              position: "relative",
+              width: "100vw",
+              height: "100vh",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%,-50%)",
+                maxWidth: 800,
+                minWidth: 400,
+                backgroundColor: "rgba(0,0,0,.8)",
+                border: "1px solid rgba(255,255,255,.2)",
+                padding: "10px 5px",
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  transform: "translate(50%,-50%)",
+                  cursor: "pointer",
+                }}
+              >
+                <IoMdCloseCircle
+                  style={{ color: "red", fontSize: 30 }}
+                  onClick={() => setCanAddTM(false)}
+                />
+              </div>
+              <div
+                style={{ fontSize: 36, color: "white", textAlign: "center" }}
+              >
+                Team Info
+              </div>
+              <form
+                ref={formRef}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                }}
+                className="scrollbar--white"
+                style={{
+                  minHeight: 200,
+                  maxHeight: 600,
+                  overflowY: "scroll",
+                  overflowX: "hidden",
+                }}
+              >
+                {Array((tournament?.group?.participants || 1) - 1)
+                  .fill(0)
+                  .map((t, i) => {
+                    return (
+                      <div key={Math.random()}>
+                        <div style={{ color: "white", fontSize: 24 }}>
+                          Player {i + 2}
+                        </div>
+                        <Input
+                          placeholder="In Game Name**"
+                          name={`namePlayer${i + 2}`}
+                          isWhite
+                        />
+                        <Input
+                          type="email"
+                          placeholder="Email"
+                          name={`emailPlayer${i + 2}`}
+                          isWhite
+                        />
+                      </div>
+                    );
+                  })}
+                <div style={{ textAlign: "right", marginTop: 10 }}>
+                  <ProgressButton
+                    type="link"
+                    text="Join Tournament"
+                    onPress={(_: any, next: any) => {
+                      const inputs = Array.from(formRef.current);
+                      inputs.pop();
+                      const teamInputs = inputs.map((t: any) => t.value);
+                      let players: any = {};
+                      const mates = [];
+                      const emailRegex = new RegExp(
+                        "[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}"
+                      );
+                      for (let i = 0; i < teamInputs.length; i++) {
+                        if (i % 2 === 1) {
+                          if (
+                            teamInputs[i] &&
+                            !emailRegex.test(teamInputs[i])
+                          ) {
+                            setMessages([
+                              {
+                                message: "Valid Team Player Email is required.",
+                              },
+                            ]);
+                            next(false, "Failed");
+                            return;
+                          }
+                          players.email = teamInputs[i];
+                          mates.push(players);
+                          players = {};
+                        } else {
+                          if (!teamInputs[i]) {
+                            setMessages([
+                              { message: "Team Player In GameId is required." },
+                            ]);
+                            next(false, "Failed");
+                            return;
+                          }
+                          players.name = teamInputs[i];
+                        }
+                      }
+
+                      doRequest(next, () => next(false, "Failed"), {
+                        teamPlayers: mates,
+                      });
+                    }}
+                  />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="tournament">
         <div className="tournament__container">
           <div className="tournament__card">

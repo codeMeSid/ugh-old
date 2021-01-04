@@ -166,7 +166,7 @@ class Fire {
         title: "UltimateGamersHub Notification",
         body: body,
         click_action: `https://ultimategamershub.com${action}`,
-        icon: "https://firebasestorage.googleapis.com/v0/b/ultimategamershub.appspot.com/o/ugh%2Flogo%20(1).png?alt=media&token=17fd9c6b-cb71-4466-83ab-1825493c5b0a",
+        icon: "https://firebasestorage.googleapis.com/v0/b/ultimategamershub.appspot.com/o/ugh%2Flogo%20(1)_icon_final_webp.webp?alt=media&token=e50ef20c-d61b-4798-8cf0-ecc20826a844",
       }
     }, {
       headers: {

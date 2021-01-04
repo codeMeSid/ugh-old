@@ -41,6 +41,7 @@ export interface TournamentDoc extends mongoose.Document {
     coins: number;
     position: number;
   }>;
+  teamMates: any
 }
 
 interface TournamentModel extends mongoose.Model<TournamentDoc> {
@@ -97,6 +98,9 @@ const tournamentSchema = new mongoose.Schema(
     },
     startDateTime: mongoose.Schema.Types.Date,
     endDateTime: mongoose.Schema.Types.Date,
+    teamMates: {
+      type: mongoose.SchemaTypes.Mixed
+    },
     brackets: [
       {
         type: mongoose.Schema.Types.ObjectId,

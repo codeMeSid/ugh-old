@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BracketDoc } from "../../../server/models/bracket";
 import { useRequest } from "../../hooks/use-request";
 import { numberPostion } from "../../public/number-postion";
@@ -8,6 +8,8 @@ import FileInput from "../input/file";
 import Input from "../input/input";
 import { DQ } from "../../../server/utils/enum/dq";
 import { event } from "../../socket";
+import IconDialogButton from "../button/icon-dialog";
+import { RiTeamLine } from "react-icons/ri";
 
 const PlayerImg = require("../../public/asset/logo_icon.webp");
 
@@ -222,6 +224,43 @@ const BracketRankCard = ({
   });
   return (
     <div className="bracket__rank">
+      {bracket?.teamA?.teamMates?.length > 0 && (
+        <div className="bracket__rank__team">
+          <IconDialogButton
+            Icon={RiTeamLine}
+            iconStyle={{
+              color: "white",
+              borderRadius: "50%",
+              backgroundColor: "red",
+              fontSize: 18,
+              padding: "2px",
+            }}
+            style={{
+              minWidth: 360,
+              position: "fixed",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%,-50%)",
+            }}
+          >
+            <div style={{ textAlign: "center", fontSize: 28 }}>Team Info</div>
+            <table>
+              <tr>
+                <td>Game Id</td>
+                <td>Email</td>
+              </tr>
+              {bracket?.teamA?.teamMates?.map((t: any) => {
+                return (
+                  <tr key={Math.random()}>
+                    <td>{t.name}</td>
+                    <td>{t.email || "-"}</td>
+                  </tr>
+                );
+              })}
+            </table>
+          </IconDialogButton>
+        </div>
+      )}
       <div
         className={`bracket__rank__profile ${
           bracket.teamA.user?.uploadUrl ? "" : "none"
