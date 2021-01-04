@@ -124,7 +124,6 @@ Tournaments.getInitialProps = async (ctx) => {
     method: "get",
   });
   const tournaments = {};
-
   data?.map((t) => {
     const gameName = t.game.name;
     const status = t.status;

@@ -12,12 +12,14 @@ const DialogButton = ({
   size = "large",
   disabled,
   buttonStyle = {},
+  buttonText = "Submit",
   type = "link",
 }: {
   buttonStyle?: any;
   type?: string;
   size?: string;
   title: any;
+  buttonText?: string;
   fullButton?: boolean;
   children: any;
   onAction?: (
@@ -69,7 +71,7 @@ const DialogButton = ({
               />
               <ProgressButton
                 type="primary"
-                text="submit"
+                text={buttonText}
                 onPress={(_, next) => {
                   onAction(
                     (data: any) => {

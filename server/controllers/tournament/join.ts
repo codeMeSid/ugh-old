@@ -39,9 +39,30 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
       tournament.playerCount
     )
       throw new Error("Tournament slots full");
-    if (!tournament?.isFree && user.wallet.coins - tournament.coins < 0)
-      throw new Error("Insufficient coins in account to enter tournament");
-    user.wallet.coins -= (tournament.isFree ? 0 : tournament.coins);
+
+    const walletBalance = user.wallet.coins;
+    const earningBalance = user.tournaments.filter(t => t.didWin).reduce((acc, t) => acc + t.coins, 0);
+    let tournamentFee = tournament.isFree ? 0 : tournament.coins;
+    if (walletBalance >= tournamentFee)
+      user.wallet.coins -= tournamentFee;
+    else if (walletBalance + earningBalance >= tournamentFee) {
+      tournamentFee -= walletBalance;
+      user.wallet.coins = 0;
+      if (tournamentFee > 0)
+        user.tournaments = user.tournaments.map(t => {
+          if (t.didWin) {
+            if (t.coins >= tournamentFee) {
+              t.coins -= tournamentFee;
+            }
+            else {
+              tournamentFee -= t.coins;
+              t.coins = 0;
+            }
+          }
+          return t;
+        })
+    }
+    else throw new BadRequestError("Insufficient Balance")
     user.tournaments.push({
       didWin: false,
       id: tournament.id,

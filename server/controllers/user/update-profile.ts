@@ -20,7 +20,9 @@ export const updateUserProfileController = async (
     passbook = Passbook.build({
       coins: Math.abs(coins - user.wallet.coins),
       transactionEnv: TransactionEnv.AdminAward,
-      transactionType: TransactionType.Credit,
+      transactionType: coins - user.wallet.coins < 0
+        ? TransactionType.Debit
+        : TransactionType.Credit,
       ughId: user.ughId
     })
     user.wallet.coins = coins;

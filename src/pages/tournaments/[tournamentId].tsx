@@ -23,10 +23,14 @@ const Logo = require("../../public/asset/logo_icon.webp");
 const TournamentDetail = ({
   tournament,
   currentUser,
+  userHasEarning,
+  userHasWalletBalance,
   errors,
 }: {
   tournament: TournamentDoc;
   matches: any;
+  userHasEarning: boolean;
+  userHasWalletBalance: boolean;
   currentUser: any;
   errors: any;
 }) => {
@@ -88,16 +92,11 @@ const TournamentDetail = ({
       tournament?.regId &&
       !(isTournamentCompleted || isTournamentStarted) &&
       new Date(tournament?.startDateTime).valueOf() > Date.now()
-    )
-      return (
-        <DialogButton
-          style={{ position: "fixed", minWidth: 360, maxWidth: 500 }}
-          size="medium"
-          title="Join"
-          fullButton
-          onAction={(onSuccess, onError) => doRequest(onSuccess, onError)}
-        >
-          <div style={{ fontSize: 20, marginBottom: 20, textAlign: "center" }}>
+    ) {
+      let text: any;
+      if (userHasWalletBalance)
+        text = (
+          <>
             <p>
               Please read the rules of the tournament before joining, as they
               vary for every tournament.
@@ -106,10 +105,50 @@ const TournamentDetail = ({
               You will be charged{" "}
               {tournament?.isFree ? 0 : tournament?.coins || 10} coins to join.
             </p>
+          </>
+        );
+      else if (userHasEarning)
+        text = (
+          <>
+            <p>
+              Please read the rules of the tournament before joining, as they
+              vary for every tournament.
+            </p>
+            <p style={{ color: "red" }}>
+              Insufficient coins to join. Do you want to join tournament using
+              Earned coins?
+            </p>
+            <p style={{ marginTop: 10 }}>
+              You will be charged{" "}
+              {tournament?.isFree ? 0 : tournament?.coins || 10} coins to join.
+            </p>
+          </>
+        );
+      else
+        text = (
+          <p style={{ color: "red" }}>Insufficient Coins to join tournament.</p>
+        );
+      return (
+        <DialogButton
+          style={{ position: "fixed", minWidth: 360, maxWidth: 500 }}
+          size="medium"
+          title="Join"
+          buttonText={
+            userHasWalletBalance || userHasEarning ? "Submit" : "Shop Coins"
+          }
+          fullButton
+          onAction={(onSuccess, onError) => {
+            if (userHasWalletBalance || userHasEarning)
+              doRequest(onSuccess, onError);
+            else Router.push("/shop");
+          }}
+        >
+          <div style={{ fontSize: 20, marginBottom: 20, textAlign: "center" }}>
+            {text}
           </div>
         </DialogButton>
       );
-    else if (tournamentHasWinners)
+    } else if (tournamentHasWinners)
       return (
         <DialogButton
           style={{ position: "fixed", minWidth: 400 }}
@@ -463,14 +502,15 @@ const TournamentDetail = ({
 
 TournamentDetail.getInitialProps = async (ctx) => {
   const { tournamentId } = ctx.query;
-  const { data: tournament, errors } = await serverRequest(ctx, {
+  const { data, errors } = await serverRequest(ctx, {
     url: `/api/ugh/tournament/fetch/detail/${tournamentId}`,
     method: "get",
     body: {},
   });
-
   return {
-    tournament,
+    tournament: data?.tournament,
+    userHasEarning: !!data?.userHasEarning,
+    userHasWalletBalance: !!data?.userHasWalletBalance,
     errors,
   };
 };

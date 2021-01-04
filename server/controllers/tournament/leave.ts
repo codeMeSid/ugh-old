@@ -29,7 +29,7 @@ export const tournamentLeaveHandler = async (req: Request, res: Response) => {
         const passbook = Passbook.build({
             coins: penaltyCoins,
             transactionEnv: TransactionEnv.TournamentLeave,
-            transactionType: TransactionType.Debit,
+            transactionType: TransactionType.Credit,
             ughId: user.ughId,
             event: tournament.name
         })

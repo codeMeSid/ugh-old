@@ -54,7 +54,7 @@ export const tournamentHandler: Array<ApiSign> = [
     url: "/fetch/detail/:tournamentId",
     method: HttpMethod.Get,
     controller: tournamentFetchDetailController,
-    middlewares: [],
+    middlewares: [currentUser],
   },
   {
     url: "/join/:tournamentId",
