@@ -29,6 +29,7 @@ export const tournamentStartTimer = (regId: string, id: string, startDateTime: D
 
             if (!tournament) throw new Error("Invalid Tournament");
             if (tournament.status !== TournamentStatus.Upcoming) throw new Error("Tournament cannot be started at this stage");
+            tournament.winnerCoin = Math.ceil((tournament.players.length / tournament.playerCount) * tournament.winnerCoin);
             // calculate % of players in game
             const attendance =
                 ((tournament.players.length * tournament.group.participants) /
@@ -50,7 +51,7 @@ export const tournamentStartTimer = (regId: string, id: string, startDateTime: D
                     users.map(async (user) => {
                         user.wallet.coins = user.wallet.coins + (tournament?.isFree ? 0 : tournament?.coins);
                         user.tournaments = user.tournaments.filter(t =>
-                            JSON.stringify(t) !== JSON.stringify(tournament.id)
+                            JSON.stringify(t) !== JSON.stringify(tournament?.id)
                         );
                         const passbook = Passbook.build({
                             coins: tournament?.isFree ? 0 : tournament?.coins,
@@ -83,7 +84,7 @@ export const tournamentStartTimer = (regId: string, id: string, startDateTime: D
                             bracket = Bracket.build({
                                 teamA: {
                                     user: teamA,
-                                    teamMates: (tournament?.teamMates[teamA.id] || [])
+                                    teamMates: (tournament?.teamMates ? tournament?.teamMates[teamA?.id] || [] : [])
                                 },
                                 teamB: {
                                     user: undefined,
@@ -104,7 +105,7 @@ export const tournamentStartTimer = (regId: string, id: string, startDateTime: D
                                 teamA: {
                                     user: teamA,
                                     score: -1,
-                                    teamMates: (tournament?.teamMates[teamA.id] || []),
+                                    teamMates: (tournament?.teamMates ? tournament?.teamMates[teamA?.id] || [] : []),
                                     uploadBy: new Date(
                                         Date.now() + TournamentTime.TournamentScoreUpdateTime
                                     ),
@@ -112,7 +113,7 @@ export const tournamentStartTimer = (regId: string, id: string, startDateTime: D
                                 teamB: {
                                     user: teamB,
                                     score: -1,
-                                    teamMates: (tournament?.teamMates[teamB.id] || []),
+                                    teamMates: (tournament?.teamMates ? tournament?.teamMates[teamB?.id] || [] : []),
                                     uploadBy: new Date(
                                         Date.now() + TournamentTime.TournamentScoreUpdateTime
                                     ),

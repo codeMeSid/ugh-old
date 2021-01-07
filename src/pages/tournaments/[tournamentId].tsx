@@ -387,7 +387,7 @@ const TournamentDetail = ({
                           Player {i + 2}
                         </div>
                         <Input
-                          placeholder="In Game Name**"
+                          placeholder="InGame ID*"
                           name={`namePlayer${i + 2}`}
                           isWhite
                         />
@@ -494,7 +494,7 @@ const TournamentDetail = ({
                   </div>
                   <IconDialogButton
                     Icon={BsFillInfoCircleFill}
-                    style={{ position: "fixed", minWidth: 400 }}
+                    style={{ position: "fixed", width: 400 }}
                     iconStyle={{
                       color: "blue",
                       fontSize: 20,
@@ -504,7 +504,7 @@ const TournamentDetail = ({
                   >
                     <table>
                       <tr>
-                        <td>position</td>
+                        <td>Position</td>
                         <td>Prize</td>
                       </tr>
                       {prizeDistribution(
@@ -519,6 +519,16 @@ const TournamentDetail = ({
                         );
                       })}
                     </table>
+                    <p
+                      style={{
+                        color: "red",
+                        marginTop: 10,
+                        fontSize: 18,
+                      }}
+                    >
+                      ** Note: The prize may vary depending on the number of
+                      users joining the tournament.
+                    </p>
                   </IconDialogButton>
                   <div style={{ marginRight: 10 }}>{JoinButton()}</div>
                   <div>

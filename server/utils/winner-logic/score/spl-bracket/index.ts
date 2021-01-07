@@ -187,7 +187,7 @@ const createNewBracket = (user: UserDoc, splBracket: BracketDoc, tournament: Tou
         teamA: {
             user,
             score: -1,
-            teamMates: (tournament?.teamMates[user.id] || [])
+            teamMates: (tournament?.teamMates ? tournament?.teamMates[user.id] || [] : [])
         },
         teamB: {
             user: undefined,

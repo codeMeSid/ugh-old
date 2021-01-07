@@ -193,7 +193,7 @@ const PlayerScoreCard = ({
               <div style={{ textAlign: "center", fontSize: 28 }}>Team Info</div>
               <table>
                 <tr>
-                  <td>Game Id</td>
+                  <td>InGame ID</td>
                   <td>Email</td>
                 </tr>
                 {team?.teamMates?.map((t: any) => {

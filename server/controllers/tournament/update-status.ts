@@ -37,7 +37,7 @@ export const tournamentUpdateStatusController = async (
     if (!tournament) throw new BadRequestError("Tournament doesnt exist.");
     if (tournament.status !== TournamentStatus.Upcoming)
       throw new BadRequestError("Tournament status cannot be changed");
-
+    tournament.winnerCoin = Math.ceil((tournament.players.length / tournament.playerCount) * tournament.winnerCoin);
     switch (status) {
       case TournamentStatus.Cancelled:
         users = await User.find({
@@ -52,7 +52,7 @@ export const tournamentUpdateStatusController = async (
         }));
         for (let i = 0; i < users.length; i++) {
           const tIndex = users[i].tournaments.findIndex(
-            (t) => JSON.stringify(t.id) === JSON.stringify(tournament.id)
+            (t) => JSON.stringify(t?.id) === JSON.stringify(tournament?.id)
           );
           if (tIndex === -1) continue;
           users[i].tournaments[tIndex].didWin = true;
@@ -74,6 +74,12 @@ export const tournamentUpdateStatusController = async (
         await session.commitTransaction();
         timer.cancel(`${tournament.regId}-end`)
         break;
+      ///////////////////////////////////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////////////////////////////////////  
+      ///////////////////////////////////////////////////////////////////////////////////  
+      ///////////////////////////////////////////////////////////////////////////////////  
+      ///////////////////////////////////////////////////////////////////////////////////  
+
       case TournamentStatus.Started:
         const brackets = [];
         users = shuffle(tournament.players);
@@ -87,7 +93,7 @@ export const tournamentUpdateStatusController = async (
             const bracket = Bracket.build({
               teamA: {
                 user: teamA[0],
-                teamMates: (tournament?.teamMates[teamA[0].id] || [])
+                teamMates: (tournament?.teamMates ? tournament?.teamMates[teamA[0]?.id] || [] : [])
               },
               teamB: {
                 user: undefined,
@@ -108,7 +114,7 @@ export const tournamentUpdateStatusController = async (
               teamA: {
                 user: teamA[0],
                 score: -1,
-                teamMates: (tournament?.teamMates[teamA[0].id] || []),
+                teamMates: (tournament?.teamMates ? tournament?.teamMates[teamA[0]?.id] || [] : []),
                 uploadBy: new Date(
                   Date.now() + TournamentTime.TournamentScoreUpdateTime
                 ),
@@ -116,7 +122,7 @@ export const tournamentUpdateStatusController = async (
               teamB: {
                 user: teamB[0],
                 score: -1,
-                teamMates: (tournament?.teamMates[teamB[0].id] || []),
+                teamMates: (tournament?.teamMates ? tournament?.teamMates[teamB[0]?.id] || [] : []),
                 uploadBy: new Date(
                   Date.now() + TournamentTime.TournamentScoreUpdateTime
                 ),
@@ -185,7 +191,7 @@ export const tournamentUpdateStatusController = async (
               done();
             }
           },
-          { id: tournament.id }
+          { id: tournament?.id }
         );
         break;
     }
