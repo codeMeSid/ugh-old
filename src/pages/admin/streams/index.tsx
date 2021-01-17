@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
-import SideLayout from "../../components/layout/sidelayout";
-import Table from "../../components/table";
-import SocialButton from "../../components/button/social";
-import { useRequest } from "../../hooks/use-request";
-import { StreamDoc } from "../../../server/models/stream";
+import SideLayout from "../../../components/layout/sidelayout";
+import Table from "../../../components/table";
+import SocialButton from "../../../components/button/social";
+import { useRequest } from "../../../hooks/use-request";
+import { StreamDoc } from "../../../../server/models/stream";
 import Link from "next/link";
 import Switch from "react-switch";
-import { GameDoc } from "../../../server/models/game";
-import DialogButton from "../../components/button/dialog";
-import Input from "../../components/input/input";
-import Select from "../../components/input/select";
-import FileInput from "../../components/input/file";
-import Option from "../../components/input/option";
-import { socialOptions } from "../../public/resource";
+import { GameDoc } from "../../../../server/models/game";
+import DialogButton from "../../../components/button/dialog";
+import Input from "../../../components/input/input";
+import Select from "../../../components/input/select";
+import FileInput from "../../../components/input/file";
+import Option from "../../../components/input/option";
+import { socialOptions } from "../../../public/resource";
 import Router from "next/router";
-import { AiFillDelete } from "react-icons/ai";
-import IconDialogButton from "../../components/button/icon-dialog";
+import { AiFillDelete, AiOutlineEdit } from "react-icons/ai";
+import IconDialogButton from "../../../components/button/icon-dialog";
 
 const AdminStreamDashboard = () => {
   // states
@@ -33,6 +33,13 @@ const AdminStreamDashboard = () => {
       <Switch checked={activity} onChange={() => changeStreamActivity(id)} />
     );
   };
+  const EditLink = (id: string) => (
+    <Link href={`/admin/streams/${id}`}>
+      <a className="table__link">
+        <AiOutlineEdit style={{ color: "green", fontSize: 24 }} />
+      </a>
+    </Link>
+  );
   // request
   const { doRequest } = useRequest({
     url: "/api/ugh/stream/fetch/all",
@@ -51,6 +58,7 @@ const AdminStreamDashboard = () => {
             target="_blank"
           />,
           SwitchBlade(stream.id, stream.isActive),
+          EditLink(stream.id),
           <IconDialogButton
             Icon={AiFillDelete}
             iconStyle={{ color: "red", fontSize: 24 }}
@@ -191,6 +199,10 @@ const AdminStreamDashboard = () => {
           {
             text: "activity",
             isResponsive: false,
+          },
+          {
+            text: "edit",
+            isResponsive: true,
           },
           {
             text: "delete",

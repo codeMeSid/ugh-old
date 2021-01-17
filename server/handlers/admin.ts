@@ -21,6 +21,7 @@ import { Bracket } from "../models/bracket";
 import mongoose from "mongoose";
 import { News } from "../models/news";
 import { Gallery } from "../models/gallery";
+import { gameUpdateController } from "../controllers/game/update";
 
 const superAdminMiddleware = [currentUser, requireSuperAdminAuth];
 
@@ -31,9 +32,35 @@ export const adminHandler: Array<ApiSign> = [
     controller: adminFetchMetricController,
     middlewares: [],
   },
-  // user (tournament history add and delete) edit
-  // game edit
-  // console edit
+  {
+    url: "/update/user/tournament/:ughId/:tournamentId",
+    method: HttpMethod.Put,
+    controller: async (req: Request, res: Response) => {
+      const { ughId, tournamentId } = req.params;
+      const user = await User.findOne({ ughId });
+      if (!user) throw new BadRequestError("Invalid User Request");
+      user.tournaments = user.tournaments.map((t) => {
+        if (t.id === tournamentId) t.didWin = false;
+        return t;
+      });
+      await user.save();
+      res.send(true);
+    },
+    middlewares: superAdminMiddleware,
+  },
+  {
+    url: "/remove/user/tournament/:ughId/:tournamentId",
+    method: HttpMethod.Put,
+    controller: async (req: Request, res: Response) => {
+      const { ughId, tournamentId } = req.params;
+      const user = await User.findOne({ ughId });
+      if (!user) throw new BadRequestError("Invalid User Request");
+      user.tournaments = user.tournaments.filter((t) => t.id !== tournamentId);
+      await user.save();
+      res.send(true);
+    },
+    middlewares: superAdminMiddleware,
+  },
   // streams edit
   // sponsorships edit
   {
@@ -66,6 +93,7 @@ export const adminHandler: Array<ApiSign> = [
     },
     middlewares: superAdminMiddleware,
   },
+
   {
     url: "/delete/coin/:coinId",
     method: HttpMethod.Delete,

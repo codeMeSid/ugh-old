@@ -4,7 +4,7 @@ import {
   currentUser,
   requireAdminAuth,
   validateRequest,
-} from "@monsid/ugh-og"
+} from "@monsid/ugh-og";
 import { gameAddController } from "../controllers/game/add";
 import { gameFetchController } from "../controllers/game/fetch";
 import { gameFetchActiveController } from "../controllers/game/fetch-active";
@@ -12,6 +12,7 @@ import { gameUpdateActivityController } from "../controllers/game/activity";
 import { gameUpdateController } from "../controllers/game/update";
 import { gameFetchDetailController } from "../controllers/game/fetch-detail";
 import { gameAddValidator } from "../utils/validator/game/add";
+import { requireSuperAdminAuth } from "../utils/middlewares/require-superadmin";
 
 export const gameHandler: Array<ApiSign> = [
   {
@@ -53,6 +54,6 @@ export const gameHandler: Array<ApiSign> = [
     url: "/update/:gameId",
     method: HttpMethod.Put,
     controller: gameUpdateController,
-    middlewares: [currentUser, requireAdminAuth],
+    middlewares: [currentUser, requireSuperAdminAuth],
   },
 ];

@@ -10,6 +10,8 @@ import { serverRequest } from "../../../../hooks/server-request";
 import { useRequest } from "../../../../hooks/use-request";
 import Router from "next/router";
 import { TiTick } from "react-icons/ti";
+import { AiFillDelete } from "react-icons/ai";
+import DialogButton from "../../../../components/button/dialog";
 
 const AdminTournamentPage = ({ tournaments, errors, ughId }) => {
   let winning = 0;
@@ -34,6 +36,7 @@ const AdminTournamentPage = ({ tournaments, errors, ughId }) => {
           { text: "tournament", isResponsive: false },
           { text: "game", isResponsive: true },
           { text: "status", isResponsive: false },
+          { text: "delete", isResponsive: true },
         ]}
         data={tournaments.map((t: any) => {
           const canStatusChange =
@@ -46,7 +49,25 @@ const AdminTournamentPage = ({ tournaments, errors, ughId }) => {
             t.name,
             t?.game,
             t.didWin ? (
-              <TiTick style={{ color: "green", fontSize: 30 }} />
+              <IconDialogButton
+                Icon={TiTick}
+                iconStyle={{ color: "green", fontSize: 30 }}
+                style={{ width: 300 }}
+                onAction={(onSuccess, onError) => {
+                  const { doRequest: wonTournamentRequest } = useRequest({
+                    url: `/api/ugh/admin/update/user/tournament/${ughId}/${t.id}`,
+                    method: "put",
+                    body: {},
+                    onSuccess: Router.reload,
+                    onError: setMessages,
+                  });
+                  wonTournamentRequest(onSuccess, onError);
+                }}
+              >
+                <div style={{ margin: 10, fontSize: 18 }}>
+                  Are you Sure? Change it to loss?
+                </div>
+              </IconDialogButton>
             ) : canStatusChange ? (
               <div style={{ color: "blue", fontWeight: 900, fontSize: 20 }}>
                 TBD
@@ -74,6 +95,23 @@ const AdminTournamentPage = ({ tournaments, errors, ughId }) => {
                 />
               </IconDialogButton>
             ),
+            <IconDialogButton
+              Icon={AiFillDelete}
+              iconStyle={{ color: "red", fontSize: 24 }}
+              style={{ width: 300 }}
+              onAction={(onSuccess, onError) => {
+                const { doRequest: deleteUser } = useRequest({
+                  url: `/api/ugh/admin/remove/user/tournament/${ughId}/${t.id}`,
+                  method: "put",
+                  body: {},
+                  onSuccess: Router.reload,
+                  onError: setMessages,
+                });
+                deleteUser(onSuccess, onError);
+              }}
+            >
+              <div style={{ margin: 10, fontSize: 18 }}>Are you Sure?</div>
+            </IconDialogButton>,
           ];
         })}
       />
