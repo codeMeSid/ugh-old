@@ -3,7 +3,7 @@ import {
   GameType,
   timer,
   TournamentStatus,
-} from "@monsid/ugh-og"
+} from "@monsid/ugh-og";
 import { Request, Response } from "express";
 import { Tournament } from "../../models/tournament";
 import mongoose from "mongoose";
@@ -37,7 +37,7 @@ export const tournamentUpdateStatusController = async (
     if (!tournament) throw new BadRequestError("Tournament doesnt exist.");
     if (tournament.status !== TournamentStatus.Upcoming)
       throw new BadRequestError("Tournament status cannot be changed");
-    tournament.winnerCoin = Math.ceil((tournament.players.length / tournament.playerCount) * tournament.winnerCoin);
+
     switch (status) {
       case TournamentStatus.Cancelled:
         users = await User.find({
@@ -57,30 +57,47 @@ export const tournamentUpdateStatusController = async (
           if (tIndex === -1) continue;
           users[i].tournaments[tIndex].didWin = true;
           users[i].tournaments[tIndex].coins = 0;
-          users[i].wallet.coins = users[i].wallet.coins + (tournament?.isFree ? 0 : tournament.coins + 10);
-          passbooks.push(Passbook.build({
-            coins: tournament?.isFree ? 0 : tournament.coins + 10,
-            transactionEnv: TransactionEnv.TounamentCancel,
-            event: tournament?.name,
-            transactionType: TransactionType.Credit,
-            ughId: users[i].ughId
-          }));
+          users[i].wallet.coins =
+            users[i].wallet.coins +
+            (tournament?.isFree ? 0 : tournament.coins + 10);
+          passbooks.push(
+            Passbook.build({
+              coins: tournament?.isFree ? 0 : tournament.coins + 10,
+              transactionEnv: TransactionEnv.TounamentCancel,
+              event: tournament?.name,
+              transactionType: TransactionType.Credit,
+              ughId: users[i].ughId,
+            })
+          );
         }
         await Promise.all([
           users?.map(async (u) => u.save({ session })),
-          passbooks?.map(async p => p.save({ session })),
+          passbooks?.map(async (p) => p.save({ session })),
           tournament.save({ session }),
         ]);
         await session.commitTransaction();
-        timer.cancel(`${tournament.regId}-end`)
+        timer.cancel(`${tournament.regId}-end`);
+        users.map((user) =>
+          mailer.send(
+            MailerTemplate.Cancel,
+            { ughId: user.ughId, tournamentName: tournament.name },
+            user.email,
+            "UGH Tournament Cancelled"
+          )
+        );
         break;
       ///////////////////////////////////////////////////////////////////////////////////
-      ///////////////////////////////////////////////////////////////////////////////////  
-      ///////////////////////////////////////////////////////////////////////////////////  
-      ///////////////////////////////////////////////////////////////////////////////////  
-      ///////////////////////////////////////////////////////////////////////////////////  
+      ///////////////////////////////////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////////////////////////////////////
 
       case TournamentStatus.Started:
+        tournament.winnerCoin = Math.ceil(
+          ((tournament.players.length * tournament.group.participants) /
+            tournament.playerCount) *
+            tournament.winnerCoin
+        );
         const brackets = [];
         users = shuffle(tournament.players);
         let i = 0;
@@ -89,11 +106,14 @@ export const tournamentUpdateStatusController = async (
           const teamA = users.slice(i, i + 1);
           if (!teamA) break;
           if (tournament.game.gameType === GameType.Rank) {
-            const uploadBy = (new Date(tournament.endDateTime).valueOf() - Date.now()) / 2;
+            const uploadBy =
+              (new Date(tournament.endDateTime).valueOf() - Date.now()) / 2;
             const bracket = Bracket.build({
               teamA: {
                 user: teamA[0],
-                teamMates: (tournament?.teamMates ? tournament?.teamMates[teamA[0]?.id] || [] : [])
+                teamMates: tournament?.teamMates
+                  ? tournament?.teamMates[teamA[0]?.id] || []
+                  : [],
               },
               teamB: {
                 user: undefined,
@@ -103,7 +123,7 @@ export const tournamentUpdateStatusController = async (
               round: 1,
               uploadBy: new Date(Date.now() + uploadBy),
               gameName: tournament.game.name,
-              tournamentName: tournament.name
+              tournamentName: tournament.name,
             });
             brackets.push(bracket);
             tournament.brackets.push(bracket);
@@ -114,7 +134,9 @@ export const tournamentUpdateStatusController = async (
               teamA: {
                 user: teamA[0],
                 score: -1,
-                teamMates: (tournament?.teamMates ? tournament?.teamMates[teamA[0]?.id] || [] : []),
+                teamMates: tournament?.teamMates
+                  ? tournament?.teamMates[teamA[0]?.id] || []
+                  : [],
                 uploadBy: new Date(
                   Date.now() + TournamentTime.TournamentScoreUpdateTime
                 ),
@@ -122,7 +144,9 @@ export const tournamentUpdateStatusController = async (
               teamB: {
                 user: teamB[0],
                 score: -1,
-                teamMates: (tournament?.teamMates ? tournament?.teamMates[teamB[0]?.id] || [] : []),
+                teamMates: tournament?.teamMates
+                  ? tournament?.teamMates[teamB[0]?.id] || []
+                  : [],
                 uploadBy: new Date(
                   Date.now() + TournamentTime.TournamentScoreUpdateTime
                 ),
@@ -131,7 +155,7 @@ export const tournamentUpdateStatusController = async (
               regId,
               gameType: tournament.game.gameType,
               gameName: tournament.game.name,
-              tournamentName: tournament.name
+              tournamentName: tournament.name,
             });
             if (teamB.length === 0) {
               bracket.round = 2;
@@ -140,10 +164,13 @@ export const tournamentUpdateStatusController = async (
             } else {
               const bracketCheckTime = new Date(
                 new Date(bracket.teamA.uploadBy).getTime() +
-                TournamentTime.TournamentScoreCheckTime
+                  TournamentTime.TournamentScoreCheckTime
               );
-              bracketCheckTimer(bracket.regId, bracketCheckTime, tournament.regId);
-
+              bracketCheckTimer(
+                bracket.regId,
+                bracketCheckTime,
+                tournament.regId
+              );
             }
             brackets.push(bracket);
             tournament.brackets.push(bracket);
@@ -174,18 +201,21 @@ export const tournamentUpdateStatusController = async (
         });
         timer.schedule(
           `${tournament.regId}-end`,
-          new Date(new Date(tournament.endDateTime).valueOf() + (tournament.game.gameType === GameType.Rank ? 0 : 1000 * 60 * 30)),
+          new Date(
+            new Date(tournament.endDateTime).valueOf() +
+              (tournament.game.gameType === GameType.Rank ? 0 : 1000 * 60 * 30)
+          ),
           async ({ id }: { id: string }, done) => {
             try {
               const tournament = await Tournament.findById(id);
-              if (!tournament) throw new Error("Invalid Tournament - manual start")
+              if (!tournament)
+                throw new Error("Invalid Tournament - manual start");
               if (tournament.status === TournamentStatus.Started) {
                 tournament.set({ status: TournamentStatus.Completed });
                 await tournament.save();
                 done();
                 winnerLogic(tournament.regId, null, "end");
               } else throw new Error("Tournament Status - manual start");
-
             } catch (error) {
               console.log(error.message);
               done();

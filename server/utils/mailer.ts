@@ -38,7 +38,6 @@ class Mailer {
           html: htmlTemplate,
         },
         (err, info) => {
-
           if (err) {
             console.log({
               type,
@@ -47,9 +46,9 @@ class Mailer {
               info,
               on: format(Date.now(), "dd/MM/yyyy hh:mm a"),
             });
-            this.transporter.close()
+            // this.transporter.close();
           }
-          resolve();
+          resolve(true);
         }
       );
     });

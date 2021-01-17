@@ -3,8 +3,8 @@ import "firebase/auth";
 import "firebase/storage";
 import "firebase/messaging";
 import { randomBytes } from "crypto";
-import localforage from 'localforage';
-import axios from 'axios';
+import localforage from "localforage";
+import axios from "axios";
 
 class Fire {
   private fireObj!: Firebase.app.App;
@@ -19,7 +19,6 @@ class Fire {
     this.init = this.init.bind(this);
     this.getRecaptcha = this.getRecaptcha.bind(this);
     this.fireObj = this.init();
-
   }
 
   private init() {
@@ -75,18 +74,24 @@ class Fire {
 
   getRecaptcha(container: string, onVerify: (response: any) => any) {
     if (!this.fireObj) return false;
-    this.rcv = new Firebase.auth.RecaptchaVerifier(container, {
-      callback: onVerify
-    }, this.fireObj);
+    this.rcv = new Firebase.auth.RecaptchaVerifier(
+      container,
+      {
+        callback: onVerify,
+      },
+      this.fireObj
+    );
     return this.rcv;
   }
 
   async phoneAuth(phone: string) {
     if (!this.fireObj) return;
     try {
-      this.confirmation = await this.fireObj.auth().signInWithPhoneNumber(phone, this.rcv);
+      this.confirmation = await this.fireObj
+        .auth()
+        .signInWithPhoneNumber(phone, this.rcv);
     } catch (error) {
-      console.log({ error })
+      console.log({ error });
     }
     return !!this.confirmation;
   }
@@ -102,9 +107,8 @@ class Fire {
       status = false;
       message = "Invalid or Expired OTP";
     }
-    return { status, message }
+    return { status, message };
   }
-
 
   async google(): Promise<Firebase.User> {
     if (!this.fireObj) return;
@@ -121,11 +125,11 @@ class Fire {
     const auth = fireObj.auth();
     const provider = new Firebase.auth.FacebookAuthProvider();
     const result = await auth.signInWithPopup(provider);
-    return result.user
+    return result.user;
   }
 
   async signout() {
-    if (!this.fireObj) return
+    if (!this.fireObj) return;
     const fireObj = this.fireObj;
     await fireObj.auth().signOut();
   }
@@ -136,43 +140,57 @@ class Fire {
       const fcmToken: any = await localforage.getItem("FCM_TOKEN");
       if (fcmToken) {
         messaging.onMessage(onMessage);
-        return { fcmToken, isNew: false }
+        return { fcmToken, isNew: false };
       }
-      const newFcmToken = await messaging
-        .getToken({
-          vapidKey: "BAEfSb0Bqar1LispPKrxu3wARzIQ6KEXkd5W6mui3bXZRdejQh6PTx4vHE5iU55MRe0t4NobD93LkWwztqc_hQ4"
-        });
+      const newFcmToken = await messaging.getToken({
+        vapidKey:
+          "BAEfSb0Bqar1LispPKrxu3wARzIQ6KEXkd5W6mui3bXZRdejQh6PTx4vHE5iU55MRe0t4NobD93LkWwztqc_hQ4",
+      });
       if (newFcmToken) {
         localforage.setItem("FCM_TOKEN", newFcmToken);
         messaging.onMessage(onMessage);
-        return { fcmToken: newFcmToken, isNew: true }
+        return { fcmToken: newFcmToken, isNew: true };
       }
     } catch (error) {
       console.log(error.message);
     }
-    return null
+    return null;
   }
 
   async removeFcmToken() {
     const messaging = this.fireObj.messaging();
     await messaging.deleteToken();
-    await localforage.removeItem("FCM_TOKEN")
+    await localforage.removeItem("FCM_TOKEN");
   }
 
   sendNotification(to: string, body: string, action: string) {
-    axios.post("https://fcm.googleapis.com/fcm/send", {
-      to,
-      notification: {
-        title: "UltimateGamersHub Notification",
-        body: body,
-        click_action: `https://ultimategamershub.com${action}`,
-        icon: "https://firebasestorage.googleapis.com/v0/b/ultimategamershub.appspot.com/o/ugh%2Flogo%20(1)_icon_final_webp.webp?alt=media&token=e50ef20c-d61b-4798-8cf0-ecc20826a844",
-      }
-    }, {
-      headers: {
-        Authorization: "key=AAAAQqwms6A:APA91bHPqEs8fAo93-RRp11ilWDakBl1zq7UOAGeEOB6ttCfZznTRjRZNkp92fvwkJAOq4PIWF3hpbNmdJYJpW_LMQ3LPaxQYQW75crNzXIuf3ebqkSmHOzWwlBix4ILBcYc_sRZG2oU",
-      }
-    }).catch((error) => console.error(error.message));
+    axios
+      .post(
+        "https://fcm.googleapis.com/fcm/send",
+        {
+          to,
+          notification: {
+            title: "UltimateGamersHub Notification",
+            body: body,
+            click_action: `https://ultimategamershub.com${action}`,
+            icon:
+              "https://firebasestorage.googleapis.com/v0/b/ultimategamershub.appspot.com/o/ugh%2FUGH_Icon_final.webp?alt=media&token=334a61cb-7bbb-454c-b9c5-edf0473e8ec2",
+          },
+        },
+        {
+          headers: {
+            Authorization:
+              "key=AAAAQqwms6A:APA91bHPqEs8fAo93-RRp11ilWDakBl1zq7UOAGeEOB6ttCfZznTRjRZNkp92fvwkJAOq4PIWF3hpbNmdJYJpW_LMQ3LPaxQYQW75crNzXIuf3ebqkSmHOzWwlBix4ILBcYc_sRZG2oU",
+          },
+        }
+      )
+      .then((res) =>
+        console.log({
+          notificationSuccess: !!res.data.success,
+          reason: res.data.results,
+        })
+      )
+      .catch((error) => console.error(error));
   }
 }
 

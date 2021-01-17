@@ -11,4 +11,7 @@ export enum MailerTemplate {
   Update = "update",
   ForgotPassword = "forgot-password",
   Reset = "reset",
+  Accept = "accept",
+  Cancel = "cancel",
+  Reject = "reject",
 }

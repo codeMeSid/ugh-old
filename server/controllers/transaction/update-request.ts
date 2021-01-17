@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
-import { TransactionTypes, BadRequestError } from "@monsid/ugh-og"
+import { TransactionTypes, BadRequestError } from "@monsid/ugh-og";
 import { Transaction } from "../../models/transaction";
 import mongoose from "mongoose";
-import { User } from "../../models/user";
+import { User, UserDoc } from "../../models/user";
 import { Passbook, PassbookDoc } from "../../models/passbook";
 import { TransactionEnv } from "../../utils/enum/transaction-env";
 import { TransactionType } from "../../utils/enum/transaction-type";
+import { mailer } from "../../utils/mailer";
+import { MailerTemplate } from "../../utils/enum/mailer-template";
 
 export const transactionUpdateRequestController = async (
   req: Request,
@@ -14,6 +16,8 @@ export const transactionUpdateRequestController = async (
   const { orderId } = req.params;
   const { accepted, razorpayId } = req.body;
   let status: string;
+  let user: UserDoc;
+  let coins: number;
   if (accepted) status = TransactionTypes.Refunded;
   else status = TransactionTypes.Rejected;
   if (accepted && !razorpayId)
@@ -23,32 +27,38 @@ export const transactionUpdateRequestController = async (
   try {
     const transaction = await Transaction.findOne({ orderId }).session(session);
     if (!transaction) throw new BadRequestError("Invalid transaction");
-    const user = await User.findById(transaction.user).session(session);
+    user = await User.findById(transaction.user).session(session);
+    if (!user) throw new BadRequestError("User Invalid");
     let passbook: PassbookDoc;
+    coins = transaction.amount;
     if (accepted) {
-      if (user?.tournaments
-        .filter((t) => t.didWin)
-        .reduce((acc, t) => acc + t.coins, 0) - transaction.amount < 0)
+      if (
+        user?.tournaments
+          .filter((t) => t.didWin)
+          .reduce((acc, t) => acc + t.coins, 0) -
+          transaction.amount <
+        0
+      )
         throw new BadRequestError("Insufficient Balance to process");
       let amount = transaction.amount;
-      user.tournaments = user.tournaments.map(t => {
+      user.tournaments = user.tournaments.map((t) => {
         if (!t.didWin) return t;
         if (amount > 0) {
           if (amount > t.coins) {
-            amount -= t.coins
+            amount -= t.coins;
             t.coins = 0;
           } else {
             t.coins -= amount;
-            amount = 0
+            amount = 0;
           }
         }
         return t;
-      })
+      });
       passbook = Passbook.build({
         coins: transaction.amount,
         transactionEnv: TransactionEnv.Refund,
         transactionType: TransactionType.Debit,
-        ughId: user.ughId
+        ughId: user.ughId,
       });
     }
     transaction.set({
@@ -61,8 +71,25 @@ export const transactionUpdateRequestController = async (
     await session.commitTransaction();
   } catch (error) {
     await session.abortTransaction();
+    console.log({ error });
     throw new BadRequestError(error.message);
   }
   session.endSession();
+  console.log({ msg: "Mail sending", user: !!user, coins });
+  if (user && coins) {
+    console.log({ msg: "Mail sendoong" });
+    const mailTemplate = !!accepted
+      ? MailerTemplate.Accept
+      : MailerTemplate.Reject;
+    const subject = accepted
+      ? "Withdraw Request Accepted"
+      : "Withdraw Request Rejected";
+    mailer.send(
+      mailTemplate,
+      { ughId: user.ughId, coins },
+      user.email,
+      subject
+    );
+  }
   res.send(true);
 };

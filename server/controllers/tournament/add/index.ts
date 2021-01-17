@@ -5,7 +5,7 @@ import {
   GameType,
   UserActivity,
   UserRole,
-} from "@monsid/ugh-og"
+} from "@monsid/ugh-og";
 import { Game } from "../../../models/game";
 import mongoose from "mongoose";
 import { Settings } from "../../../models/settings";
@@ -28,7 +28,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     game: gameId,
     playerCount,
     group,
-    isFree
+    isFree,
   } = req.body;
   const { role, ughId } = req.currentUser;
   const msIn1Hr = 1000 * 60 * 60;
@@ -58,7 +58,10 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     if (!game) throw new BadRequestError("Invalid game");
     if (!settings) throw new BadRequestError("Settings not upto date");
     if (!user) throw new BadRequestError("Invalid user");
-    const newEndDateTime = new Date(new Date(endDateTime).valueOf() + (game.gameType === GameType.Score ? (1000 * 60 * 30) : 0))
+    const newEndDateTime = new Date(
+      new Date(endDateTime).valueOf() +
+        (game.gameType === GameType.Score ? 1000 * 60 * 30 : 0)
+    );
     const totalWinnings = parseInt(playerCount) * parseInt(coins);
     const earning = Math.round((settings.tournamentFees / 100) * totalWinnings);
     const winnerCoin = totalWinnings - (isFree ? 0 : earning);
@@ -91,7 +94,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
         name: tournament.name,
         startDateTime: tournament.startDateTime,
         endDateTime: tournament.endDateTime,
-        game: game.name
+        game: game.name,
       });
       tournament.players.push(user);
     }
@@ -99,12 +102,14 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     await tournament.save({ session });
     await session.commitTransaction();
 
-    tournamentStartTimer(tournament.regId, tournament.id, tournament.startDateTime);
+    tournamentStartTimer(
+      tournament.regId,
+      tournament.id,
+      tournament.startDateTime
+    );
 
     tournamentEndTimer(tournament.regId, tournament.id, newEndDateTime);
-
-    sendTournamentAddedMail(tournament, ughId)
-
+    sendTournamentAddedMail(tournament, ughId);
   } catch (error) {
     await session.abortTransaction();
     throw new BadRequestError(error.message);
@@ -113,24 +118,21 @@ export const tournamentAddController = async (req: Request, res: Response) => {
   res.send(true);
 };
 
-const sendTournamentAddedMail = async (tournament: TournamentDoc, ughId: string) => {
+const sendTournamentAddedMail = async (
+  tournament: TournamentDoc,
+  ughId: string
+) => {
   const users = await User.find({
     "settings.newTournamentWasAdded": true,
-    activity: UserActivity.Active
+    activity: UserActivity.Active,
   });
   users.forEach((user) => {
     if (user.fcmToken && user.ughId !== ughId) {
-      fire.sendNotification(user.fcmToken, "New Tournament Added", `/tournaments/${tournament.regId}`)
+      fire.sendNotification(
+        user.fcmToken,
+        "New Tournament Added",
+        `/tournaments/${tournament.regId}`
+      );
     }
-    // mailer.send(
-    //   MailerTemplate.New,
-    //   {
-    //     ughId: user.ughId,
-    //     tournamentName: tournament.name,
-    //     tournamentUrl: `${process.env.BASE_URL}/tournaments/${tournament.regId}`,
-    //   },
-    //   user.email,
-    //   "New UGH Tournament"
-    // );
   });
 };
