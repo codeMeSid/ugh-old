@@ -7,8 +7,10 @@ import { useRequest } from "../../hooks/use-request";
 import { event } from "../../socket";
 import IconDialogButton from "../button/icon-dialog";
 import { RiTeamLine } from "react-icons/ri";
+import ImageDialogButton from "../button/image-dialog";
 
 const PlayerImg = require("../../public/asset/logo_icon.webp");
+const TeamImg = require("../../public/asset/team_icon.webp");
 
 const PlayerScoreCard = ({
   player,
@@ -173,19 +175,18 @@ const PlayerScoreCard = ({
       <div className="bracket__score__player">
         {team?.teamMates?.length > 0 && (
           <div className="bracket__score__team">
-            <IconDialogButton
-              Icon={RiTeamLine}
-              iconStyle={{
-                color: "white",
+            <ImageDialogButton
+              ImageLink={TeamImg}
+              imageStyle={{
                 borderRadius: "50%",
                 backgroundColor: "red",
-                fontSize: 18,
-                padding: "2px",
+                width: 22,
+                height: 22,
               }}
               style={{
                 minWidth: 360,
                 position: "fixed",
-                top: "50%",
+                top: "40%",
                 left: "50%",
                 transform: "translate(-50%,-50%)",
               }}
@@ -205,7 +206,7 @@ const PlayerScoreCard = ({
                   );
                 })}
               </table>
-            </IconDialogButton>
+            </ImageDialogButton>
           </div>
         )}
         <div

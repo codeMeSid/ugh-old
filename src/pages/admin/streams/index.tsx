@@ -58,7 +58,7 @@ const AdminStreamDashboard = () => {
             target="_blank"
           />,
           SwitchBlade(stream.id, stream.isActive),
-          EditLink(stream.id),
+          // EditLink(stream.id),
           <IconDialogButton
             Icon={AiFillDelete}
             iconStyle={{ color: "red", fontSize: 24 }}
@@ -200,10 +200,10 @@ const AdminStreamDashboard = () => {
             text: "activity",
             isResponsive: false,
           },
-          {
-            text: "edit",
-            isResponsive: true,
-          },
+          // {
+          //   text: "edit",
+          //   isResponsive: true,
+          // },
           {
             text: "delete",
             isResponsive: true,

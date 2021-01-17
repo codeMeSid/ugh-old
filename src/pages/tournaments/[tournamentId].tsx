@@ -636,6 +636,11 @@ const TournamentDetail = ({
                   key={Math.random()}
                   currentUser={currentUser}
                   player={player}
+                  teamMates={
+                    tournament?.teamMates
+                      ? tournament?.teamMates[currentUser?.id] || []
+                      : []
+                  }
                 />
               ))}
             </div>

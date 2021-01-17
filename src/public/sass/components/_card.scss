@@ -39,6 +39,13 @@
   box-shadow: 0 0.8rem 1.5rem black;
   border: 0.1rem solid rgba(gray, 0.2);
   margin: 1rem;
+  position: relative;
+  &__team {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 5px 5px 0 0;
+  }
   &__profile {
     width: 18rem;
     height: 18rem;

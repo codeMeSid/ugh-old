@@ -10,8 +10,10 @@ import { DQ } from "../../../server/utils/enum/dq";
 import { event } from "../../socket";
 import IconDialogButton from "../button/icon-dialog";
 import { RiTeamLine } from "react-icons/ri";
+import ImageDialogButton from "../button/image-dialog";
 
 const PlayerImg = require("../../public/asset/logo_icon.webp");
+const TeamImg = require("../../public/asset/team_icon.webp");
 
 const BracketRankCard = ({
   userHasUploadedScore,
@@ -226,19 +228,18 @@ const BracketRankCard = ({
     <div className="bracket__rank">
       {bracket?.teamA?.teamMates?.length > 0 && (
         <div className="bracket__rank__team">
-          <IconDialogButton
-            Icon={RiTeamLine}
-            iconStyle={{
-              color: "white",
+          <ImageDialogButton
+            ImageLink={TeamImg}
+            imageStyle={{
               borderRadius: "50%",
               backgroundColor: "red",
-              fontSize: 18,
-              padding: "2px",
+              width: 25,
+              height: 25,
             }}
             style={{
               minWidth: 360,
               position: "fixed",
-              top: "50%",
+              top: "40%",
               left: "50%",
               transform: "translate(-50%,-50%)",
             }}
@@ -258,7 +259,7 @@ const BracketRankCard = ({
                 );
               })}
             </table>
-          </IconDialogButton>
+          </ImageDialogButton>
         </div>
       )}
       <div
