@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRequest } from "../../../hooks/use-request";
 import SideLayout from "../../../components/layout/sidelayout";
 import Table from "../../../components/table";
 import Link from "next/link";
 import { DQ } from "../../../../server/utils/enum/dq";
+import Router from "next/router";
+import { AiFillDelete } from "react-icons/ai";
+import IconDialogButton from "../../../components/button/icon-dialog";
 
 interface Dispute {
   bracketId: string;
@@ -43,7 +46,7 @@ const AdminDisputeDashboard = () => {
     url: "/api/ugh/bracket/fetch/disputes",
     method: "get",
     body: {},
-    onSuccess: (data: Array<Dispute>) => {
+    onSuccess: (data: Array<any>) => {
       setDisputeData(
         data.map((dispute) => [
           TableLink(dispute.bracketId),
@@ -69,6 +72,23 @@ const AdminDisputeDashboard = () => {
           <div style={{ color: disputeReason(dispute.wasResolved).color }}>
             {disputeReason(dispute.wasResolved).value}
           </div>,
+          <IconDialogButton
+            Icon={AiFillDelete}
+            iconStyle={{ color: "red", fontSize: 24 }}
+            style={{ width: 300 }}
+            onAction={(onSuccess, onError) => {
+              const { doRequest: deleteUser } = useRequest({
+                url: `/api/ugh/admin/delete/dispute/${dispute.id}`,
+                method: "delete",
+                body: {},
+                onSuccess: Router.reload,
+                onError: setMessages,
+              });
+              deleteUser(onSuccess, onError);
+            }}
+          >
+            <div style={{ margin: 10, fontSize: 18 }}>Are you Sure?</div>
+          </IconDialogButton>,
         ])
       );
     },
@@ -88,6 +108,7 @@ const AdminDisputeDashboard = () => {
           { text: "game type", isResponsive: true },
           { text: "proof", isResponsive: true },
           { text: "was resolved", isResponsive: false },
+          { text: "dispute", isResponsive: true },
         ]}
       />
     </SideLayout>

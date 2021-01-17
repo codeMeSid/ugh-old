@@ -1,4 +1,4 @@
-import { BadRequestError } from "@monsid/ugh-og"
+import { BadRequestError } from "@monsid/ugh-og";
 import { Request, Response } from "express";
 import { Bracket } from "../../models/bracket";
 import { Tournament } from "../../models/tournament";
@@ -18,5 +18,13 @@ export const bracketFetchDisputeDetail = async (
   let team;
   if (teamName === "teamA") team = bracket.teamA;
   else team = bracket.teamB;
-  res.send({ team, winner, regId, gameType, tournamentId: tournament.regId });
+  res.send({
+    team,
+    winner,
+    regId,
+    gameType,
+    tournamentId: tournament.regId,
+    gameName: bracket.gameName,
+    tournamentName: bracket.tournamentName,
+  });
 };

@@ -3,6 +3,7 @@ import { Bracket } from "../../models/bracket";
 
 interface Dispute {
   bracketId: string;
+  id: string;
   ughId: {
     on: string;
     by: string;
@@ -11,7 +12,7 @@ interface Dispute {
   proof: string;
   wasResolved: string;
   gameName: string;
-  tournamentName: string
+  tournamentName: string;
 }
 
 export const bracketFetchDisputes = async (req: Request, res: Response) => {
@@ -46,23 +47,26 @@ export const bracketFetchDisputes = async (req: Request, res: Response) => {
     if (disputeA)
       disputes.push({
         bracketId: `${regId}-teamB`,
+        id: bracket.id,
         gameType,
         proof: uploadB,
         wasResolved: winner,
         ughId: { by: uA, on: uB },
         gameName: bracket.gameName,
-        tournamentName: bracket.tournamentName
+        tournamentName: bracket.tournamentName,
       });
     if (disputeB)
       disputes.push({
         bracketId: `${regId}-teamA`,
         gameType,
+        id: bracket.id,
         proof: uploadA,
         wasResolved: winner,
         ughId: { by: uB, on: uA },
         gameName: bracket.gameName,
-        tournamentName: bracket.tournamentName
+        tournamentName: bracket.tournamentName,
       });
   });
+
   res.send(disputes);
 };

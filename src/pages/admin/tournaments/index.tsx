@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import SideLayout from "../../../components/layout/sidelayout";
 import Table from "../../../components/table";
 import { useRequest } from "../../../hooks/use-request";
@@ -7,6 +7,9 @@ import Link from "next/link";
 import { format } from "date-fns";
 import Button from "../../../components/button/main";
 import ProgressButton from "../../../components/button/progress";
+import Router from "next/router";
+import { AiFillDelete } from "react-icons/ai";
+import IconDialogButton from "../../../components/button/icon-dialog";
 
 const AdminTournamentDashboard = () => {
   const [tData, setTData] = useState([]);
@@ -53,6 +56,23 @@ const AdminTournamentDashboard = () => {
               : t?.winners?.length > 0
               ? null
               : EvaluateButton(t?.regId),
+            <IconDialogButton
+              Icon={AiFillDelete}
+              iconStyle={{ color: "red", fontSize: 24 }}
+              style={{ width: 300 }}
+              onAction={(onSuccess, onError) => {
+                const { doRequest: deleteUser } = useRequest({
+                  url: `/api/ugh/admin/delete/tournament/${t.id}`,
+                  method: "delete",
+                  body: {},
+                  onSuccess: Router.reload,
+                  onError: setMessages,
+                });
+                deleteUser(onSuccess, onError);
+              }}
+            >
+              <div style={{ margin: 10, fontSize: 18 }}>Are you Sure?</div>
+            </IconDialogButton>,
           ];
         })
       );
@@ -99,6 +119,10 @@ const AdminTournamentDashboard = () => {
           {
             text: "evaluate",
             isResponsive: false,
+          },
+          {
+            text: "delete",
+            isResponsive: true,
           },
         ]}
         data={tData}
