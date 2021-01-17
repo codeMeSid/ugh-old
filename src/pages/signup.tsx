@@ -151,7 +151,7 @@ const SignUp = ({ ughIds, errors }) => {
           />
           <Input
             placeholder="mobile (+91)*"
-            type="text"
+            type="number"
             name="mobile"
             onChange={onChangeHandler}
             value={mobile}
