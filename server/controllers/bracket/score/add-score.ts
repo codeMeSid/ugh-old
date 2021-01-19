@@ -89,8 +89,8 @@ export const addScoreController = async (req: Request, res: Response) => {
           if (bracket.teamA.hasRaisedDispute || bracket.teamB.hasRaisedDispute)
             throw new Error("dispute was raised");
           if (bracket.teamA.score > bracket.teamB.score)
-            bracket.winner = bracket.teamA.user.ughId;
-          else bracket.winner = bracket.teamB.user.ughId;
+            bracket.winner = bracket.teamA.user?.ughId;
+          else bracket.winner = bracket.teamB.user?.ughId;
           await bracket.save()
           done();
           winnerLogic(tournamentId, regId, "score teamB added");

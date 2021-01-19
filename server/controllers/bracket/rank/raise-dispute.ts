@@ -39,14 +39,14 @@ export const raiseDisputeController = async (req: Request, res: Response) => {
     bracketA.teamB.user = user;
     await bracketA.save({ session });
     await session.commitTransaction();
-    disputeBy = user.ughId;
-    disputeOn = bracketA.teamA.user.ughId;
+    disputeBy = user?.ughId;
+    disputeOn = bracketA.teamA.user?.ughId;
     fire.sendNotification(bracketA.teamA.user.fcmToken
-      , `${user.ughId} raised Ranking dispute.`
+      , `${user?.ughId} raised Ranking dispute.`
       , `/game/${tournament.regId}`);
     mailer.send(
       MailerTemplate.Dispute,
-      { ughId: bracketA.teamA.user.ughId, opponentUghId: user.ughId },
+      { ughId: bracketA.teamA.user?.ughId, opponentUghId: user?.ughId },
       bracketA.teamA.user.email,
       "UGH Tournament Dispute"
     );
