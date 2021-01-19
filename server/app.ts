@@ -5,7 +5,7 @@ import helmet from "helmet";
 import cors from "cors";
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
-import { NodeEnv } from "@monsid/ugh-og"
+import { NodeEnv } from "@monsid/ugh-og";
 
 import next from "next";
 import { config } from "dotenv";
@@ -26,6 +26,8 @@ app.use(
   cookieSession({
     signed: isDevMode,
     keys: ["p"],
+    name: "ugh",
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
   })
 );
 
