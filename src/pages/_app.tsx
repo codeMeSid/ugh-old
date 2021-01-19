@@ -102,15 +102,16 @@ class AppComponent extends React.Component<Props> {
   // }
 
   async getNotificationRequest() {
-    const status = Notification.permission;
+    const status = await Notification.requestPermission();
     let token: any;
     if (status === "granted") {
       token = await fire.getFCMToken(this.onMessage);
-    } else if (status !== "denied") {
-      Notification.requestPermission().then(async (resp) => {
-        if (resp === "granted") token = await fire.getFCMToken(this.onMessage);
-      });
     }
+    //  else if (status !== "denied") {
+    //   Notification.requestPermission().then(async (resp) => {
+    //     if (resp === "granted") token = await fire.getFCMToken(this.onMessage);
+    //   });
+    // }
     if (token && token.isNew) {
       const { doRequest } = useRequest({
         url: "/api/ugh/user/update/fcm",
