@@ -4,7 +4,7 @@ import {
   infolog,
   timer,
   TournamentStatus,
-} from "@monsid/ugh-og"
+} from "@monsid/ugh-og";
 import mongoose from "mongoose";
 import { Bracket, BracketDoc } from "../../models/bracket";
 import { PassbookDoc } from "../../models/passbook";
@@ -25,6 +25,13 @@ export const winnerLogic = async (
 ) => {
   const session = await mongoose.startSession();
   session.startTransaction();
+  let updates: {
+    updatedTournament: TournamentDoc;
+    updatedBrackets: Array<BracketDoc>;
+    updateUsers: Array<UserDoc>;
+    newBrackets?: Array<BracketDoc>;
+    passbooks?: Array<PassbookDoc>;
+  };
   try {
     const tournament = await Tournament.findOne({
       regId: tournamentId,
@@ -49,44 +56,43 @@ export const winnerLogic = async (
     );
     if (brackets.length === 0) return;
 
-    let updates: {
-      updatedTournament: TournamentDoc;
-      updatedBrackets: Array<BracketDoc>;
-      updateUsers: Array<UserDoc>;
-      newBrackets?: Array<BracketDoc>;
-      passbooks?: Array<PassbookDoc>;
-    };
     switch (tournament.game.gameType) {
       case GameType.Rank:
-        updates = await rankLogger(tournament, brackets, users);
+        updates = rankLogger(tournament, brackets, users);
+        if (updates)
+          await Promise.all([
+            updates?.updateUsers?.map((u) => u.save({ session })),
+            updates?.updatedBrackets?.map((b) => b.save({ session })),
+            updates?.newBrackets?.map((b) => b.save({ session })),
+            updates?.passbooks?.map((p) => p.save({ session })),
+            updates?.updatedTournament?.save({ session }),
+          ]);
         break;
       case GameType.Score:
-        updates = await scoreLogger(tournament, brackets, bracket, users);
+        updates = scoreLogger(tournament, brackets, bracket, users);
+        if (updates) {
+          updates?.updateUsers?.map(async (u) => await u.save({ session }));
+          updates?.updatedBrackets?.map(async (b) => await b.save({ session }));
+          updates?.newBrackets?.map(async (b) => await b.save({ session }));
+          updates?.passbooks?.map(async (p) => await p.save({ session }));
+          await updates?.updatedTournament?.save({ session });
+        }
         break;
     }
-    if (updates)
-      await Promise.all([
-        updates?.updateUsers?.map(async (u) => u.save({ session })),
-        updates?.updatedBrackets?.map(async (b) => b.save({ session })),
-        updates?.newBrackets?.map(async (b) => b.save({ session })),
-        updates?.passbooks?.map(async p => p.save({ session })),
-        updates?.updatedTournament?.save({ session }),
-      ]);
 
     await session.commitTransaction();
-    if (updates) {
-      sendNotification(updates.updatedTournament, updates.updatedBrackets);
-      sendEmail(updates.updatedTournament, updates.updateUsers);
-      sendUpdates(updates.updatedTournament.regId);
-    }
   } catch (error) {
     console.log({ msg: "winner logic", error: error.message });
     await session.abortTransaction();
   }
+  if (updates) {
+    sendNotification(updates.updatedTournament, updates.updatedBrackets);
+    sendEmail(updates.updatedTournament, updates.updateUsers);
+    sendUpdates(updates.updatedTournament.regId);
+  }
   session.endSession();
   return;
 };
-
 
 const sendNotification = (tournament: any, brackets: any) => {
   try {
@@ -109,7 +115,7 @@ const sendNotification = (tournament: any, brackets: any) => {
         });
     }
   } catch (error) {
-    console.error(error?.message)
+    console.error(error?.message);
   }
   return;
 };
@@ -139,25 +145,21 @@ const sendEmail = (tournament: any, users: any) => {
             "UGH Tournament Better Luck Next Time !!!"
           );
       });
-
   } catch (error) {
-    console.error(error?.message)
+    console.error(error?.message);
   }
   return;
 };
 const sendUpdates = (regId: string) => {
   try {
-    messenger.io
-      .to(SocketChannel.BracketRank)
-      .emit(SocketEvent.EventRecieve, {
-        by: "UGH",
-        tournamentId: regId,
-        type: "update",
-        channel: SocketChannel.BracketRank,
-      });
-
+    messenger.io.to(SocketChannel.BracketRank).emit(SocketEvent.EventRecieve, {
+      by: "UGH",
+      tournamentId: regId,
+      type: "update",
+      channel: SocketChannel.BracketRank,
+    });
   } catch (error) {
-    console.error(error?.message)
+    console.error(error?.message);
   }
   return;
-}
+};
