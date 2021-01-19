@@ -2,7 +2,7 @@ FROM node:12.15.0-alpine3.10
 
 # Installing dependencies
 COPY package*.json .
-RUN npm install --silent
+RUN npm install
 
 # Copying source files
 COPY . .
