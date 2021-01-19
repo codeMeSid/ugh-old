@@ -25,7 +25,7 @@ const AddGame = ({
   const [name, setName] = useState(game?.name || "");
   const [imageUrl, setImageUrl] = useState(game?.imageUrl || "");
   const [console, setConsole] = useState(
-    game?.console || consoles?.length >= 1 ? consoles[0]?.name : ""
+    game?.console || (consoles?.length > 1 ? consoles[0].name : "")
   );
   const [gameType, setGameType] = useState(game?.gameType || "score");
   const [thumbnailUrl, setThumbnailUrl] = useState(game?.thumbnailUrl || "");
