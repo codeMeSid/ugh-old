@@ -151,11 +151,11 @@ const TournamentDetail = ({
                 .filter(
                   (p) =>
                     !Array.from(tournament?.dqPlayers || []).some(
-                      (dqP) => p.ughId === dqP.ughId
+                      (dqP) => p?.ughId === dqP?.ughId
                     )
                 )
                 .map((p) => [
-                  <span style={{ fontSize: 20 }}>{p.ughId}</span>,
+                  <span style={{ fontSize: 20 }}>{p?.ughId}</span>,
                   <span style={{ color: "green", fontSize: 20 }}>Playing</span>,
                   <IconDialogButton
                     onAction={(onSuccess, onError) => {
@@ -172,7 +172,7 @@ const TournamentDetail = ({
                     }}
                     Icon={RiUserSharedLine}
                     iconStyle={{ color: "red", fontSize: 20 }}
-                    style={{ width: 400 }}
+                    style={{ width: 400, position: "fixed" }}
                   >
                     <div style={{ margin: "10px 0", fontSize: 20 }}>
                       Are you sure?

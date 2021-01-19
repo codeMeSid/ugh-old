@@ -75,8 +75,8 @@ const BracketScoreCard = ({
           tournamentId={tournamentId}
           player={{
             profilePic: A.profilePic,
-            ughId: A.ughId,
-            isCurrentUser: currentUser.ughId === A.ughId,
+            ughId: A?.ughId,
+            isCurrentUser: currentUser?.ughId === A?.ughId,
           }}
           team={{
             hasScore: A.hasScore,
@@ -99,7 +99,7 @@ const BracketScoreCard = ({
             hasWinner: !!bracket.winner,
           }}
           opponent={{
-            ughId: B.ughId,
+            ughId: B?.ughId,
             raiseDisputeBy: A.raiseDisputeBy,
             canRaiseDispute:
               isPlayerB &&
@@ -118,8 +118,8 @@ const BracketScoreCard = ({
           tournamentId={tournamentId}
           player={{
             profilePic: B.profilePic,
-            ughId: B.ughId,
-            isCurrentUser: currentUser.ughId === B.ughId,
+            ughId: B?.ughId,
+            isCurrentUser: currentUser?.ughId === B?.ughId,
           }}
           team={{
             hasScore: B.hasScore,
@@ -142,7 +142,7 @@ const BracketScoreCard = ({
             hasWinner: !!bracket.winner,
           }}
           opponent={{
-            ughId: A.ughId,
+            ughId: A?.ughId,
             raiseDisputeBy: B.raiseDisputeBy,
             canRaiseDispute:
               isPlayerA &&

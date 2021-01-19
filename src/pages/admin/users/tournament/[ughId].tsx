@@ -11,7 +11,6 @@ import { useRequest } from "../../../../hooks/use-request";
 import Router from "next/router";
 import { TiTick } from "react-icons/ti";
 import { AiFillDelete } from "react-icons/ai";
-import DialogButton from "../../../../components/button/dialog";
 
 const AdminTournamentPage = ({ tournaments, errors, ughId }) => {
   let winning = 0;
@@ -46,7 +45,7 @@ const AdminTournamentPage = ({ tournaments, errors, ughId }) => {
               new Date(t?.startDateTime || Date.now()),
               "dd/MM/yyy hh:mm a"
             ),
-            t.name,
+            t?.name,
             t?.game,
             t.didWin ? (
               <IconDialogButton
@@ -55,7 +54,7 @@ const AdminTournamentPage = ({ tournaments, errors, ughId }) => {
                 style={{ width: 300 }}
                 onAction={(onSuccess, onError) => {
                   const { doRequest: wonTournamentRequest } = useRequest({
-                    url: `/api/ugh/admin/update/user/tournament/${ughId}/${t.id}`,
+                    url: `/api/ugh/admin/update/user/tournament/${ughId}/${t?.id}`,
                     method: "put",
                     body: {},
                     onSuccess: Router.reload,
@@ -83,7 +82,7 @@ const AdminTournamentPage = ({ tournaments, errors, ughId }) => {
                       { message: "Minimum Winnings 10 UGH coins." },
                     ]);
                   }
-                  doRequest(onSuccess, onError, { winning, id: t.id, ughId });
+                  doRequest(onSuccess, onError, { winning, id: t?.id, ughId });
                 }}
               >
                 <Input
@@ -101,7 +100,7 @@ const AdminTournamentPage = ({ tournaments, errors, ughId }) => {
               style={{ width: 300 }}
               onAction={(onSuccess, onError) => {
                 const { doRequest: deleteUser } = useRequest({
-                  url: `/api/ugh/admin/remove/user/tournament/${ughId}/${t.id}`,
+                  url: `/api/ugh/admin/remove/user/tournament/${ughId}/${t?.id}`,
                   method: "put",
                   body: {},
                   onSuccess: Router.reload,

@@ -1,4 +1,4 @@
-import { TournamentStatus } from "@monsid/ugh-og"
+import { TournamentStatus } from "@monsid/ugh-og";
 import { BracketDoc } from "../../models/bracket";
 import { Passbook, PassbookDoc } from "../../models/passbook";
 import { TournamentDoc } from "../../models/tournament";
@@ -8,7 +8,7 @@ import { TransactionEnv } from "../enum/transaction-env";
 import { TransactionType } from "../enum/transaction-type";
 import { prizeDistribution } from "../prize-distribution";
 
-export const rankLogger = async (
+export const rankLogger = (
   tournament: TournamentDoc,
   brackets: BracketDoc[],
   users: UserDoc[]
@@ -38,15 +38,14 @@ export const rankLogger = async (
     const {
       teamA: { score, uploadUrl },
       teamB: { hasRaisedDispute },
-      winner
+      winner,
     } = b;
 
     if (score >= 1 && !winner) {
       const userIndex = users.findIndex(
         (u) => JSON.stringify(u.id) === JSON.stringify(b.teamA.user)
       );
-      if (userIndex > -1)
-        b.winner = users[userIndex]?.ughId;
+      if (userIndex > -1) b.winner = users[userIndex]?.ughId;
     }
     if (!winner && (score <= 0 || !score)) b.winner = DQ.ScoreNotUploaded;
     if (hasRaisedDispute && !uploadUrl && !winner) b.winner = DQ.DisputeLost;
@@ -57,7 +56,10 @@ export const rankLogger = async (
   // take top winners as required in tournament
   const bracketWinners = brackets
     .filter(
-      (b) => b.winner !== DQ.DisputeLost && b.winner !== DQ.ScoreNotUploaded && b.winner !== DQ.AdminDQ
+      (b) =>
+        b.winner !== DQ.DisputeLost &&
+        b.winner !== DQ.ScoreNotUploaded &&
+        b.winner !== DQ.AdminDQ
     )
     .sort((bA, bB) => bA.teamA.score - bB.teamA.score)
     .slice(0, tournament.winnerCount);
@@ -86,18 +88,22 @@ export const rankLogger = async (
     };
   });
   tournament.status = TournamentStatus.Completed;
-  tournament.winners.forEach(w => passbooks.push(Passbook.build({
-    coins: w.coins,
-    transactionEnv: TransactionEnv.TournamentWin,
-    event: tournament?.name,
-    transactionType: TransactionType.Credit,
-    ughId: w.ughId,
-  })))
-  console.log("leave rank")
+  tournament.winners.forEach((w) =>
+    passbooks.push(
+      Passbook.build({
+        coins: w.coins,
+        transactionEnv: TransactionEnv.TournamentWin,
+        event: tournament?.name,
+        transactionType: TransactionType.Credit,
+        ughId: w.ughId,
+      })
+    )
+  );
+  console.log("leave rank");
   return {
     updatedTournament: tournament,
     updatedBrackets: brackets,
     updateUsers: users,
-    passbooks
+    passbooks,
   };
 };

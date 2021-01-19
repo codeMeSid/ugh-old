@@ -5,13 +5,12 @@ import { UserDoc } from "../../../models/user";
 import { endBracketProcess } from "./end";
 import { splBracketProcess } from "./spl-bracket";
 
-export const scoreLogger = async (
+export const scoreLogger = (
   tournament: TournamentDoc,
   brackets: BracketDoc[],
   splBracket: BracketDoc,
   users: UserDoc[]
 ) => {
-
   let updates: {
     updatedTournament: TournamentDoc;
     updatedBrackets: Array<BracketDoc>;
@@ -19,9 +18,10 @@ export const scoreLogger = async (
     newBrackets?: Array<BracketDoc>;
     passbooks?: Array<PassbookDoc>;
   };
-  console.log("enter score logic")
-  if (splBracket) updates = splBracketProcess(brackets, splBracket, users, tournament);
-  else updates = endBracketProcess(brackets, users, tournament)
+  console.log("enter score logic");
+  if (splBracket)
+    updates = splBracketProcess(brackets, splBracket, users, tournament);
+  else updates = endBracketProcess(brackets, users, tournament);
 
-  return updates
+  return updates;
 };

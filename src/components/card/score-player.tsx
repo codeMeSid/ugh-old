@@ -210,11 +210,12 @@ const PlayerScoreCard = ({
           </div>
         )}
         <div
-          className={`bracket__score__image ${player.profilePic ? "" : "none"}`}
+          className={`bracket__score__image`}
+          // ${player.profilePic ? "" : "none"}
           style={{ backgroundImage: `url(${player.profilePic || PlayerImg})` }}
         />
         <div className="bracket__score__name">
-          <div>{player.ughId}</div>
+          <div>{player?.ughId}</div>
         </div>
         {team.hasScore && (
           <div className="bracket__score__value">
@@ -313,6 +314,7 @@ const PlayerScoreCard = ({
                   style={{
                     minWidth: 400,
                     maxWidth: 600,
+                    position: "fixed",
                   }}
                 >
                   <div

@@ -263,9 +263,8 @@ const BracketRankCard = ({
         </div>
       )}
       <div
-        className={`bracket__rank__profile ${
-          bracket.teamA.user?.uploadUrl ? "" : "none"
-        }`}
+        className={`bracket__rank__profile`}
+        // ${bracket.teamA.user?.uploadUrl ? "" : "none"}
         style={{
           backgroundImage: `url(${bracket.teamA.user?.uploadUrl || PlayerImg})`,
         }}
