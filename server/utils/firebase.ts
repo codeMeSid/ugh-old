@@ -3,7 +3,7 @@ import "firebase/auth";
 import "firebase/storage";
 import "firebase/messaging";
 import { randomBytes } from "crypto";
-import localforage from "localforage";
+// import localforage from "localforage";
 import axios from "axios";
 
 class Fire {
@@ -137,17 +137,17 @@ class Fire {
   async getFCMToken(onMessage: (payload: any) => any) {
     try {
       const messaging = this.fireObj.messaging();
-      const fcmToken: any = await localforage.getItem("FCM_TOKEN");
-      if (fcmToken) {
-        messaging.onMessage(onMessage);
-        return { fcmToken, isNew: false };
-      }
+      // const fcmToken: any = await localforage.getItem("FCM_TOKEN");
+      // if (fcmToken) {
+      //   messaging.onMessage(onMessage);
+      //   return { fcmToken, isNew: false };
+      // }
       const newFcmToken = await messaging.getToken({
         vapidKey:
           "BAEfSb0Bqar1LispPKrxu3wARzIQ6KEXkd5W6mui3bXZRdejQh6PTx4vHE5iU55MRe0t4NobD93LkWwztqc_hQ4",
       });
       if (newFcmToken) {
-        localforage.setItem("FCM_TOKEN", newFcmToken);
+        // localforage.setItem("FCM_TOKEN", newFcmToken);
         messaging.onMessage(onMessage);
         return { fcmToken: newFcmToken, isNew: true };
       }
@@ -160,7 +160,7 @@ class Fire {
   async removeFcmToken() {
     const messaging = this.fireObj.messaging();
     await messaging.deleteToken();
-    await localforage.removeItem("FCM_TOKEN");
+    // await localforage.removeItem("FCM_TOKEN");
   }
 
   sendNotification(to: string, body: string, action: string) {
@@ -190,7 +190,7 @@ class Fire {
           reason: res.data.results,
         })
       )
-      .catch((error) => console.error(error));
+      .catch((error) => console.log({ message: error.message }));
   }
 }
 
