@@ -18,7 +18,6 @@ export const scoreLogger = (
     newBrackets?: Array<BracketDoc>;
     passbooks?: Array<PassbookDoc>;
   };
-  console.log("enter score logic");
   if (splBracket)
     updates = splBracketProcess(brackets, splBracket, users, tournament);
   else updates = endBracketProcess(brackets, users, tournament);

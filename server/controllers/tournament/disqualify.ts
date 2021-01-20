@@ -62,7 +62,7 @@ export const tournamentDisqualifyController = async (
     await tournament.save({ session });
     await session.commitTransaction();
   } catch (error) {
-    console.log(error.messasge);
+    console.log({ msg: "DQ", error: error.messsage });
     await session.abortTransaction();
     throw new BadRequestError(error.message);
   }

@@ -71,13 +71,11 @@ export const transactionUpdateRequestController = async (
     await session.commitTransaction();
   } catch (error) {
     await session.abortTransaction();
-    console.log({ error });
+    console.log({ msg: "withdraw request", error: error.message });
     throw new BadRequestError(error.message);
   }
   session.endSession();
-  console.log({ msg: "Mail sending", user: !!user, coins });
   if (user && coins) {
-    console.log({ msg: "Mail sendoong" });
     const mailTemplate = !!accepted
       ? MailerTemplate.Accept
       : MailerTemplate.Reject;

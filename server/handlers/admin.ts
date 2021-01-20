@@ -132,7 +132,7 @@ export const adminHandler: Array<ApiSign> = [
         await session.commitTransaction();
       } catch (error) {
         await session.abortTransaction();
-        console.log({ error });
+        console.log({ msg: "tournament delete", error: error.message });
         throw new BadRequestError(error.message);
       }
       session.endSession();

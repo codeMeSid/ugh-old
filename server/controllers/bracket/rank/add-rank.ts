@@ -1,9 +1,9 @@
-import { BadRequestError, timer } from "@monsid/ugh-og"
+import { BadRequestError, timer } from "@monsid/ugh-og";
 import { Request, Response } from "express";
 import { Bracket } from "../../../models/bracket";
 import { TournamentTime } from "../../../utils/enum/tournament-time";
 import { winnerLogic } from "../../../utils/winner-logic";
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 import { Tournament } from "../../../models/tournament";
 import { DQ } from "../../../utils/enum/dq";
 
@@ -16,47 +16,59 @@ export const addRankController = async (req: Request, res: Response) => {
   session.startTransaction();
   let disputeBracketId: string;
   try {
-    const bracket = await Bracket.findOne({ regId: bracketId }).session(session);
+    const bracket = await Bracket.findOne({ regId: bracketId }).session(
+      session
+    );
     if (!bracket) throw new BadRequestError("Invalid Request");
-    const tournament = await Tournament.findOne({ regId: tournamentId }).session(session);
-    if (!tournament) throw new BadRequestError("Invalid Request")
-    const disputeBrackets = await Bracket.find({ _id: { $in: tournament.brackets } }).session(session);
-    if (disputeBrackets.length === 0) throw new BadRequestError("Invalid Request");
+    const tournament = await Tournament.findOne({
+      regId: tournamentId,
+    }).session(session);
+    if (!tournament) throw new BadRequestError("Invalid Request");
+    const disputeBrackets = await Bracket.find({
+      _id: { $in: tournament.brackets },
+    }).session(session);
+    if (disputeBrackets.length === 0)
+      throw new BadRequestError("Invalid Request");
     // find bracket that won dispute of same rank
-    const isBracketDisqualified = disputeBrackets
-      .findIndex(b => {
-        return b.regId !== bracketId &&
-          b.teamA.score === rank
-          && b.teamB.hasRaisedDispute
-          && b.winner
-          && b.winner !== DQ.AdminDQ
-          && b.winner !== DQ.DisputeLost
+    const isBracketDisqualified =
+      disputeBrackets.findIndex((b) => {
+        return (
+          b.regId !== bracketId &&
+          b.teamA.score === rank &&
+          b.teamB.hasRaisedDispute &&
+          b.winner &&
+          b.winner !== DQ.AdminDQ &&
+          b.winner !== DQ.DisputeLost
+        );
       }) > -1;
 
-    const isSelfDisputeIndex = disputeBrackets
-      .findIndex(b => {
-        return b.regId !== bracketId &&
-          b.teamA.score === rank
-          && !b.teamB.hasRaisedDispute
-          && b.winner
-          && b.winner !== DQ.AdminDQ
-          && b.winner !== DQ.DisputeLost
-      });
+    const isSelfDisputeIndex = disputeBrackets.findIndex((b) => {
+      return (
+        b.regId !== bracketId &&
+        b.teamA.score === rank &&
+        !b.teamB.hasRaisedDispute &&
+        b.winner &&
+        b.winner !== DQ.AdminDQ &&
+        b.winner !== DQ.DisputeLost
+      );
+    });
 
     if (isBracketDisqualified) bracket.winner = DQ.DisputeLost;
     else if (isSelfDisputeIndex > -1) {
       bracket.teamB.user = disputeBrackets[isSelfDisputeIndex].teamA.user;
       bracket.teamB.hasRaisedDispute = true;
-    }
-    else {
-      disputeBracketId = disputeBrackets[
-        disputeBrackets.findIndex(b => {
-          return b.regId !== bracketId &&
-            b.teamA.score === rank
-            && !b.teamB.hasRaisedDispute
-            && !b.winner
-        })
-      ]?.regId;
+    } else {
+      disputeBracketId =
+        disputeBrackets[
+          disputeBrackets.findIndex((b) => {
+            return (
+              b.regId !== bracketId &&
+              b.teamA.score === rank &&
+              !b.teamB.hasRaisedDispute &&
+              !b.winner
+            );
+          })
+        ]?.regId;
     }
     bracket.teamA.score = rank;
     bracket.updateBy = new Date(
@@ -77,8 +89,10 @@ export const addRankController = async (req: Request, res: Response) => {
               "Users"
             );
             if (!bracket) throw new Error("Invalid bracket - add rank");
-            if (bracket.teamB.hasRaisedDispute) throw new Error("bracket has dispute - add rank");
-            if (bracket.winner) throw new Error("bracket has completed - add rank");
+            if (bracket.teamB.hasRaisedDispute)
+              throw new Error("bracket has dispute - add rank");
+            if (bracket.winner)
+              throw new Error("bracket has completed - add rank");
             bracket.winner = bracket.teamA.user.ughId;
             bracket.updateBy = undefined;
             bracket.uploadBy = undefined;
@@ -86,7 +100,7 @@ export const addRankController = async (req: Request, res: Response) => {
             done();
             winnerLogic(tournamentId, null, "rank added");
           } catch (error) {
-            console.log(error.message);
+            console.log({ msg: "add rank", error: error.message });
             done();
           }
         },
@@ -95,7 +109,7 @@ export const addRankController = async (req: Request, res: Response) => {
     }
   } catch (error) {
     await session.abortTransaction();
-    throw new BadRequestError(error.message)
+    throw new BadRequestError(error.message);
   }
   session.endSession();
   res.send(disputeBracketId);

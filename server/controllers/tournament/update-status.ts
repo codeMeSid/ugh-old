@@ -217,7 +217,7 @@ export const tournamentUpdateStatusController = async (
                 winnerLogic(tournament.regId, null, "end");
               } else throw new Error("Tournament Status - manual start");
             } catch (error) {
-              console.log(error.message);
+              console.log({ msg: "manual start end", error: error.messsage });
               done();
             }
           },
@@ -226,7 +226,7 @@ export const tournamentUpdateStatusController = async (
         break;
     }
   } catch (error) {
-    console.log({ msg: "cancel", error: error.message });
+    console.log({ msg: "manual", error: error.message });
     await session.abortTransaction();
   }
   session.endSession();

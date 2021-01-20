@@ -17,7 +17,6 @@ export const splBracketProcess = (
   users: Array<UserDoc>,
   tournament: TournamentDoc
 ) => {
-  console.log("enter score spl bracket");
   const newBrackets: Array<BracketDoc> = [];
   const passbooks: Array<PassbookDoc> = [];
   const canCreateBracket = canCreateBracketCheck(brackets, tournament);
@@ -29,7 +28,6 @@ export const splBracketProcess = (
   //      - or by moving to next available bracket
   //      - by create new bracket
   if (splBracket.winner === DQ.ScoreNotUploaded) {
-    console.log("enter score spl bracket no score");
     if (nextEmptyBracketIndex !== -1) {
       const emptyBracketUserIndex = getUserIndex(
         users,
@@ -43,10 +41,6 @@ export const splBracketProcess = (
           brackets[nextEmptyBracketIndex]
         );
         if (nextPlayEmptyBracketIndex !== -1) {
-          console.log(
-            "enter score spl bracket no score shift other player existing bracket"
-          );
-
           const uploadBy = new Date(
             Date.now() + TournamentTime.TournamentScoreUpdateTime
           );
@@ -69,10 +63,6 @@ export const splBracketProcess = (
             tournament.regId
           );
         } else if (canCreateBracket) {
-          console.log(
-            "enter score spl bracket no score shift other player new bracket"
-          );
-
           const newBracket = createNewBracket(
             users[emptyBracketUserIndex],
             brackets[nextEmptyBracketIndex],
@@ -88,7 +78,6 @@ export const splBracketProcess = (
   //  - then shift the player to that bracket
   //      - start check timer
   else if (nextEmptyBracketIndex !== -1) {
-    console.log("enter score spl bracket shift to existing bracket");
     if (splBracketWinnerIndex !== -1) {
       const uploadBy = new Date(
         Date.now() + TournamentTime.TournamentScoreUpdateTime
@@ -115,8 +104,6 @@ export const splBracketProcess = (
   // check if no empty bracket exists
   //  - create new bracket
   else if (canCreateBracket) {
-    console.log("enter score spl bracket shift to new bracket");
-
     const splBracketWinnerIndex = getUserUghIndex(users, splBracket.winner);
     const newBracket = createNewBracket(
       users[splBracketWinnerIndex],
@@ -129,8 +116,6 @@ export const splBracketProcess = (
   // check if next bracket doesnt exists and new bracket cannot be created
   //  - process all brackets to declare winner
   else {
-    console.log("enter score spl bracket winner declaration");
-
     const sortedBrackets = brackets.sort((a, b) => b.round - a.round);
     const winnerBracket = sortedBrackets[0];
     const winnerCoins = prizeDistribution(

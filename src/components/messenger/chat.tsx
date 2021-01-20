@@ -143,7 +143,6 @@ class MessengerChat extends Component<Props> {
             break;
           }
         }
-        console.log(t);
         return t;
       })
       .join(" ");

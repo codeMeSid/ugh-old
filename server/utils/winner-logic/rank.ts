@@ -99,7 +99,6 @@ export const rankLogger = (
       })
     )
   );
-  console.log("leave rank");
   return {
     updatedTournament: tournament,
     updatedBrackets: brackets,

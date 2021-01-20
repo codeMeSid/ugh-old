@@ -91,7 +91,7 @@ class Fire {
         .auth()
         .signInWithPhoneNumber(phone, this.rcv);
     } catch (error) {
-      console.log({ error });
+      console.log({ msg: "phone auth", error: error.message });
     }
     return !!this.confirmation;
   }
@@ -152,7 +152,7 @@ class Fire {
         return { fcmToken: newFcmToken, isNew: true };
       }
     } catch (error) {
-      console.log(error.message);
+      console.log({ msg: "FCM", error: error.message });
     }
     return null;
   }
@@ -186,11 +186,14 @@ class Fire {
       )
       .then((res) =>
         console.log({
+          msg: "notification axios",
           notificationSuccess: !!res.data.success,
           reason: res.data.results,
         })
       )
-      .catch((error) => console.log({ message: error.message }));
+      .catch((error) =>
+        console.log({ msg: "FCM AXIOS", error: error.message })
+      );
   }
 }
 

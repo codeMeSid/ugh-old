@@ -1,4 +1,4 @@
-import { BadRequestError, NotAuthorizedError, timer } from "@monsid/ugh-og"
+import { BadRequestError, NotAuthorizedError, timer } from "@monsid/ugh-og";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import { Bracket } from "../../../models/bracket";
@@ -53,23 +53,23 @@ export const addScoreController = async (req: Request, res: Response) => {
       `${bracketId}-A`,
       bracket.teamA.updateBy,
       async ({ regId, tournamentId }, done) => {
+        done();
         try {
           const bracket = await Bracket.findOne({ regId })
             .populate("teamA.user", "ughId email", "Users")
-            .populate("teamB.user", "ughId email", "Users")
+            .populate("teamB.user", "ughId email", "Users");
           if (!bracket) throw new Error("Invalid Bracket - add score A");
-          if (bracket.winner) throw new Error("Bracket completed - add score A");
+          if (bracket.winner)
+            throw new Error("Bracket completed - add score A");
           if (bracket.teamA.hasRaisedDispute || bracket.teamB.hasRaisedDispute)
             throw new Error("dispute was raised - add score A");
           if (bracket.teamA.score > bracket.teamB.score)
             bracket.winner = bracket.teamA.user.ughId;
           else bracket.winner = bracket.teamB.user.ughId;
           await bracket.save();
-          done();
           winnerLogic(tournamentId, regId, "score teamA added");
         } catch (error) {
-          console.log(error.messsage)
-          done();
+          console.log({ msg: "add score A", error: error.messsage });
         }
       },
       { regId: bracketId, tournamentId }
@@ -80,10 +80,11 @@ export const addScoreController = async (req: Request, res: Response) => {
       `${bracketId}-B`,
       bracket.teamB.updateBy,
       async ({ regId, tournamentId }, done) => {
+        done();
         try {
           const bracket = await Bracket.findOne({ regId })
             .populate("teamA.user", "ughId email", "Users")
-            .populate("teamB.user", "ughId email", "Users")
+            .populate("teamB.user", "ughId email", "Users");
           if (!bracket) throw new Error("Invalid Bracket - add score B");
           if (bracket.winner) throw new Error("Bracket C");
           if (bracket.teamA.hasRaisedDispute || bracket.teamB.hasRaisedDispute)
@@ -91,12 +92,10 @@ export const addScoreController = async (req: Request, res: Response) => {
           if (bracket.teamA.score > bracket.teamB.score)
             bracket.winner = bracket.teamA.user?.ughId;
           else bracket.winner = bracket.teamB.user?.ughId;
-          await bracket.save()
-          done();
+          await bracket.save();
           winnerLogic(tournamentId, regId, "score teamB added");
         } catch (error) {
-          console.log(error.message)
-          done();
+          console.log({ msg: "add score B", error: error.messsage });
         }
       },
       { regId: bracketId, tournamentId }
