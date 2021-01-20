@@ -16,6 +16,7 @@ const AdminCoinsDashboard = () => {
   const [coinData, setCoinData] = useState([]);
   const [cost, setCost] = useState(0);
   const [value, setValue] = useState(0);
+  const [isShopCoin, setIsShopCoin] = useState(false);
   const [messages, setMessages] = useState([]);
   // components
   const SwitchBlade = (id: string, activity: boolean) => {
@@ -34,6 +35,11 @@ const AdminCoinsDashboard = () => {
           return [
             coin.value,
             coin.cost,
+            coin.isShopCoin ? (
+              <div style={{ color: "green" }}>YES</div>
+            ) : (
+              <div style={{ color: "red" }}>NO</div>
+            ),
             SwitchBlade(coin.id, coin.isActive),
             <IconDialogButton
               Icon={AiFillDelete}
@@ -60,7 +66,7 @@ const AdminCoinsDashboard = () => {
   });
   const { doRequest: addCoinRequest } = useRequest({
     url: "/api/ugh/coin/add",
-    body: { cost, value },
+    body: { cost, value, isShopCoin },
     method: "post",
     onSuccess: () => {
       setMessages([{ message: "Coin successfully added", type: "success" }]);
@@ -109,15 +115,21 @@ const AdminCoinsDashboard = () => {
         <Input
           name="value"
           type="number"
-          placeholder="value"
+          placeholder="face value"
           value={value}
           onChange={onChangeHandler}
+        />
+        <div style={{ fontSize: 18 }}>Is Coin for shopping?</div>
+        <Switch
+          checked={isShopCoin}
+          onChange={() => setIsShopCoin(!isShopCoin)}
         />
       </DialogButton>
       <Table
         headers={[
-          { text: "value", isResponsive: false },
+          { text: "face value", isResponsive: false },
           { text: "cost", isResponsive: false },
+          { text: "for shopping", isResponsive: false },
           { text: "activity", isResponsive: false },
           { text: "delete", isResponsive: true },
         ]}

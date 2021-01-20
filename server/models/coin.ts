@@ -3,12 +3,14 @@ import mongoose from "mongoose";
 interface CoinAttrs {
   cost: number;
   value: number;
+  isShopCoin: boolean;
 }
 
 export interface CoinDoc extends mongoose.Document {
   cost: number;
   value: number;
   isActive: boolean;
+  isShopCoin: boolean;
 }
 
 interface CoinModel extends mongoose.Model<CoinDoc> {
@@ -29,6 +31,7 @@ const CoinSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    isShopCoin: { type: Boolean, default: false },
   },
   {
     toJSON: {

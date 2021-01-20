@@ -34,7 +34,10 @@ export interface UserDoc extends mongoose.Document {
   gamerProfile: UserGamerProfile;
   idProof: UserIdProof;
   address: UserAddress;
-  wallet: UserWallet;
+  wallet: {
+    coins: number;
+    shopCoins: number;
+  };
   dob: Date;
   activity: UserActivity;
   role: UserRole;
@@ -102,15 +105,7 @@ const userSchema = new mongoose.Schema(
         type: Number,
         default: 0,
       },
-      wins: {
-        type: Number,
-        default: 0,
-      },
-      earnings: {
-        type: Number,
-        default: 0,
-      },
-      tournaments: {
+      shopCoins: {
         type: Number,
         default: 0,
       },
