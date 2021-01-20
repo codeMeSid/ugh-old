@@ -1,4 +1,8 @@
-import { BadRequestError, TournamentStatus } from "@monsid/ugh-og"
+import {
+  BadRequestError,
+  TournamentStatus,
+  UserActivity,
+} from "@monsid/ugh-og";
 import { Request, Response } from "express";
 import { body } from "express-validator";
 import mongoose from "mongoose";
@@ -15,17 +19,20 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    const tournament = await Tournament.findById(tournamentId).populate("game", "name", "Games").session(session);
+    const tournament = await Tournament.findById(tournamentId)
+      .populate("game", "name", "Games")
+      .session(session);
     const user = await User.findById(id).session(session);
 
     if (!tournament) throw new Error("Invalid Tournament");
-    if (!user) throw new Error("Invalid user");
+    if (!user || (user && user?.activity !== UserActivity.Active))
+      throw new Error("Invalid user");
     const passbook = Passbook.build({
       coins: tournament?.isFree ? 0 : tournament.coins,
       transactionEnv: TransactionEnv.TournamentJoin,
       event: tournament?.name,
       transactionType: TransactionType.Debit,
-      ughId: user.ughId
+      ughId: user.ughId,
     });
     const status = tournament.status;
     if (status !== TournamentStatus.Upcoming)
@@ -43,28 +50,27 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
       throw new Error("Tournament slots full");
 
     const walletBalance = user.wallet.coins;
-    const earningBalance = user.tournaments.filter(t => t.didWin).reduce((acc, t) => acc + t.coins, 0);
+    const earningBalance = user.tournaments
+      .filter((t) => t.didWin)
+      .reduce((acc, t) => acc + t.coins, 0);
     let tournamentFee = tournament.isFree ? 0 : tournament.coins;
-    if (walletBalance >= tournamentFee)
-      user.wallet.coins -= tournamentFee;
+    if (walletBalance >= tournamentFee) user.wallet.coins -= tournamentFee;
     else if (walletBalance + earningBalance >= tournamentFee) {
       tournamentFee -= walletBalance;
       user.wallet.coins = 0;
       if (tournamentFee > 0)
-        user.tournaments = user.tournaments.map(t => {
+        user.tournaments = user.tournaments.map((t) => {
           if (t.didWin) {
             if (t.coins >= tournamentFee) {
               t.coins -= tournamentFee;
-            }
-            else {
+            } else {
               tournamentFee -= t.coins;
               t.coins = 0;
             }
           }
           return t;
-        })
-    }
-    else throw new BadRequestError("Insufficient Balance")
+        });
+    } else throw new BadRequestError("Insufficient Balance");
     user.tournaments.push({
       didWin: false,
       id: tournament.id,
@@ -72,11 +78,11 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
       name: tournament.name,
       startDateTime: tournament.startDateTime,
       endDateTime: tournament.endDateTime,
-      game: tournament?.game?.name
+      game: tournament?.game?.name,
     });
     tournament.players.push(user);
     if (teamPlayers) {
-      const team = { ...(tournament.teamMates || {}), [user.id]: teamPlayers }
+      const team = { ...(tournament.teamMates || {}), [user.id]: teamPlayers };
       tournament.teamMates = team;
     }
     await tournament.save({ session });

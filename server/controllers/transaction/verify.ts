@@ -5,7 +5,8 @@ import {
   BadRequestError,
   paymentHandler,
   TransactionTypes,
-} from "@monsid/ugh-og"
+  UserActivity,
+} from "@monsid/ugh-og";
 import { Transaction } from "../../models/transaction";
 import { Coin } from "../../models/coin";
 import { Passbook } from "../../models/passbook";
@@ -32,12 +33,21 @@ export const transactionVerifyController = async (
     });
     const user = await User.findById(id).session(session);
     const coins = await Coin.findById(coinId).session(session);
-    user.set({ "wallet.coins": user.wallet.coins + coins.value });
+    if (!user || (user && user?.activity !== UserActivity.Active))
+      throw new BadRequestError("Invalid User Operation");
+    if (!coins) throw new BadRequestError("Invalid Transaction Opration");
+    if (coins.isShopCoin) {
+      user.wallet.shopCoins = user.wallet.shopCoins
+        ? user.wallet.shopCoins + coins.value
+        : coins.value;
+    } else {
+      user.wallet.coins += coins.value;
+    }
     const passbook = Passbook.build({
       coins: coins.value,
       transactionEnv: TransactionEnv.Purchase,
       transactionType: TransactionType.Credit,
-      ughId: user.ughId
+      ughId: user.ughId,
     });
     await passbook.save({ session });
     await transaction.save({ session });
@@ -46,8 +56,8 @@ export const transactionVerifyController = async (
   } catch (error) {
     await session.abortTransaction();
     throw new BadRequestError(error.message);
-  } finally {
-    session.endSession();
   }
+  session.endSession();
+
   res.send(true);
 };
