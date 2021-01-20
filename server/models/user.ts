@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import { Password, UserRecovery, UserTournament } from "@monsid/ugh-og"
+import { Password, UserRecovery, UserTournament } from "@monsid/ugh-og";
 import {
   UserActivity,
   UserRole,
@@ -9,7 +9,7 @@ import {
   UserIdProof,
   UserWallet,
   UserSettings,
-} from "@monsid/ugh-og"
+} from "@monsid/ugh-og";
 
 interface UserAttrs {
   ughId: string;
@@ -41,13 +41,13 @@ export interface UserDoc extends mongoose.Document {
   settings: UserSettings;
   recovery: UserRecovery;
   tournaments: Array<{
-    id: string,
-    didWin: boolean,
-    coins: number,
-    name: string,
-    startDateTime: Date,
-    endDateTime: Date,
-    game: string
+    id: string;
+    didWin: boolean;
+    coins: number;
+    name: string;
+    startDateTime: Date;
+    endDateTime: Date;
+    game: string;
   }>;
   phone: string;
   isSuperAdmin: string;
@@ -126,7 +126,7 @@ const userSchema = new mongoose.Schema(
         name: String,
         startDateTime: Date,
         endDateTime: Date,
-        game: String
+        game: String,
       },
     ],
     dob: mongoose.Schema.Types.Date,
@@ -194,9 +194,5 @@ userSchema.pre("save", async function (done) {
 userSchema.statics.build = (attrs: UserAttrs): UserDoc => {
   return new User(attrs);
 };
-
-userSchema.statics.isSuperUser = function () {
-  console.log(this);
-}
 
 export const User = mongoose.model<UserDoc, UserModel>("Users", userSchema);

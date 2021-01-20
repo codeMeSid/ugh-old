@@ -6,6 +6,10 @@ import MainLayout from "../../../components/layout/mainlayout";
 import { useRequest } from "../../../hooks/use-request";
 import Router from "next/router";
 import { differenceInYears } from "date-fns";
+import React from "react";
+import Select from "../../../components/input/select";
+import { locations } from "../../../public/location-resource";
+import Option from "../../../components/input/option";
 
 const SocialActivatePage = ({ ughId }) => {
   const [mobile, setMobile] = useState("+91");
@@ -14,6 +18,7 @@ const SocialActivatePage = ({ ughId }) => {
   const [canSendOtp, setCanSendOtp] = useState(false);
   const [rcv, setRcv] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [state, setState] = useState("Tamil Nadu");
 
   useEffect(() => {
     if (!ughId) return setMessages([{ messages: "Invalid Request" }]);
@@ -35,6 +40,8 @@ const SocialActivatePage = ({ ughId }) => {
     body: {
       mobile,
       dob,
+      country: "India",
+      state,
     },
     method: "post",
     onSuccess: () => {
@@ -132,6 +139,20 @@ const SocialActivatePage = ({ ughId }) => {
               name="dob"
               value={dob}
               onChange={onInputHandler}
+            />
+          </div>
+          <div className="row">
+            <Input placeholder="country" value="India" disabled />
+          </div>
+          <div className="row">
+            <Select
+              name="state"
+              placeholder="state"
+              value={state}
+              onSelect={(e) => setState(e.currentTarget.value)}
+              options={locations.India.map((s) => {
+                return <Option key={s} display={s} value={s} />;
+              })}
             />
           </div>
           <ProgressButton
