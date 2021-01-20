@@ -130,13 +130,11 @@ const UserProfile = ({
             </div>
             <div className="profile__body__bottom">
               <div className="profile__body__bottom__left">
+                <div className="profile__body__bottom__left__title">bio</div>
                 <div
-                  className="profile__body__bottom__left__title"
+                  className="profile__body__bottom__left__value"
                   style={{ wordWrap: "break-word", wordBreak: "keep-all" }}
                 >
-                  bio
-                </div>
-                <div className="profile__body__bottom__left__value">
                   {user?.bio}
                 </div>
               </div>
