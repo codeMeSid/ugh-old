@@ -174,7 +174,7 @@ class Fire {
             body: body,
             click_action: `https://ultimategamershub.com${action}`,
             icon:
-              "https://firebasestorage.googleapis.com/v0/b/ultimategamershub.appspot.com/o/ugh%2FUGH_Icon_final.webp?alt=media&token=334a61cb-7bbb-454c-b9c5-edf0473e8ec2",
+              "https://firebasestorage.googleapis.com/v0/b/ultimategamershub.appspot.com/o/ugh%2Flogo_icon_notification.webp?alt=media&token=9fc67c04-9325-4b0c-a4e1-a57e0937d9d2",
           },
         },
         {

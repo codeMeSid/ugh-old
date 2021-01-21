@@ -117,7 +117,7 @@ class AppComponent extends React.Component<Props> {
         url: "/api/ugh/user/update/fcm",
         body: { fcmToken: token.fcmToken },
         method: "put",
-        onError: (errs) => console.log(errs),
+        onError: (errs) => console.log({ msg: "tok", error: errs }),
       });
       doRequest();
     }

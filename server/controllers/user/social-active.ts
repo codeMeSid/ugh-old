@@ -18,12 +18,8 @@ export const userSocialActivateController = async (
   isValidDob(dob);
   filter.isUnfit({ mobile });
 
-  let user = await User.findOne({ mobile });
-  if (user)
-    throw new BadRequestError(
-      "Mobile number already registered with another account."
-    );
-  user = await User.findOne({ ughId });
+  const user = await User.findOne({ ughId });
+  if (!user) throw new BadRequestError("Invalid User Operation");
   if (user.activity !== UserActivity.Inactive)
     throw new BadRequestError("User Account already active/banned");
   user.activity = UserActivity.Active;

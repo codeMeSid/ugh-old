@@ -79,7 +79,6 @@ export const winnerLogic = async (
         }
         break;
     }
-
     await session.commitTransaction();
   } catch (error) {
     console.log({ msg: "winner logic", error: error.message });
@@ -115,7 +114,10 @@ const sendNotification = (tournament: any, brackets: any) => {
         });
     }
   } catch (error) {
-    console.error(error?.message);
+    console.log({
+      msg: "winner logic socket notification",
+      error: error?.message,
+    });
   }
   return;
 };
@@ -146,7 +148,10 @@ const sendEmail = (tournament: any, users: any) => {
           );
       });
   } catch (error) {
-    console.error(error?.message);
+     console.log({
+      msg: "winner logic send email",
+      error: error?.message,
+    });
   }
   return;
 };
@@ -159,7 +164,10 @@ const sendUpdates = (regId: string) => {
       channel: SocketChannel.BracketRank,
     });
   } catch (error) {
-    console.error(error?.message);
+     console.log({
+      msg: "winner logic socket notification2",
+      error: error?.message,
+    });
   }
   return;
 };

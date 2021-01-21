@@ -65,9 +65,23 @@ const SocialActivatePage = ({ ughId }) => {
       next(false, "Failed");
       return;
     }
-    setCanSendOtp(true);
-    recaptchaVerifierContainer(mobile);
-    next();
+    const { doRequest } = useRequest({
+      url: "/api/ugh/user/social-auth/verify",
+      body: {
+        mobile,
+      },
+      method: "post",
+      onError: (data) => {
+        setMessages(data);
+        next(false, "Failed");
+      },
+      onSuccess: () => {
+        setCanSendOtp(true);
+        recaptchaVerifierContainer(mobile);
+        next();
+      },
+    });
+    doRequest();
   };
 
   const recaptchaVerifierContainer = async (mobile: string) => {

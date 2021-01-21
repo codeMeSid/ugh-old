@@ -5,7 +5,8 @@ import {
   requireAuth,
   requireAdminAuth,
   validateRequest,
-} from "@monsid/ugh-og"
+  BadRequestError,
+} from "@monsid/ugh-og";
 
 import { signupController } from "../controllers/user/signup";
 import { signinController } from "../controllers/user/signin";
@@ -31,6 +32,8 @@ import { userFetchMobileController } from "../controllers/user/fetch-detail-mobi
 import { userSocialActivateController } from "../controllers/user/social-active";
 import { userUpdateTournamentController } from "../controllers/user/update-tournament";
 import { userFcmController } from "../controllers/user/fcm";
+import { Request, Response } from "express";
+import { User } from "../models/user";
 
 export const userHandlers: Array<ApiSign> = [
   {
@@ -97,6 +100,20 @@ export const userHandlers: Array<ApiSign> = [
     url: "/social-auth",
     method: HttpMethod.Post,
     controller: userSocialAuthController,
+    middlewares: [],
+  },
+  {
+    url: "/social-auth/verify",
+    method: HttpMethod.Post,
+    controller: async (req: Request, res: Response) => {
+      const { mobile } = req.body;
+      const user = await User.findOne({ mobile });
+      if (user)
+        throw new BadRequestError(
+          "Mobile number already registered with another account."
+        );
+      res.send(true);
+    },
     middlewares: [],
   },
   {
