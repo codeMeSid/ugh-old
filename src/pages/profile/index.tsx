@@ -3,7 +3,7 @@ import Button from "../../components/button/main";
 import MainLayout from "../../components/layout/mainlayout";
 import { serverRequest } from "../../hooks/server-request";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillTrophy } from "react-icons/ai";
 import { FaPiggyBank } from "react-icons/fa";
 import { ImGift } from "react-icons/im";
@@ -11,6 +11,10 @@ import { BsGear } from "react-icons/bs";
 import { TournamentDoc } from "../../../server/models/tournament";
 import TournamentTab from "../../components/tournament-tab";
 import Tooltip from "../../components/tooltip";
+import TextDialogButton from "../../components/button/text-dialog";
+import { useRequest } from "../../hooks/use-request";
+import Router from "next/router";
+import Input from "../../components/input/input";
 const PlayerImg = require("../../public/asset/user.svg");
 
 const UserProfile = ({
@@ -26,6 +30,9 @@ const UserProfile = ({
   isNewAuth: boolean;
   isSocialAuth: boolean;
 }) => {
+  const [messages, setMessages] = useState(errors);
+  const [newUghId, setNewUghId] = useState("");
+  const [confUghId, setConfUghId] = useState("");
   useEffect(() => {
     if (isNewAuth)
       alert(
@@ -37,7 +44,7 @@ const UserProfile = ({
       );
   }, []);
   return (
-    <MainLayout messages={errors}>
+    <MainLayout messages={messages}>
       <div className="profile">
         <div className="profile__container">
           <div className="profile__head">
@@ -58,7 +65,61 @@ const UserProfile = ({
                 <div className="profile__body__top__item">
                   <div className="profile__body__top__item__title">ugh id</div>
                   <div className="profile__body__top__item__value">
-                    {user?.ughId}
+                    <TextDialogButton
+                      text={
+                        <Tooltip title="Click to Update">{user?.ughId}</Tooltip>
+                      }
+                      style={{ position: "fixed", width: 400 }}
+                      buttonText="Update"
+                      onAction={(onSuccess, onError) => {
+                        if (newUghId !== confUghId || newUghId === "") {
+                          setMessages([{ message: "UghId's do not match." }]);
+                          onError(null);
+                          return;
+                        }
+                        const { doRequest } = useRequest({
+                          url: "/api/ugh/user/update/ughId",
+                          body: { newUghId },
+                          method: "put",
+                          onError: (err) => {
+                            setMessages(err);
+                          },
+                          onSuccess: Router.reload,
+                        });
+                        doRequest(onSuccess, onError);
+                      }}
+                    >
+                      <div>
+                        <Input
+                          placeholder="New UghId"
+                          value={newUghId}
+                          onChange={(n, v) => {
+                            if (`${v}`.split(" ").length > 1)
+                              return setMessages([
+                                {
+                                  message:
+                                    "UghId cannot container white space characters",
+                                },
+                              ]);
+                            return setNewUghId(v);
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <Input
+                          placeholder="Confirm UghId"
+                          value={confUghId}
+                          onChange={(n, v) => setConfUghId(v)}
+                        />
+                      </div>
+                      <div
+                        style={{ color: "red", fontSize: 16, margin: "10px 0" }}
+                      >
+                        ***NOTE: You will be charged 50 UGH coins to update your
+                        UghId. Also make sure your wallet has sufficient
+                        balance, else it will be deducted from your earnings.
+                      </div>
+                    </TextDialogButton>
                   </div>
                 </div>
                 <div className="profile__body__top__item">
