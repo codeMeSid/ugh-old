@@ -4,7 +4,7 @@ import {
   currentUser,
   requireAuth,
   requireAdminAuth,
-} from "@monsid/ugh-og"
+} from "@monsid/ugh-og";
 
 import { transactionCreateController } from "../controllers/transaction/create";
 import { transactionVerifyController } from "../controllers/transaction/verify";
@@ -13,6 +13,7 @@ import { transactionFetchController } from "../controllers/transaction/fetch";
 import { transactionCreateRequestController } from "../controllers/transaction/create-request";
 import { transactionDetailController } from "../controllers/transaction/fetch-detail";
 import { transactionUpdateRequestController } from "../controllers/transaction/update-request";
+import { generateReportController } from "../controllers/transaction/generate-report";
 
 export const transactionHandler: Array<ApiSign> = [
   {
@@ -31,6 +32,12 @@ export const transactionHandler: Array<ApiSign> = [
     url: "/fetch/detail/:orderId",
     method: HttpMethod.Get,
     controller: transactionDetailController,
+    middlewares: [currentUser, requireAdminAuth],
+  },
+  {
+    url: "/generate/report",
+    method: HttpMethod.Get,
+    controller: generateReportController,
     middlewares: [currentUser, requireAdminAuth],
   },
   {
