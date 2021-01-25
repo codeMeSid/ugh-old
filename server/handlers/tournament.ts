@@ -5,7 +5,7 @@ import {
   requireAuth,
   requireAdminAuth,
   validateRequest,
-} from "@monsid/ugh-og"
+} from "@monsid/ugh-og";
 import { tournamentAddController } from "../controllers/tournament/add";
 import { tournamentFetchAllController } from "../controllers/tournament/fetch-all";
 import { tournamentFetchDetailController } from "../controllers/tournament/fetch-detail";
@@ -18,8 +18,15 @@ import { TournamentEvaluateController } from "../controllers/tournament/evaluate
 import { tournamentFetchUghIdController } from "../controllers/tournament/fetch-ughId";
 import { tournamentLeaveHandler } from "../controllers/tournament/leave";
 import { tournamentDisqualifyController } from "../controllers/tournament/disqualify";
+import { generateTournamentReportController } from "../controllers/tournament/generate-report";
 
 export const tournamentHandler: Array<ApiSign> = [
+  {
+    url: "/generate/report",
+    method: HttpMethod.Get,
+    controller: generateTournamentReportController,
+    middlewares: [currentUser, requireAdminAuth],
+  },
   {
     url: "/evaluate/:regId",
     method: HttpMethod.Get,
