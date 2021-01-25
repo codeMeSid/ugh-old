@@ -34,6 +34,7 @@ import { userUpdateTournamentController } from "../controllers/user/update-tourn
 import { userFcmController } from "../controllers/user/fcm";
 import { Request, Response } from "express";
 import { User } from "../models/user";
+import { updateUserUghIdController } from "../controllers/user/update-ughId";
 
 export const userHandlers: Array<ApiSign> = [
   {
@@ -133,6 +134,12 @@ export const userHandlers: Array<ApiSign> = [
     method: HttpMethod.Post,
     controller: signinController,
     middlewares: [signinValidator, validateRequest],
+  },
+  {
+    url: "/update/ughId",
+    method: HttpMethod.Put,
+    controller: updateUserUghIdController,
+    middlewares: [currentUser, requireAuth],
   },
   {
     url: "/update/fcm",
