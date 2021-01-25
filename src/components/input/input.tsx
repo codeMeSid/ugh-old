@@ -28,7 +28,7 @@ const Input = ({ type = "text", placeholder, onChange = () => { }, noHelp = fals
 
 
     return <div className="form__group">
-        <input style={style} disabled={disabled} name={name} value={formatValue(value)} type={type} className={`form__input ${isWhite ? "white" : ""}`} placeholder={placeholder} onChange={(e) => onChange(e.currentTarget.name, e.currentTarget.value)} autoComplete="off" />
+        <input style={style} disabled={disabled} name={name} value={formatValue(value)} type={type} className={`form__input ${isWhite ? "white" : ""}`} placeholder={placeholder} onChange={(e) => onChange(e.currentTarget.name, e.currentTarget.value)} autoComplete="UGHRandomString" />
         {!noHelp && <small className="form__input__helper">{placeholder}</small>}
     </div>
 }

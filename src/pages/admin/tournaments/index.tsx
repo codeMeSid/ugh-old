@@ -4,12 +4,14 @@ import Table from "../../../components/table";
 import { useRequest } from "../../../hooks/use-request";
 import { TournamentDoc } from "../../../../server/models/tournament";
 import Link from "next/link";
-import { format } from "date-fns";
+import { format, startOfWeek } from "date-fns";
 import Button from "../../../components/button/main";
 import ProgressButton from "../../../components/button/progress";
 import Router from "next/router";
 import { AiFillDelete } from "react-icons/ai";
 import IconDialogButton from "../../../components/button/icon-dialog";
+import XLSX from "xlsx";
+import DialogButton from "../../../components/button/dialog";
 
 const AdminTournamentDashboard = () => {
   const [tData, setTData] = useState([]);
@@ -79,17 +81,94 @@ const AdminTournamentDashboard = () => {
     },
     onError: (errors) => setMessages(errors),
   });
+
+  const generateReportHandler = (_: any, next: any) => {
+    const { doRequest: reportGenerateRequest } = useRequest({
+      url: "/api/ugh/tournament/generate/report",
+      method: "get",
+      body: {},
+      onError: (err) => {
+        setMessages(err);
+        next(false, "Failed");
+      },
+      onSuccess: (data) => {
+        const ws = XLSX.utils.aoa_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "UGH TRANSACTIONS");
+        XLSX.writeFile(
+          wb,
+          `UGH_TOURNAMENT(${format(
+            startOfWeek(new Date()),
+            "dd/MM/yyyy"
+          )}).xlsx`
+        );
+        next();
+      },
+    });
+    reportGenerateRequest();
+  };
+
+  const generateReportNCleanHandler = (_: any, next: any) => {
+    const { doRequest: cleanRequest } = useRequest({
+      url: "/api/ugh/admin/clean/tournaments",
+      body: {},
+      method: "delete",
+      onSuccess: Router.reload,
+      onError: (err) => {
+        setMessages(err);
+        next(false, "Failed");
+      },
+    });
+    const { doRequest: reportGenerateRequest } = useRequest({
+      url: "/api/ugh/tournament/generate/report",
+      method: "get",
+      body: {},
+      onError: (err) => {
+        setMessages(err);
+        next(false, "Failed");
+      },
+      onSuccess: (data) => {
+        const ws = XLSX.utils.aoa_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "UGH TRANSACTIONS");
+        XLSX.writeFile(
+          wb,
+          `UGH_TOURNAMENT(${format(
+            startOfWeek(new Date()),
+            "dd/MM/yyyy"
+          )}).xlsx`
+        );
+        cleanRequest();
+      },
+    });
+    reportGenerateRequest();
+  };
+
   useEffect(() => {
     doRequest();
   }, []);
 
   return (
     <SideLayout messages={messages} title={`match(${tData.length})`}>
-      <Link href="/admin/tournaments/add">
-        <a style={{ marginBottom: 20 }}>
-          <Button text="Add Tournament" />
-        </a>
-      </Link>
+      <div style={{ marginBottom: 10 }}>
+        <Link href="/admin/tournaments/add">
+          <a style={{ marginBottom: 20 }}>
+            <Button text="Add Tournament" />
+          </a>
+        </Link>
+        <ProgressButton
+          style={{ marginLeft: 10 }}
+          text="Generate Report"
+          type="github"
+          onPress={generateReportHandler}
+        />
+        <ProgressButton
+          style={{ marginLeft: 10 }}
+          text="Generate Report & Clean"
+          type="youtube"
+          onPress={generateReportNCleanHandler}
+        />
+      </div>
       <Table
         headers={[
           {

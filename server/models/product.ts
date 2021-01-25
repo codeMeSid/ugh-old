@@ -9,6 +9,7 @@ interface ProductAttrs {
   isInStock: boolean;
   isNewlyStocked: boolean;
   isInSale: boolean;
+  isHighlighted: boolean;
   saleValue: number;
   releaseDate: Date;
   tags: Array<string>;
@@ -25,6 +26,7 @@ export interface ProductDoc extends mongoose.Document {
   isInStock: boolean;
   isNewlyStocked: boolean;
   isInSale: boolean;
+  isHighlighted: boolean;
   saleValue: number;
   releaseDate: Date;
   tags: Array<string>;
@@ -48,6 +50,7 @@ const ProductSchema = new mongoose.Schema(
     isInStock: Boolean,
     isNewlyStocked: Boolean,
     isInSale: Boolean,
+    isHighlighted: Boolean,
     saleValue: Number,
     releaseDate: mongoose.Schema.Types.Date,
     tags: [String],

@@ -71,19 +71,24 @@ const AdminTransactionDashboard = () => {
   }, []);
 
   const downloadExcelHandler = async (_: any, next: any) => {
-    const sheetTitle = [
-      "Created At",
-      "Order ID",
-      "Razorpay ID",
-      "Amount",
-      "Status",
-    ];
-    const ws = XLSX.utils.aoa_to_sheet([sheetTitle, ...sheetData]);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "UGH TRANSACTIONS");
-    XLSX.writeFile(wb, "UGH_TRANSACTIONS.xlsx");
-    doRequest();
-    next();
+    const { doRequest: generateReportRequest } = useRequest({
+      url: "/api/ugh/transaction/generate/report",
+      method: "get",
+      body: {},
+      onError: (err) => {
+        setMessages(err);
+        next(false, "Failed");
+      },
+      onSuccess: (data) => {
+        const ws = XLSX.utils.aoa_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "UGH TRANSACTIONS");
+        XLSX.writeFile(wb, "UGH_TRANSACTIONS.xlsx");
+        next();
+      },
+    });
+    generateReportRequest();
+    // doRequest();
   };
 
   return (

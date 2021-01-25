@@ -1,4 +1,4 @@
-import { ApiSign, requireAdminAuth, currentUser } from "@monsid/ugh-og"
+import { ApiSign, requireAdminAuth, currentUser } from "@monsid/ugh-og";
 
 import { userHandlers } from "./user";
 import { featureHandlers } from "./feature";
@@ -17,12 +17,14 @@ import { settingHandler } from "./settings";
 import { bracketHandler } from "./bracket";
 import { messageHandler } from "./message";
 import { passbookHandler } from "./passbook";
+import { categoryHandler } from "./category";
+import { productHandler } from "./product";
 
 export const apiHandlers: Array<ApiSign> = [
   {
     url: "/test",
     controller: async (req: any, res: any) => {
-      res.send(true)
+      res.send(true);
     },
     middlewares: [],
   },
@@ -190,6 +192,26 @@ export const apiHandlers: Array<ApiSign> = [
     ({ url, controller, middlewares, method }): ApiSign => {
       return {
         url: `/passbook${url}`,
+        controller,
+        method,
+        middlewares: [...middlewares],
+      };
+    }
+  ),
+  ...Array.from(categoryHandler).map(
+    ({ url, controller, middlewares, method }): ApiSign => {
+      return {
+        url: `/category${url}`,
+        controller,
+        method,
+        middlewares: [...middlewares],
+      };
+    }
+  ),
+  ...Array.from(productHandler).map(
+    ({ url, controller, middlewares, method }): ApiSign => {
+      return {
+        url: `/product${url}`,
         controller,
         method,
         middlewares: [...middlewares],

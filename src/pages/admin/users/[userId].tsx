@@ -8,18 +8,21 @@ import { format } from "date-fns";
 import ProgressButton from "../../../components/button/progress";
 import { useRequest } from "../../../hooks/use-request";
 import Router from "next/router";
-import Table from "../../../components/table";
 import Link from "next/link";
 import Button from "../../../components/button/main";
+import { UserDoc } from "../../../../server/models/user";
 
-const UserDetail = ({ user }: { user: any }) => {
+const UserDetail = ({ user, errors }: { user: UserDoc; errors: any }) => {
   const [coins, setCoins] = useState(user?.wallet?.coins || 0);
   const [role, setRole] = useState(user?.role);
-  const [messages, setMessages] = useState([]);
+  const [dob, setDob] = useState(user?.dob || "");
+  const [mobile, setMobile] = useState(user?.mobile || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [messages, setMessages] = useState(errors);
 
   const { doRequest } = useRequest({
     url: `/api/ugh/user/update/profile/${user?.ughId}`,
-    body: { coins, role },
+    body: { coins, role, dob, mobile, email },
     method: "put",
     onSuccess: Router.reload,
     onError: (errors) => setMessages(errors),
@@ -45,7 +48,12 @@ const UserDetail = ({ user }: { user: any }) => {
             <Input placeholder="name" value={user?.name} disabled={true} />
           </div>
           <div className="col">
-            <Input placeholder="email" value={user?.email} disabled={true} />
+            <Input
+              placeholder="email"
+              value={email}
+              type="email"
+              onChange={(n, v) => setEmail(v)}
+            />
           </div>
         </div>
         <div className="row">
@@ -56,11 +64,9 @@ const UserDetail = ({ user }: { user: any }) => {
           <div className="col">
             <Input
               placeholder="date of birth"
-              value={format(
-                user?.dob ? new Date(user?.dob) : Date.now(),
-                "do MMMM yyy"
-              )}
-              disabled={true}
+              type="date"
+              value={dob}
+              onChange={(n, v) => setDob(new Date(v))}
             />
           </div>
         </div>
@@ -80,8 +86,8 @@ const UserDetail = ({ user }: { user: any }) => {
           <div className="col">
             <Input
               placeholder="phone"
-              value={`${user?.mobile || ""}`}
-              disabled={true}
+              value={mobile}
+              onChange={(n, v) => setMobile(v)}
             />
           </div>
           <div className="col">
@@ -143,11 +149,14 @@ const UserDetail = ({ user }: { user: any }) => {
             />
           </div>
           <div className="col">
-            <Input
-              placeholder="Stream Id"
-              value={user?.gamerProfile?.steamId}
-            />
+            <Input placeholder="Steam Id" value={user?.gamerProfile?.steamId} />
           </div>
+        </div>
+        <div className="row">
+          <div className="col">
+            <Input placeholder="PSN Id" value={user?.gamerProfile?.psnId} />
+          </div>
+          <div className="col"></div>
         </div>
         <div className="row">
           <div className="col">
@@ -174,8 +183,16 @@ const UserDetail = ({ user }: { user: any }) => {
         <ProgressButton
           size="medium"
           type="link"
-          text="UPDATE"
+          text="Update"
           onPress={async (_, next) => {
+            if (mobile !== user?.mobile) {
+              const mobRegex = new RegExp("[+]91[1-9]{1}[0-9]{9}");
+              if (!mobRegex.test(mobile)) {
+                setMessages([{ message: "Invalid Mobile Number Format" }]);
+                next(false, "Failed");
+                return;
+              }
+            }
             await doRequest();
             next();
           }}
@@ -204,9 +221,8 @@ UserDetail.getInitialProps = async (ctx) => {
   });
   return {
     user: data,
+    errors: errors || [],
   };
 };
 
 export default UserDetail;
-
-//     gamerProfile: UserGamerProfile;

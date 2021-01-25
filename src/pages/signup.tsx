@@ -134,6 +134,13 @@ const SignUp = ({ ughIds, errors }) => {
               )}
             </div>
           ) : null}
+          {ughId.length > 0 && (ughId.length < 4 || ughId.length > 10) && (
+            <div className="signin__ughid ">
+              <div className="signin__ughid--fail">
+                UGH ID should have 4 to 10 characters
+              </div>
+            </div>
+          )}
           <Input
             placeholder="name*"
             name="name"
@@ -205,6 +212,13 @@ const SignUp = ({ ughIds, errors }) => {
               }
               if (password !== password2 || password.length === 0) {
                 setMessages([{ message: "passwords do not match" }]);
+                next(false, "Failed");
+                return;
+              }
+              if (ughId.length < 4 || ughId.length > 10) {
+                setMessages([
+                  { message: "UGH ID should have min. 4 to max. 10 chars" },
+                ]);
                 next(false, "Failed");
                 return;
               }

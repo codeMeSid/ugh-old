@@ -21,7 +21,7 @@ import { Bracket } from "../models/bracket";
 import mongoose from "mongoose";
 import { News } from "../models/news";
 import { Gallery } from "../models/gallery";
-import { gameUpdateController } from "../controllers/game/update";
+import { startOfWeek } from "date-fns";
 
 const superAdminMiddleware = [currentUser, requireSuperAdminAuth];
 
@@ -61,8 +61,6 @@ export const adminHandler: Array<ApiSign> = [
     },
     middlewares: superAdminMiddleware,
   },
-  // streams edit
-  // sponsorships edit
   {
     url: "/delete/console/:consoleId",
     method: HttpMethod.Delete,
@@ -103,6 +101,18 @@ export const adminHandler: Array<ApiSign> = [
       res.send(true);
     },
     middlewares: superAdminMiddleware,
+  },
+  {
+    url: "/clean/tournaments",
+    method: HttpMethod.Delete,
+    middlewares: superAdminMiddleware,
+    controller: async (req: Request, res: Response) => {
+      const count = await Tournament.deleteMany({
+        startDateTime: { $lt: new Date(startOfWeek(new Date())) },
+        status: TournamentStatus.Completed,
+      });
+      res.send(true);
+    },
   },
   {
     url: "/delete/tournament/:tournamentId",
