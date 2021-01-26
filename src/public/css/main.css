@@ -860,10 +860,12 @@ tr:nth-child(even) {
       font-size: 1rem;
       margin-top: 0.2rem; }
   .messenger__form {
-    height: 3.6rem; }
+    height: 3.6rem;
+    display: flex;
+    position: relative; }
   .messenger__input {
     height: 100%;
-    width: 100%;
+    width: 90%;
     padding-left: 0.5rem;
     outline: none;
     border: 0; }

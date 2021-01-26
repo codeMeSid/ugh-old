@@ -184,13 +184,14 @@ class Fire {
           },
         }
       )
-      .then((res) =>
-        console.log({
-          msg: "notification axios",
-          notificationSuccess: !!res.data.success,
-          reason: res.data.results,
-        })
-      )
+      .then((res) => {
+        if (!!!res.data.success)
+          console.log({
+            msg: "notification axios",
+            notificationSuccess: !!res.data.success,
+            reason: res.data.results,
+          });
+      })
       .catch((error) =>
         console.log({ msg: "FCM AXIOS", error: error.message })
       );

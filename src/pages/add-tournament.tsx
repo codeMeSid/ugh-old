@@ -34,6 +34,8 @@ const AddTournament = ({
   const [name, setName] = useState("");
   const [sdt, setSdt] = useState("");
   const [edt, setEdt] = useState("");
+  const [sdd, setSdd] = useState(new Date());
+  const [edd, setEdd] = useState(new Date());
 
   const onChangeHandler = (name: String, val: any) => {
     switch (name) {
@@ -41,9 +43,13 @@ const AddTournament = ({
         return setName(val);
       case "coins":
         return setCoins(val);
-      case "startDateTime":
+      case "startDate":
+        return setSdd(val);
+      case "endDate":
+        return setEdd(val);
+      case "startTime":
         return setSdt(val);
-      case "endDateTime":
+      case "endTime":
         return setEdt(val);
     }
   };
@@ -75,33 +81,50 @@ const AddTournament = ({
     }
   };
 
-  const onTouramentCreateHandler = async () => {
+  const onTouramentCreateHandler = async (onSuccess: any, onError: any) => {
     const iGame = games?.filter(
       (game) => game.console === consoles[console]?.name
     )[game];
     const iGameParticipants = iGame?.participants[participants];
+    if (!sdt || !edt) {
+      setMessages([{ message: "Invalid schedule time" }]);
+      onError();
+      return;
+    }
+    const st = sdt.split(":");
+    const et = edt.split(":");
     if (iGame.gameType === "score" && iGameParticipants >= 4) {
-      const _sdt = new Date(sdt).valueOf();
-      const _edt = new Date(edt).valueOf();
-      const _dt = (_edt - _sdt) / (1000 * 60 * 60);
+      const _sdd = new Date(sdd)
+        .setHours(parseInt(st[0]), parseInt(st[1]), 0)
+        .valueOf();
+      const _edd = new Date(edd)
+        .setHours(parseInt(et[0]), parseInt(et[1]), 0)
+        .valueOf();
+      const _dd = (_edd - _sdd) / (1000 * 60 * 60);
       const recommendedTime = Math.ceil(
         Math.log2(games[game]?.participants[participants])
       );
-      if (_dt < recommendedTime)
+      if (_dd < recommendedTime)
         return setMessages([
           {
             message: `Atleast ${recommendedTime} hours of tournament time is required for this game.`,
           },
         ]);
     }
+    const startDateTime = new Date(sdd)
+      .setHours(parseInt(st[0]), parseInt(st[1]), 0)
+      .valueOf();
+    const endDateTime = new Date(edd)
+      .setHours(parseInt(et[0]), parseInt(et[1]), 0)
+      .valueOf();
     const body = {
       name,
       coins: coins || 0,
       winnerCount:
         games?.filter((game) => game.console === consoles[console]?.name)[game]
           ?.winners[wI] || 1,
-      startDateTime: new Date(sdt),
-      endDateTime: new Date(edt),
+      startDateTime,
+      endDateTime,
       game: games?.filter((game) => game.console === consoles[console]?.name)[
         game
       ]?.id,
@@ -119,7 +142,7 @@ const AddTournament = ({
       onSuccess: () => Router.replace("/my-tournament"),
       onError: (errors) => setMessages(errors),
     });
-    await doRequest();
+    await doRequest(onSuccess, onError);
   };
 
   return (
@@ -186,19 +209,43 @@ const AddTournament = ({
           <div className="row">
             <div className="col">
               <Input
-                type="datetime-local"
-                placeholder="start at"
+                type="date"
+                placeholder="start on"
                 onChange={onChangeHandler}
-                name="startDateTime"
+                name="startDate"
+                value={sdd}
                 isWhite
               />
             </div>
             <div className="col">
               <Input
-                type="datetime-local"
+                type="time"
+                placeholder="start at"
+                onChange={onChangeHandler}
+                name="startTime"
+                value={sdt}
+                isWhite
+              />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <Input
+                type="date"
+                placeholder="end on"
+                onChange={onChangeHandler}
+                name="endDate"
+                value={edd}
+                isWhite
+              />
+            </div>
+            <div className="col">
+              <Input
+                type="time"
                 placeholder="end at"
                 onChange={onChangeHandler}
-                name="endDateTime"
+                name="endTime"
+                value={edt}
                 isWhite
               />
             </div>

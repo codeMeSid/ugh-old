@@ -72,8 +72,15 @@ const UserProfile = ({
                       style={{ position: "fixed", width: 400 }}
                       buttonText="Update"
                       onAction={(onSuccess, onError) => {
+                        if (newUghId.length < 3) {
+                          setMessages([
+                            { message: "UghId should've minimum 3 chars." },
+                          ]);
+                          onError(null);
+                          return;
+                        }
                         if (newUghId !== confUghId || newUghId === "") {
-                          setMessages([{ message: "UghId's do not match." }]);
+                          setMessages([{ message: "UghId's do not match" }]);
                           onError(null);
                           return;
                         }

@@ -26,8 +26,10 @@ const AddTournament = ({
   const [gIndex, setGIndex] = useState(0);
   const [name, setName] = useState("");
   const [coins, setCoins] = useState(10);
-  const [startDateTime, setStartDateTime] = useState("");
-  const [endDateTime, setEndDateTime] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [wI, setWI] = useState(0);
   const [messages, setMessages] = useState(errors);
 
@@ -37,10 +39,14 @@ const AddTournament = ({
         return setName(val);
       case "coins":
         return setCoins(val);
-      case "startDateTime":
-        return setStartDateTime(val);
-      case "endDateTime":
-        return setEndDateTime(val);
+      case "startDate":
+        return setStartDate(val);
+      case "endDate":
+        return setEndDate(val);
+      case "startTime":
+        return setStartTime(val);
+      case "endTime":
+        return setEndTime(val);
       case "winnerCount":
         return setWI(val);
     }
@@ -79,9 +85,19 @@ const AddTournament = ({
       (game) => game.console === consoles[consoleIndex]?.name
     )[gameIndex];
     const iGameParticipants = iGame?.participants[pIndex];
+    if (!startTime || !endTime) {
+      setMessages([{ message: "Invalid schedule time" }]);
+      return;
+    }
+    const st = startTime.split(":");
+    const et = endTime.split(":");
     if (iGame.gameType === "score" && iGameParticipants >= 4) {
-      const _sdt = new Date(startDateTime).valueOf();
-      const _edt = new Date(endDateTime).valueOf();
+      const _sdt = new Date(startDate)
+        .setHours(parseInt(st[0]), parseInt(st[1]), 0)
+        .valueOf();
+      const _edt = new Date(endDate)
+        .setHours(parseInt(et[0]), parseInt(et[1]), 0)
+        .valueOf();
       const _dt = (_edt - _sdt) / (1000 * 60 * 60);
       const recommendedTime = Math.ceil(
         Math.log2(games[gameIndex]?.participants[pIndex])
@@ -96,6 +112,12 @@ const AddTournament = ({
         ]);
       }
     }
+    const startDateTime = new Date(startDate)
+      .setHours(parseInt(st[0]), parseInt(st[1]), 0)
+      .valueOf();
+    const endDateTime = new Date(endDate)
+      .setHours(parseInt(et[0]), parseInt(et[1]), 0)
+      .valueOf();
     const body = {
       name,
       coins: coins || 0,
@@ -186,18 +208,40 @@ const AddTournament = ({
         <div className="row">
           <div className="col">
             <Input
-              type="datetime-local"
-              placeholder="start at"
+              type="date"
+              placeholder="start on"
               onChange={onChangeHandler}
-              name="startDateTime"
+              name="startDate"
+              value={startDate}
             />
           </div>
           <div className="col">
             <Input
-              type="datetime-local"
+              type="time"
+              placeholder="start at"
+              onChange={onChangeHandler}
+              name="startTime"
+              value={startTime}
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col">
+            <Input
+              type="date"
+              placeholder="end on"
+              onChange={onChangeHandler}
+              name="endDate"
+              value={endDate}
+            />
+          </div>
+          <div className="col">
+            <Input
+              type="time"
               placeholder="end at"
               onChange={onChangeHandler}
-              name="endDateTime"
+              name="endTime"
+              value={endTime}
             />
           </div>
         </div>

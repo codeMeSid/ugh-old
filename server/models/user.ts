@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
 
-import { Password, UserRecovery, UserTournament } from "@monsid/ugh-og";
+import { Password, UserRecovery } from "@monsid/ugh-og";
 import {
   UserActivity,
   UserRole,
   UserAddress,
   UserGamerProfile,
   UserIdProof,
-  UserWallet,
   UserSettings,
 } from "@monsid/ugh-og";
+import { UserCart } from "../utils/interface/user/cart";
 
 interface UserAttrs {
   ughId: string;
@@ -55,6 +55,7 @@ export interface UserDoc extends mongoose.Document {
   phone: string;
   isSuperAdmin: string;
   fcmToken: string;
+  cart: Array<UserCart>;
 }
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
@@ -165,6 +166,15 @@ const userSchema = new mongoose.Schema(
       key: String,
       by: mongoose.Schema.Types.Date,
     },
+    cart: [
+      {
+        imageUrl: String,
+        qty: Number,
+        value: Number,
+        name: String,
+        size: String,
+      },
+    ],
   },
   {
     toJSON: {

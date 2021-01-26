@@ -139,16 +139,16 @@ const sendEmail = (tournament: any, users: any) => {
             user.email,
             "UGH TOURNAMENT WINNER"
           );
-        else
-          mailer.send(
-            MailerTemplate.Winner,
-            { ughId, tournamentName: name, opponentUghId: winners[0]?.ughId },
-            user.email,
-            "UGH Tournament Better Luck Next Time !!!"
-          );
+        // else
+        //   mailer.send(
+        //     MailerTemplate.Winner,
+        //     { ughId, tournamentName: name, opponentUghId: winners[0]?.ughId },
+        //     user.email,
+        //     "UGH Tournament Better Luck Next Time !!!"
+        //   );
       });
   } catch (error) {
-     console.log({
+    console.log({
       msg: "winner logic send email",
       error: error?.message,
     });
@@ -164,7 +164,7 @@ const sendUpdates = (regId: string) => {
       channel: SocketChannel.BracketRank,
     });
   } catch (error) {
-     console.log({
+    console.log({
       msg: "winner logic socket notification2",
       error: error?.message,
     });

@@ -76,10 +76,10 @@ const AdminTournamentPage = ({ tournaments, errors, ughId }) => {
                 Icon={GiSkullCrossedBones}
                 iconStyle={{ color: "red", fontSize: 30 }}
                 onAction={(onSuccess, onError) => {
-                  if (winning < 10) {
+                  if (winning < 1) {
                     onError([]);
                     return setMessages([
-                      { message: "Minimum Winnings 10 UGH coins." },
+                      { message: "Minimum Winnings 1 UGH coins." },
                     ]);
                   }
                   doRequest(onSuccess, onError, { winning, id: t?.id, ughId });
