@@ -15,6 +15,7 @@ interface Props {
 class SideLayout extends Component<Props> {
   state = {
     chats: [],
+    messages: [...this.props.messages],
   };
   componentDidMount() {
     const { doRequest } = useRequest({
@@ -42,8 +43,8 @@ class SideLayout extends Component<Props> {
   }
 
   render() {
-    const { chats } = this.state;
-    const { title, children, currentUser, messages } = this.props;
+    const { chats, messages } = this.state;
+    const { title, children, currentUser } = this.props;
     return (
       <>
         <div className="layout layout--side">

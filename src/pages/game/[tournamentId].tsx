@@ -16,12 +16,14 @@ const BracketList = ({
   userHasUploadedScore,
   currentUser,
   tournamentId,
+  chats,
 }: {
   brackets: Array<BracketDoc>;
   errors: any;
   userHasUploadedScore: boolean;
   currentUser: any;
   tournamentId: string;
+  chats: Array<any>;
 }) => {
   const [matches, setMatches] = useState(brackets);
   const [uploadedScore, setUploadedScore] = useState(userHasUploadedScore);
@@ -119,6 +121,17 @@ const BracketList = ({
         chats={[
           { channel: "admin", title: "admin", to: "admin", profile: Logo },
           { channel: "match", title: "match chat", to: tournamentId },
+          ...chats
+            .map((user: any) => {
+              if (currentUser?.ughId === user?.ughId) return;
+              return {
+                to: user?.ughId,
+                channel: "user",
+                profile: user?.uploadUrl,
+                title: user?.ughId,
+              };
+            })
+            .filter((chat: any) => chat && chat.to !== currentUser?.ughId),
         ]}
       />
     </MainLayout>
@@ -135,6 +148,7 @@ BracketList.getInitialProps = async (ctx) => {
     });
     return {
       brackets: data?.brackets || [],
+      chats: data?.players || [],
       userHasUploadedScore: !!data?.playerHasUploadedScore,
       errors: errors || [],
       tournamentId,

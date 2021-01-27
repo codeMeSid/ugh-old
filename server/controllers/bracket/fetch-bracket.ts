@@ -1,4 +1,4 @@
-import { BadRequestError, GameType, UserRole } from "@monsid/ugh-og"
+import { BadRequestError, GameType, UserRole } from "@monsid/ugh-og";
 import { Request, Response } from "express";
 import { Bracket } from "../../models/bracket";
 import { Tournament } from "../../models/tournament";
@@ -6,7 +6,11 @@ import { Tournament } from "../../models/tournament";
 export const fetchBracketController = async (req: Request, res: Response) => {
   const { tournamentId } = req.params;
   const { id, role } = req.currentUser;
-  const tournament = await Tournament.findOne({ regId: tournamentId });
+  const tournament = await Tournament.findOne({ regId: tournamentId }).populate(
+    "players",
+    "ughId uploadUrl",
+    "Users"
+  );
   if (!tournament) throw new BadRequestError("Invalid tournament");
   const isTournamentPlayer =
     tournament.players.findIndex(
@@ -27,5 +31,9 @@ export const fetchBracketController = async (req: Request, res: Response) => {
         break;
       }
 
-  res.send({ brackets, playerHasUploadedScore });
+  res.send({
+    brackets,
+    playerHasUploadedScore,
+    players: tournament.players || [],
+  });
 };
