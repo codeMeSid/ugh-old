@@ -9,7 +9,7 @@ import Router from "next/router";
 import { AiFillDelete } from "react-icons/ai";
 import IconDialogButton from "../../../components/button/icon-dialog";
 
-const AdminUserDashboard = () => {
+const AdminUserDashboard = ({ currentUser }) => {
   // state
   const [userData, setUserData] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -90,7 +90,11 @@ const AdminUserDashboard = () => {
   };
   // render
   return (
-    <SideLayout messages={messages} title={`users(${userData.length})`}>
+    <SideLayout
+      currentUser={currentUser}
+      messages={messages}
+      title={`users(${userData.length})`}
+    >
       <Table
         headers={[
           { text: "ughId", isResponsive: false },

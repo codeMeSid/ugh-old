@@ -7,9 +7,7 @@ import SideLayout from "../../../components/layout/sidelayout";
 import { useRequest } from "../../../hooks/use-request";
 import Router from "next/router";
 
-// TODO NEWS SUPER ADMIN
-
-export default () => {
+export default ({ currentUser }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [uploadUrl, setUploadUrl] = useState("");
@@ -37,7 +35,7 @@ export default () => {
     }
   };
   return (
-    <SideLayout messages={messages} title="add news">
+    <SideLayout currentUser={currentUser} messages={messages} title="add news">
       <div className="row">
         <FileInput
           onChange={onChangeHandler}

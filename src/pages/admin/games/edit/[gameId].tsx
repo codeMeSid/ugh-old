@@ -17,10 +17,12 @@ const AddGame = ({
   game,
   consoles,
   errors,
+  currentUser,
 }: {
   game: GameDoc;
   consoles: ConsoleDoc[];
   errors: any;
+  currentUser?: any;
 }) => {
   const [name, setName] = useState(game?.name || "");
   const [imageUrl, setImageUrl] = useState(game?.imageUrl || "");
@@ -132,7 +134,7 @@ const AddGame = ({
   };
 
   return (
-    <SideLayout messages={messages} title="edit game">
+    <SideLayout currentUser={currentUser} messages={messages} title="edit game">
       <div className="detail">
         <div className="row">
           <div className="col">

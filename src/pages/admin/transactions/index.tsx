@@ -11,7 +11,7 @@ import Router from "next/router";
 import { AiFillDelete } from "react-icons/ai";
 import IconDialogButton from "../../../components/button/icon-dialog";
 
-const AdminTransactionDashboard = () => {
+const AdminTransactionDashboard = ({ currentUser }) => {
   const [tData, setTData] = useState([]);
   const [sheetData, setSheetData] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -92,7 +92,11 @@ const AdminTransactionDashboard = () => {
   };
 
   return (
-    <SideLayout messages={messages} title={`bank(${tData.length})`}>
+    <SideLayout
+      currentUser={currentUser}
+      messages={messages}
+      title={`bank(${tData.length})`}
+    >
       <div style={{ margin: "1rem 0" }}>
         <ProgressButton
           text="Download Excel"

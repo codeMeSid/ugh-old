@@ -860,12 +860,10 @@ tr:nth-child(even) {
       font-size: 1rem;
       margin-top: 0.2rem; }
   .messenger__form {
-    height: 3.6rem;
-    display: flex;
-    position: relative; }
+    height: 3.6rem; }
   .messenger__input {
     height: 100%;
-    width: 90%;
+    width: 100%;
     padding-left: 0.5rem;
     outline: none;
     border: 0; }
@@ -897,7 +895,8 @@ tr:nth-child(even) {
     .messenger__contact__list {
       height: 90%;
       width: 100%;
-      overflow-y: scroll; }
+      overflow-y: scroll;
+      padding-bottom: 1rem; }
       .messenger__contact__list::-webkit-scrollbar {
         width: 0.2rem; }
     .messenger__contact__item {
@@ -1859,7 +1858,6 @@ tr:nth-child(even) {
 .bracket__score {
   width: 36rem;
   height: fit-content;
-  background-color: rgba(255, 255, 255, 0.3);
   box-shadow: 1rem rem 2rem rgba(0, 0, 0, 0.7);
   margin: 1rem;
   position: relative;

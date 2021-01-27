@@ -46,7 +46,7 @@ class SideNavbar extends Component {
           </div>
           <NavlinkIcon Icon={GoHome} href="/admin" title="home" />
           <NavlinkIcon Icon={RiUser5Line} href="/admin/users" title="users" />
-          <div
+          {/* <div
             style={{ position: "relative" }}
             onClick={() => this.setState({ mnc: 0 })}
           >
@@ -56,7 +56,7 @@ class SideNavbar extends Component {
               href="/admin/messages"
               title="messages"
             />
-          </div>
+          </div> */}
           <NavlinkIcon Icon={RiBitCoinLine} href="/admin/coins" title="coins" />
           <NavlinkIcon Icon={GoBook} href="/admin/passbook" title="passbook" />
           <NavlinkIcon

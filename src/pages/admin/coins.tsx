@@ -11,7 +11,7 @@ import Router from "next/router";
 import { AiFillDelete } from "react-icons/ai";
 import IconDialogButton from "../../components/button/icon-dialog";
 
-const AdminCoinsDashboard = () => {
+const AdminCoinsDashboard = ({ currentUser }) => {
   // states
   const [coinData, setCoinData] = useState([]);
   const [cost, setCost] = useState(0);
@@ -103,7 +103,11 @@ const AdminCoinsDashboard = () => {
   };
   // render
   return (
-    <SideLayout messages={messages} title={`coins(${coinData.length})`}>
+    <SideLayout
+      currentUser={currentUser}
+      messages={messages}
+      title={`coins(${coinData.length})`}
+    >
       <DialogButton title="add coin" onAction={addCoinRequest}>
         <Input
           name="cost"

@@ -59,25 +59,17 @@ export const winnerLogic = async (
     switch (tournament.game.gameType) {
       case GameType.Rank:
         updates = rankLogger(tournament, brackets, users);
-        if (updates)
-          await Promise.all([
-            updates?.updateUsers?.map((u) => u.save({ session })),
-            updates?.updatedBrackets?.map((b) => b.save({ session })),
-            updates?.newBrackets?.map((b) => b.save({ session })),
-            updates?.passbooks?.map((p) => p.save({ session })),
-            updates?.updatedTournament?.save({ session }),
-          ]);
         break;
       case GameType.Score:
         updates = scoreLogger(tournament, brackets, bracket, users);
-        if (updates) {
-          updates?.updateUsers?.map(async (u) => await u.save({ session }));
-          updates?.updatedBrackets?.map(async (b) => await b.save({ session }));
-          updates?.newBrackets?.map(async (b) => await b.save({ session }));
-          updates?.passbooks?.map(async (p) => await p.save({ session }));
-          await updates?.updatedTournament?.save({ session });
-        }
         break;
+    }
+    if (updates) {
+      updates?.updateUsers?.map(async (u) => await u.save({ session }));
+      updates?.updatedBrackets?.map(async (b) => await b.save({ session }));
+      updates?.newBrackets?.map(async (b) => await b.save({ session }));
+      updates?.passbooks?.map(async (p) => await p.save({ session }));
+      await updates?.updatedTournament?.save({ session });
     }
     await session.commitTransaction();
   } catch (error) {

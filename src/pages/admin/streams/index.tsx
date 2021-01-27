@@ -17,7 +17,7 @@ import Router from "next/router";
 import { AiFillDelete, AiOutlineEdit } from "react-icons/ai";
 import IconDialogButton from "../../../components/button/icon-dialog";
 
-const AdminStreamDashboard = () => {
+const AdminStreamDashboard = ({ currentUser }) => {
   // states
   const [streamData, setStreamData] = useState([]);
   const [games, setGames] = useState([]);
@@ -145,7 +145,11 @@ const AdminStreamDashboard = () => {
   };
   // render
   return (
-    <SideLayout messages={messages} title={`streams(${streamData.length})`}>
+    <SideLayout
+      currentUser={currentUser}
+      messages={messages}
+      title={`streams(${streamData.length})`}
+    >
       <DialogButton title="add stream" onAction={addStreamRequest}>
         <Input
           name="name"

@@ -8,13 +8,15 @@ const AdminPassbookPage = ({
   passbooks,
   errors,
   passbookMetrics,
+  currentUser,
 }: {
   passbooks: Array<PassbookDoc>;
   passbookMetrics: any;
   errors: any;
+  currentUser?: any;
 }) => {
   return (
-    <SideLayout messages={errors} title="Passbook">
+    <SideLayout currentUser={currentUser} messages={errors} title="Passbook">
       <div className="detail">
         <div className="row">
           <Table
@@ -59,7 +61,7 @@ AdminPassbookPage.getInitialProps = async (ctx) => {
     Array.from(data).forEach((p: any) => {
       if (passbookMetrics[p.transactionEnv])
         passbookMetrics[p.transactionEnv] += p.coins;
-        else passbookMetrics[p.transactionEnv] = p.coins;
+      else passbookMetrics[p.transactionEnv] = p.coins;
     });
   }
   return { passbooks: data || [], errors: errors || [], passbookMetrics };

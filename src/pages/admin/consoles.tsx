@@ -10,7 +10,7 @@ import IconDialogButton from "../../components/button/icon-dialog";
 import { AiFillDelete } from "react-icons/ai";
 import Router from "next/router";
 
-const AdminConsolesDashboard = () => {
+const AdminConsolesDashboard = ({ currentUser }) => {
   // states
   const [consoleData, setConsoleData] = useState([]);
   const [name, setName] = useState("");
@@ -84,7 +84,11 @@ const AdminConsolesDashboard = () => {
   };
   // render
   return (
-    <SideLayout messages={messages} title={`console(${consoleData.length})`}>
+    <SideLayout
+      currentUser={currentUser}
+      messages={messages}
+      title={`console(${consoleData.length})`}
+    >
       <DialogButton title="add console" onAction={addConsoleRequest}>
         <Input
           name="name"

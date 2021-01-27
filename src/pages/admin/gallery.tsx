@@ -12,7 +12,7 @@ import Router from "next/router";
 import { AiFillDelete } from "react-icons/ai";
 import IconDialogButton from "../../components/button/icon-dialog";
 
-const AdminGalleryDashboard = () => {
+const AdminGalleryDashboard = ({ currentUser }) => {
   // states
   const [galleryData, setGalleryData] = useState([]);
   const [name, setName] = useState("");
@@ -99,7 +99,11 @@ const AdminGalleryDashboard = () => {
   };
   // render
   return (
-    <SideLayout messages={messages} title={`gallery(${galleryData.length})`}>
+    <SideLayout
+      currentUser={currentUser}
+      messages={messages}
+      title={`gallery(${galleryData.length})`}
+    >
       <DialogButton title="add gallery" onAction={addGalleryRequest}>
         <Input name="name" placeholder="name" onChange={onChangeHandler} />
         <FileInput

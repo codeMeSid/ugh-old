@@ -10,7 +10,7 @@ import Router from "next/router";
 import { AiFillDelete } from "react-icons/ai";
 import IconDialogButton from "../../../components/button/icon-dialog";
 
-const AdminNewsDashboard = () => {
+const AdminNewsDashboard = ({ currentUser }) => {
   const [newsData, setNewsData] = useState([]);
 
   const [messages, setMessages] = useState([]);
@@ -70,7 +70,11 @@ const AdminNewsDashboard = () => {
     await doRequest();
   };
   return (
-    <SideLayout messages={messages} title={`news(${newsData.length})`}>
+    <SideLayout
+      currentUser={currentUser}
+      messages={messages}
+      title={`news(${newsData.length})`}
+    >
       <Link href="/admin/news/add">
         <a>
           <Button text="Add News" />

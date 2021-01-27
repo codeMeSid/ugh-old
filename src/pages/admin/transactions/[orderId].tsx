@@ -13,9 +13,11 @@ import FileInput from "../../../components/input/file";
 const TransactionDetail = ({
   transaction,
   errors,
+  currentUser,
 }: {
   transaction: TransactionDoc;
   errors: any;
+  currentUser?: any;
 }) => {
   const [tId, setTId] = useState("");
   const [messages, setMessages] = useState(errors);
@@ -40,7 +42,11 @@ const TransactionDetail = ({
   });
 
   return (
-    <SideLayout messages={messages} title={`${transaction?.orderId}`}>
+    <SideLayout
+      currentUser={currentUser}
+      messages={messages}
+      title={`${transaction?.orderId}`}
+    >
       <div className="row">
         <div className="col">
           <Input placeholder="order Id" value={transaction?.orderId} disabled />

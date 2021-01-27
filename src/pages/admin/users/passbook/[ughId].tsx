@@ -4,9 +4,9 @@ import SideLayout from "../../../../components/layout/sidelayout";
 import Table from "../../../../components/table";
 import { serverRequest } from "../../../../hooks/server-request";
 
-const AdminUserPassbook = ({ passbooks, errors, ughId }) => {
+const AdminUserPassbook = ({ passbooks, errors, ughId, currentUser }) => {
   return (
-    <SideLayout title="passbook">
+    <SideLayout title="passbook" currentUser={currentUser} messages={errors}>
       <div className="detail">
         <div className="row">
           <h1 style={{ fontWeight: 600, fontSize: 36 }}>{ughId}</h1>

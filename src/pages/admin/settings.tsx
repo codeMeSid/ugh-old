@@ -12,9 +12,11 @@ import TextEditor from "../../components/editor";
 const SettingsPage = ({
   settings,
   errors,
+  currentUser,
 }: {
   settings: SettingsDoc;
   errors: any;
+  currentUser?: any;
 }) => {
   const [coins, setCoins] = useState(settings?.tournamentFees);
   const [wallpapers, setWallpapers] = useState(settings?.wallpapers || []);
@@ -71,7 +73,7 @@ const SettingsPage = ({
     setWallpapers(Array.from(wallpapers).filter((w, i) => i !== index));
   };
   return (
-    <SideLayout messages={messages} title="settings">
+    <SideLayout currentUser={currentUser} messages={messages} title="settings">
       <div className="detail">
         <div className="row">
           <Input

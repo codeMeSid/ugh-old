@@ -8,7 +8,7 @@ import Switch from "react-switch";
 import Link from "next/link";
 import { AiOutlineEdit } from "react-icons/ai";
 
-const AdminGamesDashboard = () => {
+const AdminGamesDashboard = ({ currentUser }) => {
   const [gameData, setGameData] = useState([]);
   const [messages, setMessages] = useState([]);
   const SwitchBlade = (id: string, activity: boolean) => {
@@ -68,7 +68,11 @@ const AdminGamesDashboard = () => {
   };
   // render
   return (
-    <SideLayout messages={messages} title={`games(${gameData.length})`}>
+    <SideLayout
+      currentUser={currentUser}
+      messages={messages}
+      title={`games(${gameData.length})`}
+    >
       <Link href="/admin/games/add">
         <a>
           <Button text="Add Game" />

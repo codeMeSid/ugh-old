@@ -15,10 +15,12 @@ const AddTournament = ({
   games,
   consoles,
   errors,
+  currentUser,
 }: {
   games: Array<GameDoc>;
   consoles: Array<ConsoleDoc>;
   errors: Array<any>;
+  currentUser?: any;
 }) => {
   const [consoleIndex, setConsoleIndex] = useState(0);
   const [gameIndex, setGameIndex] = useState(0);
@@ -150,7 +152,7 @@ const AddTournament = ({
     next();
   };
   return (
-    <SideLayout messages={messages} title="add match">
+    <SideLayout currentUser={currentUser} messages={messages} title="add match">
       <div className="detail">
         <div className="row">
           <div className="col">

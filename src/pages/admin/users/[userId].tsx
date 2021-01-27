@@ -12,7 +12,15 @@ import Link from "next/link";
 import Button from "../../../components/button/main";
 import { UserDoc } from "../../../../server/models/user";
 
-const UserDetail = ({ user, errors }: { user: UserDoc; errors: any }) => {
+const UserDetail = ({
+  user,
+  errors,
+  currentUser,
+}: {
+  user: UserDoc;
+  errors: any;
+  currentUser?: any;
+}) => {
   const [coins, setCoins] = useState(user?.wallet?.coins || 0);
   const [role, setRole] = useState(user?.role);
   const [dob, setDob] = useState(user?.dob || "");
@@ -32,6 +40,7 @@ const UserDetail = ({ user, errors }: { user: UserDoc; errors: any }) => {
   const onSelectHandler = (e) => setRole(e.currentTarget.value);
   return (
     <SideLayout
+      currentUser={currentUser}
       messages={messages}
       title={user?.ughId ? user?.ughId : "not found"}
     >

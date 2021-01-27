@@ -13,7 +13,7 @@ import IconDialogButton from "../../../components/button/icon-dialog";
 import XLSX from "xlsx";
 import DialogButton from "../../../components/button/dialog";
 
-const AdminTournamentDashboard = () => {
+const AdminTournamentDashboard = ({ currentUser }) => {
   const [tData, setTData] = useState([]);
   const [messages, setMessages] = useState([]);
   const TableLink = (name: string, id: string) => (
@@ -149,7 +149,11 @@ const AdminTournamentDashboard = () => {
   }, []);
 
   return (
-    <SideLayout messages={messages} title={`match(${tData.length})`}>
+    <SideLayout
+      currentUser={currentUser}
+      messages={messages}
+      title={`match(${tData.length})`}
+    >
       <div style={{ marginBottom: 10 }}>
         <Link href="/admin/tournaments/add">
           <a style={{ marginBottom: 20 }}>

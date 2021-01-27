@@ -18,6 +18,7 @@ const DisputeDetail = ({
     gameName,
   },
   errors,
+  currentUser,
 }: {
   bracket?: {
     team: {
@@ -33,6 +34,7 @@ const DisputeDetail = ({
     tournamentName: string;
   };
   errors: any;
+  currentUser?: any;
 }) => {
   const [messages, setMessages] = useState(errors);
   const disputeHandler = async (accept: boolean) => {
@@ -52,7 +54,7 @@ const DisputeDetail = ({
   };
 
   return (
-    <SideLayout messages={messages} title={regId}>
+    <SideLayout currentUser={currentUser} messages={messages} title={regId}>
       <div className="detail">
         <div className="row">
           <Input placeholder="ugh id" value={team?.user?.ughId} disabled />

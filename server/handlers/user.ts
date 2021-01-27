@@ -35,6 +35,7 @@ import { userFcmController } from "../controllers/user/fcm";
 import { Request, Response } from "express";
 import { User } from "../models/user";
 import { updateUserUghIdController } from "../controllers/user/update-ughId";
+import { userFetchAllMessengerController } from "../controllers/user/fetch-all-messenger";
 
 export const userHandlers: Array<ApiSign> = [
   {
@@ -60,6 +61,12 @@ export const userHandlers: Array<ApiSign> = [
     method: HttpMethod.Get,
     controller: userFetchAllController,
     middlewares: [],
+  },
+  {
+    url: "/fetch/all/messenger",
+    method: HttpMethod.Get,
+    controller: userFetchAllMessengerController,
+    middlewares: [currentUser, requireAdminAuth],
   },
   {
     url: "/fetch/detail",

@@ -12,7 +12,7 @@ import Router from "next/router";
 import { TiTick } from "react-icons/ti";
 import { AiFillDelete } from "react-icons/ai";
 
-const AdminTournamentPage = ({ tournaments, errors, ughId }) => {
+const AdminTournamentPage = ({ tournaments, errors, ughId, currentUser }) => {
   let winning = 0;
   const [messages, setMessages] = useState(errors || []);
 
@@ -25,7 +25,11 @@ const AdminTournamentPage = ({ tournaments, errors, ughId }) => {
   });
 
   return (
-    <SideLayout title="tournaments" messages={messages}>
+    <SideLayout
+      currentUser={currentUser}
+      title="tournaments"
+      messages={messages}
+    >
       <h1 style={{ textAlign: "center", fontWeight: 600, fontSize: 36 }}>
         {ughId}
       </h1>

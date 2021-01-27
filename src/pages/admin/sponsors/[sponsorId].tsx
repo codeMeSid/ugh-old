@@ -10,10 +10,12 @@ const SponsorDetail = ({
   sponsor,
   baseUrl,
   errors,
+  currentUser,
 }: {
   sponsor: SponsorDoc;
   baseUrl: string;
   errors: any;
+  currentUser?: any;
 }) => {
   const [sponsorId, setSponsorId] = useState(sponsor?.sponsorId);
   const [isProccessed, setIsProccessed] = useState(sponsor?.isProccessed);
@@ -31,7 +33,7 @@ const SponsorDetail = ({
   });
 
   return (
-    <SideLayout messages={messages} title={"sponsor"}>
+    <SideLayout currentUser={currentUser} messages={messages} title={"sponsor"}>
       <div className="row">
         <div className="col">
           <Input placeholder="name" value={sponsor?.name} disabled />
@@ -91,7 +93,9 @@ const SponsorDetail = ({
           {isProccessed ? (
             <Input
               placeholder="sponsor link"
-              value={`https://www.ultimategamershub.com/sponsors/${sponsorId || "NA"}`}
+              value={`https://www.ultimategamershub.com/sponsors/${
+                sponsorId || "NA"
+              }`}
               disabled
             />
           ) : (

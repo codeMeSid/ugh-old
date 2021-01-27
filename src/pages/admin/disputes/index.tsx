@@ -21,7 +21,7 @@ interface Dispute {
   tournamentName: string;
 }
 
-const AdminDisputeDashboard = () => {
+const AdminDisputeDashboard = ({ currentUser }) => {
   const [disputeData, setDisputeData] = useState([]);
   const [messages, setMessages] = useState([]);
   const TableLink = (id: string) => (
@@ -99,7 +99,7 @@ const AdminDisputeDashboard = () => {
   }, []);
 
   return (
-    <SideLayout messages={messages} title="Disputes">
+    <SideLayout currentUser={currentUser} messages={messages} title="Disputes">
       <Table
         data={disputeData}
         headers={[

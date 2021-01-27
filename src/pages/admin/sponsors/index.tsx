@@ -11,7 +11,7 @@ import { AiFillDelete } from "react-icons/ai";
 import stream from "stream";
 import IconDialogButton from "../../../components/button/icon-dialog";
 
-const AdminSponsorDashboard = () => {
+const AdminSponsorDashboard = ({ currentUser }) => {
   const [sData, setSData] = useState([]);
   const [messages, setMessages] = useState([]);
   const SwitchBlade = (id: string, activity: boolean) => {
@@ -92,7 +92,11 @@ const AdminSponsorDashboard = () => {
     await doRequest();
   };
   return (
-    <SideLayout messages={messages} title={`sponsors(${sData.length})`}>
+    <SideLayout
+      currentUser={currentUser}
+      messages={messages}
+      title={`sponsors(${sData.length})`}
+    >
       <Table
         headers={[
           {

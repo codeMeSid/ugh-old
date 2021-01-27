@@ -16,9 +16,11 @@ import { RiUserSharedLine } from "react-icons/ri";
 const TournamentDetail = ({
   tournament,
   errors,
+  currentUser,
 }: {
   tournament: TournamentDoc;
   errors: any;
+  currentUser?: any;
 }) => {
   const [status, setStatus] = useState(tournament?.status);
   const [messages, setMessages] = useState(errors);
@@ -35,7 +37,11 @@ const TournamentDetail = ({
   });
 
   return (
-    <SideLayout messages={messages} title="Match detail">
+    <SideLayout
+      currentUser={currentUser}
+      messages={messages}
+      title="Match detail"
+    >
       <div className="detail">
         <div className="row">
           <div className="col">

@@ -10,7 +10,7 @@ import Router from "next/router";
 import { AiFillDelete } from "react-icons/ai";
 import IconDialogButton from "../../../components/button/icon-dialog";
 
-const AdminSponsorshipDashboard = () => {
+const AdminSponsorshipDashboard = ({ currentUser }) => {
   const [sData, setSData] = useState([]);
   const [messages, setMessages] = useState([]);
   const SwitchBlade = (id: string, activity: boolean) => {
@@ -86,7 +86,11 @@ const AdminSponsorshipDashboard = () => {
   };
 
   return (
-    <SideLayout messages={messages} title={`packs(${sData.length})`}>
+    <SideLayout
+      currentUser={currentUser}
+      messages={messages}
+      title={`packs(${sData.length})`}
+    >
       <Link href="/admin/sponsorships/add">
         <a style={{ marginBottom: 20 }}>
           <Button text="Add Pack" />
