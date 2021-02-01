@@ -10,7 +10,7 @@ import mongoose from "mongoose";
 import { User, UserDoc } from "../../models/user";
 import { shuffle } from "../../utils/shuffle";
 import { randomBytes } from "crypto";
-import { Bracket } from "../../models/bracket";
+import { Bracket, BracketDoc } from "../../models/bracket";
 import { TournamentTime } from "../../utils/enum/tournament-time";
 import { winnerLogic } from "../../utils/winner-logic";
 import { mailer } from "../../utils/mailer";
@@ -178,12 +178,17 @@ export const tournamentUpdateStatusController = async (
           }
         }
         tournament.status = TournamentStatus.Started;
+        tournament.endDateTime = new Date(
+          Date.now() +
+            (new Date(tournament.endDateTime).valueOf() -
+              new Date(tournament.startDateTime).valueOf())
+        );
         tournament.startDateTime = new Date();
 
-        await Promise.all([
-          tournament.save({ session }),
-          brackets?.map(async (b) => b.save({ session })),
-        ]);
+        await tournament.save({ session });
+        await Promise.all(
+          brackets?.map((b: BracketDoc) => b.save({ session }))
+        );
         await session.commitTransaction();
         timer.cancel(tournament.regId);
         timer.cancel(`${tournament.regId}-end`);
@@ -201,10 +206,7 @@ export const tournamentUpdateStatusController = async (
         });
         timer.schedule(
           `${tournament.regId}-end`,
-          new Date(
-            new Date(tournament.endDateTime).valueOf() +
-              (tournament.game.gameType === GameType.Rank ? 0 : 1000 * 60 * 30)
-          ),
+          new Date(tournament.endDateTime),
           async ({ id }: { id: string }, done) => {
             try {
               const tournament = await Tournament.findById(id);

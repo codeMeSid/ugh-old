@@ -22,6 +22,7 @@ import mongoose from "mongoose";
 import { News } from "../models/news";
 import { Gallery } from "../models/gallery";
 import { startOfWeek } from "date-fns";
+import { Category } from "../models/category";
 
 const superAdminMiddleware = [currentUser, requireSuperAdminAuth];
 
@@ -30,6 +31,31 @@ export const adminHandler: Array<ApiSign> = [
     url: "/fetch/metrics",
     method: HttpMethod.Get,
     controller: adminFetchMetricController,
+    middlewares: [],
+  },
+  {
+    url: "/fetch/notificaton",
+    controller: async (req: Request, res: Response) => {
+      const session = await mongoose.startSession();
+      session.startTransaction();
+      let tn = 0;
+      let dn = 0;
+      try {
+        tn = await Transaction.countDocuments({
+          status: TransactionTypes.Requested,
+        });
+        dn = await Bracket.countDocuments({
+          $or: [
+            { "teamA.hasRaisedDispute": true },
+            { "teamB.hasRaisedDispute": true },
+          ],
+          winner: { $exists: false },
+        });
+      } catch (error) {}
+      session.endSession();
+      res.send({ tn, dn });
+    },
+    method: HttpMethod.Get,
     middlewares: [],
   },
   {
@@ -67,6 +93,16 @@ export const adminHandler: Array<ApiSign> = [
     controller: async (req: Request, res: Response) => {
       const { consoleId } = req.params;
       await Console.findByIdAndDelete(consoleId);
+      res.send(true);
+    },
+    middlewares: superAdminMiddleware,
+  },
+  {
+    url: "/delete/category/:categoryId",
+    method: HttpMethod.Delete,
+    controller: async (req: Request, res: Response) => {
+      const { categoryId } = req.params;
+      await Category.findByIdAndDelete(categoryId);
       res.send(true);
     },
     middlewares: superAdminMiddleware,

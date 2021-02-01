@@ -5,7 +5,7 @@ import { Tournament } from "../../models/tournament";
 
 export const fetchBracketController = async (req: Request, res: Response) => {
   const { tournamentId } = req.params;
-  const { id, role } = req.currentUser;
+  const { id, ughId, role } = req.currentUser;
   const tournament = await Tournament.findOne({ regId: tournamentId }).populate(
     "players",
     "ughId uploadUrl",
@@ -14,7 +14,9 @@ export const fetchBracketController = async (req: Request, res: Response) => {
   if (!tournament) throw new BadRequestError("Invalid tournament");
   const isTournamentPlayer =
     tournament.players.findIndex(
-      (playerId) => JSON.stringify(playerId) === JSON.stringify(id)
+      (playerId) =>
+        JSON.stringify(playerId?.id) === JSON.stringify(id) ||
+        playerId?.ughId === ughId
     ) !== -1;
   if (!isTournamentPlayer && role !== UserRole.Admin)
     throw new BadRequestError("Player doesn't belong to tournament");

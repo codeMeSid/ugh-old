@@ -17,7 +17,6 @@ export const userSocialActivateController = async (
   const { mobile, dob, country, state } = req.body;
   isValidDob(dob);
   filter.isUnfit({ mobile });
-
   const user = await User.findOne({ ughId });
   if (!user) throw new BadRequestError("Invalid User Operation");
   if (user.activity !== UserActivity.Inactive)

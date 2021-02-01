@@ -126,6 +126,17 @@ const UserDetail = ({
         </div>
         <div className="row">
           <div className="col">
+            <Input
+              placeholder="earnings"
+              value={user?.tournaments
+                .filter((t) => t.didWin)
+                .reduce((acc, t) => acc + t.coins, 0)}
+              disabled={true}
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col">
             <img
               src={user?.idProof?.aadharUrl}
               className="detail__image"

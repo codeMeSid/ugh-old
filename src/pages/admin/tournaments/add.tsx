@@ -82,23 +82,23 @@ const AddTournament = ({
     }
   };
 
-  const onTouramentCreateHandler = async (next: any, isFree: boolean) => {
+  const onTouramentCreateHandler = (next: any, isFree: boolean) => {
     const iGame = games?.filter(
       (game) => game.console === consoles[consoleIndex]?.name
     )[gameIndex];
     const iGameParticipants = iGame?.participants[pIndex];
     if (!startTime || !endTime) {
       setMessages([{ message: "Invalid schedule time" }]);
-      return;
+      return next(false, "Failed");
     }
     const st = startTime.split(":");
     const et = endTime.split(":");
     if (iGame.gameType === "score" && iGameParticipants >= 4) {
       const _sdt = new Date(startDate)
-        .setHours(parseInt(st[0]), parseInt(st[1]), 0)
+        .setHours(parseInt(st[0]), parseInt(st[1]), 0, 0)
         .valueOf();
       const _edt = new Date(endDate)
-        .setHours(parseInt(et[0]), parseInt(et[1]), 0)
+        .setHours(parseInt(et[0]), parseInt(et[1]), 0, 0)
         .valueOf();
       const _dt = (_edt - _sdt) / (1000 * 60 * 60);
       const recommendedTime = Math.ceil(
@@ -115,10 +115,10 @@ const AddTournament = ({
       }
     }
     const startDateTime = new Date(startDate)
-      .setHours(parseInt(st[0]), parseInt(st[1]), 0)
+      .setHours(parseInt(st[0]), parseInt(st[1]), 0, 0)
       .valueOf();
     const endDateTime = new Date(endDate)
-      .setHours(parseInt(et[0]), parseInt(et[1]), 0)
+      .setHours(parseInt(et[0]), parseInt(et[1]), 0, 0)
       .valueOf();
     const body = {
       name,
@@ -146,10 +146,12 @@ const AddTournament = ({
       body,
       method: "post",
       onSuccess: () => Router.replace("/admin/tournaments"),
-      onError: (errors) => setMessages(errors),
+      onError: (errors) => {
+        setMessages(errors);
+        next(false, "Failed");
+      },
     });
-    await doRequest();
-    next();
+    doRequest();
   };
   return (
     <SideLayout currentUser={currentUser} messages={messages} title="add match">

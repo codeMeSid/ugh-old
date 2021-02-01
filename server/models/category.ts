@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 interface CategoryAttrs {
   name: string;
-  sub: Array<{ name: string; isActive: boolean }>;
+  sub: Array<string>;
 }
 
 export interface CategoryDoc extends mongoose.Document {
   name: string;
-  sub: Array<{ name: string; isActive: boolean }>;
+  sub: Array<string>;
   isActive: boolean;
 }
 
@@ -18,7 +18,7 @@ interface CategoryModel extends mongoose.Model<CategoryDoc> {
 const CategorySchema = new mongoose.Schema(
   {
     name: String,
-    sub: [{ name: String, isActive: Boolean }],
+    sub: [String],
     isActive: {
       type: Boolean,
       default: true,

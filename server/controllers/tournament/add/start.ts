@@ -178,10 +178,9 @@ export const tournamentStartTimer = (
           }
           // change tournament status to started
           tournament.status = TournamentStatus.Started;
-          await Promise.all([
-            tournament.save({ session }),
-            brackets?.map(async (b) => b.save({ session })),
-          ]);
+          await tournament.save({ session });
+          brackets?.map(async (b: BracketDoc) => await b.save({ session }));
+
           await session.commitTransaction();
           users.forEach((user) => {
             if (user.settings.addedTournamentWillStart)

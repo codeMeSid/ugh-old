@@ -1,44 +1,35 @@
-import { Component } from "react";
+import { Component, useEffect, useState } from "react";
 import Message from "./message";
 
-
 interface MHProps {
-    messages: Array<{
-        message: string,
-        type: string
-    }>
+  messages: Array<{
+    message: string;
+    type: string;
+  }>;
 }
 
+const MessageHandler = ({ messages = [] }: { messages?: Array<any> }) => {
+  const [ms, setMs] = useState(messages);
 
-class MessageHandler extends Component<MHProps> {
-    state = {
-        messages: this.props.messages || []
-    }
+  useEffect(() => {
+    if (JSON.stringify(ms) !== JSON.stringify(messages)) setMs(messages);
+  }, [messages]);
 
-    componentDidUpdate(prevProps) {
-        const { messages } = prevProps;
-        const { messages: messagesArray } = this.props;
-        if (JSON.stringify(messages) !== JSON.stringify(messagesArray)) {
-            this.setState({ messages: messagesArray || [] })
-        }
-    }
-    onClickHandler(i: number) {
-        this.setState((prevState: any) => {
-            const updatedMessage = prevState.messages.filter((_, index) => i !== index);
-            return {
-                messages: updatedMessage
-            }
-        })
-    }
+  const onClickHandler = (i: number) =>
+    setMs(ms.filter((it, index) => index !== i));
 
-    render() {
-        const { messages } = this.state;
-        return <div className="message_handler">
-            {
-                (messages ? messages : []).map(({ message, type }, index) => <Message key={Math.random()} text={message} type={type} onClick={() => this.onClickHandler(index)} />)
-            }
-        </div>
-    }
-}
+  return (
+    <div className="message_handler">
+      {ms.map(({ message, type }, index) => (
+        <Message
+          key={Math.random()}
+          text={message}
+          type={type}
+          onClick={() => onClickHandler(index)}
+        />
+      ))}
+    </div>
+  );
+};
 
 export default MessageHandler;

@@ -20,6 +20,7 @@ import { numberPostion } from "../../public/number-postion";
 import { IoMdCloseCircle } from "react-icons/io";
 import ProgressButton from "../../components/button/progress";
 import Input from "../../components/input/input";
+import { UserDoc } from "../../../server/models/user";
 
 const Logo = require("../../public/asset/logo_icon.webp");
 
@@ -244,17 +245,20 @@ const TournamentDetail = ({
 
     const attendance = ((players * participants) / playerCount) * 100;
 
-    if (status === "completed" && winners === 0) {
-      text = "No Winners";
-      color = "red";
-    }
-    if (status === "completed" && attendance < cutoff) {
-      text = "Tournament Cancelled";
-      color = "red";
-    }
-    if (status === "started" && Date.now() > endDateTime) {
-      text = "Under Review, Tournament In Progress";
-      color = "yellow";
+    // if under review
+    // if cancelled
+    // if no winners
+    if (winners === 0 && status !== "upcoming") {
+      if (status === "started" && Date.now() > endDateTime) {
+        text = "Under Review, Tournament In Progress";
+        color = "yellow";
+      } else if (status === "completed" && attendance < cutoff) {
+        text = "Tournament Cancelled";
+        color = "red";
+      } else if (status === "completed") {
+        text = "No Winners";
+        color = "red";
+      }
     }
 
     return text ? (
@@ -631,14 +635,14 @@ const TournamentDetail = ({
               Meet The Competitors
             </div>
             <div className="tournament__container__list">
-              {tournament?.players?.map((player) => (
+              {tournament?.players?.map((player: UserDoc) => (
                 <PlayerCard
                   key={Math.random()}
                   currentUser={currentUser}
                   player={player}
                   teamMates={
                     tournament?.teamMates
-                      ? tournament?.teamMates[currentUser?.id] || []
+                      ? tournament?.teamMates[player?.id] || []
                       : []
                   }
                 />

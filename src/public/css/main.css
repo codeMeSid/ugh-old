@@ -2069,3 +2069,7 @@ tr:nth-child(even) {
   .bracket__rank__accept {
     display: flex;
     margin-top: 0.2rem; }
+
+.store {
+  min-height: 100vh;
+  padding-bottom: 2rem; }

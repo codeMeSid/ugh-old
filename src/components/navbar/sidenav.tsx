@@ -12,25 +12,35 @@ import {
   RiSettings3Line,
 } from "react-icons/ri";
 import { VscDebugConsole } from "react-icons/vsc";
-import { BsPeople, BsNewspaper } from "react-icons/bs";
+import { BsPeople, BsNewspaper, BsListCheck } from "react-icons/bs";
 import { AiOutlineMessage } from "react-icons/ai";
 import { GiCrossedSwords } from "react-icons/gi";
 import { Component, useEffect, useState } from "react";
 import { event } from "../../socket";
 import { SocketChannel } from "../../../server/utils/enum/socket-channel";
+import { useRequest } from "../../hooks/use-request";
 
 class SideNavbar extends Component {
   state = {
-    mNC: 0,
+    tn: 0,
+    dn: 0,
   };
   componentDidMount() {
-    event.recieveMessage(({ to, channel }) => {
-      if (channel === SocketChannel.Admin && to === "admin")
-        this.setState((ps: any) => ({ mNC: ps.mNC + 1 }));
+    const { doRequest } = useRequest({
+      url: "/api/ugh/admin/fetch/notificaton",
+      body: {},
+      method: "get",
+      onSuccess: (data) => this.setState(data),
+      onError: (err) => {},
+    });
+    doRequest();
+    event.recieveMessage(({ type, channel }) => {
+      if (channel === SocketChannel.BracketRank && type === "dispute")
+        doRequest();
     });
   }
   render() {
-    const { mNC } = this.state;
+    const { tn, dn } = this.state;
     return (
       <>
         <div className="navbar navbar--side">
@@ -46,17 +56,19 @@ class SideNavbar extends Component {
           </div>
           <NavlinkIcon Icon={GoHome} href="/admin" title="home" />
           <NavlinkIcon Icon={RiUser5Line} href="/admin/users" title="users" />
-          {/* <div
-            style={{ position: "relative" }}
-            onClick={() => this.setState({ mnc: 0 })}
-          >
-            {mNC > 0 && <div className="navbar__count">{mNC}</div>}
+          {/* 
+           
             <NavlinkIcon
               Icon={AiOutlineMessage}
               href="/admin/messages"
               title="messages"
             />
           </div> */}
+          <NavlinkIcon
+            Icon={BsListCheck}
+            href="/admin/categorys"
+            title="category"
+          />
           <NavlinkIcon Icon={RiBitCoinLine} href="/admin/coins" title="coins" />
           <NavlinkIcon Icon={GoBook} href="/admin/passbook" title="passbook" />
           <NavlinkIcon
@@ -70,16 +82,22 @@ class SideNavbar extends Component {
             href="/admin/tournaments"
             title="tournaments"
           />
-          <NavlinkIcon
-            Icon={GiCrossedSwords}
-            href="/admin/disputes"
-            title="disputes"
-          />
-          <NavlinkIcon
-            Icon={RiBankLine}
-            href="/admin/transactions"
-            title="transactions"
-          />
+          <div style={{ position: "relative" }}>
+            {dn > 0 && <div className="navbar__count">{dn}</div>}
+            <NavlinkIcon
+              Icon={GiCrossedSwords}
+              href="/admin/disputes"
+              title="disputes"
+            />
+          </div>
+          <div style={{ position: "relative" }}>
+            {tn > 0 && <div className="navbar__count">{tn}</div>}
+            <NavlinkIcon
+              Icon={RiBankLine}
+              href="/admin/transactions"
+              title="transactions"
+            />
+          </div>
           <NavlinkIcon
             Icon={RiSettings3Line}
             href="/admin/settings"

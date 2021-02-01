@@ -60,7 +60,7 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
       user.wallet.coins = 0;
       if (tournamentFee > 0)
         user.tournaments = user.tournaments.map((t) => {
-          if (t.didWin) {
+          if (t.didWin && t.coins > 0 && tournamentFee > 0) {
             if (t.coins >= tournamentFee) {
               t.coins -= tournamentFee;
             } else {

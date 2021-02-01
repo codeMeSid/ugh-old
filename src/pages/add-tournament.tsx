@@ -95,10 +95,10 @@ const AddTournament = ({
     const et = edt.split(":");
     if (iGame.gameType === "score" && iGameParticipants >= 4) {
       const _sdd = new Date(sdd)
-        .setHours(parseInt(st[0]), parseInt(st[1]), 0)
+        .setHours(parseInt(st[0]), parseInt(st[1]), 0, 0)
         .valueOf();
       const _edd = new Date(edd)
-        .setHours(parseInt(et[0]), parseInt(et[1]), 0)
+        .setHours(parseInt(et[0]), parseInt(et[1]), 0, 0)
         .valueOf();
       const _dd = (_edd - _sdd) / (1000 * 60 * 60);
       const recommendedTime = Math.ceil(
@@ -112,10 +112,10 @@ const AddTournament = ({
         ]);
     }
     const startDateTime = new Date(sdd)
-      .setHours(parseInt(st[0]), parseInt(st[1]), 0)
+      .setHours(parseInt(st[0]), parseInt(st[1]), 0, 0)
       .valueOf();
     const endDateTime = new Date(edd)
-      .setHours(parseInt(et[0]), parseInt(et[1]), 0)
+      .setHours(parseInt(et[0]), parseInt(et[1]), 0, 0)
       .valueOf();
     const body = {
       name,

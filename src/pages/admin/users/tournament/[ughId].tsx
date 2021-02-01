@@ -49,7 +49,7 @@ const AdminTournamentPage = ({ tournaments, errors, ughId, currentUser }) => {
               new Date(t?.startDateTime || Date.now()),
               "dd/MM/yyy hh:mm a"
             ),
-            t?.name,
+            `${t?.name} (${t?.coins})`,
             t?.game,
             t.didWin ? (
               <IconDialogButton
