@@ -45,11 +45,11 @@ export const tournamentUpdateStatusController = async (
         }).session(session);
         const passbooks: Array<PassbookDoc> = [];
         tournament.status = TournamentStatus.Completed;
-        tournament.winners = users.map((u) => ({
-          ughId: u.ughId,
-          coins: tournament?.isFree ? 0 : tournament.coins + 10,
-          position: -1,
-        }));
+        // tournament.winners = users.map((u) => ({
+        //   ughId: u.ughId,
+        //   coins: tournament?.isFree ? 0 : tournament.coins,
+        //   position: -1,
+        // }));
         for (let i = 0; i < users.length; i++) {
           const tIndex = users[i].tournaments.findIndex(
             (t) => JSON.stringify(t?.id) === JSON.stringify(tournament?.id)
@@ -58,11 +58,10 @@ export const tournamentUpdateStatusController = async (
           users[i].tournaments[tIndex].didWin = true;
           users[i].tournaments[tIndex].coins = 0;
           users[i].wallet.coins =
-            users[i].wallet.coins +
-            (tournament?.isFree ? 0 : tournament.coins + 10);
+            users[i].wallet.coins + (tournament?.isFree ? 0 : tournament.coins);
           passbooks.push(
             Passbook.build({
-              coins: tournament?.isFree ? 0 : tournament.coins + 10,
+              coins: tournament?.isFree ? 0 : tournament.coins,
               transactionEnv: TransactionEnv.TounamentCancel,
               event: tournament?.name,
               transactionType: TransactionType.Credit,
@@ -187,7 +186,7 @@ export const tournamentUpdateStatusController = async (
 
         await tournament.save({ session });
         await Promise.all(
-          brackets?.map((b: BracketDoc) => b.save({ session }))
+          brackets?.map(async (b: BracketDoc) => await b.save({ session }))
         );
         await session.commitTransaction();
         timer.cancel(tournament.regId);

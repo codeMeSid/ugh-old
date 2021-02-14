@@ -1,10 +1,14 @@
+import React from "react";
+import MainLayout from "../../components/layout/mainlayout";
 import StoreLayout from "../../components/layout/storelayout";
 
 const StorePage = ({ currentUser }) => {
   return (
-    <StoreLayout currentUser={currentUser}>
-      <div></div>
-    </StoreLayout>
+    <MainLayout>
+      <StoreLayout currentUser={currentUser}>
+        <div></div>
+      </StoreLayout>
+    </MainLayout>
   );
 };
 

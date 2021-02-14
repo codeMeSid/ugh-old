@@ -1,6 +1,5 @@
 import React from "react";
 import StoreNav from "../navbar/storenav";
-import MainLayout from "./mainlayout";
 
 const StoreLayout = ({
   currentUser,
@@ -10,12 +9,10 @@ const StoreLayout = ({
   children: any;
 }) => {
   return (
-    <MainLayout>
-      <div className="store">
-        <StoreNav currentUser={currentUser} />
-        <div className="store__body">{children}</div>
-      </div>
-    </MainLayout>
+    <div className="store">
+      <StoreNav currentUser={currentUser} />
+      <div className="store__body">{children}</div>
+    </div>
   );
 };
 

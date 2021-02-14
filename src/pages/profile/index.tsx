@@ -79,6 +79,15 @@ const UserProfile = ({
                           onError(null);
                           return;
                         }
+                        if (
+                          new RegExp('[!@#$%^&*(),.?":{}|<>]').test(newUghId)
+                        ) {
+                          setMessages([
+                            { message: "UGH ID contains invalid chars." },
+                          ]);
+                          onError(null);
+                          return;
+                        }
                         if (newUghId !== confUghId || newUghId === "") {
                           setMessages([{ message: "UghId's do not match" }]);
                           onError(null);

@@ -22,29 +22,29 @@ export const updateUserUghIdController = async (
     user = await User.findById(id).session(session);
     if (!user) throw new BadRequestError("Invalid User Operation");
     const walletBalance = user.wallet.coins;
-    if (walletBalance < 50) {
-      const earnings = user.tournaments
-        .filter((t) => t.didWin && t.coins > 0)
-        .reduce((acc, t) => acc + t.coins, 0);
-      if (earnings + walletBalance < 50)
-        throw new BadRequestError("Insufficient balance.");
-      let fee = 50;
+    const earnings = user.tournaments
+      .filter((t) => t.didWin && t.coins > 0)
+      .reduce((acc, t) => acc + t.coins, 0);
+    let fee = 50;
+    if (walletBalance >= fee) {
+      user.wallet.coins -= fee;
+      fee = 0;
+    } else if (walletBalance + earnings >= 50) {
       fee -= user.wallet.coins;
       user.wallet.coins = 0;
       user.tournaments = user.tournaments.map((t) => {
         if (t.didWin && t.coins > 0 && fee > 0) {
-          if (t.coins < fee) {
+          if (t.coins >= fee) {
+            t.coins -= fee;
+            fee = 0;
+          } else {
             fee -= t.coins;
             t.coins = 0;
-          } else {
-            t.coins -= 50;
           }
         }
         return t;
       });
-    } else {
-      user.wallet.coins -= 50;
-    }
+    } else throw new BadRequestError("Insufficient Balance");
     let passbooks = await Passbook.find({ ughId: user.ughId });
     user.ughId = newUghId;
     const passbook = Passbook.build({

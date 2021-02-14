@@ -50,7 +50,7 @@ const AdminUserDashboard = ({ currentUser }) => {
             <IconDialogButton
               Icon={AiFillDelete}
               iconStyle={{ color: "red", fontSize: 24 }}
-              style={{ width: 300 }}
+              style={{ width: 300, position: "fixed" }}
               onAction={(onSuccess, onError) => {
                 const { doRequest: deleteUser } = useRequest({
                   url: `/api/ugh/admin/delete/user/${user.id}`,

@@ -9,10 +9,6 @@ import ProgressButton from "../components/button/progress";
 import Router from "next/router";
 import Input from "../components/input/input";
 import { useState } from "react";
-import Select from "../components/input/select";
-import Option from "../components/input/option";
-
-const bgImage = require("../public/asset/signup.jpg");
 
 const Withdraw = ({
   transactions,
@@ -26,16 +22,15 @@ const Withdraw = ({
   errors: Array<any>;
 }) => {
   const [requestCoin, setRequestCoin] = useState(coins);
-  const [paymentMode, setPaymentMode] = useState("google pay");
-  const [phone, setPhone] = useState("");
+  const [bank, setBank] = useState("");
+  const [bankAC, setBankAC] = useState("");
+  const [ifsc, setIfsc] = useState("");
+  const [name, setName] = useState("");
   const [messages, setMessages] = useState(errors);
 
   return (
     <MainLayout messages={messages}>
-      <div
-        // style={{ backgroundImage: `url(${bgImage})` }}
-        className="detail__bg profile"
-      >
+      <div className="detail__bg profile">
         <div className="withdraw">
           <div className="withdraw__head">
             <div className="withdraw__head__coins">
@@ -50,22 +45,35 @@ const Withdraw = ({
                 onChange={(_, val) => setRequestCoin(val)}
                 isWhite
               />
-              <Select
-                name="paymentMode"
+              <Input
+                placeholder="bank account name"
+                type="text"
+                value={name}
+                onChange={(_, val) => setName(val)}
                 isWhite
-                onSelect={(e) => setPaymentMode(e.currentTarget.value)}
-                placeholder="Payment Method"
-                value={paymentMode}
-                options={["google pay", "paytm", "phone pe"].map((p) => (
-                  <Option value={p} display={p.toUpperCase()} key={p} />
-                ))}
               />
               <Input
-                placeholder="Mobile No./ UPI ID"
-                name="phone"
+                placeholder="Account #"
+                name="account"
                 type="text"
-                value={phone}
-                onChange={(_, val) => setPhone(val)}
+                value={bankAC}
+                onChange={(_, val) => setBankAC(val)}
+                isWhite
+              />
+              <Input
+                placeholder="bank name"
+                name="bank"
+                type="text"
+                value={bank}
+                onChange={(_, val) => setBank(val)}
+                isWhite
+              />
+              <Input
+                placeholder="bank IFSC code"
+                name="bankIfsc"
+                type="text"
+                value={ifsc}
+                onChange={(_, val) => setIfsc(val)}
                 isWhite
               />
             </div>
@@ -85,8 +93,10 @@ const Withdraw = ({
                   method: "post",
                   body: {
                     coins: requestCoin,
-                    phone,
-                    paymentMode,
+                    bank,
+                    bankAC,
+                    ifsc,
+                    name,
                   },
                   onError: (errors) => {
                     next(false, "Failed");

@@ -51,25 +51,27 @@ export const tournamentJoinController = async (req: Request, res: Response) => {
 
     const walletBalance = user.wallet.coins;
     const earningBalance = user.tournaments
-      .filter((t) => t.didWin)
+      .filter((t) => t.didWin && t.coins > 0)
       .reduce((acc, t) => acc + t.coins, 0);
-    let tournamentFee = tournament.isFree ? 0 : tournament.coins;
-    if (walletBalance >= tournamentFee) user.wallet.coins -= tournamentFee;
-    else if (walletBalance + earningBalance >= tournamentFee) {
-      tournamentFee -= walletBalance;
+    let fee = tournament.isFree ? 0 : tournament.coins;
+    if (walletBalance >= fee) {
+      user.wallet.coins -= fee;
+      fee = 0;
+    } else if (walletBalance + earningBalance >= fee) {
+      fee -= user.wallet.coins;
       user.wallet.coins = 0;
-      if (tournamentFee > 0)
-        user.tournaments = user.tournaments.map((t) => {
-          if (t.didWin && t.coins > 0 && tournamentFee > 0) {
-            if (t.coins >= tournamentFee) {
-              t.coins -= tournamentFee;
-            } else {
-              tournamentFee -= t.coins;
-              t.coins = 0;
-            }
+      user.tournaments = user.tournaments.map((t) => {
+        if (t.didWin && t.coins > 0 && fee > 0) {
+          if (t.coins >= fee) {
+            t.coins -= fee;
+            fee = 0;
+          } else {
+            fee -= t.coins;
+            t.coins = 0;
           }
-          return t;
-        });
+        }
+        return t;
+      });
     } else throw new BadRequestError("Insufficient Balance");
     user.tournaments.push({
       didWin: false,

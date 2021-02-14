@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { TransactionTypes } from "@monsid/ugh-og"
+import { TransactionTypes } from "@monsid/ugh-og";
 import { UserDoc } from "./user";
 
 interface TransactionAttrs {
@@ -7,8 +7,10 @@ interface TransactionAttrs {
   orderId: string;
   amount: number;
   status: TransactionTypes;
-  paymentMode?: string;
-  phone?: string;
+  name?: string;
+  bank?: string;
+  bankAC?: string;
+  ifsc?: string;
   userDetail?: UserDoc;
 }
 
@@ -19,8 +21,10 @@ export interface TransactionDoc extends mongoose.Document {
   amount: number;
   createdAt: Date;
   status: TransactionTypes;
-  paymentMode: string;
-  phone: string;
+  bank: string;
+  name: string;
+  bankAC: string;
+  ifsc: string;
   userDetail: UserDoc;
 }
 
@@ -40,8 +44,10 @@ const transactionSchema = new mongoose.Schema(
       type: String,
       enum: Object.values(TransactionTypes),
     },
-    paymentMode: String,
-    phone: String,
+    bank: String,
+    name: String,
+    bankAC: String,
+    ifsc: String,
   },
   {
     toJSON: {

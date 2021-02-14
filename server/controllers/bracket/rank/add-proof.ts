@@ -1,4 +1,4 @@
-import { BadRequestError } from "@monsid/ugh-og"
+import { BadRequestError } from "@monsid/ugh-og";
 import { Request, Response } from "express";
 import { Bracket } from "../../../models/bracket";
 import mongoose from "mongoose";
@@ -24,10 +24,10 @@ export const addProofController = async (req: Request, res: Response) => {
   await bracket.save();
   const {
     teamA: {
-      user: { ughId, email },
+      user: { ughId: opponentUghId },
     },
     teamB: {
-      user: { ughId: opponentUghId },
+      user: { ughId, email },
     },
   } = bracket;
   mailer.send(

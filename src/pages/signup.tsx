@@ -222,6 +222,13 @@ const SignUp = ({ ughIds, errors }) => {
                 next(false, "Failed");
                 return;
               }
+              if (new RegExp('[!@#$%^&*(),.?":{}|<>]').test(ughId)) {
+                setMessages([
+                  { message: "UGH ID contains invalid chars." },
+                ]);
+                next(false, "Failed");
+                return;
+              }
               if (
                 Array.from(ughIds).filter(({ ughId: u }) => {
                   return u === ughId;

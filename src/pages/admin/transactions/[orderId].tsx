@@ -103,14 +103,22 @@ const TransactionDetail = ({
       </div>
       <div className="row">
         <div className="col">
-          <Input
-            placeholder="Payment Mode"
-            value={transaction?.paymentMode}
-            disabled
-          />
+          <Input placeholder="Bank" value={transaction?.bank} disabled />
         </div>
         <div className="col">
-          <Input placeholder="Payment On" value={transaction?.phone} disabled />
+          <Input placeholder="Bank IFSC" value={transaction?.ifsc} disabled />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col">
+          <Input placeholder="Account #" value={transaction?.bankAC} disabled />
+        </div>
+        <div className="col">
+          <Input
+            placeholder="Account Name"
+            value={transaction?.name}
+            disabled
+          />
         </div>
       </div>
       {transaction?.userDetail && (

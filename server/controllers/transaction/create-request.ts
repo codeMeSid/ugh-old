@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import { Transaction } from "../../models/transaction";
-import { BadRequestError, TransactionTypes, UserActivity, UserRole } from "@monsid/ugh-og"
+import {
+  BadRequestError,
+  TransactionTypes,
+  UserActivity,
+  UserRole,
+} from "@monsid/ugh-og";
 import { randomBytes } from "crypto";
 import { User } from "../../models/user";
 import { fire } from "../../utils/firebase";
@@ -10,8 +15,10 @@ export const transactionCreateRequestController = async (
   res: Response
 ) => {
   const { id } = req.currentUser;
-  const { coins, paymentMode, phone } = req.body;
-  if (!phone) throw new BadRequestError("mobile no./UPI id required");
+  const { coins, bank, bankAC, ifsc, name } = req.body;
+  console.log(req.body);
+  if (!bank || !bankAC || !ifsc || !name)
+    throw new BadRequestError("Invalid Bank Details");
   const user = await User.findById(id);
   if (!user) throw new BadRequestError("Request failed");
   if (!user.idProof.panCard || !user.idProof.panUrl)
@@ -31,14 +38,24 @@ export const transactionCreateRequestController = async (
     status: TransactionTypes.Requested,
     user: id,
     orderId,
-    paymentMode,
-    phone,
+    bank,
+    bankAC,
+    ifsc,
+    name,
     userDetail: user,
   });
   await transaction.save();
-  const admins = await User.find({ role: UserRole.Admin, activity: UserActivity.Active });
-  if (admins) admins.forEach(admin => {
-    fire.sendNotification(admin.fcmToken, "New Withdraw Request", `/admin/transactions/${transaction.orderId}`);
-  })
+  const admins = await User.find({
+    role: UserRole.Admin,
+    activity: UserActivity.Active,
+  });
+  if (admins)
+    admins.forEach((admin) => {
+      fire.sendNotification(
+        admin.fcmToken,
+        "New Withdraw Request",
+        `/admin/transactions/${transaction.orderId}`
+      );
+    });
   res.send(true);
 };
