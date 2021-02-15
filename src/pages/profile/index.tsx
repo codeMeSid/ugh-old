@@ -121,6 +121,11 @@ const UserProfile = ({
                           }}
                         />
                       </div>
+                      {new RegExp('[!@#$%^&*(),.?":{}|<>]').test(newUghId) && (
+                        <div style={{ color: "red", textAlign: "center" }}>
+                          UGH ID cannot have Spl. characters
+                        </div>
+                      )}
                       <div>
                         <Input
                           placeholder="Confirm UghId"

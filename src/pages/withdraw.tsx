@@ -46,7 +46,7 @@ const Withdraw = ({
                 isWhite
               />
               <Input
-                placeholder="bank account name"
+                placeholder="account holder name"
                 type="text"
                 value={name}
                 onChange={(_, val) => setName(val)}

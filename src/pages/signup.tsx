@@ -119,25 +119,37 @@ const SignUp = ({ ughIds, errors }) => {
             value={ughId}
             isWhite
           />
-          {ughId.length > 4 ? (
+          {ughId.length > 4 && (
             <div className="signin__ughid ">
               {Array.from(ughIds).filter(({ ughId: u }) => {
                 return u === ughId;
-              }).length > 0 ? (
-                <div className="signin__ughid--fail">
-                  this UGH ID is already taken.
-                </div>
-              ) : (
-                <div className="signin__ughid--success">
-                  UGH ID is available.
-                </div>
-              )}
+              }).length > 0 &&
+                !new RegExp('[!@#$%^&*(),.?":{}|<>]').test(ughId) && (
+                  <div className="signin__ughid--fail">
+                    this UGH ID is already taken.
+                  </div>
+                )}
+              {Array.from(ughIds).filter(({ ughId: u }) => {
+                return u === ughId;
+              }).length === 0 &&
+                !new RegExp('[!@#$%^&*(),.?":{}|<>]').test(ughId) && (
+                  <div className="signin__ughid--success">
+                    UGH ID is available.
+                  </div>
+                )}
             </div>
-          ) : null}
+          )}
           {ughId.length > 0 && (ughId.length < 4 || ughId.length > 10) && (
             <div className="signin__ughid ">
               <div className="signin__ughid--fail">
                 UGH ID should have 4 to 10 characters
+              </div>
+            </div>
+          )}
+          {new RegExp('[!@#$%^&*(),.?":{}|<>]').test(ughId) && (
+            <div className="signin__ughid ">
+              <div className="signin__ughid--fail">
+                UGH ID cannot have Spl. characters
               </div>
             </div>
           )}
@@ -223,9 +235,7 @@ const SignUp = ({ ughIds, errors }) => {
                 return;
               }
               if (new RegExp('[!@#$%^&*(),.?":{}|<>]').test(ughId)) {
-                setMessages([
-                  { message: "UGH ID contains invalid chars." },
-                ]);
+                setMessages([{ message: "UGH ID contains invalid chars." }]);
                 next(false, "Failed");
                 return;
               }

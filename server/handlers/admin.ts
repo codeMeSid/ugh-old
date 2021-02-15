@@ -112,17 +112,32 @@ export const adminHandler: Array<ApiSign> = [
     method: HttpMethod.Delete,
     controller: async (req: Request, res: Response) => {
       const { userId } = req.params;
-      const user = await User.findById(userId);
-      if (!user) throw new BadRequestError("Invalid User");
-      const tournaments = await Tournament.find({
-        $or: [{ players: { $in: [user] } }, { dqPlayers: { $in: [user] } }],
-        status: { $in: [TournamentStatus.Upcoming, TournamentStatus.Started] },
-      });
-      if (tournaments.length >= 1)
-        throw new BadRequestError(
-          "User is currently in tournament, cannot be deleted"
-        );
-      await user.deleteOne();
+      const session = await mongoose.startSession();
+      session.startTransaction();
+      try {
+        const user = await User.findById(userId).session(session);
+        if (!user) throw new Error("Inavlid User Operation");
+        const tournaments = await Tournament.find({
+          $or: [{ players: { $in: [user] } }, { dqPlayers: { $in: [user] } }],
+          status: {
+            $in: [TournamentStatus.Upcoming, TournamentStatus.Started],
+          },
+        }).session(session);
+        if (tournaments.length >= 1)
+          throw new BadRequestError(
+            "User is currently in tournament, cannot be deleted"
+          );
+        const brackets = await Bracket.find({
+          $or: [{ "teamA.user": user.id }, { "teamB.user": user.id }],
+        }).session(session);
+        await user.deleteOne();
+        await Promise.all(brackets.map((bracket) => bracket.deleteOne()));
+        await session.commitTransaction();
+      } catch (error) {
+        await session.abortTransaction();
+        throw new BadRequestError(error.message);
+      }
+      session.endSession();
       res.send(true);
     },
     middlewares: superAdminMiddleware,
