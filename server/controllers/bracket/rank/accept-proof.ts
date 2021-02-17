@@ -1,4 +1,4 @@
-import { BadRequestError, UserRole } from "@monsid/ugh-og"
+import { BadRequestError, UserRole } from "@monsid/ugh-og";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import { Bracket, BracketDoc } from "../../../models/bracket";
@@ -37,29 +37,54 @@ export const acceptProofController = async (req: Request, res: Response) => {
       .session(session);
     if (!bracketB) throw new BadRequestError("Invalid Request");
     let brackets: Array<BracketDoc> = [];
-    const { teamA: { score: sA, user: { ughId: uA }, uploadUrl }, winner: wA } = bracketA;
-    const { teamA: { score: sB, user: { ughId: uB } }, teamB: { hasRaisedDispute: dC }, winner: wB } = bracketB;
-    if (wA) throw new BadRequestError("Bracket is complete & cannot be challenged.");
+    const {
+      teamA: {
+        score: sA,
+        user: { ughId: uA },
+        uploadUrl,
+      },
+      winner: wA,
+    } = bracketA;
+    const {
+      teamA: {
+        score: sB,
+        user: { ughId: uB },
+      },
+      teamB: { hasRaisedDispute: dC },
+      winner: wB,
+    } = bracketB;
+    if (wA)
+      throw new BadRequestError("Bracket is complete & cannot be challenged.");
     if (accept && !uploadUrl)
       throw new BadRequestError("No proof was uploaded");
     switch (!!accept) {
       case true:
-        if (wA !== DQ.AdminDQ && wA !== DQ.DisputeLost)
-          bracketA.winner = uA;
-        if (sA !== sB && !dC && wB !== DQ.AdminDQ && wB !== DQ.DisputeLost) bracketB.winner = DQ.DisputeLost;
-        brackets = await Bracket.find({ _id: { $in: tournament.brackets }, "teamA.score": sA });
-        brackets = brackets.map(b => {
-          if (b.winner !== DQ.AdminDQ && JSON.stringify(b.teamA.user) !== JSON.stringify(bracketA.teamA.user.id)) b.winner = DQ.DisputeLost;
+        if (wA !== DQ.AdminDQ && wA !== DQ.DisputeLost) bracketA.winner = uA;
+        if (sA !== sB && !dC && wB !== DQ.AdminDQ && wB !== DQ.DisputeLost)
+          bracketB.winner = DQ.DisputeLost;
+        brackets = await Bracket.find({
+          _id: { $in: tournament.brackets },
+          "teamA.score": sA,
+        });
+        brackets = brackets.map((b) => {
+          if (
+            b.winner !== DQ.AdminDQ &&
+            JSON.stringify(b.teamA.user) !==
+              JSON.stringify(bracketA.teamA.user.id)
+          )
+            b.winner = DQ.DisputeLost;
           return b;
-        })
+        });
         break;
       case false:
-        if (wA !== DQ.AdminDQ)
-          bracketA.winner = DQ.DisputeLost;
-        if (!dC && wB !== DQ.AdminDQ && wB !== DQ.DisputeLost) bracketB.winner = uB;
+        if (wA !== DQ.AdminDQ) bracketA.winner = DQ.DisputeLost;
+        if (!dC && wB !== DQ.AdminDQ && wB !== DQ.DisputeLost)
+          bracketB.winner = uB;
         break;
     }
-    await Promise.all([bracketA.save({ session }), bracketB.save({ session }), brackets.map((b) => b.save({ session }))]);
+    await bracketA.save({ session });
+    await bracketB.save({ session });
+    brackets.map(async (b) => await b.save({ session }));
     await session.commitTransaction();
   } catch (error) {
     console.log({ msg: "rank accept proof", error: error.message });

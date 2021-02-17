@@ -82,6 +82,7 @@ export const addRankController = async (req: Request, res: Response) => {
         bracketId,
         bracket.updateBy,
         async ({ id, tournamentId }, done) => {
+          done();
           try {
             const bracket = await Bracket.findById(id).populate(
               "teamA.user",
@@ -97,11 +98,9 @@ export const addRankController = async (req: Request, res: Response) => {
             bracket.updateBy = undefined;
             bracket.uploadBy = undefined;
             await bracket.save();
-            done();
             winnerLogic(tournamentId, null, "rank added");
           } catch (error) {
             console.log({ msg: "add rank", error: error.message });
-            done();
           }
         },
         { id: bracket.id, tournamentId }

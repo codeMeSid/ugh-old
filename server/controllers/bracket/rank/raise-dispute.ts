@@ -1,13 +1,10 @@
-import { BadRequestError, GameType, timer } from "@monsid/ugh-og"
+import { BadRequestError, timer } from "@monsid/ugh-og";
 import { Request, Response } from "express";
 import { Bracket } from "../../../models/bracket";
 import { User } from "../../../models/user";
 import mongoose from "mongoose";
 import { mailer } from "../../../utils/mailer";
 import { MailerTemplate } from "../../../utils/enum/mailer-template";
-import { messenger } from "../../../utils/socket";
-import { SocketChannel } from "../../../utils/enum/socket-channel";
-import { SocketEvent } from "../../../utils/enum/socket-event";
 import { Tournament } from "../../../models/tournament";
 import { fire } from "../../../utils/firebase";
 
@@ -21,10 +18,10 @@ export const raiseDisputeController = async (req: Request, res: Response) => {
     const bracketA = await Bracket.findOne({ regId: bracketId })
       .populate("teamA.user", "email UghId fcmToken", "Users")
       .session(session);
-    if (!bracketA) throw new BadRequestError("Invalid Bracket")
-    const tournament = await Tournament
-      .findOne({ brackets: { $in: [bracketA] } })
-      .session(session);
+    if (!bracketA) throw new BadRequestError("Invalid Bracket");
+    const tournament = await Tournament.findOne({
+      brackets: { $in: [bracketA] },
+    }).session(session);
     const user = await User.findById(id).session(session);
     if (!user) throw new BadRequestError("Invalid Request");
     if (bracketA.teamA.score === 0)
@@ -41,9 +38,11 @@ export const raiseDisputeController = async (req: Request, res: Response) => {
     await session.commitTransaction();
     disputeBy = user?.ughId;
     disputeOn = bracketA.teamA.user?.ughId;
-    fire.sendNotification(bracketA.teamA.user.fcmToken
-      , `${user?.ughId} raised Ranking dispute.`
-      , `/game/${tournament.regId}`);
+    fire.sendNotification(
+      bracketA.teamA.user.fcmToken,
+      `${user?.ughId} raised Ranking dispute.`,
+      `/game/${tournament.regId}`
+    );
     mailer.send(
       MailerTemplate.Dispute,
       { ughId: bracketA.teamA.user?.ughId, opponentUghId: user?.ughId },

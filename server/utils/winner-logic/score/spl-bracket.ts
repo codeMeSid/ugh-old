@@ -1,15 +1,15 @@
 import { TournamentStatus } from "@monsid/ugh-og";
 import { randomBytes } from "crypto";
-import { Bracket, BracketDoc } from "../../../../models/bracket";
-import { Passbook, PassbookDoc } from "../../../../models/passbook";
-import { TournamentDoc } from "../../../../models/tournament";
-import { UserDoc } from "../../../../models/user";
-import { bracketCheckTimer } from "../../../bracket-check-timer";
-import { DQ } from "../../../enum/dq";
-import { TournamentTime } from "../../../enum/tournament-time";
-import { TransactionEnv } from "../../../enum/transaction-env";
-import { TransactionType } from "../../../enum/transaction-type";
-import { prizeDistribution } from "../../../prize-distribution";
+import { Bracket, BracketDoc } from "../../../models/bracket";
+import { Passbook, PassbookDoc } from "../../../models/passbook";
+import { TournamentDoc } from "../../../models/tournament";
+import { UserDoc } from "../../../models/user";
+import { bracketCheckTimer } from "../../bracket-check-timer";
+import { DQ } from "../../enum/dq";
+import { TournamentTime } from "../../enum/tournament-time";
+import { TransactionEnv } from "../../enum/transaction-env";
+import { TransactionType } from "../../enum/transaction-type";
+import { prizeDistribution } from "../../prize-distribution";
 
 export const splBracketProcess = (
   brackets: Array<BracketDoc>,

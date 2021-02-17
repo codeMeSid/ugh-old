@@ -1,6 +1,5 @@
 import { BadRequestError, NotAuthorizedError, timer } from "@monsid/ugh-og";
 import { Request, Response } from "express";
-import mongoose from "mongoose";
 import { Bracket } from "../../../models/bracket";
 import { TournamentTime } from "../../../utils/enum/tournament-time";
 import { winnerLogic } from "../../../utils/winner-logic";
@@ -69,7 +68,7 @@ export const addScoreController = async (req: Request, res: Response) => {
           await bracket.save();
           winnerLogic(tournamentId, regId, "score teamA added");
         } catch (error) {
-          console.log({ msg: "add score A", error: error.messsage });
+          console.log({ msg: "add score A", error });
         }
       },
       { regId: bracketId, tournamentId }

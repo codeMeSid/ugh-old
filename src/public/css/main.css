@@ -1858,7 +1858,8 @@ tr:nth-child(even) {
 .bracket__score {
   width: 36rem;
   height: fit-content;
-  box-shadow: 1rem rem 2rem rgba(0, 0, 0, 0.7);
+  box-shadow: 1rem rem 2rem rgba(128, 128, 128, 0.7);
+  border: 1px solid rgba(128, 128, 128, 0.2);
   margin: 1rem;
   position: relative;
   cursor: pointer;
@@ -1897,7 +1898,7 @@ tr:nth-child(even) {
       margin-right: 0.5rem; }
   .bracket__score__winner {
     position: absolute;
-    top: 38%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-30deg);
     font-size: 4.2rem;

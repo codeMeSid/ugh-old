@@ -57,11 +57,9 @@ export const updateUserUghIdController = async (
       p.ughId = newUghId;
       return p;
     });
-    await Promise.all([
-      user.save({ session }),
-      passbook.save({ session }),
-      passbooks.map((p) => p.save({ session })),
-    ]);
+    await user.save({ session });
+    await passbook.save({ session });
+    await Promise.all(passbooks.map((p) => p.save({ session })));
     await session.commitTransaction();
     const userJwt = generateToken(
       {

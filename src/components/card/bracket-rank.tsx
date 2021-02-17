@@ -8,8 +8,6 @@ import FileInput from "../input/file";
 import Input from "../input/input";
 import { DQ } from "../../../server/utils/enum/dq";
 import { event } from "../../socket";
-import IconDialogButton from "../button/icon-dialog";
-import { RiTeamLine } from "react-icons/ri";
 import ImageDialogButton from "../button/image-dialog";
 
 const PlayerImg = require("../../public/asset/logo_icon.webp");

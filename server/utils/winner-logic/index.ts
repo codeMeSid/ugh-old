@@ -24,7 +24,6 @@ export const winnerLogic = async (
   message?: string
 ) => {
   const session = await mongoose.startSession();
-  session.startTransaction();
   let updates: {
     updatedTournament: TournamentDoc;
     updatedBrackets: Array<BracketDoc>;
@@ -32,30 +31,28 @@ export const winnerLogic = async (
     newBrackets?: Array<BracketDoc>;
     passbooks?: Array<PassbookDoc>;
   };
+  session.startTransaction();
   try {
     const tournament = await Tournament.findOne({
       regId: tournamentId,
     })
       .populate("game", "gameType name", "Games")
       .session(session);
-    if (!tournament) {
-      errorlog("tournament failed");
-      infolog(tournamentId);
-      return;
-    }
-    if (tournament.winners.length >= 1) return;
 
+    if (!tournament) throw new Error("Invalid Tournament");
+    if (tournament.winners.length >= 1)
+      throw new Error("Tournament already has winners");
     const users = await User.find({ _id: { $in: tournament.players } }).session(
       session
     );
+    if (users.length === 0) throw new Error("Invalid Tournament users");
     const brackets = await Bracket.find({
       _id: { $in: tournament.brackets },
     }).session(session);
+    if (brackets.length === 0) throw new Error("Invalid Tournament brackets");
     const bracket = await Bracket.findOne({ regId: bracketId }).session(
       session
     );
-    if (brackets.length === 0) return;
-
     switch (tournament.game.gameType) {
       case GameType.Rank:
         updates = rankLogger(tournament, brackets, users);
@@ -65,23 +62,42 @@ export const winnerLogic = async (
         break;
     }
     if (updates) {
-      updates?.updateUsers?.map(async (u) => await u.save({ session }));
-      updates?.updatedBrackets?.map(async (b) => await b.save({ session }));
-      updates?.newBrackets?.map(async (b) => await b.save({ session }));
-      updates?.passbooks?.map(async (p) => await p.save({ session }));
-      await updates?.updatedTournament?.save({ session });
+      const {
+        updateUsers,
+        updatedBrackets,
+        updatedTournament,
+        newBrackets,
+        passbooks,
+      } = updates;
+      const uus = Array.from(updateUsers || []);
+      const nbs = Array.from(newBrackets || []);
+      const ubs = Array.from(updatedBrackets || []);
+      const nps = Array.from(passbooks || []);
+      const ut = updatedTournament;
+      uus.map(async (u) => await u.save({ session }));
+      nbs.map(async (b) => await b.save({ session }));
+      ubs.map(async (b) => await b.save({ session }));
+      nps.map(async (p) => await p.save({ session }));
+      await ut?.save({ session });
     }
     await session.commitTransaction();
   } catch (error) {
-    console.log({ msg: "winner logic", error: error.message });
     await session.abortTransaction();
-  }
-  if (updates) {
-    sendNotification(updates.updatedTournament, updates.updatedBrackets);
-    sendEmail(updates.updatedTournament, updates.updateUsers);
-    sendUpdates(updates.updatedTournament.regId);
+    console.log({ msg: "winner logic", error: error.message });
   }
   session.endSession();
+  if (updates) {
+    const {
+      updateUsers: uus,
+      updatedBrackets: ubs,
+      updatedTournament: ut,
+      newBrackets: nbs,
+      passbooks: nps,
+    } = updates;
+    sendNotification(ut, ubs);
+    sendEmail(ut, uus);
+    sendUpdates(ut?.regId);
+  }
   return;
 };
 

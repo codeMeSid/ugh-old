@@ -45,11 +45,6 @@ export const tournamentUpdateStatusController = async (
         }).session(session);
         const passbooks: Array<PassbookDoc> = [];
         tournament.status = TournamentStatus.Completed;
-        // tournament.winners = users.map((u) => ({
-        //   ughId: u.ughId,
-        //   coins: tournament?.isFree ? 0 : tournament.coins,
-        //   position: -1,
-        // }));
         for (let i = 0; i < users.length; i++) {
           const tIndex = users[i].tournaments.findIndex(
             (t) => JSON.stringify(t?.id) === JSON.stringify(tournament?.id)
@@ -69,11 +64,9 @@ export const tournamentUpdateStatusController = async (
             })
           );
         }
-        await Promise.all([
-          users?.map(async (u) => u.save({ session })),
-          passbooks?.map(async (p) => p.save({ session })),
-          tournament.save({ session }),
-        ]);
+        await Promise.all(users.map((u) => u.save({ session })));
+        await Promise.all(passbooks.map((p) => p.save({ session })));
+        await tournament.save({ session });
         await session.commitTransaction();
         timer.cancel(`${tournament.regId}-end`);
         users.map((user) =>
@@ -185,9 +178,7 @@ export const tournamentUpdateStatusController = async (
         tournament.startDateTime = new Date();
 
         await tournament.save({ session });
-        await Promise.all(
-          brackets?.map(async (b: BracketDoc) => await b.save({ session }))
-        );
+        await Promise.all(brackets.map((b: BracketDoc) => b.save({ session })));
         await session.commitTransaction();
         timer.cancel(tournament.regId);
         timer.cancel(`${tournament.regId}-end`);
