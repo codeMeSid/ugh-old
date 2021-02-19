@@ -13,9 +13,6 @@ import { User } from "../../../models/user";
 import { randomBytes } from "crypto";
 import { tournamentStartTimer } from "./start";
 import { tournamentEndTimer } from "./end";
-import { messenger } from "../../../utils/socket";
-import { SocketEvent } from "../../../utils/enum/socket-event";
-import { SocketChannel } from "../../../utils/enum/socket-channel";
 import { fire } from "../../../utils/firebase";
 
 export const tournamentAddController = async (req: Request, res: Response) => {
@@ -66,7 +63,12 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     const earning = Math.round((settings.tournamentFees / 100) * totalWinnings);
     const winnerCoin = totalWinnings - (isFree ? 0 : earning);
     const tournament = Tournament.build({
-      addedBy: cUser,
+      addedBy: {
+        id: user.id,
+        name: user.name,
+        role: user.role,
+        ughId: user.ughId,
+      },
       coins: parseInt(coins),
       endDateTime: newEndDateTime,
       game,

@@ -40,9 +40,6 @@ export const tournamentStartTimer = (
           ((tournament.players.length * tournament.group.participants) /
             tournament.playerCount) *
           100;
-        // if attendance less than minimum then cancel tournament
-        // tournament status => completed
-        // return all players entry coins - if paid
         if (attendance < tournament.game.cutoff) {
           tournament.set({ status: TournamentStatus.Completed });
           const users = await User.find({
@@ -50,27 +47,28 @@ export const tournamentStartTimer = (
               $in: tournament.players.map((playerId) => playerId),
             },
           }).session(session);
-          await Promise.all([
-            // return entry coins
-            // make entry in passbook
-            users.map(async (user) => {
-              user.wallet.coins =
-                user.wallet.coins +
-                (tournament?.isFree ? 0 : tournament?.coins);
-              user.tournaments = user.tournaments.filter(
-                (t) => JSON.stringify(t) !== JSON.stringify(tournament?.id)
+          await Promise.all(
+            users.map((u) => {
+              u.wallet.coins += tournament.isFree ? 0 : tournament.coins;
+              u.tournaments = u.tournaments.filter(
+                (t) => JSON.stringify(t) !== JSON.stringify(tournament.id)
               );
-              const passbook = Passbook.build({
-                coins: tournament?.isFree ? 0 : tournament?.coins,
+              u.save({ session });
+            })
+          );
+          await Promise.all(
+            users.map((u) =>
+              Passbook.build({
+                coins: tournament.isFree ? 0 : tournament.coins,
                 transactionEnv: TransactionEnv.TounamentCancel,
                 event: Tournament?.name,
                 transactionType: TransactionType.Credit,
-                ughId: user.ughId,
-              });
-              return [user.save({ session }), passbook.save({ session })];
-            }),
-            tournament.save({ session }),
-          ]);
+                ughId: u.ughId,
+              }).save({ session })
+            )
+          );
+
+          await tournament.save({ session });
           await session.commitTransaction();
           timer.cancel(`${tournament.regId}-end`);
           users.map((user) =>
@@ -179,9 +177,7 @@ export const tournamentStartTimer = (
           // change tournament status to started
           tournament.status = TournamentStatus.Started;
           await tournament.save({ session });
-          await Promise.all(
-            brackets?.map(async (b: BracketDoc) => await b.save({ session }))
-          );
+          await Promise.all(brackets.map((b) => b.save({ session })));
           await session.commitTransaction();
           users.forEach((user) => {
             if (user.settings.addedTournamentWillStart)
@@ -201,7 +197,6 @@ export const tournamentStartTimer = (
         await session.abortTransaction();
       }
       session.endSession();
-      // done();
     },
     { id }
   );

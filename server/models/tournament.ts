@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { UserPayload, TournamentStatus, GameGroups } from "@monsid/ugh-og"
+import { UserPayload, TournamentStatus, GameGroups } from "@monsid/ugh-og";
 import { UserDoc } from "./user";
 import { BracketDoc } from "./bracket";
 import { GameDoc } from "./game";
@@ -41,7 +41,7 @@ export interface TournamentDoc extends mongoose.Document {
     coins: number;
     position: number;
   }>;
-  teamMates: any
+  teamMates: any;
 }
 
 interface TournamentModel extends mongoose.Model<TournamentDoc> {
@@ -55,7 +55,7 @@ const tournamentSchema = new mongoose.Schema(
     playerCount: Number,
     isFree: {
       type: Boolean,
-      default: false
+      default: false,
     },
     group: {
       name: String,
@@ -91,6 +91,7 @@ const tournamentSchema = new mongoose.Schema(
       name: String,
       email: String,
       role: String,
+      ughId: String,
     },
     regId: {
       type: String,
@@ -99,7 +100,7 @@ const tournamentSchema = new mongoose.Schema(
     startDateTime: mongoose.Schema.Types.Date,
     endDateTime: mongoose.Schema.Types.Date,
     teamMates: {
-      type: mongoose.SchemaTypes.Mixed
+      type: mongoose.SchemaTypes.Mixed,
     },
     brackets: [
       {

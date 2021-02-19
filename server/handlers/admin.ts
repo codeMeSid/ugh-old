@@ -184,12 +184,10 @@ export const adminHandler: Array<ApiSign> = [
         const brackets = await Bracket.find({
           _id: { $in: tournament.brackets },
         });
-        await Promise.all([
-          Tournament.findByIdAndDelete(tournamentId).session(session),
-          brackets.map(async (bracket) =>
-            Bracket.findByIdAndDelete(bracket.id).session(session)
-          ),
-        ]);
+        await Tournament.findByIdAndDelete(tournamentId).session(session);
+        await Promise.all(
+          brackets.map((b) => Bracket.findByIdAndDelete(b.id).session(session))
+        );
         await session.commitTransaction();
       } catch (error) {
         await session.abortTransaction();

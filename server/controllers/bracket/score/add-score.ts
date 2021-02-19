@@ -68,7 +68,7 @@ export const addScoreController = async (req: Request, res: Response) => {
           await bracket.save();
           winnerLogic(tournamentId, regId, "score teamA added");
         } catch (error) {
-          console.log({ msg: "add score A", error });
+          console.log({ msg: "add score A", error: error.messsage });
         }
       },
       { regId: bracketId, tournamentId }
@@ -94,7 +94,7 @@ export const addScoreController = async (req: Request, res: Response) => {
           await bracket.save();
           winnerLogic(tournamentId, regId, "score teamB added");
         } catch (error) {
-          console.log({ msg: "add score B", error: error.messsage });
+          console.log({ msg: "add score B", error });
         }
       },
       { regId: bracketId, tournamentId }
