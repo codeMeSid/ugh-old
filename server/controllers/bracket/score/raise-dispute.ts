@@ -15,9 +15,11 @@ export const raiseScoreDisputeController = async (
   const bracket = await Bracket.findOne({ regId: bracketId })
     .populate("teamA.user", "ughId email fcmToken", "Users")
     .populate("teamB.user", "ughId email fcmToken", "Users");
-  const tournament = await Tournament.findOne({ brackets: { $in: [bracket] } });
   if (!bracket) throw new BadRequestError("Failed to raise dispute");
   if (bracket.winner) throw new BadRequestError("Dispute cannot be raised");
+  const tournament = await Tournament.findOne({ brackets: { $in: [bracket] } });
+  if (!tournament) throw new BadRequestError("Invalid Tournament");
+
   const isPlayerA =
     JSON.stringify(bracket.teamA.user.id) === JSON.stringify(id);
   const isPlayerB =
@@ -39,50 +41,32 @@ export const raiseScoreDisputeController = async (
       user: { ughId: uB, email: eB, fcmToken: fB },
     },
   } = bracket;
-
   if (scoreA === -1 || scoreB === -1)
     throw new BadRequestError("Both teams need to upload score");
   if (proofA || proofB)
     throw new BadRequestError("Proof has already been added");
   if (disputeA || disputeB) return res.send(true);
-
-  if (isPlayerA && updateB && Date.now() < new Date(updateB).valueOf()) {
+  if (isPlayerA && updateB && Date.now() < new Date(updateB).valueOf())
     bracket.teamA.hasRaisedDispute = true;
-  }
-  if (isPlayerB && updateA && Date.now() < new Date(updateA).valueOf()) {
+
+  if (isPlayerB && updateA && Date.now() < new Date(updateA).valueOf())
     bracket.teamB.hasRaisedDispute = true;
-    mailer.send(
-      MailerTemplate.Dispute,
-      { ughId: uA, opponentUghId: uB },
-      eA,
-      "UGH Tournament Dispute"
-    );
-  }
+
   await bracket.save();
-  let from: string, to: string;
-  if (isPlayerA) {
-    mailer.send(
-      MailerTemplate.Dispute,
-      { ughId: uB, opponentUghId: uA },
-      eB,
-      "UGH Tournament Dispute"
-    );
-    from = uA;
-    to = fB;
-  }
-  if (isPlayerB) {
-    mailer.send(
-      MailerTemplate.Dispute,
-      { ughId: uA, opponentUghId: uB },
-      eA,
-      "UGH Tournament Dispute"
-    );
-    from = uB;
-    to = fA;
-  }
-  if (from && to)
+  const from: string = isPlayerA ? uA : uB;
+  const to: string = isPlayerA ? uB : uA;
+  const toToken: string = isPlayerA ? fB : fA;
+  const email = isPlayerA ? eB : eA;
+
+  mailer.send(
+    MailerTemplate.Dispute,
+    { ughId: to, opponentUghId: from },
+    email,
+    "UGH Tournament Dispute"
+  );
+  if (toToken)
     fire.sendNotification(
-      to,
+      toToken,
       `${from} raised Scoring dispute.`,
       `/game/${tournament?.regId}`
     );
