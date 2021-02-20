@@ -12,7 +12,7 @@ const DropdownMenu = ({
       <div className="navbar__item--dropdown__title">{title}</div>
       <div className="navbar__item--dropdown__menu">
         {listItems.map((link) => {
-          const splitText = link.split("-");
+          const splitText = link?.split("-");
           const show = splitText.join(" ");
           return (
             <Link key={Math.random()} href={`/${link}`}>

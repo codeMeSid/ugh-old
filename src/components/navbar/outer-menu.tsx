@@ -8,7 +8,7 @@ import {
 const OuterMenu = ({ currentUser, onClick }) => (
   <div className="navbar__responsive-menu">
     {outerMenuLinks.map((link) => {
-      const splitText = link.split("-");
+      const splitText = link?.split("-");
       const show = splitText.join(" ");
       return (
         <Link key={link} href={`/${link}`}>
@@ -27,7 +27,7 @@ const OuterMenu = ({ currentUser, onClick }) => (
     )}
     {currentUser
       ? outerMenuLinksAuth.map((link) => {
-          const splitText = link.split("-");
+          const splitText = link?.split("-");
           const show = splitText.join(" ");
           return (
             <Link key={link} href={`/${link}`}>
@@ -38,7 +38,7 @@ const OuterMenu = ({ currentUser, onClick }) => (
           );
         })
       : outerMenuLinksNonAuth.map((link) => {
-          const splitText = link.split("-");
+          const splitText = link?.split("-");
           const show = splitText.join(" ");
           return (
             <Link key={link} href={`/${link}`}>

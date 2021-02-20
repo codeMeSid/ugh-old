@@ -48,7 +48,7 @@ const Timer = (
         const minsLeft = Math.floor((delta % (msIn1Hour)) / (msIn1Min));
         const secondsLeft = Math.floor((delta % (msIn1Min)) / msIn1Sec);
         let diffTime = "";
-        format.split(" ").map(t => {
+        format?.split(" ").map(t => {
             switch (t) {
                 case "D": diffTime += `${daysLeft} Days`;
                     break;

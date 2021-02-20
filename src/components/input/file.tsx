@@ -28,7 +28,7 @@ const FileInput = ({
       const file = e.currentTarget.files[0];
       const bytesIn1Mb = 1000000;
       const fileSize = file.size / bytesIn1Mb;
-      const fileType = file.type.split("/")[1];
+      const fileType = file.type?.split("/")[1];
       if (fileSize > 5) {
         alert("file Size should be less than 5mb");
         return;

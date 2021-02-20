@@ -43,7 +43,7 @@ const CategoryAddAdminPage = ({ currentUser }) => {
               placeholder="category name"
               value={name}
               onChange={(n: any, v: string) => {
-                if (v.split(" ").length === 1) setName(v);
+                if (v?.split(" ").length === 1) setName(v);
               }}
             />
           </div>
@@ -66,7 +66,7 @@ const CategoryAddAdminPage = ({ currentUser }) => {
               placeholder={`Sub-Category ${sc.length + 1}`}
               value={scv}
               onChange={(n, v) => {
-                if (v.split(" ").length === 1) setScv(v);
+                if (v?.split(" ").length === 1) setScv(v);
               }}
             />
           </DialogButton>

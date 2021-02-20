@@ -31,7 +31,7 @@ const SignUp = ({ ughIds, errors }) => {
   const onChangeHandler = (name: string, value: string) => {
     switch (name) {
       case "ughId": {
-        if (`${value}`.split(" ").length > 1)
+        if (`${value}`?.split(" ").length > 1)
           return setMessages([
             { message: "UghId cannot container white space characters" },
           ]);

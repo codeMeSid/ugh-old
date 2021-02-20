@@ -110,7 +110,7 @@ const UserProfile = ({
                           placeholder="New UghId"
                           value={newUghId}
                           onChange={(n, v) => {
-                            if (`${v}`.split(" ").length > 1)
+                            if (`${v}`?.split(" ").length > 1)
                               return setMessages([
                                 {
                                   message:

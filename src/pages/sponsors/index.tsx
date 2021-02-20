@@ -38,7 +38,7 @@ const Sponsors = ({
   };
   const onSelectHandler = (e: any) => {
     const val = `${e.currentTarget.value}`
-      .split(",")
+      ?.split(",")
       .map((num) => parseInt(num));
     setSponsorshipIndex(val[0]);
     setPackIndex(val[1]);

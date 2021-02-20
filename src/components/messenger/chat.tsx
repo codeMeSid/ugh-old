@@ -112,13 +112,12 @@ class MessengerChat extends Component<Props> {
     if (!text) return;
 
     const textToHtml = text
-      .split(" ")
+      ?.split(" ")
       .map((t) => {
         const urlRegexs = [
           "(https|http)(://)(ww[a-z0-9]?[.])([a-zA-z0-9]*)([.][a-z]*)+",
           "(ww[a-z0-9]?[.])([a-zA-z0-9]*)([.][a-z]*)+",
           "(https|http)(://)([a-zA-z0-9]*)([.][a-z]*)+",
-          // "([a-zA-z0-9]*)([.][a-z]*)+",
         ];
         for (let i = 0; i < urlRegexs.length; i++) {
           const regex = new RegExp(urlRegexs[i]);
@@ -131,7 +130,7 @@ class MessengerChat extends Component<Props> {
                 t = `<a style="color:blue;" href="http://${t}">${t}</a>`;
                 break;
               case 2:
-                const tEmp = t.split("//");
+                const tEmp = t?.split("//");
                 tEmp[1] = `www.${tEmp[1]}`;
                 const tFin = tEmp.join("//");
                 t = `<a style="color:blue;" href="${tFin}">${t}</a>`;

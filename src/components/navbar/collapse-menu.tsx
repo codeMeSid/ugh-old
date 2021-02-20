@@ -11,7 +11,7 @@ const CollapseMenu = ({ currentUser }: { currentUser: any }) => {
   return (
     <div className="navbar__list--collapse">
       {navlinks.map((link) => {
-        const splitText = link.split("-");
+        const splitText = link?.split("-");
         const show = splitText.join(" ");
         return (
           <Link key={Math.random()} href={`/${link}`}>
@@ -26,7 +26,7 @@ const CollapseMenu = ({ currentUser }: { currentUser: any }) => {
       )}
       {!currentUser &&
         navlinksAuth.map((link) => {
-          const splitText = link.split("-");
+          const splitText = link?.split("-");
           const show = splitText.join(" ");
           return (
             <Link key={Math.random()} href={`/${link}`}>

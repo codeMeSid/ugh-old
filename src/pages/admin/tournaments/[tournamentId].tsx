@@ -12,6 +12,7 @@ import Table from "../../../components/table";
 import Router from "next/router";
 import IconDialogButton from "../../../components/button/icon-dialog";
 import { RiUserSharedLine } from "react-icons/ri";
+import Link from "next/link";
 
 const TournamentDetail = ({
   tournament,
@@ -43,6 +44,11 @@ const TournamentDetail = ({
       title="Match detail"
     >
       <div className="detail">
+        <Link href={`/tournaments/${tournament?.regId}`}>
+          <a>
+            <h1 style={{ fontWeight: "bold" }}>{tournament?.regId}</h1>
+          </a>
+        </Link>
         <div className="row">
           <div className="col">
             <Input placeholder="name" value={tournament?.name} disabled />
