@@ -1,4 +1,3 @@
-import SocketIo, { Server as IoServer, Socket } from "socket.io";
 import { Server } from "http";
 import { SocketEvent } from "../enum/socket-event";
 import { SocketMessage } from "../interface/socket-message";
@@ -8,15 +7,24 @@ import { User, UserDoc } from "../../models/user";
 import { UserActivity, UserRole } from "@monsid/ugh-og";
 import { Tournament } from "../../models/tournament";
 import { fire } from "../firebase";
+import SocketIO from "socket.io";
+
+const { Server: IoServer, Socket } = SocketIO;
 
 class Messenger {
-  io: IoServer;
-  socket: Socket;
+  io: SocketIO.Server;
+  socket: SocketIO.Socket;
   init(server: Server) {
-    this.io = SocketIo(server);
+    this.io = require("socket.io")(server);
     this.io.on("connection", (socket) => {
       this.socket = socket;
-      this.socket.join(["admin", "match", "user", "bracket-rank", "notification"]);
+      this.socket.join([
+        "admin",
+        "match",
+        "user",
+        "bracket-rank",
+        "notification",
+      ]);
       this.socket.on(SocketEvent.EventSend, (data) => {
         socket.to(data.channel).emit(SocketEvent.EventRecieve, data);
         this.saveMessage(data);
@@ -41,13 +49,15 @@ class Messenger {
             channel,
           });
           user = await User.findOne({ ughId: to });
-        }
-        else {
+        } else {
           convo = await Conversation.findOne({
             users: { $in: [from] },
             channel,
           });
-          users = await User.find({ role: UserRole.Admin, activity: UserActivity.Active })
+          users = await User.find({
+            role: UserRole.Admin,
+            activity: UserActivity.Active,
+          });
           action = "/admin/messages";
         }
         break;
@@ -56,14 +66,22 @@ class Messenger {
           channel: `${channel}-${to}`,
         });
         if (convo) {
-          const tournament = await Tournament.findOne({ regId: to }).populate("players", "ughId fcmToken", "Users");
+          const tournament = await Tournament.findOne({ regId: to }).populate(
+            "players",
+            "ughId fcmToken",
+            "Users"
+          );
           users = tournament?.players || [];
-          action = `/tournaments/${tournament?.regId || ""}`
+          action = `/tournaments/${tournament?.regId || ""}`;
         }
         break;
       case SocketChannel.User:
         convo = await Conversation.findOne({
-          $and: [{ users: { $in: [to] } }, { users: { $in: [from] } }, { channel }],
+          $and: [
+            { users: { $in: [to] } },
+            { users: { $in: [from] } },
+            { channel },
+          ],
         });
         user = await User.findOne({ ughId: to });
         break;
@@ -102,8 +120,12 @@ class Messenger {
       }
     }
     await convo.save();
-    if (user) fire.sendNotification(user.fcmToken, `New Message from ${from}`, action);
-    if (users) users.forEach(u => fire.sendNotification(u.fcmToken, `New Message from ${from}`, action))
+    if (user)
+      fire.sendNotification(user.fcmToken, `New Message from ${from}`, action);
+    if (users)
+      users.forEach((u) =>
+        fire.sendNotification(u.fcmToken, `New Message from ${from}`, action)
+      );
     return;
   }
 }

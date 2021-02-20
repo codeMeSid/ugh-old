@@ -8,7 +8,7 @@ import {
   DatabaseConnectionError,
   currentUser,
   authAdminRoute,
-} from "@monsid/ugh-og"
+} from "@monsid/ugh-og";
 import { app, nextApp } from "./app";
 import { apiRouter } from "./routes/api-routes";
 import {
@@ -22,7 +22,6 @@ import { siteRouter } from "./routes/site-routes";
 import { mailer } from "./utils/mailer";
 import { messenger } from "./utils/socket";
 
-const Agendash = require("agendash");
 const start = async () => {
   try {
     await nextApp.prepare();
@@ -41,7 +40,6 @@ const start = async () => {
     paymentHandler.init(RAZORPAY_ID, RAZORPAY_SECRET);
     mailer.init(PASSWORD, EMAIL);
     await timer.connect(MONGO_URI);
-    app.use("/jobs", currentUser, authAdminRoute, Agendash(timer._agenda));
     app.use("/api/ugh", apiRouter);
     app.use(errorHandler);
     app.use(siteRouter);

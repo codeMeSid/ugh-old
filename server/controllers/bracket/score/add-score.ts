@@ -85,7 +85,7 @@ export const addScoreController = async (req: Request, res: Response) => {
             .populate("teamA.user", "ughId email", "Users")
             .populate("teamB.user", "ughId email", "Users");
           if (!bracket) throw new Error("Invalid Bracket - add score B");
-          if (bracket.winner) throw new Error("Bracket C");
+          if (bracket.winner) throw new Error("Bracket winner");
           if (bracket.teamA.hasRaisedDispute || bracket.teamB.hasRaisedDispute)
             throw new Error("dispute was raised");
           if (bracket.teamA.score > bracket.teamB.score)

@@ -1,4 +1,4 @@
-import * as Firebase from "firebase/app";
+import Firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/messaging";
@@ -45,19 +45,19 @@ class Fire {
     const fireObj = this.fireObj;
     const storage = fireObj.storage();
     const name =
-      randomBytes(4).toString("hex") + file.name.trim().split(/ +/).join(" ");
+      randomBytes(4).toString("hex") + file.name.trim()?.split(/ +/).join(" ");
     const uploadTask = storage.ref(`ugh/${name}`).put(file);
 
     const url = await new Promise((resolve, reject) =>
       uploadTask.on(
         "state_changed",
-        (data) => {
+        (data: any) => {
           if (progressUpdate)
             progressUpdate(
               Math.round((data.bytesTransferred / data.totalBytes) * 100)
             );
         },
-        (error) => {
+        (error: any) => {
           throw new Error(error.message);
         },
         async () => {
