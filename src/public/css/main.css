@@ -1439,7 +1439,7 @@ tr:nth-child(even) {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      max-width: 100rem;
+      width: 100rem;
       margin-top: 2rem; }
       .match__head__container__list__item {
         width: 18rem;
@@ -1861,7 +1861,6 @@ tr:nth-child(even) {
   box-shadow: 1rem rem 2rem rgba(128, 128, 128, 0.7);
   border: 1px solid rgba(128, 128, 128, 0.2);
   margin: 1rem;
-  position: relative;
   cursor: pointer;
   padding-bottom: 0.2rem;
   word-wrap: break-word;
@@ -1898,7 +1897,7 @@ tr:nth-child(even) {
       margin-right: 0.5rem; }
   .bracket__score__winner {
     position: absolute;
-    top: 30%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-30deg);
     font-size: 4.2rem;
@@ -1922,7 +1921,8 @@ tr:nth-child(even) {
     background-repeat: no-repeat;
     border-radius: 100%;
     margin: 0 auto;
-    background-color: rgba(128, 128, 128, 0.5); }
+    background-color: rgba(128, 128, 128, 0.5);
+    position: relative; }
   .bracket__score__name {
     margin-top: 0.5rem;
     font-size: 2.4rem;

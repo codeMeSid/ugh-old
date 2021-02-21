@@ -213,7 +213,17 @@ const PlayerScoreCard = ({
           className={`bracket__score__image`}
           // ${player.profilePic ? "" : "none"}
           style={{ backgroundImage: `url(${player.profilePic || PlayerImg})` }}
-        />
+        >
+          {bracket?.hasWinner && (
+            <div
+              className={`bracket__score__winner bracket__score__winner--${
+                team.isWinner ? "winner" : "lost"
+              }`}
+            >
+              {team.isWinner ? "WON" : "LOST"}
+            </div>
+          )}
+        </div>
         <div className="bracket__score__name">
           <div>{player?.ughId}</div>
         </div>
@@ -223,15 +233,7 @@ const PlayerScoreCard = ({
             <span className="bracket__score__value--number">{team.score}</span>
           </div>
         )}
-        {bracket.hasWinner ? (
-          <div
-            className={`bracket__score__winner bracket__score__winner--${
-              team.isWinner ? "winner" : "lost"
-            }`}
-          >
-            {team.isWinner ? "WON" : "LOST"}
-          </div>
-        ) : (
+        {!bracket?.hasWinner && (
           <>
             {bracket.wasDisputeRaised && (
               <div

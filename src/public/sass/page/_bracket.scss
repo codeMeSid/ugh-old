@@ -23,7 +23,7 @@
   box-shadow: 1rem rem 2rem rgba(gray, 0.7);
   border: 1px solid rgba(gray, 0.2);
   margin: 1rem;
-  position: relative;
+
   cursor: pointer;
   padding-bottom: 0.2rem;
   word-wrap: break-word;
@@ -68,7 +68,7 @@
   }
   &__winner {
     position: absolute;
-    top: 30%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-30deg);
     font-size: 4.2rem;
@@ -99,6 +99,7 @@
     border-radius: 100%;
     margin: 0 auto;
     background-color: rgba(gray, 0.5);
+    position: relative;
   }
   &__name {
     margin-top: 0.5rem;

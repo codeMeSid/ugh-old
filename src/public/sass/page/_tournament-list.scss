@@ -21,7 +21,6 @@
         font-size: 3.8rem;
         text-align: center;
         text-transform: capitalize;
-        
       }
       &__subtitle {
         color: white;
@@ -35,7 +34,7 @@
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        max-width: 100rem;
+        width: 100rem;
         margin-top: 2rem;
         &__item {
           width: 18rem;
