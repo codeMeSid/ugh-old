@@ -69,7 +69,7 @@ export const acceptProofController = async (req: Request, res: Response) => {
         brackets = brackets.map((b) => {
           if (
             b.winner !== DQ.AdminDQ &&
-            JSON.stringify(b.teamA.user) !==
+            JSON.stringify(b?.teamA?.user) !==
               JSON.stringify(bracketA.teamA.user.id)
           )
             b.winner = DQ.DisputeLost;

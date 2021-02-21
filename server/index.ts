@@ -21,6 +21,7 @@ import {
 import { siteRouter } from "./routes/site-routes";
 import { mailer } from "./utils/mailer";
 import { messenger } from "./utils/socket";
+import { jobRouter } from "./routes/job-route";
 
 const start = async () => {
   try {
@@ -40,6 +41,7 @@ const start = async () => {
     paymentHandler.init(RAZORPAY_ID, RAZORPAY_SECRET);
     mailer.init(PASSWORD, EMAIL);
     await timer.connect(MONGO_URI);
+    app.use("/job/ugh", jobRouter);
     app.use("/api/ugh", apiRouter);
     app.use(errorHandler);
     app.use(siteRouter);
