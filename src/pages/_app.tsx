@@ -62,7 +62,7 @@ class AppComponent extends React.Component<Props> {
       "/tac": "Terms & Conditions",
       "/login": "Login Player",
       "/withdraw": "Withdraw Coins",
-      "/store":"UGH Store",
+      "/store": "UGH Store",
       "/account/activate/[ughId]": `${router.query?.ughId}\'s Player Activation`,
       "/account/activate": "Account Activation Mail Sent",
       "/account/forgot-password": "Forgot Password",
