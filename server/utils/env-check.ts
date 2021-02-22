@@ -10,7 +10,7 @@ const {
   BASE_URL,
   EMAIL,
   PASSWORD,
-  TIMER_URL,
+  // TIMER_URL,
 } = process.env;
 
 if (!PORT) {
@@ -52,10 +52,10 @@ if (!PASSWORD) {
   errorlog("PASSWORD is required");
   throw new Error();
 }
-if (!TIMER_URL) {
-  errorlog("PASSWORD is required");
-  throw new Error();
-}
+// if (!TIMER_URL) {
+//   errorlog("PASSWORD is required");
+//   throw new Error();
+// }
 
 export {
   PORT,
@@ -67,5 +67,5 @@ export {
   BASE_URL,
   EMAIL,
   PASSWORD,
-  TIMER_URL,
+  // TIMER_URL,
 };
