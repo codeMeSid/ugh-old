@@ -20,7 +20,15 @@ if (isDevMode) config();
 // middlewares
 app.use(json());
 app.use(compression());
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: "'unsafe-inline' * data: https:",
+      },
+    },
+  })
+);
 app.use(cors());
 app.use(
   cookieSession({
