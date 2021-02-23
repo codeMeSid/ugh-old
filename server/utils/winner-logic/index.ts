@@ -1,10 +1,4 @@
-import {
-  errorlog,
-  GameType,
-  infolog,
-  timer,
-  TournamentStatus,
-} from "@monsid/ugh-og";
+import { GameType, TournamentStatus } from "@monsid/ugh-og";
 import mongoose from "mongoose";
 import { Bracket, BracketDoc } from "../../models/bracket";
 import { PassbookDoc } from "../../models/passbook";
@@ -15,6 +9,7 @@ import { SocketChannel } from "../enum/socket-channel";
 import { SocketEvent } from "../enum/socket-event";
 import { mailer } from "../mailer";
 import { messenger } from "../socket";
+import { timerCancelRequest } from "../timer-request-cancel";
 import { rankLogger } from "./rank";
 import { scoreLogger } from "./score";
 
@@ -104,13 +99,12 @@ export const winnerLogic = async (
 const sendNotification = (tournament: any, brackets: any) => {
   try {
     if (tournament.status === TournamentStatus.Completed) {
-      timer.cancel(`${tournament.regId}-end`);
+      timerCancelRequest(`T-${tournament.regId}-E`);
       brackets.forEach((bracket: any) => {
         const bracketId = bracket.regId;
-        timer.cancel(`${bracketId}`);
-        timer.cancel(`${bracketId}-A`);
-        timer.cancel(`${bracketId}-B`);
-        timer.cancel(`${bracketId}-check`);
+        timerCancelRequest(`${bracketId}`);
+        timerCancelRequest(`${bracketId}-A`);
+        timerCancelRequest(`${bracketId}-B`);
       });
       messenger.io
         .to(SocketChannel.BracketRank)

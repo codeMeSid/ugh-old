@@ -1,9 +1,4 @@
-import {
-  BadRequestError,
-  GameType,
-  timer,
-  TournamentStatus,
-} from "@monsid/ugh-og";
+import { BadRequestError, GameType, TournamentStatus } from "@monsid/ugh-og";
 import { Request, Response } from "express";
 import { Tournament } from "../../models/tournament";
 import mongoose from "mongoose";
@@ -12,13 +7,15 @@ import { shuffle } from "../../utils/shuffle";
 import { randomBytes } from "crypto";
 import { Bracket, BracketDoc } from "../../models/bracket";
 import { TournamentTime } from "../../utils/enum/tournament-time";
-import { winnerLogic } from "../../utils/winner-logic";
 import { mailer } from "../../utils/mailer";
 import { MailerTemplate } from "../../utils/enum/mailer-template";
 import { Passbook, PassbookDoc } from "../../models/passbook";
 import { TransactionEnv } from "../../utils/enum/transaction-env";
 import { TransactionType } from "../../utils/enum/transaction-type";
-import { bracketCheckTimer } from "../../utils/bracket-check-timer";
+import { TimerChannel } from "../../utils/enum/timer-channel";
+import { TimerType } from "../../utils/enum/timer-type";
+import { timerRequest } from "../../utils/timer-request";
+import { timerCancelRequest } from "../../utils/timer-request-cancel";
 
 export const tournamentUpdateStatusController = async (
   req: Request,
@@ -68,7 +65,7 @@ export const tournamentUpdateStatusController = async (
         await Promise.all(passbooks.map((p) => p.save({ session })));
         await tournament.save({ session });
         await session.commitTransaction();
-        timer.cancel(`${tournament.regId}-end`);
+        timerCancelRequest(`T-${tournament.regId}-E`);
         users.map((user) =>
           mailer.send(
             MailerTemplate.Cancel,
@@ -158,11 +155,14 @@ export const tournamentUpdateStatusController = async (
                 new Date(bracket.teamA.uploadBy).getTime() +
                   TournamentTime.TournamentScoreCheckTime
               );
-              bracketCheckTimer(
-                bracket.regId,
-                bracketCheckTime,
-                tournament.regId
-              );
+              timerRequest(bracket.regId, bracketCheckTime, {
+                channel: TimerChannel.Bracket,
+                type: TimerType.Check,
+                eventName: {
+                  regId: bracket.regId,
+                  tournamentRegId: tournament.regId,
+                },
+              });
             }
             brackets.push(bracket);
             tournament.brackets.push(bracket);
@@ -180,8 +180,10 @@ export const tournamentUpdateStatusController = async (
         await tournament.save({ session });
         await Promise.all(brackets.map((b: BracketDoc) => b.save({ session })));
         await session.commitTransaction();
-        timer.cancel(tournament.regId);
-        timer.cancel(`${tournament.regId}-end`);
+
+        timerCancelRequest(`T-${tournament.regId}-S`);
+        timerCancelRequest(`T-${tournament.regId}-E`);
+
         users.forEach((user) => {
           if (user.settings.addedTournamentWillStart)
             mailer.send(
@@ -194,31 +196,17 @@ export const tournamentUpdateStatusController = async (
               `Tournament ${tournament.name} Started`
             );
         });
-        timer.schedule(
-          `${tournament.regId}-end`,
-          new Date(tournament.endDateTime),
-          async ({ id }: { id: string }, done) => {
-            try {
-              const tournament = await Tournament.findById(id);
-              if (!tournament)
-                throw new Error("Invalid Tournament - manual start");
-              if (tournament.status === TournamentStatus.Started) {
-                tournament.set({ status: TournamentStatus.Completed });
-                await tournament.save();
-                done();
-                winnerLogic(tournament.regId, null, "end");
-              } else throw new Error("Tournament Status - manual start");
-            } catch (error) {
-              console.log({ msg: "manual start end", error: error.messsage });
-              done();
-            }
+        timerRequest(`T-${tournament.regId}-E`, tournament.endDateTime, {
+          channel: TimerChannel.Tournament,
+          type: TimerType.End,
+          eventName: {
+            id: tournament.id,
           },
-          { id: tournament?.id }
-        );
+        });
         break;
     }
   } catch (error) {
-    console.log({ msg: "manual", error: error.message });
+    console.log({ msg: "Tournament Status Change", error: error.message });
     await session.abortTransaction();
   }
   session.endSession();

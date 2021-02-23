@@ -7,6 +7,7 @@ import { mailer } from "../../../utils/mailer";
 import { MailerTemplate } from "../../../utils/enum/mailer-template";
 import { Tournament } from "../../../models/tournament";
 import { fire } from "../../../utils/firebase";
+import { timerCancelRequest } from "../../../utils/timer-request-cancel";
 
 export const raiseDisputeController = async (req: Request, res: Response) => {
   const { id } = req.currentUser;
@@ -49,7 +50,7 @@ export const raiseDisputeController = async (req: Request, res: Response) => {
       bracketA.teamA.user.email,
       "UGH Tournament Dispute"
     );
-    timer.cancel(bracketId);
+    timerCancelRequest(bracketId);
   } catch (error) {
     console.log({ msg: "rank raise dispute", message: error.message });
     await session.abortTransaction();

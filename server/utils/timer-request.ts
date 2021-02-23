@@ -1,5 +1,5 @@
 import axios from "axios";
-// import { TIMER_URL } from "./env-check";
+import { TIMER_URL } from "./env-check";
 import { EventData } from "./interface/event-data";
 
 export const timerRequest = (
@@ -8,7 +8,7 @@ export const timerRequest = (
   data: EventData
 ) => {
   try {
-    // axios.post(TIMER_URL, { data, name, time });
+    axios.post(TIMER_URL, { data, name, time });
   } catch (error) {
     console.log(`${name} failed to set timer`);
   }

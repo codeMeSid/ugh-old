@@ -25,7 +25,14 @@ export const endSpecialBracketCondition = (props: Args): RetType => {
   const passbooks: Array<PassbookDoc> = [];
   const { brackets, tournament, users } = props;
 
-  const sortedBrackets = brackets.sort((a, b) => b.round - a.round);
+  const sortedBrackets = brackets
+    .filter(
+      (bracket) =>
+        bracket.winner !== DQ.ScoreNotUploaded &&
+        bracket.winner !== DQ.AdminDQ &&
+        bracket.winner !== DQ.DisputeLost
+    )
+    .sort((a, b) => b.round - a.round);
 
   const winnerBracket = sortedBrackets[0];
   if (

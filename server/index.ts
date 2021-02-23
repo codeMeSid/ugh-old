@@ -3,11 +3,8 @@ import {
   successlog,
   errorHandler,
   errorlog,
-  timer,
   paymentHandler,
   DatabaseConnectionError,
-  currentUser,
-  authAdminRoute,
 } from "@monsid/ugh-og";
 import { app, nextApp } from "./app";
 import { apiRouter } from "./routes/api-routes";
@@ -40,7 +37,7 @@ const start = async () => {
     );
     paymentHandler.init(RAZORPAY_ID, RAZORPAY_SECRET);
     mailer.init(PASSWORD, EMAIL);
-    await timer.connect(MONGO_URI);
+    // await timer.connect(MONGO_URI);
     app.use("/job/ugh", jobRouter);
     app.use("/api/ugh", apiRouter);
     app.use(errorHandler);

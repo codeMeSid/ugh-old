@@ -1,8 +1,11 @@
 import { BadRequestError, NotAuthorizedError, timer } from "@monsid/ugh-og";
 import { Request, Response } from "express";
 import { Bracket } from "../../../models/bracket";
+import { TimerChannel } from "../../../utils/enum/timer-channel";
+import { TimerType } from "../../../utils/enum/timer-type";
 import { TournamentTime } from "../../../utils/enum/tournament-time";
-import { winnerLogic } from "../../../utils/winner-logic";
+import { timerRequest } from "../../../utils/timer-request";
+import { timerCancelRequest } from "../../../utils/timer-request-cancel";
 
 export const addScoreController = async (req: Request, res: Response) => {
   const { id } = req.currentUser;
@@ -26,7 +29,7 @@ export const addScoreController = async (req: Request, res: Response) => {
     if (hasTeamBUpdatedScore) {
       const canUpdateScore =
         Date.now() < new Date(bracket.teamB.updateBy).valueOf();
-      if (canUpdateScore) timer.cancel(`${bracketId}-B`);
+      if (canUpdateScore) timerCancelRequest(`S-${bracket.regId}-B`);
       else throw new BadRequestError("Time up to update score");
     }
   }
@@ -42,63 +45,29 @@ export const addScoreController = async (req: Request, res: Response) => {
     if (hasTeamAUpdatedScore) {
       const canUpdateScore =
         Date.now() < new Date(bracket.teamA.updateBy).valueOf();
-      if (canUpdateScore) timer.cancel(`${bracketId}-B`);
+      if (canUpdateScore) timerCancelRequest(`S-${bracket.regId}-A`);
       else throw new BadRequestError("Time up to update score");
     }
   }
   await bracket.save();
   if (isPlayerA) {
-    timer.schedule(
-      `${bracketId}-A`,
-      bracket.teamA.updateBy,
-      async ({ regId, tournamentId }, done) => {
-        done();
-        try {
-          const bracket = await Bracket.findOne({ regId })
-            .populate("teamA.user", "ughId email", "Users")
-            .populate("teamB.user", "ughId email", "Users");
-          if (!bracket) throw new Error("Invalid Bracket - add score A");
-          if (bracket.winner)
-            throw new Error("Bracket completed - add score A");
-          if (bracket.teamA.hasRaisedDispute || bracket.teamB.hasRaisedDispute)
-            throw new Error("dispute was raised - add score A");
-          if (bracket.teamA.score > bracket.teamB.score)
-            bracket.winner = bracket.teamA.user.ughId;
-          else bracket.winner = bracket.teamB.user.ughId;
-          await bracket.save();
-          winnerLogic(tournamentId, regId, "score teamA added");
-        } catch (error) {
-          console.log({ msg: "add score A", error: error.messsage });
-        }
+    timerRequest(`S-${bracket.regId}-A`, bracket.teamA.updateBy, {
+      channel: TimerChannel.Bracket,
+      type: TimerType.ScoreA,
+      eventName: {
+        bracketRegId: bracket.regId,
+        tournamentId,
       },
-      { regId: bracketId, tournamentId }
-    );
-  }
-  if (isPlayerB) {
-    timer.schedule(
-      `${bracketId}-B`,
-      bracket.teamB.updateBy,
-      async ({ regId, tournamentId }, done) => {
-        done();
-        try {
-          const bracket = await Bracket.findOne({ regId })
-            .populate("teamA.user", "ughId email", "Users")
-            .populate("teamB.user", "ughId email", "Users");
-          if (!bracket) throw new Error("Invalid Bracket - add score B");
-          if (bracket.winner) throw new Error("Bracket winner");
-          if (bracket.teamA.hasRaisedDispute || bracket.teamB.hasRaisedDispute)
-            throw new Error("dispute was raised");
-          if (bracket.teamA.score > bracket.teamB.score)
-            bracket.winner = bracket.teamA.user?.ughId;
-          else bracket.winner = bracket.teamB.user?.ughId;
-          await bracket.save();
-          winnerLogic(tournamentId, regId, "score teamB added");
-        } catch (error) {
-          console.log({ msg: "add score B", error });
-        }
+    });
+  } else if (isPlayerB) {
+    timerRequest(`S-${bracket.regId}-B`, bracket.teamB.updateBy, {
+      channel: TimerChannel.Bracket,
+      type: TimerType.ScoreB,
+      eventName: {
+        bracketRegId: bracket.regId,
+        tournamentId,
       },
-      { regId: bracketId, tournamentId }
-    );
+    });
   }
   res.send(true);
 };

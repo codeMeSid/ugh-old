@@ -11,9 +11,10 @@ import mongoose from "mongoose";
 import { Settings } from "../../../models/settings";
 import { User } from "../../../models/user";
 import { randomBytes } from "crypto";
-import { tournamentStartTimer } from "./start";
-import { tournamentEndTimer } from "./end";
 import { fire } from "../../../utils/firebase";
+import { timerRequest } from "../../../utils/timer-request";
+import { TimerChannel } from "../../../utils/enum/timer-channel";
+import { TimerType } from "../../../utils/enum/timer-type";
 
 export const tournamentAddController = async (req: Request, res: Response) => {
   const {
@@ -104,14 +105,23 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     await tournament.save({ session });
     await session.commitTransaction();
 
-    tournamentStartTimer(
-      tournament.regId,
-      tournament.id,
-      tournament.startDateTime
-    );
+    timerRequest(`T-${tournament.regId}-S`, tournament.startDateTime, {
+      channel: TimerChannel.Tournament,
+      type: TimerType.Start,
+      eventName: {
+        id: tournament.id,
+      },
+    });
 
-    tournamentEndTimer(tournament.regId, tournament.id, newEndDateTime);
-    sendTournamentAddedMail(tournament, ughId);
+    timerRequest(`T-${tournament.regId}-E`, tournament.endDateTime, {
+      channel: TimerChannel.Tournament,
+      type: TimerType.End,
+      eventName: {
+        id: tournament.id,
+      },
+    });
+
+    // sendTournamentAddedMail(tournament, ughId);
   } catch (error) {
     await session.abortTransaction();
     throw new BadRequestError(error.message);

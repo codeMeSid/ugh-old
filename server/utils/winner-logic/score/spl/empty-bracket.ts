@@ -1,9 +1,11 @@
 import { BracketDoc } from "../../../../models/bracket";
 import { TournamentDoc } from "../../../../models/tournament";
 import { UserDoc } from "../../../../models/user";
-import { bracketCheckTimer } from "../../../bracket-check-timer";
 import { TournamentTime } from "../../../enum/tournament-time";
 import { getUserUghIndex } from "./methods/get-user-index";
+import { TimerChannel } from "../../../enum/timer-channel";
+import { TimerType } from "../../../enum/timer-type";
+import { timerRequest } from "../../../timer-request";
 
 interface Args {
   users: Array<UserDoc>;
@@ -51,7 +53,14 @@ export const emptySpecialBracketCondition = (
     new Date(uploadBy).getTime() + TournamentTime.TournamentScoreCheckTime
   );
 
-  bracketCheckTimer(brackets[eBI].regId, bracketCheckTime, tournament.regId);
+  timerRequest(brackets[eBI].regId, bracketCheckTime, {
+    channel: TimerChannel.Bracket,
+    type: TimerType.Check,
+    eventName: {
+      regId: brackets[eBI].regId,
+      tournamentRegId: tournament.regId,
+    },
+  });
 
   return brackets;
 };

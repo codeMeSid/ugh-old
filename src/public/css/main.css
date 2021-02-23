@@ -1439,7 +1439,7 @@ tr:nth-child(even) {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      width: 100rem;
+      width: 90vw;
       margin-top: 2rem; }
       .match__head__container__list__item {
         width: 18rem;

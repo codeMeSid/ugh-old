@@ -6,11 +6,13 @@
 import { BracketDoc } from "../../../../models/bracket";
 import { TournamentDoc } from "../../../../models/tournament";
 import { UserDoc } from "../../../../models/user";
-import { bracketCheckTimer } from "../../../bracket-check-timer";
 import { TournamentTime } from "../../../enum/tournament-time";
 import { createNewBracket } from "./methods/create-new-bracket";
 import { getNextEmptyBracketIndex } from "./methods/empty-bracket-index";
 import { getUserIndex } from "./methods/get-user-index";
+import { TimerChannel } from "../../../enum/timer-channel";
+import { TimerType } from "../../../enum/timer-type";
+import { timerRequest } from "../../../timer-request";
 
 interface Args {
   users: Array<UserDoc>;
@@ -68,7 +70,14 @@ export const specialBracketCondition = (props: Args): RetType => {
     const bracketCheckTime = new Date(
       new Date(uploadBy).getTime() + TournamentTime.TournamentScoreCheckTime
     );
-    bracketCheckTimer(brackets[nEBI].regId, bracketCheckTime, tournament.regId);
+    timerRequest(brackets[nEBI].regId, bracketCheckTime, {
+      channel: TimerChannel.Bracket,
+      type: TimerType.Check,
+      eventName: {
+        regId: brackets[nEBI].regId,
+        tournamentRegId: tournament.regId,
+      },
+    });
     return { brackets, tournament };
   } else if (canCreateBracket) {
     // TODO: check if futher creation is required

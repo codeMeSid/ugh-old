@@ -2,10 +2,12 @@ import { BadRequestError, timer } from "@monsid/ugh-og";
 import { Request, Response } from "express";
 import { Bracket } from "../../../models/bracket";
 import { TournamentTime } from "../../../utils/enum/tournament-time";
-import { winnerLogic } from "../../../utils/winner-logic";
 import mongoose from "mongoose";
 import { Tournament } from "../../../models/tournament";
 import { DQ } from "../../../utils/enum/dq";
+import { timerRequest } from "../../../utils/timer-request";
+import { TimerChannel } from "../../../utils/enum/timer-channel";
+import { TimerType } from "../../../utils/enum/timer-type";
 
 export const addRankController = async (req: Request, res: Response) => {
   const { bracketId } = req.params;
@@ -77,35 +79,12 @@ export const addRankController = async (req: Request, res: Response) => {
     bracket.uploadBy = undefined;
     await bracket.save({ session });
     await session.commitTransaction();
-    if (!bracket.winner) {
-      timer.schedule(
-        bracketId,
-        bracket.updateBy,
-        async ({ id, tournamentId }, done) => {
-          done();
-          try {
-            const bracket = await Bracket.findById(id).populate(
-              "teamA.user",
-              "ughId",
-              "Users"
-            );
-            if (!bracket) throw new Error("Invalid bracket - add rank");
-            if (bracket.teamB.hasRaisedDispute)
-              throw new Error("bracket has dispute - add rank");
-            if (bracket.winner)
-              throw new Error("bracket has completed - add rank");
-            bracket.winner = bracket.teamA.user.ughId;
-            bracket.updateBy = undefined;
-            bracket.uploadBy = undefined;
-            await bracket.save();
-            winnerLogic(tournamentId, null, "rank added");
-          } catch (error) {
-            console.log({ msg: "add rank", error: error.message });
-          }
-        },
-        { id: bracket.id, tournamentId }
-      );
-    }
+    if (!bracket.winner)
+      timerRequest(bracketId, bracket.updateBy, {
+        channel: TimerChannel.Bracket,
+        type: TimerType.Rank,
+        eventName: { bracketId: bracket.id, tournamentId },
+      });
   } catch (error) {
     await session.abortTransaction();
     throw new BadRequestError(error.message);
