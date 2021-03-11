@@ -11,6 +11,6 @@ export const timerCancelRequest = (name: string) => {
       },
     });
   } catch (error) {
-    console.log(`${name} failed to set timer`);
+    console.log({ msg: "TIMER REQUEST", error: `${name} failed to set timer` });
   }
 };

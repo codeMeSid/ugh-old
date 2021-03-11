@@ -21,7 +21,6 @@ router.post("/", async (req: Request, res: Response) => {
     data: { data },
   } = req.body;
   const { channel, eventName, type }: EventData = data;
-  console.log(data);
   if (channel === TimerChannel.Tournament) {
     switch (type) {
       case TimerType.Start:

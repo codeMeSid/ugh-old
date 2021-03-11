@@ -10,6 +10,6 @@ export const timerRequest = (
   try {
     axios.post(TIMER_URL, { data, name, time });
   } catch (error) {
-    console.log(`${name} failed to set timer`);
+    console.log({ msg: "TIMER REQUEST", error: `${name} failed to set timer` });
   }
 };

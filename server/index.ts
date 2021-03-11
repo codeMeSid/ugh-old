@@ -37,7 +37,6 @@ const start = async () => {
     );
     paymentHandler.init(RAZORPAY_ID, RAZORPAY_SECRET);
     mailer.init(PASSWORD, EMAIL);
-    // await timer.connect(MONGO_URI);
     app.use("/job/ugh", jobRouter);
     app.use("/api/ugh", apiRouter);
     app.use(errorHandler);

@@ -43,12 +43,23 @@
       }
       &__time {
         position: absolute;
-        position: absolute;
         top: 5rem;
         left: 2rem;
         font-size: 2.5rem;
         font-weight: bold;
         color: white;
+      }
+      &__share {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        color: white;
+        cursor: pointer;
+        font-size: 3rem;
+        mix-blend-mode: difference;
+        &:hover {
+          mix-blend-mode: luminosity;
+        }
       }
       &__winner {
         position: absolute;

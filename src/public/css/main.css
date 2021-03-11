@@ -1624,12 +1624,21 @@ tr:nth-child(even) {
         color: white; }
       .tournament__card__head__time {
         position: absolute;
-        position: absolute;
         top: 5rem;
         left: 2rem;
         font-size: 2.5rem;
         font-weight: bold;
         color: white; }
+      .tournament__card__head__share {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        color: white;
+        cursor: pointer;
+        font-size: 3rem;
+        mix-blend-mode: difference; }
+        .tournament__card__head__share:hover {
+          mix-blend-mode: luminosity; }
       .tournament__card__head__winner {
         position: absolute;
         top: 50%;

@@ -21,6 +21,7 @@ import { IoMdCloseCircle } from "react-icons/io";
 import ProgressButton from "../../components/button/progress";
 import Input from "../../components/input/input";
 import { UserDoc } from "../../../server/models/user";
+import { FaShareAlt } from "react-icons/fa";
 
 const Logo = require("../../public/asset/logo_icon.webp");
 
@@ -316,6 +317,17 @@ const TournamentDetail = ({
       );
   };
 
+  const copyToClipboard = async () => {
+    try {
+      await window?.navigator?.clipboard.writeText(
+        `https://ultimategamershub.com/tournaments/${tournament?.regId}`
+      );
+      alert("Link copied to clipboard");
+    } catch (error) {
+      alert("Failed to copy to clipboard");
+    }
+  };
+
   return (
     <MainLayout messages={messages}>
       {canAddTM && (
@@ -469,7 +481,10 @@ const TournamentDetail = ({
               </div>
               <div className="tournament__card__head__time">{getTimer()}</div>
               <div className="tournament__card__head__time">{getTimer()}</div>
-
+              <FaShareAlt
+                className="tournament__card__head__share"
+                onClick={copyToClipboard}
+              />
               {tournament?.winners?.length > 0 && (
                 <div className="tournament__card__head__winner">
                   <IoIosTrophy className="tournament__card__head__winner__icon" />
