@@ -10,9 +10,9 @@ export const bracketScoreUpdateB = async (
       .populate("teamA.user", "ughId email", "Users")
       .populate("teamB.user", "ughId email", "Users");
     if (!bracket) throw new Error("Invalid Bracket - add score B");
-    if (bracket.winner) throw new Error("Bracket winner");
+    if (bracket.winner) return;
     if (bracket.teamA.hasRaisedDispute || bracket.teamB.hasRaisedDispute)
-      throw new Error("dispute was raised");
+      return;
     if (bracket.teamA.score > bracket.teamB.score)
       bracket.winner = bracket.teamA.user?.ughId;
     else bracket.winner = bracket.teamB.user?.ughId;

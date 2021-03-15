@@ -18,7 +18,6 @@ export const winnerLogic = async (
   bracketId?: string,
   message?: string
 ) => {
-  const session = await mongoose.startSession();
   let updates: {
     updatedTournament: TournamentDoc;
     updatedBrackets: Array<BracketDoc>;
@@ -26,28 +25,36 @@ export const winnerLogic = async (
     newBrackets?: Array<BracketDoc>;
     passbooks?: Array<PassbookDoc>;
   };
+  const session = await mongoose.startSession();
   session.startTransaction();
   try {
+    ////// FETCH TOURNAMENT //////
     const tournament = await Tournament.findOne({
       regId: tournamentId,
     })
       .populate("game", "gameType name", "Games")
       .session(session);
-
-    if (!tournament) throw new Error("Invalid Tournament");
-    if (tournament.winners.length >= 1)
-      throw new Error("Tournament already has winners");
-    const users = await User.find({ _id: { $in: tournament.players } }).session(
-      session
-    );
-    if (users.length === 0) throw new Error("Invalid Tournament users");
+    ////// FETCH BRACKETS //////
     const brackets = await Bracket.find({
       _id: { $in: tournament.brackets },
     }).session(session);
-    if (brackets.length === 0) throw new Error("Invalid Tournament brackets");
+    ////// FETCH BRACKET //////
     const bracket = await Bracket.findOne({ regId: bracketId }).session(
       session
     );
+    ////// FETCH USERS //////
+    const users = await User.find({ _id: { $in: tournament.players } }).session(
+      session
+    );
+    ////// CHECKS //////
+    if (!tournament) throw new Error("Invalid Tournament");
+    if (tournament.winners.length >= 1)
+      throw new Error("Tournament already has winners");
+
+    if (users.length === 0) throw new Error("Invalid Tournament users");
+
+    if (brackets.length === 0) throw new Error("Invalid Tournament brackets");
+    ////// SWITCH CASE GAME //////
     switch (tournament.game.gameType) {
       case GameType.Rank:
         updates = rankLogger(tournament, brackets, users);

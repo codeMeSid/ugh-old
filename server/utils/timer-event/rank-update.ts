@@ -12,14 +12,13 @@ export const bracketRankUpdate = async (
       "Users"
     );
     if (!bracket) throw new Error("Invalid bracket - add rank");
-    if (bracket.teamB.hasRaisedDispute)
-      throw new Error("bracket has dispute - add rank");
-    if (bracket.winner) throw new Error("bracket has completed - add rank");
+    if (bracket.teamB.hasRaisedDispute) return;
+    if (bracket.winner) return;
     bracket.winner = bracket.teamA.user.ughId;
     bracket.updateBy = undefined;
     bracket.uploadBy = undefined;
     await bracket.save();
-    winnerLogic(tournamentId, null, "rank added");
+    // winnerLogic(tournamentId, null, "rank added");
   } catch (error) {
     console.log({ msg: "add rank", error: error.message });
   }

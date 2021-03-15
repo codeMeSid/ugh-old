@@ -25,7 +25,7 @@ export const bracketCheck = async (regId: string, tournamentRegId: string) => {
       winner,
     } = bracket;
 
-    if (winner) throw new Error("Bracket completed - bracket check timer");
+    if (winner) return;
     // checks
     // if teamA & teamB didnot update score
     // if teamA added score & teamB did not

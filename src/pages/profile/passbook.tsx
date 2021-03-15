@@ -38,6 +38,7 @@ const ProfilePassbookPage = ({
         </div>
         <div className="withdraw__body">
           <Table
+            hasPagination
             headers={[
               { text: "date", isResponsive: false },
               { text: "coins", isResponsive: false },

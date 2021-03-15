@@ -27,6 +27,7 @@ export const tournamentAddController = async (req: Request, res: Response) => {
     playerCount,
     group,
     isFree,
+    teamPlayers,
   } = req.body;
   const { role, ughId } = req.currentUser;
   const msIn1Hr = 1000 * 60 * 60;
@@ -100,6 +101,13 @@ export const tournamentAddController = async (req: Request, res: Response) => {
         game: game.name,
       });
       tournament.players.push(user);
+      if (teamPlayers) {
+        const team = {
+          ...(tournament.teamMates || {}),
+          [user.id]: teamPlayers,
+        };
+        tournament.teamMates = team;
+      }
     }
     await user.save({ session });
     await tournament.save({ session });

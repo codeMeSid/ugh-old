@@ -33,6 +33,7 @@ const UserTournamentPage = ({ tournaments, errors }) => {
           </div>
           <div className="withdraw__body">
             <Table
+              hasPagination
               headers={[
                 { text: "date", isResponsive: true },
                 { text: "tournament", isResponsive: false },

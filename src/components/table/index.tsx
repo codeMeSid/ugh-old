@@ -8,6 +8,7 @@ interface Props {
   headers: Array<{ text: string; isResponsive: boolean }>;
   data: Array<any>;
   hasLoader?: boolean;
+  hasPagination?: boolean;
 }
 
 class Table extends React.Component<Props> {
@@ -30,11 +31,13 @@ class Table extends React.Component<Props> {
   }
 
   render() {
-    const { data, headers, hasLoader } = this.props;
+    const { data, headers, hasLoader, hasPagination } = this.props;
     const { page, rowsPerPage } = this.state;
     const itemCount = page * rowsPerPage;
     const pageCount = Math.ceil(data.length / rowsPerPage);
-    const dataList = data.slice(itemCount, itemCount + rowsPerPage);
+    const dataList = hasPagination
+      ? data.slice(itemCount, itemCount + rowsPerPage)
+      : data;
     return (
       <>
         <table>
@@ -97,7 +100,7 @@ class Table extends React.Component<Props> {
                 })}
           </tbody>
         </table>
-        {data.length > 0 && (
+        {data.length > 0 && hasPagination && (
           <div
             style={{
               marginLeft: "auto",
@@ -122,8 +125,9 @@ class Table extends React.Component<Props> {
               <span>
                 <AiFillCaretLeft
                   style={{
-                    color: page === 0 ? "gray" : "black",
+                    color: page === 0 ? "red" : "blue",
                     cursor: "pointer",
+                    mixBlendMode: "difference",
                   }}
                   onClick={() => this.onPageClickHandler("-")}
                 />
@@ -134,8 +138,9 @@ class Table extends React.Component<Props> {
               <span>
                 <AiFillCaretRight
                   style={{
-                    color: page + 1 !== pageCount ? "black" : "gray",
+                    color: page + 1 !== pageCount ? "blue" : "red",
                     cursor: "pointer",
+                    mixBlendMode: "difference",
                   }}
                   onClick={() => this.onPageClickHandler("+")}
                 />
