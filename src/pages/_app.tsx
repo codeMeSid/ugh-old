@@ -5,10 +5,8 @@ import SponsorSlider from "../components/sponsor-slider";
 import Footer from "../components/footer";
 import "../public/css/main.css";
 import "react-awesome-button/dist/styles.css";
-import { useEffect } from "react";
 import { fire } from "../../server/utils/firebase";
 import { useRequest } from "../hooks/use-request";
-import { event } from "../socket";
 import React from "react";
 
 interface Props {
@@ -139,9 +137,8 @@ class AppComponent extends React.Component<Props> {
 
   render() {
     const { Component, pageProps, router, currentUser } = this.props;
-    const tabTitle = `${
-      this.getTitle(router.route) || "Take A Better Path"
-    } - Ultimate Gamers Hub | Play Tournaments`;
+    const tabTitle = `${this.getTitle(router.route) || "Take A Better Path"
+      } - Ultimate Gamers Hub | Play Tournaments`;
     return (
       <>
         <Head>
@@ -203,6 +200,36 @@ class AppComponent extends React.Component<Props> {
             href="/favicon-16x16.png"
           />
           <link rel="manifest" href="/site.webmanifest" />
+          <script async src="https://www.googletagmanager.com/gtag/js?id=AW-627700612" />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.dataLayer = window.dataLayer || []; 
+                    function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); 
+                    gtag('config', 'AW-627700612');` }}
+          />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `function gtag_report_conversion(url) 
+                       { var callback = function () { if (typeof(url) != 'undefined') { window.location = url; } }; 
+                       gtag('event', 'conversion', { 'send_to': 'AW-627700612/Dj4OCIzwib8CEITnp6sC', 'event_callback': callback }); 
+                       return false; }` }}
+          />
+          <script dangerouslySetInnerHTML={{
+            __html: `!function(f,b,e,v,n,t,s)
+                    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                    n.queue=[];t=b.createElement(e);t.async=!0;
+                    t.src=v;s=b.getElementsByTagName(e)[0];
+                    s.parentNode.insertBefore(t,s)}(window, document,'script',
+                    'https://connect.facebook.net/en_US/fbevents.js');
+                    fbq('init', '592353362169632');
+                    fbq('track', 'PageView');` }}
+          />
+          <noscript dangerouslySetInnerHTML={{
+            __html: `<img height="1" width="1" style="display:none"
+                    src="https://www.facebook.com/tr?id=592353362169632&ev=PageView&noscript=1" />` }}
+          />
         </Head>
         {!router.route.match("/admin") && !router.route.match("/signout") && (
           <TopNavbar currentUser={currentUser} />
